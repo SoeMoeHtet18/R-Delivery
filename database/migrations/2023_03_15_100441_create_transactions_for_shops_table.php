@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('type');
             $table->unsignedBigInteger('paid_by');
-            $table->foreign('paid_by');
+            $table->foreign('paid_by')->references('id')->on('users');
             $table->softDeletes();
             $table->timestamps();
         });

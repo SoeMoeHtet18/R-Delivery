@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('notifications', function (Blueprint $table) {
+        Schema::create('notifiables', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->text('message');
+            $table->unsignedBigInteger('notification_id');
+            $table->foreign('notification_id')->references('id')->on('notifications');
+            $table->unsignedBigInteger('notifiable_id');
+            $table->string('notifiable_type');
             $table->timestamps();
         });
     }
