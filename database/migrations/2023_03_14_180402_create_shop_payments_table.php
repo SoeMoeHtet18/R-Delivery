@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('shop_payments', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('shop_id');
+            $table->foreign('shop_id')->references('id')->on('shops');
             $table->decimal('amount');
             $table->string('image');
             $table->string('type');

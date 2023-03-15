@@ -35,7 +35,7 @@ return new class extends Migration
             $table->string('collection_method');
             $table->string('proof_of_payment');            
             $table->unsignedBigInteger('last_updated_by')->nullable();
-            $table->foreign('last_updated_by')->nullable();
+            $table->foreign('last_updated_by')->references('id')->on('users');
             $table->timestamps();
         });
     }
