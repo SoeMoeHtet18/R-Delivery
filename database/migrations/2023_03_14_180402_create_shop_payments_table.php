@@ -16,8 +16,9 @@ return new class extends Migration
             $table->unsignedBigInteger('shop_id');
             $table->foreign('shop_id')->references('id')->on('shops');
             $table->decimal('amount');
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->string('type');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

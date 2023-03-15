@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Shop;
 use App\Models\ShopPayment;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -25,9 +26,10 @@ class ShopPaymentFactory extends Factory
     public function definition(): array
     {
         return [
+            'shop_id' => Shop::all()->random()->id,
             'amount' => fake()->randomDigit(),
             'image' => fake()->image(),
-            'type' => Str::random(6),
+            'type' => array_rand(['fully_delivery_fees_payment', 'remaining_delivery_fees_payment']),
         ];
     }
 }

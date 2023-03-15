@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Order;
 use App\Models\ProofOfDelivery;
 use App\Models\Rider;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -31,7 +32,7 @@ class ProofOfDeliveryFactory extends Factory
             'image' => fake()->image(),
             'delivered_date' => fake()->date(),
             'rider_id' => Rider::all()->random()->id,
-            'last_updated_by' => Str::randomNumber(2),
+            'last_updated_by' => User::all()->random()->id,
         ];
     }
 }

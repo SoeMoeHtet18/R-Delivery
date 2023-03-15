@@ -9,6 +9,6 @@ class ShopPayment extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'amount', 'image', 'type'
+        'shop_id', 'amount', 'image', 'type'
     ];
 }

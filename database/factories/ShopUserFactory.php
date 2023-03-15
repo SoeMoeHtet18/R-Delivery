@@ -2,20 +2,21 @@
 
 namespace Database\Factories;
 
-use App\Models\Shop;
+use App\Models\ShopUser;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
  */
-class ShopsFactory extends Factory
-{   
+class ShopUserFactory extends Factory
+{
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Shop::class;
+    protected $model = ShopUser::class;
     /**
      * Define the model's default state.
      *
@@ -25,8 +26,12 @@ class ShopsFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'address' => fake()->address(),
             'phone_number' => fake()->unique()->phoneNumber(),
+            'email' => fake()->unique()->safeEmail(),
+            'email_verified_at' => now(),
+            'password' => encrypt(Str::random(8)),// password
+            'device_id' => Str::random(6),
+            'remember_token' => Str::random(10),
         ];
     }
 }

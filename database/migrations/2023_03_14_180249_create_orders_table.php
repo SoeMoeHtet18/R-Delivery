@@ -25,17 +25,18 @@ return new class extends Migration
             $table->integer('quantity');
             $table->decimal('total_amount');
             $table->decimal('delivery_fees');
-            $table->decimal('markup_delivery_fees');
-            $table->text('remark');
+            $table->decimal('markup_delivery_fees')->nullable();
+            $table->text('remark')->nullable();
             $table->string('status');
             $table->string('item_type');
             $table->string('full_address')->nullable();
             $table->timestamp('schedule_date')->nullable();
             $table->string('type');
             $table->string('collection_method');
-            $table->string('proof_of_payment');            
+            $table->string('proof_of_payment')->nullable();            
             $table->unsignedBigInteger('last_updated_by')->nullable();
             $table->foreign('last_updated_by')->references('id')->on('users');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

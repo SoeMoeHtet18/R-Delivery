@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('order_id');
             $table->foreign('order_id')->references('id')->on('orders');
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->timestamp('delivered_date');
             $table->unsignedBigInteger('rider_id');
             $table->foreign('rider_id')->references('id')->on('riders');
-            $table->unsignedBigInteger('last_updated_by');
+            $table->unsignedBigInteger('last_updated_by')->nullable();
             $table->foreign('last_updated_by')->references('id')->on('users');
             $table->timestamps();
         });

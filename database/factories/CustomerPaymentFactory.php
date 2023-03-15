@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\CustomerPayment;
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -32,7 +33,7 @@ class CustomerPaymentFactory extends Factory
             'type' => array_rand(['fully_paid', 'delivery_fees_only', 'remaining_amount']),
             'proof_of_payment' => fake()->image(),
             'paid_at' => fake()->date(),
-            'last_updated_by' => Str::randomNumber(2),
+            'last_updated_by' => User::all()->random()->id,
         ];
     }
 }

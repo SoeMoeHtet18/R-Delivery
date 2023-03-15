@@ -17,10 +17,11 @@ return new class extends Migration
             $table->foreign('order_id')->references('id')->on('orders');
             $table->decimal('amount');
             $table->string('type');
-            $table->string('proof_of_payment');
-            $table->timestamp('paid_at');
-            $table->unsignedBigInteger('last_updated_by');
+            $table->string('proof_of_payment')->nullable();
+            $table->timestamp('paid_at')->nullable();
+            $table->unsignedBigInteger('last_updated_by')->nullable();
             $table->foreign('last_updated_by')->references('id')->on('users');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

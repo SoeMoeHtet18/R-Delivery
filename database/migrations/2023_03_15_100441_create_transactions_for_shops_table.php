@@ -16,10 +16,11 @@ return new class extends Migration
             $table->unsignedBigInteger('shop_id');
             $table->foreign('shop_id')->references('id')->on('shops');
             $table->decimal('amount');
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->string('type');
             $table->unsignedBigInteger('paid_by');
             $table->foreign('paid_by');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

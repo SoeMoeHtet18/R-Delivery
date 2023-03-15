@@ -6,13 +6,14 @@ use App\Models\Order;
 use App\Models\Rider;
 use App\Models\Shop;
 use App\Models\Township;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
  */
-class OrdersFactory extends Factory
+class OrderFactory extends Factory
 {   
     /**
      * The name of the factory's corresponding model.
@@ -47,7 +48,7 @@ class OrdersFactory extends Factory
             'type' => array_rand(['standard', 'express', 'door_to_door']),
             'collection_method' => array_rand(['pick_up', 'drop_off']),
             'proof_of_payment' => fake()->image(),
-            'last_updated_by' => Str::randomNumber(2),
+            'last_updated_by' => User::all()->random()->id,
         ];
     }
 }

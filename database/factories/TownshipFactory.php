@@ -2,20 +2,20 @@
 
 namespace Database\Factories;
 
-use App\Models\Rider;
+use App\Models\Township;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
+
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
  */
-class RidersFactory extends Factory
-{
+class TownshipFactory extends Factory
+{   
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Rider::class;
+    protected $model = Township::class;
     /**
      * Define the model's default state.
      *
@@ -25,12 +25,6 @@ class RidersFactory extends Factory
     {
         return [
             'name' => fake()->name(),
-            'phone_number' => fake()->unique()->phoneNumber(),
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => encrypt(Str::random(8)),// password
-            'device_id' => Str::random(6),
-            'remember_token' => Str::random(10),
         ];
     }
 }
