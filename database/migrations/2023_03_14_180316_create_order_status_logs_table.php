@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreign('order_id')->references('id')->on('orders');
             $table->string('status_change');
             $table->unsignedBigInteger('last_updated_by');
-            $table->foreign('last_updated_by');
+            $table->foreign('last_updated_by')->references('id')->on('users');
             $table->timestamps();
         });
     }

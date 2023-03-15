@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('proof_of_payment');
             $table->timestamp('paid_at');
             $table->unsignedBigInteger('last_updated_by');
-            $table->foreign('last_updated_by');
+            $table->foreign('last_updated_by')->references('id')->on('users');
             $table->timestamps();
         });
     }

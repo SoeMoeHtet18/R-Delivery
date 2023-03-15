@@ -11,12 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('prepayment_orders', function (Blueprint $table) {
+        Schema::create('order_transaction', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('prepayment_id');
-            $table->foreign('prepayment_id')->references('id')->on('shop_prepayments');
             $table->unsignedBigInteger('order_id');
             $table->foreign('order_id')->references('id')->on('orders');
+            $table->unsignedBigInteger('transaction_for_shop_id');
+            $table->foreign('transaction_for_shop_id')->references('id')->on('transactions_for_shops');
             $table->timestamps();
         });
     }
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('prepayment_orders');
+        Schema::dropIfExists('order_transactions');
     }
 };
