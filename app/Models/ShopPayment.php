@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ShopPayment extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'amount', 'image', 'type'
+    ];
 }
