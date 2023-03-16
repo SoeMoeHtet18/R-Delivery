@@ -49,7 +49,7 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('quickadmin/css/AdminLTE.min.css') }}">
     
-
+    @include('admin.layouts.css')
     @stack('style')
     @yield('style')
 </head>

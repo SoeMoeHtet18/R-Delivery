@@ -1,5 +1,5 @@
 <div class="page-header navbar navbar-fixed-top">
-    <div class="page-header-inner">
+    <div class="page-header-inner  w-100">
         <div class="page-header-inner">
 
             <a href="javascript:;"

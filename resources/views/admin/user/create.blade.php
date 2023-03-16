@@ -3,7 +3,9 @@
 @section('content')
         <div class="card">
             <div class="card-body">
-                <h2 class="ps-1">Add New User</h2>
+                <h2 class="ps-1 card-header-title">
+                    <strong>Add New User</strong>
+                </h2>
                 <form action="{{route('users.store')}}" method="POST">
                     @csrf
                     <div class="row m-0 mb-3">
