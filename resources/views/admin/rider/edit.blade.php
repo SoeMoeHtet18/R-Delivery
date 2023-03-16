@@ -3,7 +3,9 @@
 @section('content')
         <div class="card">
             <div class="card-body">
-                <h2 class="ps-1">Update Rider</h2>
+                <h2 class="ps-1 card-header-title">
+                    <strong>Update Rider</strong>
+                </h2>
                 <form action="{{route('riders.update', $rider->id)}}" method="POST">
                     @csrf
                     @method('PUT')

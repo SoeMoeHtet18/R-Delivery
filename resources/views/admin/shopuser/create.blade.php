@@ -3,12 +3,10 @@
 @section('content')
         <div class="card">
             <div class="card-body">
-                <h2 class="ps-1 card-header-title">
-                    <strong>
-                        Add new rider
-                    </strong>
-                    </h2>
-                <form action="{{route('riders.store')}}" method="post">
+                <h2 class="ps-1">
+                    <strong>Add New ShopUser</strong>
+                </h2>
+                <form action="{{route('shopusers.store')}}" method="POST">
                     @csrf
                     <div class="row m-0 mb-3">
                         <div class="col-2">
@@ -27,9 +25,9 @@
                         </div>
                         <div class="col-10">
                             <input type="text" name="phone_number" class="form-control"/>
-                        @if ($errors->has('phone_number'))
+                            @if ($errors->has('phone_number'))
                             <span class="text-danger"><strong>{{ $errors->first('phone_number') }}</strong></span>
-                        @endif
+                            @endif
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
@@ -38,9 +36,9 @@
                         </div>
                         <div class="col-10">
                             <input type="email" name="email" class="form-control"/>
-                        @if ($errors->has('email'))
+                            @if ($errors->has('email'))
                             <span class="text-danger"><strong>{{ $errors->first('email') }}</strong></span>
-                        @endif
+                            @endif
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
@@ -49,9 +47,9 @@
                         </div>
                         <div class="col-10">
                             <input type="password" name="password" class="form-control"/>
-                        @if ($errors->has('password'))
-                            <span class="text-danger"><strong>{{ $errors->first('password') }}</strong></span>
-                        @endif
+                            @if ($errors->has('password'))
+                                <span class="text-danger"><strong>{{ $errors->first('password') }}</strong></span>
+                            @endif
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
@@ -60,12 +58,12 @@
                         </div>
                         <div class="col-10">
                             <input type="text" name="device_id" class="form-control"/>
-                        @if ($errors->has('device_id'))
-                            <span class="text-danger"><strong>{{ $errors->first('device_id') }}</strong></span>
-                        @endif
+                            @if ($errors->has('device_id'))
+                                <span class="text-danger"><strong>{{ $errors->first('device_id') }}</strong></span>
+                            @endif
                         </div>
                     </div>
-                    <input type="submit" value="Create" class="btn btn-success float-end">
+                    <input type="submit" class="btn btn-success float-end">
                 </form>
             </div>
         </div>
