@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\RidersController;
+use App\Http\Controllers\ShopUsersController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,3 +21,4 @@ Route::get('/', function () {
 });
 
 Route::resource('/user', AdminController::class);
+Route::resource('/riders', RidersController::class);
