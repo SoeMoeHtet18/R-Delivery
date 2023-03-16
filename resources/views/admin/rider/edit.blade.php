@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('content')
-        <div class="card">
+        <div class="card card-container">
             <div class="card-body">
                 <h2 class="ps-1 card-header-title">
                     <strong>Update Rider</strong>
