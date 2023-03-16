@@ -47,6 +47,7 @@
     <!-- <link rel="stylesheet" href="{{ asset('quickadmin/css/jquery-jvectormap.css') }}"> -->
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('quickadmin/css/AdminLTE.min.css') }}">
+    
 
     @stack('style')
     @yield('style')
