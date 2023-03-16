@@ -5,7 +5,7 @@
             data-auto-scroll="true"
             data-slide-speed="200">
             <li>
-                <a href="{{route('user.index')}}">
+                <a href="{{route('users.index')}}">
                     <!-- <i class="fa fa-users"></i> -->
                     <span class="title">User</span>
                 </a>

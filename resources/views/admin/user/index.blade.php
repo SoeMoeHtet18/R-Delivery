@@ -10,7 +10,7 @@
 </style>
 
 <div class="create-button">
-    <a class="btn btn-success">Add User</a>
+    <a class="btn btn-success" href="{{route('users.create')}}">Add User</a>
 </div>
 
 <div class="portlet box green">
@@ -51,7 +51,7 @@
     var table = $('.datatable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('user.index') }}",
+        ajax: "{{ route('users.index') }}",
         columns: [
             {data: 'id', name: 'id'},
             {data: 'name', name: 'name'},

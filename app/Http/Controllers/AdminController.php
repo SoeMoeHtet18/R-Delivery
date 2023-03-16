@@ -32,7 +32,7 @@ class AdminController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.user.create');
     }
 
     /**
@@ -40,7 +40,15 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = new User();
+        $user->name = $request->name;
+        $user->phone_number = $request->phone_number ? $request->phone_number : null;
+        $user->email = $request->email;
+        $user->password = $request->password? bcrypt($request->password): null;
+        $user->device_id = $request->device_id ? $request->device_id : null;
+        $user->save();
+
+        return redirect()->route('users.index');
     }
 
     /**
