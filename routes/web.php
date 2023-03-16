@@ -22,3 +22,4 @@ Route::get('/', function () {
 
 Route::resource('/user', AdminController::class);
 Route::resource('/riders', RidersController::class);
+Route::resource('/shopusers', ShopUsersController::class);

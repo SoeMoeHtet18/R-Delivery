@@ -23,7 +23,7 @@
                 </a>
             </li>
             <li>
-                <a href="">
+                <a href="{{route('shopusers.index')}}">
                     <!-- <i class="fa fa-users"></i> -->
                     <span class="title">Shop User</span>
                 </a>
