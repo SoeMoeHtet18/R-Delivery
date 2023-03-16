@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Rider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
 class RidersController extends Controller
@@ -22,10 +23,10 @@ class RidersController extends Controller
                     $actionBtn = '
                         <a href="'. route("riders.show", $riders->id) .'" class="edit btn btn-info btn-sm">View</a> 
                         <a href="'. route("riders.edit", $riders->id) .'" class="edit btn btn-light btn-sm">Edit</a> 
-                        <form action="'.route("riders.destroy", $riders->id) .'" method="post">
+                        <form action="'.route("riders.destroy", $riders->id) .'" method="post" class="d-inline">
                             <input type="hidden" name="_token" value="'. csrf_token() .'">
                             <input type="hidden" name="_method" value="DELETE">
-                            <input type="submit" value="Delete" class="btn btn-danger"/>
+                            <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
                         </form>';
                     return $actionBtn;
                 })
@@ -48,20 +49,35 @@ class RidersController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = $request->validate([
-            'name' => 'required',
-            'phone_number' => 'required',
-            'password' => 'required',
-            'device_id' => 'required'
-        ]);
-
-        $rider = new Rider();
-        $rider->name = $request->name;
-        $rider->phone_number = $request->phone_number;
-        $rider->email = $request->email? $request->email : null;
-        $rider->password = bcrypt($request->password);
-        $rider->device_id = $request->device_id;
-        $rider->save();
+        $rules = [ 
+            'name'                  => 'required|string',
+            'phone_number'          => 'required|string|unique:riders',
+            'email'                 => 'unique:riders',
+            'device_id'             => 'required',
+            'password'              => 'required|min:8'
+        ];
+            
+        $customErr = [
+            'name.required'                 => 'Name field is required.',
+            'phone_number.required'         => 'Phone Number is required.',
+            'phone_number.unique'           => 'Phone Number already exists.',
+            'email'                         => 'Email already exists',
+            'device_id.required'            => 'Device ID is required.',
+            'password.required'             => 'Password is required', 
+            'password.min'                  => 'Password should be a minimum of 8 characters.',
+        ];
+        $validator = Validator::make($request->all(), $rules,$customErr);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        } else {
+            $rider = new Rider();
+            $rider->name = $request->name;
+            $rider->phone_number = $request->phone_number;
+            $rider->email = $request->email? $request->email : null;
+            $rider->password = bcrypt($request->password);
+            $rider->device_id = $request->device_id;
+            $rider->save();
+        }
 
         return redirect(route('riders.index'));
     }
@@ -71,7 +87,9 @@ class RidersController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $rider = Rider::where('id', $id)->first();
+
+        return view('admin.rider.detail', compact('rider'));
     }
 
     /**
@@ -79,7 +97,9 @@ class RidersController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $rider = Rider::where('id', $id)->first();
+
+        return view('admin.rider.edit', compact('rider'));
     }
 
     /**
@@ -87,7 +107,39 @@ class RidersController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $rider = Rider::where('id',$id)->first();
+
+        if(!$rider) {
+            return redirect()->back();
+        }
+
+        $rules = [ 
+            'name'                  => 'required|string',
+            'phone_number'          => 'required|string|unique:riders,phone_number,' . $id,
+            'email'                 => 'unique:riders,email,' . $id,
+            'device_id'             => 'required',
+        ];
+            
+        $customErr = [
+            'name.required'                 => 'Name field is required.',
+            'phone_number.required'         => 'Phone Number is required.',
+            'phone_number.unique'           => 'Phone Number already exists.',
+            'email.unique'                  => 'Email already exists',
+            'device_id.required'            => 'Device ID is required.',
+        ];
+        $validator = Validator::make($request->all(), $rules,$customErr);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        } else {
+            $rider->name = $request->name;
+            $rider->phone_number = $request->phone_number;
+            $rider->email = $request->email? $request->email : null;
+            $rider->password = bcrypt($request->password);
+            $rider->device_id = $request->device_id;
+            $rider->save();
+        }
+
+        return redirect(route('riders.index'));
     }
 
     /**
