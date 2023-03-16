@@ -3,8 +3,8 @@
 @section('content')
         <div class="card">
             <div class="card-body">
-                <h2 class="ps-1">Add New User</h2>
-                <form action="{{route('users.store')}}" method="POST">
+                <h2 class="ps-1">Add new rider</h2>
+                <form action="{{route('riders.store')}}" method="post">
                     @csrf
                     <div class="row m-0 mb-3">
                         <div class="col-2">
@@ -13,9 +13,6 @@
                         <div class="col-10">
                             <input type="text" name="name" class="form-control"/>
                         </div>
-                        @if ($errors->has('name'))
-                            <span class="help-block"><strong>{{ $errors->first('name') }}</strong></span>
-                        @endif
                     </div>
                     <div class="row m-0 mb-3">
                         <div class="col-2">
@@ -24,9 +21,6 @@
                         <div class="col-10">
                             <input type="text" name="phone_number" class="form-control"/>
                         </div>
-                        @if ($errors->has('phone_number'))
-                            <span class="help-block"><strong>{{ $errors->first('phone_number') }}</strong></span>
-                        @endif
                     </div>
                     <div class="row m-0 mb-3">
                         <div class="col-2">
@@ -35,20 +29,6 @@
                         <div class="col-10">
                             <input type="email" name="email" class="form-control"/>
                         </div>
-                        @if ($errors->has('email'))
-                            <span class="help-block"><strong>{{ $errors->first('email') }}</strong></span>
-                        @endif
-                    </div>
-                    <div class="row m-0 mb-3">
-                        <div class="col-2">
-                            <h4>Device ID <b>:</b></h4>
-                        </div>
-                        <div class="col-10">
-                            <input type="text" name="device_id" class="form-control"/>
-                        </div>
-                        @if ($errors->has('device_id'))
-                            <span class="help-block"><strong>{{ $errors->first('device_id') }}</strong></span>
-                        @endif
                     </div>
                     <div class="row m-0 mb-3">
                         <div class="col-2">
@@ -57,11 +37,16 @@
                         <div class="col-10">
                             <input type="password" name="password" class="form-control"/>
                         </div>
-                        @if ($errors->has('password'))
-                            <span class="help-block"><strong>{{ $errors->first('password') }}</strong></span>
-                        @endif
                     </div>
-                    <input type="submit" class="btn btn-success float-end">
+                    <div class="row m-0 mb-3">
+                        <div class="col-2">
+                            <h4>Device ID <b>:</b></h4>
+                        </div>
+                        <div class="col-10">
+                            <input type="text" name="device_id" class="form-control"/>
+                        </div>
+                    </div>
+                    <input type="submit" value="Create" class="btn btn-success float-end">
                 </form>
             </div>
         </div>

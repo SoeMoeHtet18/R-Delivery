@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
 class AdminController extends Controller
@@ -18,7 +19,8 @@ class AdminController extends Controller
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function($row){
-                    $actionBtn = '<a href="javascript:void(0)" class="edit btn btn-success btn-sm">Edit</a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm">Delete</a>';
+                    $actionBtn = '<a href="' . route("users.show", $row->id) . '" class="info btn btn-info btn-sm">View</a>
+                    <a href="' . route("users.edit", $row->id) . '" class="edit btn btn-light btn-sm">Edit</a>';
                     return $actionBtn;
                 })
                 ->rawColumns(['action'])
@@ -40,13 +42,30 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        $user = new User();
-        $user->name = $request->name;
-        $user->phone_number = $request->phone_number ? $request->phone_number : null;
-        $user->email = $request->email;
-        $user->password = $request->password? bcrypt($request->password): null;
-        $user->device_id = $request->device_id ? $request->device_id : null;
-        $user->save();
+        $rules = [ 
+            'name'                  => 'required|string',
+            'phone_number'          => 'required|string|unique:users',
+            'device_id'             => 'required',
+        ];
+            
+        $customErr = [
+            'name.required'                 => 'Name field is required.',
+            'phone_number.required'         => 'Phone Number is required.',
+            'phone_number.unique'           => 'Phone Number already exists.',
+            'device_id.required'            => 'Device ID is required.',
+        ];
+        $validator = Validator::make($request->all(), $rules,$customErr);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        } else {
+            $user = new User();
+            $user->name = $request->name;
+            $user->phone_number = $request->phone_number;
+            $user->email = $request->email;
+            $user->password = $request->password? bcrypt($request->password): null;
+            $user->device_id = $request->device_id;
+            $user->save();
+        }
 
         return redirect()->route('users.index');
     }
@@ -64,7 +83,8 @@ class AdminController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $user = User::where('id',$id)->first();
+        return view('admin.user.edit',compact('user'));
     }
 
     /**
@@ -72,7 +92,7 @@ class AdminController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $user = User::where('id',$id)->first();
     }
 
     /**
@@ -80,6 +100,7 @@ class AdminController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        User::destroy($id);
+        return redirect()->route('users.index');
     }
 }
