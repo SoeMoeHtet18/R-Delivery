@@ -65,7 +65,10 @@
                         @endif
                         </div>
                     </div>
-                    <input type="submit" value="Create" class="btn btn-success float-end">
+                    <div class="footer-button float-end">
+                        <a href="{{route('riders.index')}}" class="btn btn-light">Cancel</a>
+                        <input type="submit" class="btn btn-success ">
+                    </div>
                 </form>
             </div>
         </div>
