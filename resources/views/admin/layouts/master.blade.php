@@ -30,4 +30,5 @@
 @yield('javascript')
 {{--@include('admin.layouts.footer')--}}
 
-
+</body>
+</html>

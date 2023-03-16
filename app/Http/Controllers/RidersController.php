@@ -33,7 +33,7 @@ class RidersController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.rider.add');
     }
 
     /**
