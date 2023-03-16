@@ -20,7 +20,12 @@ class AdminController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function($row){
                     $actionBtn = '<a href="' . route("users.show", $row->id) . '" class="info btn btn-info btn-sm">View</a>
-                    <a href="' . route("users.edit", $row->id) . '" class="edit btn btn-light btn-sm">Edit</a>';
+                    <a href="' . route("users.edit", $row->id) . '" class="edit btn btn-light btn-sm">Edit</a>
+                    <form action="'.route("users.destroy", $row->id) .'" method="post" class="d-inline">
+                        <input type="hidden" name="_token" value="'. csrf_token() .'">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
+                    </form>';
                     return $actionBtn;
                 })
                 ->rawColumns(['action'])
@@ -81,6 +86,9 @@ class AdminController extends Controller
     public function show(string $id)
     {
         $user = User::where('id',$id)->first();
+        if(!$user) {
+            abort(404);
+        }
         return view('admin.user.detail',compact('user'));
     }
 
@@ -120,6 +128,9 @@ class AdminController extends Controller
             $user->name = $request->name;
             $user->phone_number = $request->phone_number;
             $user->email = $request->email;
+            if($request->password) {
+                $user->password = bcrypt($request->password);
+            }
             $user->device_id = $request->device_id;
             $user->save();
         }

@@ -43,6 +43,14 @@
                     </div>
                     <div class="row m-0 mb-3">
                         <div class="col-2">
+                            <h4>Password <b>:</b></h4>
+                        </div>
+                        <div class="col-10">
+                            <input type="password" name="password" class="form-control" placeholder="Leave empty to keep the same"/>
+                        </div>
+                    </div>
+                    <div class="row m-0 mb-3">
+                        <div class="col-2">
                             <h4>Device ID <b>:</b></h4>
                         </div>
                         <div class="col-10">
