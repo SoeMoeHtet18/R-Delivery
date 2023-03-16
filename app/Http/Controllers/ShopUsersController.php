@@ -17,9 +17,11 @@ class ShopUsersController extends Controller
             $data = ShopUser::select('*');
             return DataTables::of($data)
                 ->addIndexColumn()
-                ->addColumn('action', function($row){
-                    $actionBtn = '<a href="javascript:void(0)" class="edit btn btn-success btn-sm">Edit</a> 
-                        <a href="javascript:void(0)" class="delete btn btn-danger btn-sm">Delete</a>';
+                ->addColumn('action', function($data){
+                    $actionBtn = '<a href="' . route("shopusers.show", $data->id) . '" class="info btn btn-info btn-sm">View</a>
+                                <a href="' . route("shopusers.edit", $data->id) . '" class="edit btn btn-light btn-sm">Edit</a> 
+                                <a href="' . route("shopusers.destroy", $data->id) . '" class="delete btn btn-danger btn-sm">Delete</a>';
+
                     return $actionBtn;
                 })
                 ->rawColumns(['action'])
@@ -49,7 +51,8 @@ class ShopUsersController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $shopuser = ShopUser::where('id',$id)->first();
+        return view('admin.shopuser.detail',compact('shopuser'));
     }
 
     /**
@@ -73,6 +76,8 @@ class ShopUsersController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        ShopUser::destroy($id);
+
+        return redirect()->route('shopusers.index');
     }
 }
