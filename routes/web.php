@@ -20,6 +20,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('/user', AdminController::class);
+Route::resource('/users', AdminController::class);
 Route::resource('/riders', RidersController::class);
 Route::resource('/shopusers', ShopUsersController::class);
