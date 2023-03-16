@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('content')
-        <div class="card">
+        <div class="card card-container">
             <div class="card-body">
                 <h2 class="ps-1 card-header-title">
                     <strong>Update Rider</strong>
@@ -61,7 +61,10 @@
                             @endif
                         </div>
                     </div>
-                    <input type="submit" class="btn btn-success float-end">
+                    <div class="footer-button float-end">
+                        <a href="{{url()->previous() }}" class="btn btn-light">Cancel</a>
+                        <input type="submit" class="btn btn-success ">
+                    </div>
                 </form>
             </div>
         </div>
