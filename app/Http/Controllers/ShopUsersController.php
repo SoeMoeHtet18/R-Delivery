@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ShopUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
 class ShopUsersController extends Controller
@@ -35,15 +36,46 @@ class ShopUsersController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.shopuser.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        //
+    {   
+        $rules = [
+            'name'              => 'required|string',
+            'phone_number'      => 'required|string|unique:shop_users',
+            'email'             => 'unique:shop_users',
+            'device_id'         => 'required',
+            'password'          => 'required|min:8',
+        ];
+
+        $customErr = [
+            'name.required'              => 'Name field is required',
+            'phone_number.required'      => 'Phone Number is required',
+            'phone_number.unique'        => 'Phone Number already exists',
+            'email'                      => 'Email already exists',
+            'device_id.required'         => 'Device ID is required',
+            'password.required'          => 'Password is required',
+            'password.min'               => 'Password should be a minimum of 8 characters.',
+        ];
+        
+        $validator = Validator::make($request->all(), $rules,$customErr);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        } else {
+            $shopuser = new ShopUser();
+            $shopuser->name = $request->name;
+            $shopuser->phone_number = $request->phone_number ? $request->phone_number : null;
+            $shopuser->email = $request->email;
+            $shopuser->password = $request->password? bcrypt($request->password): null;
+            $shopuser->device_id = $request->device_id ? $request->device_id : null;
+            $shopuser->save();
+        }
+
+        return redirect()->route('shopusers.index');
     }
 
     /**
@@ -60,7 +92,7 @@ class ShopUsersController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        // 
     }
 
     /**

@@ -10,7 +10,7 @@
 </style>
 
 <div class="create-button">
-    <a href="{{route('riders.create')}}" class="btn btn-success">Add ShopUser</a>
+    <a href="{{route('shopusers.create')}}" class="btn btn-success">Add ShopUser</a>
 </div>
 
 <div class="portlet box green">
