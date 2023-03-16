@@ -13,6 +13,9 @@
                         <div class="col-10">
                             <input type="text" name="name" class="form-control"/>
                         </div>
+                        @if ($errors->has('name'))
+                            <span class="help-block"><strong>{{ $errors->first('name') }}</strong></span>
+                        @endif
                     </div>
                     <div class="row m-0 mb-3">
                         <div class="col-2">
@@ -21,6 +24,9 @@
                         <div class="col-10">
                             <input type="text" name="phone_number" class="form-control"/>
                         </div>
+                        @if ($errors->has('phone_number'))
+                            <span class="help-block"><strong>{{ $errors->first('phone_number') }}</strong></span>
+                        @endif
                     </div>
                     <div class="row m-0 mb-3">
                         <div class="col-2">
@@ -29,6 +35,9 @@
                         <div class="col-10">
                             <input type="email" name="email" class="form-control"/>
                         </div>
+                        @if ($errors->has('email'))
+                            <span class="help-block"><strong>{{ $errors->first('email') }}</strong></span>
+                        @endif
                     </div>
                     <div class="row m-0 mb-3">
                         <div class="col-2">
@@ -37,6 +46,9 @@
                         <div class="col-10">
                             <input type="text" name="device_id" class="form-control"/>
                         </div>
+                        @if ($errors->has('device_id'))
+                            <span class="help-block"><strong>{{ $errors->first('device_id') }}</strong></span>
+                        @endif
                     </div>
                     <div class="row m-0 mb-3">
                         <div class="col-2">
@@ -45,6 +57,9 @@
                         <div class="col-10">
                             <input type="password" name="password" class="form-control"/>
                         </div>
+                        @if ($errors->has('password'))
+                            <span class="help-block"><strong>{{ $errors->first('password') }}</strong></span>
+                        @endif
                     </div>
                     <input type="submit" class="btn btn-success float-end">
                 </form>
