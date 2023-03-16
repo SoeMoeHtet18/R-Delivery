@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
-class RidersController extends Controller
+class RiderController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -114,10 +114,7 @@ class RidersController extends Controller
     public function update(Request $request, string $id)
     {
         $rider = Rider::where('id',$id)->first();
-        if(!$rider) {
-            abort(404);
-        }
-        
+
         $rules = [ 
             'name'                  => 'required|string',
             'phone_number'          => 'required|string|unique:riders,phone_number,' . $id,
@@ -138,7 +135,7 @@ class RidersController extends Controller
         } else {
             $rider->name = $request->name;
             $rider->phone_number = $request->phone_number;
-            $rider->email = $request->email? $request->email : null;
+            $rider->email = $request->email;
             if($request->password) {
                 $rider->password =  bcrypt($request->password);
             }

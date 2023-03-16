@@ -98,6 +98,9 @@ class AdminController extends Controller
     public function edit(string $id)
     {
         $user = User::where('id',$id)->first();
+        if(!$user) {
+            abort(404);
+        }
         return view('admin.user.edit',compact('user'));
     }
 

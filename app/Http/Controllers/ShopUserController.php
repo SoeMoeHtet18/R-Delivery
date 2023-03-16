@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
-class ShopUsersController extends Controller
+class ShopUserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -100,6 +100,9 @@ class ShopUsersController extends Controller
     public function edit(string $id)
     {
         $shopuser = ShopUser::where('id',$id)->first();
+        if(!$shopuser) {
+            abort(404);
+        }
         return view('admin.shopuser.edit',compact('shopuser'));
     }
 
