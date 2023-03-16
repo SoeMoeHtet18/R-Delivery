@@ -88,6 +88,9 @@ class RidersController extends Controller
     public function show(string $id)
     {
         $rider = Rider::where('id', $id)->first();
+        if(!$rider) {
+            abort(404);
+        }
 
         return view('admin.rider.detail', compact('rider'));
     }
@@ -98,6 +101,9 @@ class RidersController extends Controller
     public function edit(string $id)
     {
         $rider = Rider::where('id', $id)->first();
+        if(!$rider) {
+            abort(404);
+        }
 
         return view('admin.rider.edit', compact('rider'));
     }
@@ -108,11 +114,10 @@ class RidersController extends Controller
     public function update(Request $request, string $id)
     {
         $rider = Rider::where('id',$id)->first();
-
         if(!$rider) {
-            return redirect()->back();
+            abort(404);
         }
-
+        
         $rules = [ 
             'name'                  => 'required|string',
             'phone_number'          => 'required|string|unique:riders,phone_number,' . $id,
@@ -134,12 +139,14 @@ class RidersController extends Controller
             $rider->name = $request->name;
             $rider->phone_number = $request->phone_number;
             $rider->email = $request->email? $request->email : null;
-            $rider->password = bcrypt($request->password);
+            if($request->password) {
+                $rider->password =  bcrypt($request->password);
+            }
             $rider->device_id = $request->device_id;
             $rider->save();
         }
 
-        return redirect(route('riders.index'));
+        return redirect(route('riders.show', $id));
     }
 
     /**
