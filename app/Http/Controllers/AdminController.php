@@ -45,14 +45,19 @@ class AdminController extends Controller
         $rules = [ 
             'name'                  => 'required|string',
             'phone_number'          => 'required|string|unique:users',
+            'email'                 => 'unique:users',
             'device_id'             => 'required',
+            'password'              => 'required|min:8',
         ];
             
         $customErr = [
             'name.required'                 => 'Name field is required.',
             'phone_number.required'         => 'Phone Number is required.',
             'phone_number.unique'           => 'Phone Number already exists.',
+            'email.unique'                  => 'Email already exists.',
             'device_id.required'            => 'Device ID is required.',
+            'password.required'             => 'Password is required',
+            'password.min'                  => 'Password should be a minimum of 8 characters.',
         ];
         $validator = Validator::make($request->all(), $rules,$customErr);
         if ($validator->fails()) {
@@ -75,7 +80,8 @@ class AdminController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $user = User::where('id',$id)->first();
+        return view('admin.user.detail',compact('user'));
     }
 
     /**
@@ -92,7 +98,33 @@ class AdminController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $user = User::where('id',$id)->first();
+        $rules = [ 
+            'name'                  => 'required|string',
+            'phone_number'          => 'required|string|unique:users,phone_number,'.$id,
+            'email'                 => 'unique:users,email,'.$id,
+            'device_id'             => 'required',
+        ];
+            
+        $customErr = [
+            'name.required'                 => 'Name field is required.',
+            'phone_number.required'         => 'Phone Number is required.',
+            'phone_number.unique'           => 'Phone Number already exists.',
+            'email.unique'                  => 'Email already exists.',
+            'device_id.required'            => 'Device ID is required.',
+        ];
+        $validator = Validator::make($request->all(), $rules,$customErr);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        } else {
+            $user = User::where('id',$id)->first();
+            $user->name = $request->name;
+            $user->phone_number = $request->phone_number;
+            $user->email = $request->email;
+            $user->device_id = $request->device_id;
+            $user->save();
+        }
+
+        return redirect()->route('users.index');
     }
 
     /**
