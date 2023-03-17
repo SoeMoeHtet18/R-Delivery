@@ -28,6 +28,12 @@
                     <span class="title">Shop User</span>
                 </a>
             </li>
+            <li>
+                <a href="{{route('townships.index')}}">
+                    <!-- <i class="fa fa-users"></i> -->
+                    <span class="title">Township</span>
+                </a>
+            </li>
         </ul>
     </div>
 </div>
