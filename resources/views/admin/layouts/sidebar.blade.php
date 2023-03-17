@@ -11,7 +11,7 @@
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="{{route('shops.index')}}">
                     <!-- <i class="fa fa-users"></i> -->
                     <span class="title">Shop</span>
                 </a>

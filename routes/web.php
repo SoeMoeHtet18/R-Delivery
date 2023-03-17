@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\RiderController;
+use App\Http\Controllers\ShopController;
 use App\Http\Controllers\ShopUserController;
 use App\Http\Controllers\TownshipController;
 use Illuminate\Support\Facades\Route;
@@ -25,3 +26,4 @@ Route::resource('/users', AdminController::class);
 Route::resource('/riders', RiderController::class);
 Route::resource('/shopusers', ShopUserController::class);
 Route::resource('/townships',TownshipController::class);
+Route::resource('/shops', ShopController::class);

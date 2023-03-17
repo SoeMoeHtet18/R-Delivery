@@ -10,12 +10,12 @@
 </style>
 
 <div class="create-button">
-    <a href="{{route('riders.create')}}" class="btn btn-success">Add Rider</a>
+    <a href="{{route('shops.create')}}" class="btn btn-success">Add Shop</a>
 </div>
 
 <div class="portlet box green">
     <div class="portlet-title">
-        <div class="caption">Rider Lists</div>
+        <div class="caption">Shop Lists</div>
     </div>
     <div class="portlet-body">
         <table id="datatable" class="table table-striped table-hover table-responsive datatable">
@@ -23,8 +23,8 @@
                 <tr>
                     <th>#</th>
                     <th>Name</th>
+                    <th>Address</th>
                     <th>Phone Number</th>
-                    <th>Email</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -51,14 +51,14 @@
     var table = $('.datatable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{route('riders.index')}}",
+        ajax: "{{route('shops.index')}}",
         columns: [
             {data: 'DT_RowIndex', name: 'id'},
             {data: 'name', name: 'name'},
+            {data: 'address', name: 'address'},
             {data: 'phone_number', name: 'phone_number'},
-            {data: 'email', name: 'email'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
-        ]
+        ],  
     });
       
   });
