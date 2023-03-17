@@ -21,7 +21,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('/users', AdminController::class);
-Route::resource('/riders', RiderController::class);
-Route::resource('/shopusers', ShopUserController::class);
-Route::resource('/townships',TownshipController::class);
+Route::group(['middleware' => 'auth'], function () {
+    Route::resource('/users', AdminController::class);
+    Route::resource('/riders', RiderController::class);
+    Route::resource('/shopusers', ShopUserController::class);
+    Route::resource('/townships',TownshipController::class);
+});
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
