@@ -12,4 +12,8 @@ class Shop extends Model
         'name', 'address', 'phone_number'
     ];
 
+    public function shop_users()
+    {
+        return $this->hasMany(ShopUser::class);
+    }
 }

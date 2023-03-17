@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Shop;
 use App\Models\ShopUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -40,7 +41,9 @@ class ShopUserController extends Controller
      */
     public function create()
     {
-        return view('admin.shopuser.create');
+        $shops = Shop::all();
+
+        return view('admin.shopuser.create', compact('shops'));
     }
 
     /**
@@ -76,6 +79,7 @@ class ShopUserController extends Controller
             $shopuser->email = $request->email;
             $shopuser->password = $request->password? bcrypt($request->password): null;
             $shopuser->device_id = $request->device_id ? $request->device_id : null;
+            $shopuser->shop_id = $request->shop_id;
             $shopuser->save();
         }
 
@@ -91,6 +95,9 @@ class ShopUserController extends Controller
         if(!$shopuser) {
             abort(404);
         }
+        $shop = Shop::where('id', $shopuser->shop_id)->first();
+        $shopuser->shop_name = $shop->name;
+        
         return view('admin.shopuser.detail',compact('shopuser'));
     }
 
@@ -103,7 +110,9 @@ class ShopUserController extends Controller
         if(!$shopuser) {
             abort(404);
         }
-        return view('admin.shopuser.edit',compact('shopuser'));
+        $shops = Shop::all();
+
+        return view('admin.shopuser.edit',compact('shopuser','shops'));
     }
 
     /**
@@ -138,6 +147,7 @@ class ShopUserController extends Controller
                     $shopuser->password = bcrypt($request->password);
                 }
                 $shopuser->device_id = $request->device_id;
+                $shopuser->shop_id = $request->shop_id;
                 $shopuser->save();
             }
     

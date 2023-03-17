@@ -51,7 +51,24 @@
                         <div class="col-10 p-3">
                             {{ $shop->phone_number }}
                         </div>
+                </div>
+                <div class="card">
+                    <div class="card-body px-4">
+                        <h4>
+                            <strong>Shop Users</strong>
+                        </h4>
+                        <div class="card-text">
+                            <ol>
+                                @foreach($shop->shop_users as $user)
+                                    <li>
+                                        <a href="{{route('shopusers.show', $user->id)}}"
+                                            class="text-dark">{{$user->name}}</a>
+                                    </li>
+                                @endforeach
+                            </ol>
+                        </div>
                     </div>
+                </div>
             </div>
         </div>
 @endsection

@@ -20,6 +20,19 @@
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
+                        <label for="shop" class="col-2">
+                            <h4>Shop Name <b>:</b></h4>
+                        </label>
+                        <div class="col-10">
+                            <select name="shop_id" id="shop" class="form-control">
+                                <option value="" selected disabled>Select the shop of this user</option>
+                                @foreach($shops as $shop)
+                                    <option value="{{$shop->id}}">{{$shop->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row m-0 mb-3">
                         <label for="phone_number" class="col-2">
                             <h4>Phone Number <b>:</b></h4>
                         </label>
