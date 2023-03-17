@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
 class OrderController extends Controller
@@ -40,7 +41,7 @@ class OrderController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.order.create');
     }
 
     /**
@@ -48,7 +49,38 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $rules = [
+
+        ];
+
+        $customErr = [
+
+        ];
+
+        $validator = Validator::make($request->all(), $rules,$customErr);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        } else {
+            $order = new Order();
+            $order->order_code =  $request->order_code;
+            $order->customer_name =  $request->customer_name;
+            $order->customer_phone_number =  $request->customer_phone_number ? $request->customer_phone_number : null;
+            $order->township_id =  $request->township_id;
+            $order->rider_id =  $request->rider_id;
+            $order->shop_id =  $request->shop_id;
+            $order->quantity =  $request->quantity;
+            $order->delivery_fees =  $request->delivery_fees;
+            $order->markup_delivery_fees =  $request->markup_delivery_fees ?? null;
+            $order->remark =  $request->remark ?? null;
+            $order->status =  "pending";
+            $order->item_type =  $request->item_type;
+            $order->full_address =  $request->full_address ?? null;
+            $order->schedule_date =  $request->schedule_date ?? null ;
+            $order->type =  $request->type;
+            $order->collection_method =  $request->collection_method;
+            $order->proof_of_payment =  $request->proof_of_payment;
+            // $order->last_updated_by =  $request->last_updated_by;
+        }
     }
 
     /**

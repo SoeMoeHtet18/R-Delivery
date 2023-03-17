@@ -28,6 +28,12 @@
                     <span class="title">Shop User</span>
                 </a>
             </li>
+            <li>
+                <a href="{{route('orders.index')}}">
+                    <!-- <i class="fa fa-users"></i> -->
+                    <span class="title">Oders</span>
+                </a>
+            </li>
         </ul>
     </div>
 </div>
