@@ -50,11 +50,33 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $rules = [
-
+            'order_code'            => 'required|unique:orders',
+            'customer_name'         => 'required',
+            'customer_phone_number' => 'required',
+            'township_id'           => 'required',
+            'rider_id'              => 'required',
+            'shop_id'               => 'required',
+            'quantity'              => 'required',
+            'delivery_fees'         => 'required',
+            'item_type'             => 'required',
+            'type'                  => 'required',
+            'collection_method'     => 'required',
         ];
 
         $customErr = [
-
+            'order_code.required'               => 'Order Code field is required',
+            'order_code.unique'                 => 'Order Code already exists',
+            'customer_name.required'            => 'Customer Name field is required',
+            'customer_phone_number.required'    => 'Customer Phone Number field is required',
+            'township_id.required'              => 'Township field is required',
+            'rider_id.required'                 => 'Rider field is required',
+            'shop_id.required'                  => 'Shop field is required',
+            'quantity.required'                 => 'Quantity field is required',
+            'delivery_fees.required'            => 'Delivery Fees is required',
+            'item_type.required'                => 'Item Type field is required',
+            'type.required'                     => 'Type field is required',
+            'collection_method.required'        => 'Collection Method field is required',
+            
         ];
 
         $validator = Validator::make($request->all(), $rules,$customErr);
@@ -64,7 +86,7 @@ class OrderController extends Controller
             $order = new Order();
             $order->order_code =  $request->order_code;
             $order->customer_name =  $request->customer_name;
-            $order->customer_phone_number =  $request->customer_phone_number ? $request->customer_phone_number : null;
+            $order->customer_phone_number =  $request->customer_phone_number;
             $order->township_id =  $request->township_id;
             $order->rider_id =  $request->rider_id;
             $order->shop_id =  $request->shop_id;
@@ -78,9 +100,10 @@ class OrderController extends Controller
             $order->schedule_date =  $request->schedule_date ?? null ;
             $order->type =  $request->type;
             $order->collection_method =  $request->collection_method;
-            $order->proof_of_payment =  $request->proof_of_payment;
+            $order->proof_of_payment =  $request->proof_of_payment ?? null;
             // $order->last_updated_by =  $request->last_updated_by;
         }
+        return redirect()->route('orders.index');
     }
 
     /**
