@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\RiderController;
+use App\Http\Controllers\ShopController;
 use App\Http\Controllers\ShopUserController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,3 +24,4 @@ Route::get('/', function () {
 Route::resource('/users', AdminController::class);
 Route::resource('/riders', RiderController::class);
 Route::resource('/shopusers', ShopUserController::class);
+Route::resource('/shops', ShopController::class);
