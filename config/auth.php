@@ -38,7 +38,15 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
-            'provider' => 'users',
+            'provider' => 'shop_users',
+        ],
+        'shopuser' => [
+            'driver' => 'session',
+            'provider' => 'shop_users',
+        ],
+        'shop-user-api' => [
+            'driver' => 'passport',
+            'provider' => 'shop_users',
         ],
     ],
 
@@ -69,6 +77,10 @@ return [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
+        'shop_users' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\ShopUser::class,
+        ],
     ],
 
     /*
