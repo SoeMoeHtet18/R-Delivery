@@ -2,20 +2,32 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Shop;
+use App\Repositories\ShopRepository;
+use App\Services\ShopService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
 class ShopController extends Controller
 {
+    protected $shopRepository;
+    protected $shopService;
+
+    public function __construct(ShopRepository $shopRepository, ShopService $shopService)
+    {
+        $this->shopRepository = $shopRepository;
+        $this->shopService = $shopService;
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
         if($request->ajax()) {
-            $shops = Shop::select('*');
+
+            $shops = $this->shopRepository->getAllShopsByDESC();
+
             return DataTables::of($shops)
                 ->addIndexColumn()
                 ->addColumn('action', function($shops) {
@@ -66,11 +78,9 @@ class ShopController extends Controller
         if  ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         } else {
-            $shop = new Shop();
-            $shop->name = $request->name;
-            $shop->address =  $request->address;
-            $shop->phone_number = $request->phone_number;
-            $shop->save();
+            $data = $request->all();
+
+            $this->shopService->saveShopData($data);
         }
         return redirect(route('shops.index'));
     }
@@ -80,10 +90,8 @@ class ShopController extends Controller
      */
     public function show(string $id)
     {
-        $shop = Shop::where('id',$id)->first();
-        if(!$shop) {
-            abort(404);
-        }
+        $shop = $this->shopRepository->getShopByID($id);
+
         return view('admin.shop.detail', compact('shop'));
     }
 
@@ -92,10 +100,8 @@ class ShopController extends Controller
      */
     public function edit(string $id)
     {
-        $shop = Shop::where('id',$id)->first();
-        if(!$shop) {
-            abort(404);
-        }
+        $shop = $this->shopRepository->getShopByID($id);
+        
         return view('admin.shop.edit', compact('shop'));
     }
 
@@ -104,12 +110,12 @@ class ShopController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $shop = Shop::where('id', $id)->first();
+        $shop = $this->shopRepository->getShopByID($id);
 
         $rules = [
             'name' => 'required|string',
             'address' => 'required|string',
-            'phone_number' => 'required|string|unique:shops'
+            'phone_number' => 'required|string|unique:shops,phone_number,' . $id
         ];
 
         $customErr = [
@@ -123,10 +129,9 @@ class ShopController extends Controller
         if  ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         } else {
-            $shop->name = $request->name;
-            $shop->address =  $request->address;
-            $shop->phone_number = $request->phone_number;
-            $shop->save();
+            $data = $request->all();
+
+            $this->shopService->updateShopByID($data, $shop);
         }
         return redirect(route('shops.show', $id));
     }
@@ -136,7 +141,16 @@ class ShopController extends Controller
      */
     public function destroy(string $id)
     {
-        Shop::destroy($id);
+        $this->shopService->deleteShopByID($id);
+        
         return redirect(route('shops.index'));
+    }
+
+    public function getShopUsers(Request $request, $id)
+    {
+        $shop_id = $id;
+        if ($request->ajax()) {
+            return $this->shopRepository->getShopUsersByShopID($shop_id);
+        };
     }
 }

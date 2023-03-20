@@ -6,7 +6,7 @@
                 <h2 class="ps-1 card-header-title">
                     <strong>Update ShopUser</strong>
                 </h2>
-                <form action="{{route('shopusers.update', $shopuser->id)}}" method="POST">
+                <form action="{{route('shopusers.update', $shop_user->id)}}" method="POST">
                     @csrf
                     @method('PUT')
                     <div class="row m-0 mb-3">
@@ -14,7 +14,7 @@
                             <h4>Name <b>:</b></h4>
                         </label>
                         <div class="col-10">
-                            <input type="text" id="name" name="name" value="{{$shopuser->name}}" class="form-control"/>
+                            <input type="text" id="name" name="name" value="{{$shop_user->name}}" class="form-control"/>
                             @if ($errors->has('name'))
                                 <span class="text-danger"><strong>{{ $errors->first('name') }}</strong></span>
                             @endif
@@ -28,7 +28,7 @@
                             <select name="shop_id" id="shop" class="form-control">
                                 <option value="" disabled>Select the shop of this user</option>
                                 @foreach($shops as $shop)
-                                    <option value="{{$shop->id}}" @if($shop->id == $shopuser->shop_id) {{'selected'}} @endif>{{$shop->name}}</option>
+                                    <option value="{{$shop->id}}" @if($shop->id == $shop_user->shop_id) {{'selected'}} @endif>{{$shop->name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -38,7 +38,7 @@
                             <h4>Phone Number <b>:</b></h4>
                         </label>
                         <div class="col-10">
-                            <input type="text" id="phone_number" name="phone_number" value="{{$shopuser->phone_number}}" class="form-control"/>
+                            <input type="text" id="phone_number" name="phone_number" value="{{$shop_user->phone_number}}" class="form-control"/>
                             @if ($errors->has('phone_number'))
                                 <span class="text-danger"><strong>{{ $errors->first('phone_number') }}</strong></span>
                             @endif
@@ -49,7 +49,7 @@
                             <h4>Email <b>:</b></h4>
                         </label>
                         <div class="col-10">
-                            <input type="email" id="email" name="email" value="{{$shopuser->email}}" class="form-control"/>
+                            <input type="email" id="email" name="email" value="{{$shop_user->email}}" class="form-control"/>
                             @if ($errors->has('email'))
                                 <span class="text-danger"><strong>{{ $errors->first('email') }}</strong></span>
                             @endif
@@ -61,17 +61,6 @@
                         </label>
                         <div class="col-10">
                             <input type="password" id="password" name="password" class="form-control" placeholder="Leave empty to keep the same"/>
-                        </div>
-                    </div>
-                    <div class="row m-0 mb-3">
-                        <label for="device_id" class="col-2">
-                            <h4>Device ID <b>:</b></h4>
-                        </label>
-                        <div class="col-10">
-                            <input type="text" id="device_id" name="device_id" value="{{$shopuser->device_id}}" class="form-control"/>
-                            @if ($errors->has('device_id'))
-                                <span class="text-danger"><strong>{{ $errors->first('device_id') }}</strong></span>
-                            @endif
                         </div>
                     </div>
                     <div class="footer-button float-end">
