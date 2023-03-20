@@ -27,7 +27,7 @@ class OrderController extends Controller
                     $actionBtn = '
                         <a href="'. route("orders.show", $row->id) .'" class="btn btn-info btn-sm">View</a> 
                         <a href="'. route("orders.edit", $row->id) .'" class="btn btn-light btn-sm">Edit</a> 
-                        <form action="'.route("orders.destroy", $row->id) .'" method="post" class="d-inline">
+                        <form action="'.route("orders.destroy", $row->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this order?`);">
                             <input type="hidden" name="_token" value="'. csrf_token() .'">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
