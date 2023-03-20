@@ -3,19 +3,29 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Repositories\AdminRepository;
+use App\Services\AdminService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
 class AdminController extends Controller
 {
+    protected $adminService;
+    protected $adminRepository;
+
+    public function __construct(AdminService $adminService, AdminRepository $adminRepository)
+    {
+        $this->adminService = $adminService;
+        $this->adminRepository = $adminRepository;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = User::select('*');
+            $data = User::select('*')->orderBy('id','DESC');
             return DataTables::of($data)
                 
                 ->addColumn('action', function($row){
@@ -52,7 +62,6 @@ class AdminController extends Controller
             'name'                  => 'required|string',
             'phone_number'          => 'required|string|unique:users',
             'email'                 => 'unique:users',
-            'device_id'             => 'required',
             'password'              => 'required|min:8',
         ];
             
@@ -61,7 +70,6 @@ class AdminController extends Controller
             'phone_number.required'         => 'Phone Number is required.',
             'phone_number.unique'           => 'Phone Number already exists.',
             'email.unique'                  => 'Email already exists.',
-            'device_id.required'            => 'Device ID is required.',
             'password.required'             => 'Password is required',
             'password.min'                  => 'Password should be a minimum of 8 characters.',
         ];
@@ -69,13 +77,8 @@ class AdminController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         } else {
-            $user = new User();
-            $user->name = $request->name;
-            $user->phone_number = $request->phone_number;
-            $user->email = $request->email;
-            $user->password = $request->password? bcrypt($request->password): null;
-            $user->device_id = $request->device_id;
-            $user->save();
+            $data = $request->all();
+            $this->adminService->saveAdminData($data);
         }
 
         return redirect()->route('users.index');
@@ -86,10 +89,8 @@ class AdminController extends Controller
      */
     public function show(string $id)
     {
-        $user = User::where('id',$id)->first();
-        if(!$user) {
-            abort(404);
-        }
+        $user = $this->adminRepository->getUserById($id);
+        
         return view('admin.user.detail',compact('user'));
     }
 
@@ -98,10 +99,7 @@ class AdminController extends Controller
      */
     public function edit(string $id)
     {
-        $user = User::where('id',$id)->first();
-        if(!$user) {
-            abort(404);
-        }
+        $user = $this->adminRepository->getUserById($id);
         return view('admin.user.edit',compact('user'));
     }
 
@@ -114,7 +112,6 @@ class AdminController extends Controller
             'name'                  => 'required|string',
             'phone_number'          => 'required|string|unique:users,phone_number,'.$id,
             'email'                 => 'unique:users,email,'.$id,
-            'device_id'             => 'required',
         ];
             
         $customErr = [
@@ -122,21 +119,14 @@ class AdminController extends Controller
             'phone_number.required'         => 'Phone Number is required.',
             'phone_number.unique'           => 'Phone Number already exists.',
             'email.unique'                  => 'Email already exists.',
-            'device_id.required'            => 'Device ID is required.',
         ];
         $validator = Validator::make($request->all(), $rules,$customErr);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         } else {
-            $user = User::where('id',$id)->first();
-            $user->name = $request->name;
-            $user->phone_number = $request->phone_number;
-            $user->email = $request->email;
-            if($request->password) {
-                $user->password = bcrypt($request->password);
-            }
-            $user->device_id = $request->device_id;
-            $user->save();
+            $user = $this->adminRepository->getUserById($id);
+            $data = $request->all();
+            $this->adminService->updateAdminData($data,$user);
         }
 
         return redirect()->route('users.index');
@@ -147,7 +137,7 @@ class AdminController extends Controller
      */
     public function destroy(string $id)
     {
-        User::destroy($id);
+        $this->adminService->deleteUserByID($id);
         return redirect()->route('users.index');
     }
 }
