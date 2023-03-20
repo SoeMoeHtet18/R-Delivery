@@ -24,17 +24,13 @@ Route::get('/', function () {
     return redirect('/login');
 });
 
-Route::resource('/users', AdminController::class);
-Route::resource('/riders', RiderController::class);
-Route::resource('/shopusers', ShopUserController::class);
-Route::resource('/townships',TownshipController::class);
-Route::resource('/shops', ShopController::class);
-Route::resource('/orders', OrderController::class);
 Route::group(['middleware' => 'auth'], function () {
     Route::resource('/users', AdminController::class);
     Route::resource('/riders', RiderController::class);
     Route::resource('/shopusers', ShopUserController::class);
     Route::resource('/townships',TownshipController::class);
+    Route::resource('/shops', ShopController::class);
+    Route::resource('/orders', OrderController::class);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
