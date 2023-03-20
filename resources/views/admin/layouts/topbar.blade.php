@@ -12,7 +12,7 @@
                 <div class="nav navbar-nav pull-right hidden-xs">
                     <span class="current-user">
                         <!-- <i class="fa fa-user-o"></i>  -->
-                        &nbsp; Admin!</span>
+                        {{ Auth::user()->name }}!</span>
                 </div>
 
             </div>

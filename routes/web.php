@@ -6,6 +6,7 @@ use App\Http\Controllers\RiderController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\ShopUserController;
 use App\Http\Controllers\TownshipController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/login');
 });
 
 Route::resource('/users', AdminController::class);
@@ -29,3 +30,11 @@ Route::resource('/shopusers', ShopUserController::class);
 Route::resource('/townships',TownshipController::class);
 Route::resource('/shops', ShopController::class);
 Route::resource('/orders', OrderController::class);
+Route::group(['middleware' => 'auth'], function () {
+    Route::resource('/users', AdminController::class);
+    Route::resource('/riders', RiderController::class);
+    Route::resource('/shopusers', ShopUserController::class);
+    Route::resource('/townships',TownshipController::class);
+});
+Auth::routes();
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
