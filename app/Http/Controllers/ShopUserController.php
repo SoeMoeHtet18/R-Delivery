@@ -96,9 +96,6 @@ class ShopUserController extends Controller
     public function show(string $id)
     {
         $shop_user = $this->shopUserRepository->getShopUserByID($id);
-
-        $shop = $this->shopRepository->getShopByID($shop_user->shop_id);
-        $shop_user->shop_name = $shop->name;
         
         return view('admin.shopuser.detail',compact('shop_user'));
     }

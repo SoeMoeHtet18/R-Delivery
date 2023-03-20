@@ -148,9 +148,8 @@ class ShopController extends Controller
 
     public function getShopUsersTable(Request $request, $id)
     {
-        $shop_id = $id;
         if ($request->ajax()) {
-            $data = $this->shopRepository->getShopUsersByShopID($shop_id);
+            $data = $this->shopRepository->getShopUsersByShopID($id);
             return DataTables::of($data)
             ->addIndexColumn()
             ->addColumn('action', function($data){
@@ -167,9 +166,8 @@ class ShopController extends Controller
 
     public function getShopOrdersTable(Request $request, $id)
     {
-        $shop_id = $id;
         if ($request->ajax()) {
-            $data = $this->shopRepository->getShopOrdersByShopID($shop_id);
+            $data = $this->shopRepository->getShopOrdersByShopID($id);
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function($row){

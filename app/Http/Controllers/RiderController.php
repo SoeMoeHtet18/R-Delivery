@@ -145,4 +145,24 @@ class RiderController extends Controller
         $this->riderService->deleteRiderByID($id);
         return redirect(route('riders.index'));
     }
+
+    public function getRiderOrdersTable(Request $request, $id)
+    {
+        if ($request->ajax()) {
+            $data = $this->riderRepository->getOrdersByShopID($id);
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function($row){
+                    $actionBtn = '
+                        <a href="'. route("orders.show", $row->id) .'" class="btn btn-info btn-sm">View</a> 
+                        <a href="'. route("orders.edit", $row->id) .'" class="btn btn-light btn-sm">Edit</a> 
+                        ';
+                    return $actionBtn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        };
+        
+
+    }
 }

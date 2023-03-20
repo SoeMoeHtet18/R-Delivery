@@ -48,6 +48,14 @@ return [
             'driver' => 'passport',
             'provider' => 'shop_users',
         ],
+        'rider' => [
+            'driver' => 'session',
+            'provider' => 'riders'
+        ],
+        'rider-api' => [
+            'driver' => 'passport',
+            'provider' => 'riders'
+        ]
     ],
 
     /*
@@ -81,6 +89,11 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\ShopUser::class,
         ],
+
+        'riders' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Rider::class
+        ]
     ],
 
     /*

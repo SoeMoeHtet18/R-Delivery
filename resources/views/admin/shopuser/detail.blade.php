@@ -41,7 +41,7 @@
                             <h4>Shop Name <b>:</b></h4>
                         </div>
                         <div class="col-10 p-3">
-                            {{ $shop_user->shop_name }}
+                            {{ $shop_user->shop->name }}
                         </div>
                     </div>
                     <div class="row m-0 mb-3">

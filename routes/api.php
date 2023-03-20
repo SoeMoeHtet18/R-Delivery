@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\RiderApiController;
 use App\Http\Controllers\Api\ShopUserApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -22,4 +23,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('shop_user_login', [ShopUserApiController::class, 'shopUsersLoginApi']);
 Route::middleware('auth:shop-user-api')->group( function () {
     Route::get('shopuser/{id}', [ShopUserApiController::class, 'show']);
+});
+Route::post('rider-login', [RiderApiController::class, 'riderLoginApi']);
+Route::middleware('auth:rider-api')->group(function() {
+    Route::get('riders/{id}', [RiderApiController::class, 'show']);
 });

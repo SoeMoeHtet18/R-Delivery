@@ -29,6 +29,7 @@ Route::get('/', function () {
 Route::group(['middleware' => 'auth'], function () {
     Route::resource('/users', AdminController::class);
     Route::resource('/riders', RiderController::class);
+    Route::get('/riders/get-orders-by-rider-id/{id}', [RiderController::class, 'getRiderOrdersTable']);
     Route::resource('/shopusers', ShopUserController::class);
     Route::resource('/townships',TownshipController::class);
     Route::resource('/shops', ShopController::class);
