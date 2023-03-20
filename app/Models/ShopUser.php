@@ -11,4 +11,9 @@ class ShopUser extends Model
     protected $fillable = [
         'name', 'phone_number', 'email', 'email_verified_at', 'password', 'device_id'
     ];
+
+    public function shop()
+    {
+        return $this->belongsTo(Shop::class);
+    }
 }

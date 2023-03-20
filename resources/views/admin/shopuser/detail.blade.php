@@ -38,6 +38,14 @@
                     </div>
                     <div class="row m-0 mb-3">
                         <div class="col-2">
+                            <h4>Shop Name <b>:</b></h4>
+                        </div>
+                        <div class="col-10 p-3">
+                            {{ $shopuser->shop_name }}
+                        </div>
+                    </div>
+                    <div class="row m-0 mb-3">
+                        <div class="col-2">
                         <h4>Phone Number <b>:</b></h4>
                         </div>
                         <div class="col-10 p-3">

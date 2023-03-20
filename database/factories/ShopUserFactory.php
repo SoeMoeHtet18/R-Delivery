@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Shop;
 use App\Models\ShopUser;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -31,6 +32,7 @@ class ShopUserFactory extends Factory
             'email_verified_at' => now(),
             'password' => encrypt(Str::random(8)),// password
             'device_id' => Str::random(6),
+            'shop_id' => Shop::all()->random()->id,
             'remember_token' => Str::random(10),
         ];
     }
