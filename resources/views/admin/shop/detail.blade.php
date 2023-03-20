@@ -52,23 +52,64 @@
                             {{ $shop->phone_number }}
                         </div>
                 </div>
-                <div class="card">
-                    <div class="card-body px-4">
-                        <h4>
-                            <strong>Shop Users</strong>
-                        </h4>
-                        <div class="card-text">
-                            <ol>
-                                @foreach($shop->shop_users as $user)
-                                    <li>
-                                        <a href="{{route('shopusers.show', $user->id)}}"
-                                            class="text-dark">{{$user->name}}</a>
-                                    </li>
-                                @endforeach
-                            </ol>
-                        </div>
+                <hr>
+                <ul class="nav nav-tabs mb-4">
+                    <li class="nav-item">
+                         <a href="#shop-user-datatable" id="shop-user-tab" class="nav-link" data-toggle="tab">Shop Users</a>
+                    </li>
+                    <li class="nav-item">
+                         <a href="#shop-order-datatable" id="shop-order-tab" class="nav-link" data-toggle="tab">Shop Orders</a>
+                    </li>
+                </ul>
+                <input type="hidden" id="current_screen" value="shop-user-datatable">
+                <div class="portlet box green">
+                    <div class="portlet-title">
+                        <div class="caption">ShopUser Lists</div>
+                    </div>
+                    <div class="portlet-body">
+                        <table id="shop-user-datatable" class="table table-striped table-hover table-responsive datatable">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Phone Number</th>
+                                    <th>Email</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                    
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
+@endsection
+@section('javascript')
+
+    <link href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script>
+    <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.11.4/js/dataTables.bootstrap5.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var shop_id = {!!json_encode($shop['id'])!!};
+            console.log(shop_id);
+            var table = $('#shop-user-datatable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: '/shops/get-shop-users-by-shop-id/' + shop_id,
+                columns: [
+                    {data: 'DT_RowIndex', name: 'id'},
+                    {data: 'name', name: 'name'},
+                    {data: 'phone_number', name: 'phone_number'},
+                    {data: 'email', name: 'email'},
+                    {data: 'action', name: 'action', orderable: false, searchable: false},
+                ], 
+            });
+        });
+    </script>
 @endsection

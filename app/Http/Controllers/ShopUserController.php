@@ -2,32 +2,43 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Shop;
-use App\Models\ShopUser;
+use App\Repositories\ShopRepository;
+use App\Repositories\ShopUserRepository;
+use App\Services\ShopUserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
 class ShopUserController extends Controller
 {
+    protected $shopUserRepository;
+    protected $shopUserService;
+    protected $shopRepository;
+
+    public function __construct(ShopUserRepository $shopUserRepository, ShopUserService $shopUserService, ShopRepository $shopRepository)
+    {
+        $this->shopUserRepository = $shopUserRepository;
+        $this->shopUserService = $shopUserService;
+        $this->shopRepository = $shopRepository;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = ShopUser::select('*');
-            return DataTables::of($data)
+            $shop_users = $this->shopUserRepository->getAllShopUsersByDESC();
+            return DataTables::of($shop_users)
                 ->addIndexColumn()
-                ->addColumn('action', function($data){
+                ->addColumn('action', function($shop_users){
                     $actionBtn = '
-                            <a href="'. route("shopusers.show", $data->id) .'" class="edit btn btn-info btn-sm">View</a> 
-                            <a href="'. route("shopusers.edit", $data->id) .'" class="edit btn btn-light btn-sm">Edit</a> 
-                            <form action="'.route("shopusers.destroy", $data->id) .'" method="post" class="d-inline">
-                            <input type="hidden" name="_token" value="'. csrf_token() .'">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
-                        </form>';
+                            <a href="'. route("shopusers.show", $shop_users->id) .'" class="edit btn btn-info btn-sm">View</a> 
+                            <a href="'. route("shopusers.edit", $shop_users->id) .'" class="edit btn btn-light btn-sm">Edit</a> 
+                            <form action="'.route("shopusers.destroy", $shop_users->id) .'" method="post" class="d-inline">
+                                <input type="hidden" name="_token" value="'. csrf_token() .'">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
+                            </form>';
                     return $actionBtn;
                 })
                 ->rawColumns(['action'])
@@ -41,7 +52,7 @@ class ShopUserController extends Controller
      */
     public function create()
     {
-        $shops = Shop::all();
+        $shops = $this->shopRepository->getAllShops();
 
         return view('admin.shopuser.create', compact('shops'));
     }
@@ -55,7 +66,6 @@ class ShopUserController extends Controller
             'name'              => 'required|string',
             'phone_number'      => 'required|string|unique:shop_users',
             'email'             => 'unique:shop_users',
-            'device_id'         => 'required',
             'password'          => 'required|min:8',
         ];
 
@@ -64,7 +74,6 @@ class ShopUserController extends Controller
             'phone_number.required'      => 'Phone Number is required',
             'phone_number.unique'        => 'Phone Number already exists',
             'email'                      => 'Email already exists',
-            'device_id.required'         => 'Device ID is required',
             'password.required'          => 'Password is required',
             'password.min'               => 'Password should be a minimum of 8 characters.',
         ];
@@ -73,14 +82,9 @@ class ShopUserController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         } else {
-            $shopuser = new ShopUser();
-            $shopuser->name = $request->name;
-            $shopuser->phone_number = $request->phone_number ? $request->phone_number : null;
-            $shopuser->email = $request->email;
-            $shopuser->password = $request->password? bcrypt($request->password): null;
-            $shopuser->device_id = $request->device_id ? $request->device_id : null;
-            $shopuser->shop_id = $request->shop_id;
-            $shopuser->save();
+            $data = $request->all();
+
+            $this->shopUserService->saveShopUserData($data);
         }
 
         return redirect()->route('shopusers.index');
@@ -91,14 +95,12 @@ class ShopUserController extends Controller
      */
     public function show(string $id)
     {
-        $shopuser = ShopUser::where('id',$id)->first();
-        if(!$shopuser) {
-            abort(404);
-        }
-        $shop = Shop::where('id', $shopuser->shop_id)->first();
-        $shopuser->shop_name = $shop->name;
+        $shop_user = $this->shopUserRepository->getShopUserByID($id);
+
+        $shop = $this->shopRepository->getShopByID($shop_user->shop_id);
+        $shop_user->shop_name = $shop->name;
         
-        return view('admin.shopuser.detail',compact('shopuser'));
+        return view('admin.shopuser.detail',compact('shop_user'));
     }
 
     /**
@@ -106,13 +108,11 @@ class ShopUserController extends Controller
      */
     public function edit(string $id)
     {
-        $shopuser = ShopUser::where('id',$id)->first();
-        if(!$shopuser) {
-            abort(404);
-        }
-        $shops = Shop::all();
+        $shop_user = $this->shopUserRepository->getShopUserByID($id);
 
-        return view('admin.shopuser.edit',compact('shopuser','shops'));
+        $shops = $this->shopRepository->getAllShops();
+
+        return view('admin.shopuser.edit',compact('shop_user','shops'));
     }
 
     /**
@@ -120,39 +120,31 @@ class ShopUserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        {
-            $rules = [ 
-                'name'                  => 'required|string',
-                'phone_number'          => 'required|string|unique:shop_users,phone_number,'.$id,
-                'email'                 => 'unique:shop_users,email,'.$id,
-                'device_id'             => 'required',
-            ];
+        $rules = [ 
+            'name'                  => 'required|string',
+            'phone_number'          => 'required|string|unique:shop_users,phone_number,'.$id,
+            'email'                 => 'unique:shop_users,email,'.$id,
+        ];
                 
-            $customErr = [
-                'name.required'                 => 'Name field is required.',
-                'phone_number.required'         => 'Phone Number is required.',
-                'phone_number.unique'           => 'Phone Number already exists.',
-                'email.unique'                  => 'Email already exists.',
-                'device_id.required'            => 'Device ID is required.',
-            ];
-            $validator = Validator::make($request->all(), $rules,$customErr);
-            if ($validator->fails()) {
-                return redirect()->back()->withErrors($validator)->withInput();
-            } else {
-                $shopuser = ShopUser::where('id',$id)->first();
-                $shopuser->name = $request->name;
-                $shopuser->phone_number = $request->phone_number;
-                $shopuser->email = $request->email;
-                if ($request->password) {
-                    $shopuser->password = bcrypt($request->password);
-                }
-                $shopuser->device_id = $request->device_id;
-                $shopuser->shop_id = $request->shop_id;
-                $shopuser->save();
-            }
-    
-            return redirect()->route('shopusers.show', $id);
+        $customErr = [
+            'name.required'                 => 'Name field is required.',
+            'phone_number.required'         => 'Phone Number is required.',
+            'phone_number.unique'           => 'Phone Number already exists.',
+            'email.unique'                  => 'Email already exists.',
+        ];
+            
+        $validator = Validator::make($request->all(), $rules,$customErr);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        } else {
+            $shop_user = $this->shopUserRepository->getShopUserByID($id);
+
+            $data = $request->all();
+            $this->shopUserService->updateShopUserByID($data, $shop_user);
         }
+    
+        return redirect()->route('shopusers.show', $id);
+        
     }
 
     /**
@@ -160,7 +152,7 @@ class ShopUserController extends Controller
      */
     public function destroy(string $id)
     {
-        ShopUser::destroy($id);
+        $this->shopUserService->deleteShopUserByID($id);
         return redirect()->route('shopusers.index');
     }
 }

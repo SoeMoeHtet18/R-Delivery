@@ -37,7 +37,7 @@
             <li>
                 <a href="{{route('orders.index')}}">
                     <!-- <i class="fa fa-users"></i> -->
-                    <span class="title">Oders</span>
+                    <span class="title">Order</span>
                 </a>
             </li>
             <li>
