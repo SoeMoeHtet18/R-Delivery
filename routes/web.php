@@ -20,9 +20,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-
+Route::resource('/users', AdminController::class);
 Route::group(['middleware' => 'auth'], function () {
-    Route::resource('/users', AdminController::class);
+    
     Route::resource('/riders', RiderController::class);
     Route::resource('/shopusers', ShopUserController::class);
     Route::resource('/townships',TownshipController::class);
