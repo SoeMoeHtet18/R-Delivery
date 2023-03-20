@@ -22,4 +22,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('shop_user_login', [ShopUserApiController::class, 'shopUsersLoginApi']);
 Route::middleware('auth:shop-user-api')->group( function () {
     Route::get('shopuser/{id}', [ShopUserApiController::class, 'show']);
+    Route::get('shopowner-order-list/{id}', [ShopUserApiController::class, 'orderListByShopOwnerID']);
+    Route::get('shopowner-create-order-list/{id}', [ShopUserApiController::class, 'orderCreateByShopOwner']);
 });
