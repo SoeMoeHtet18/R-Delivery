@@ -4,10 +4,11 @@
         <div class="card card-container">
             <div class="card-body">
                 <h2 class="ps-1 card-header-title">
-                    <strong>Add New Order</strong>
+                    <strong>Update Order</strong>
                 </h2>
-                <form action="{{route('orders.store')}}" method="POST">
+                <form action="{{route('orders.update', $order->id)}}" method="POST">
                     @csrf
+                    @method('PUT')
                     <div class="row m-0 mb-3">
                         <label for="order_code" class="col-2">
                             <h4>Order Code <b>:</b></h4>
@@ -201,9 +202,8 @@
                             @endif
                         </div>
                     </div>
-                    
                     <div class="footer-button float-end">
-                        <a href="{{route('orders.index')}}" class="btn btn-light">Cancel</a>
+                        <a href="{{url()->previous() }}" class="btn btn-light">Cancel</a>
                         <input type="submit" class="btn btn-success ">
                     </div>
                 </form>

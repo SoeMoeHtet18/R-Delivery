@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\Rider;
+use App\Models\Shop;
+use App\Models\Township;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
@@ -40,8 +43,12 @@ class OrderController extends Controller
      * Show the form for creating a new resource.
      */
     public function create()
-    {
-        return view('admin.order.create');
+    {   
+        $shops = Shop::all();
+        $riders = Rider::all();
+        $townships = Township::all();
+        
+        return view('admin.order.create',compact('shops', 'riders', 'townships'));
     }
 
     /**
@@ -111,7 +118,11 @@ class OrderController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $order = Order::with('rider', 'shop', 'township', 'user' )->where('id',$id)->first();
+        if(!$order) {
+            abort(404);
+        }
+        return view('admin.order.detail',compact('order'));
     }
 
     /**
@@ -136,7 +147,6 @@ class OrderController extends Controller
     public function destroy(string $id)
     {
         Order::destroy($id);
-
         return redirect()->route('orders.index');
     }
 }
