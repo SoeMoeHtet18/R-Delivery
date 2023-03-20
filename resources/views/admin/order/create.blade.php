@@ -55,19 +55,6 @@
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
-                        <label for="rider_id" class="col-2">
-                            <h4>Rider Name <b>:</b></h4>
-                        </label>
-                        <div class="col-10">
-                            <select name="rider_id" id="rider_id" class="form-control">
-                                <option value="" selected disabled>Select the Rider for This Order</option>
-                                @foreach ( $riders as $rider)
-                                    <option value="{{$rider->id}}">{{$rider->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row m-0 mb-3">
                         <label for="shop_id" class="col-2">
                             <h4>Shop Name <b>:</b></h4>
                         </label>
@@ -236,7 +223,6 @@
     <script>
         $(document).ready(function() {
             $('#township_id').select2();
-            $('#rider_id').select2();
             $('#shop_id').select2();
             $('#status_id').select2();
             $('#item_type_id').select2();

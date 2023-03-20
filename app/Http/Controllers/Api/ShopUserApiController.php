@@ -4,12 +4,27 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\ShopUser;
+use App\Repositories\ShopRepository;
+use App\Repositories\ShopUserRepository;
+use App\Services\OrdersService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ShopUserApiController extends Controller
 {
+    protected $shopUserRepository;
+    protected $shopRepository;
+    protected $ordersService;
+
+    public function __construct(ShopUserRepository $shopUserRepository,ShopRepository $shopRepository,OrdersService $ordersService)
+    {
+        $this->shopUserRepository = $shopUserRepository;
+        $this->shopRepository = $shopRepository;
+        $this->ordersService = $ordersService;
+
+    }
+
     public function shopUsersLoginApi(Request $request)
     {
         $validator = Validator::make($request->all(),[
@@ -34,7 +49,22 @@ class ShopUserApiController extends Controller
 
     public function show($id) 
     {
-        $shopuser = ShopUser::findOrFail($id);
+        $shopuser = $this->shopUserRepository->getShopUserByID($id);
         return response()->json( ['data' => $shopuser, 'message' => 'Successfully Get Shop User Detail', 'status' => 'success'], 200); 
+    }
+
+    public function orderListByShopOwnerID($id) 
+    {   
+        $shop_user = $this->shopUserRepository->getShopUserByID($id);
+        $order_list = $this->shopRepository->getShopOrdersByShopID($shop_user->shop_id);
+        return response()->json( ['data' => $order_list, 'message' => 'Successfully Get Order List', 'status' => 'success'], 200); 
+    }
+
+    public function orderCreateByShopOwner(Request $request, $id)
+    {   
+        $shop_user = $this->shopUserRepository->getShopUserByID($id);
+        $data = $request->all();
+        $orders = $this->ordersService->saveOrderByShopID($data, $shop_user->shop_id);
+        return response()->json( ['data' => $orders, 'message' => 'Successfully Created Order By Shop Owner', 'status' => 'success'], 200); 
     }
 }
