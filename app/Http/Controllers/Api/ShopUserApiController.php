@@ -4,12 +4,20 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\ShopUser;
+use App\Repositories\ShopUserRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ShopUserApiController extends Controller
 {
+    protected $shopuserRepository;
+
+    public function __construct(ShopUserRepository $shopUserRepository)
+    {
+        $this->shopuserRepository = $shopUserRepository;
+    }
+
     public function shopUsersLoginApi(Request $request)
     {
         $validator = Validator::make($request->all(),[
@@ -34,7 +42,7 @@ class ShopUserApiController extends Controller
 
     public function show($id) 
     {
-        $shopuser = ShopUser::findOrFail($id);
+        $shopuser = $this->shopuserRepository->getShopUserByID($id);
         return response()->json( ['data' => $shopuser, 'message' => 'Successfully Get Shop User Detail', 'status' => 'success'], 200); 
     }
 }
