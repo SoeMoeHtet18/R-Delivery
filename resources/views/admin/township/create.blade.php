@@ -19,6 +19,19 @@
                             @endif
                         </div>
                     </div>
+                    <div class="row m-0 mb-3">
+                        <label for="city" class="col-2">
+                            <h4>City <b>:</b></h4>
+                        </label>
+                        <div class="col-10">
+                            <select name="city" id="city_id" class="form-control">
+                                <option value="" selected disabled>Select City for this Township</option>
+                                @foreach($cities as $city)
+                                    <option value="{{$city->id}}">{{$city->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
                     <div class="footer-button float-end">
                         <a href="{{route('townships.index')}}" class="btn btn-light">Cancel</a>
                         <input type="submit" class="btn btn-success ">
@@ -27,4 +40,11 @@
             </div>
         </div>
         
+@endsection
+@section('javascript')
+    <script>
+        $(document).ready(function() {
+            $('#city_id').select2();
+        });
+    </script>
 @endsection

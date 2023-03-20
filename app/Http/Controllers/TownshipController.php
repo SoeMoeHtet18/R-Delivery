@@ -2,20 +2,34 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\City;
 use App\Models\Township;
+use App\Repositories\CityRepository;
+use App\Repositories\TownshipRepository;
+use App\Services\TownshipService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
 class TownshipController extends Controller
-{
+{   
+    protected $townshipRepository;
+    protected $townshipService;
+    protected $cityRepository;
+
+    public function __construct(TownshipRepository $townshipRepository,TownshipService  $townshipService,CityRepository $cityRepository)
+    {   
+        $this->townshipRepository = $townshipRepository;
+        $this->townshipService = $townshipService;
+        $this->cityRepository = $cityRepository;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {   
         if ($request->ajax()) {
-            $data = Township::select('*');
+            $data = Township::leftJoin('cities','cities.id','townships.city_id')->select('townships.*','cities.name as city_name');
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function($data){
@@ -39,8 +53,9 @@ class TownshipController extends Controller
      * Show the form for creating a new resource.
      */
     public function create()
-    {
-        return view('admin.township.create');
+    {   
+        $cities = $this->cityRepository->getAllCities();
+        return view('admin.township.create',compact('cities'));
     }
 
     /**
@@ -49,20 +64,21 @@ class TownshipController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'name'              => 'required|string',
+            'name'           => 'required|string',
+            'city'           => 'required',
         ];
 
         $customErr = [
             'name.required'     => 'Name field is required',
+            'city.required'     => 'City field is required',
         ];
         
         $validator = Validator::make($request->all(), $rules,$customErr);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         } else {
-            $township = new Township();
-            $township->name = $request->name;
-            $township->save();
+            $data = $request->all();
+            $this->townshipService->saveTownshipData($data);
         }
 
         return redirect()->route('townships.index');
@@ -73,10 +89,7 @@ class TownshipController extends Controller
      */
     public function show(string $id)
     {
-        $township = Township::where('id', $id)->first();
-        if(!$township) {
-            abort(404);
-        }
+        $township = $this->townshipRepository->getTownshipById($id);
         return view('admin.township.detail',compact('township'));
     }
 
@@ -85,37 +98,35 @@ class TownshipController extends Controller
      */
     public function edit(string $id)
     {
-        $township = Township::where('id',$id)->first();
-        if(!$township) {
-            abort(404);
-        }
-        return view('admin.township.edit',compact('township'));
+        $township = $this->townshipRepository->getTownshipById($id);
+        $cities = $this->cityRepository->getAllCities();
+        return view('admin.township.edit',compact('township', 'cities'));
     }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-    {
-        {
-            $rules = [ 
-                'name'                  => 'required|string',
-            ];
-                
-            $customErr = [
-                'name.required'                 => 'Name field is required.',
-            ];
-            $validator = Validator::make($request->all(), $rules,$customErr);
-            if ($validator->fails()) {
-                return redirect()->back()->withErrors($validator)->withInput();
-            } else {
-                $township = Township::where('id',$id)->first();
-                $township->name = $request->name;
-                $township->save();
-            }
-    
-            return redirect()->route('townships.show', $id);
+    {   
+        $rules = [ 
+            'name'                  => 'required|string',
+            'city'                  => 'required',
+        ];
+            
+        $customErr = [
+            'name.required'         => 'Name field is required.',
+            'city.required'         => 'City field is required.',
+        ];
+        $validator = Validator::make($request->all(), $rules,$customErr);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        } else {
+            $data = $request->all();
+            $township = $this->townshipRepository->getTownshipById($id);
+            $this->townshipService->updateTownshipByID($data,$township);
         }
+
+        return redirect(route('townships.show', $id));
     }
 
     /**
@@ -123,7 +134,7 @@ class TownshipController extends Controller
      */
     public function destroy(string $id)
     {
-        Township::destroy($id);
+        $this->townshipService->deleteTownshipByID($id);
         return redirect()->route('townships.index');
     }
 }
