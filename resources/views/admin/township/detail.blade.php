@@ -36,6 +36,14 @@
                             {{ $township->name }}
                         </div>
                     </div>
+                    <div class="row m-0 mb-3">
+                        <div class="col-2">
+                            <h4>City <b>:</b></h4>
+                        </div>
+                        <div class="col-10 p-3">
+                            {{ $township->city->name }}
+                        </div>
+                    </div>
             </div>
         </div>
 @endsection

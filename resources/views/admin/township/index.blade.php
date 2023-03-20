@@ -23,6 +23,7 @@
                 <tr>
                     <th>#</th>
                     <th>Name</th>
+                    <th>City</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -51,6 +52,7 @@
         columns: [
             {data: 'DT_RowIndex', name: 'id'},
             {data: 'name', name: 'name'},
+            {data: 'city_name', name: 'city'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ],
         
