@@ -17,7 +17,7 @@ class AdminController extends Controller
         if ($request->ajax()) {
             $data = User::select('*');
             return DataTables::of($data)
-                ->addIndexColumn()
+                
                 ->addColumn('action', function($row){
                     $actionBtn = '<a href="' . route("users.show", $row->id) . '" class="info btn btn-info btn-sm">View</a>
                     <a href="' . route("users.edit", $row->id) . '" class="edit btn btn-light btn-sm">Edit</a>
@@ -29,6 +29,7 @@ class AdminController extends Controller
                     return $actionBtn;
                 })
                 ->rawColumns(['action'])
+                ->addIndexColumn()
                 ->make(true);
         }
         return view('admin.user.index');
