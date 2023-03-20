@@ -2,22 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\City;
-use App\Repositories\CityRepository;
-use App\Services\CityService;
+use App\Models\ItemType;
+use App\Repositories\ItemTypeRepository;
+use App\Services\ItemTypeService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Validator;
 
-class CityController extends Controller
-{
-
-    protected $cityRepository;
-    protected $cityService;
-    public function __construct(CityRepository $cityRepository, CityService $cityService)
+class ItemTypeController extends Controller
+{   
+    protected $itemTypeRepository;
+    protected $itemTypeService;
+    public function __construct(ItemTypeRepository $itemTypeRepository, ItemTypeService $itemTypeService)
     {
-        $this->cityRepository = $cityRepository;
-        $this->cityService    = $cityService;
+        $this->itemTypeRepository = $itemTypeRepository;
+        $this->itemTypeService    = $itemTypeService;
     }
     /**
      * Display a listing of the resource.
@@ -25,13 +24,13 @@ class CityController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = City::select('*')->orderBy('id','DESC');
+            $data = ItemType::select('*')->orderBy('id','DESC');
             return DataTables::of($data)
                 
                 ->addColumn('action', function($row){
-                    $actionBtn = '<a href="' . route("cities.show", $row->id) . '" class="info btn btn-info btn-sm">View</a>
-                    <a href="' . route("cities.edit", $row->id) . '" class="edit btn btn-light btn-sm">Edit</a>
-                    <form action="'.route("cities.destroy", $row->id) .'" method="post" class="d-inline">
+                    $actionBtn = '<a href="' . route("itemtypes.show", $row->id) . '" class="info btn btn-info btn-sm">View</a>
+                    <a href="' . route("itemtypes.edit", $row->id) . '" class="edit btn btn-light btn-sm">Edit</a>
+                    <form action="'.route("itemtypes.destroy", $row->id) .'" method="post" class="d-inline">
                         <input type="hidden" name="_token" value="'. csrf_token() .'">
                         <input type="hidden" name="_method" value="DELETE">
                         <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
@@ -42,7 +41,7 @@ class CityController extends Controller
                 ->addIndexColumn()
                 ->make(true);
         }
-        return view('admin.city.index');
+        return view('admin.itemtype.index');
     }
 
     /**
@@ -50,7 +49,7 @@ class CityController extends Controller
      */
     public function create()
     {
-        return view('admin.city.create');
+        return view('admin.itemtype.create');
     }
 
     /**
@@ -63,17 +62,17 @@ class CityController extends Controller
         ];
             
         $customErr = [
-            'name.required'                 => 'Name field is required.',
+            'name.required'         => 'Name field is required.',
         ];
         $validator = Validator::make($request->all(), $rules,$customErr);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         } else {
             $data = $request->all();
-            $this->cityService->saveCityData($data);
+            $this->itemTypeService->saveitemTypeData($data);
         }
 
-        return redirect()->route('cities.index');
+        return redirect()->route('itemtypes.index');
     }
 
     /**
@@ -81,8 +80,8 @@ class CityController extends Controller
      */
     public function show(string $id)
     {
-        $city = $this->cityRepository->getByCityID($id);
-        return view('admin.city.detail',compact('city'));
+        $itemtype = $this->itemTypeRepository->getByItemTypeID($id);
+        return view('admin.itemtype.detail',compact('itemtype'));
     }
 
     /**
@@ -90,8 +89,8 @@ class CityController extends Controller
      */
     public function edit(string $id)
     {
-        $city = $this->cityRepository->getByCityID($id);
-        return view('admin.city.edit',compact('city'));
+        $itemtype = $this->itemTypeRepository->getByItemTypeID($id);
+        return view('admin.itemtype.edit',compact('itemtype'));
     }
 
     /**
@@ -111,11 +110,11 @@ class CityController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         } else {
             $data = $request->all();
-            $city = $this->cityRepository->getByCityID($id);
-            $this->cityService->updateCityByID($data,$city);
+            $itemtype = $this->itemTypeRepository->getByItemTypeID($id);
+            $this->itemTypeService->updateItemTypeByID($data,$itemtype);
         }
 
-        return redirect(route('cities.show', $id));
+        return redirect(route('itemtypes.show', $id));
     }
 
     /**
@@ -123,7 +122,7 @@ class CityController extends Controller
      */
     public function destroy(string $id)
     {
-        $this->cityService->deleteCityByID($id);
-        return redirect()->route('cities.index');
+        $this->itemTypeService->deleteItemTypeByID($id);
+        return redirect()->route('itemtypes.index');
     }
 }

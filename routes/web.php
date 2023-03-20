@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\ItemTypeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RiderController;
 use App\Http\Controllers\ShopController;
@@ -35,6 +36,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/shops/get-shop-orders-by-shop-id/{id}', [ShopController::class, 'getShopOrdersTable']);
     Route::resource('/orders', OrderController::class);
     Route::resource('/cities', CityController::class);
+    Route::resource('/itemtypes', ItemTypeController::class);
+
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

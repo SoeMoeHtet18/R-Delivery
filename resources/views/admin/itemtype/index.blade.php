@@ -10,12 +10,12 @@
 </style>
 
 <div class="create-button">
-    <a href="{{route('townships.create')}}" class="btn btn-success">Add Township</a>
+    <a class="btn btn-success" href="{{route('itemtypes.create')}}">Add ItemType</a>
 </div>
 
 <div class="portlet box green">
     <div class="portlet-title">
-        <div class="caption">Township Lists</div>
+        <div class="caption">Item Type Lists</div>
     </div>
     <div class="portlet-body">
         <table id="datatable" class="table table-striped table-hover table-responsive datatable">
@@ -23,11 +23,12 @@
                 <tr>
                     <th>#</th>
                     <th>Name</th>
-                    <th>City</th>
                     <th>Action</th>
                 </tr>
             </thead>
+
             <tbody>
+               
             </tbody>
         </table>
     </div>
@@ -48,14 +49,12 @@
     var table = $('.datatable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{route('townships.index')}}",
+        ajax: "{{ route('itemtypes.index') }}",
         columns: [
             {data: 'DT_RowIndex', name: 'id'},
             {data: 'name', name: 'name'},
-            {data: 'city_name', name: 'city'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
-        ],
-        
+        ]
     });
       
   });
