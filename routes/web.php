@@ -31,7 +31,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/shopusers', ShopUserController::class);
     Route::resource('/townships',TownshipController::class);
     Route::resource('/shops', ShopController::class);
-    Route::get('/shops/get-shop-users-by-shop-id/{id}', [ShopController::class, 'getShopUsers']);
+    Route::get('/shops/get-shop-users-by-shop-id/{id}', [ShopController::class, 'getShopUsersTable']);
+    Route::get('/shops/get-shop-orders-by-shop-id/{id}', [ShopController::class, 'getShopOrdersTable']);
     Route::resource('/orders', OrderController::class);
     Route::resource('/cities', CityController::class);
 });

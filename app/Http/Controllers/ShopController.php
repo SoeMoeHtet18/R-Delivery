@@ -146,11 +146,41 @@ class ShopController extends Controller
         return redirect(route('shops.index'));
     }
 
-    public function getShopUsers(Request $request, $id)
+    public function getShopUsersTable(Request $request, $id)
     {
         $shop_id = $id;
         if ($request->ajax()) {
-            return $this->shopRepository->getShopUsersByShopID($shop_id);
+            $data = $this->shopRepository->getShopUsersByShopID($shop_id);
+            return DataTables::of($data)
+            ->addIndexColumn()
+            ->addColumn('action', function($data){
+                $actionBtn = '
+                        <a href="'. route("shopusers.show", $data->id) .'" class="edit btn btn-info btn-sm">View</a> 
+                        <a href="'. route("shopusers.edit", $data->id) .'" class="edit btn btn-light btn-sm">Edit</a>
+                    ';
+                return $actionBtn;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+        };
+    }
+
+    public function getShopOrdersTable(Request $request, $id)
+    {
+        $shop_id = $id;
+        if ($request->ajax()) {
+            $data = $this->shopRepository->getShopOrdersByShopID($shop_id);
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function($row){
+                    $actionBtn = '
+                        <a href="'. route("orders.show", $row->id) .'" class="btn btn-info btn-sm">View</a> 
+                        <a href="'. route("orders.edit", $row->id) .'" class="btn btn-light btn-sm">Edit</a> 
+                        ';
+                    return $actionBtn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
         };
     }
 }

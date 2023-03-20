@@ -54,17 +54,6 @@
                         @endif
                         </div>
                     </div>
-                    <div class="row m-0 mb-3">
-                        <label for="device_id" class="col-2">
-                            <h4>Device ID <b>:</b></h4>
-                        </label>
-                        <div class="col-10">
-                            <input type="text" id="device_id" name="device_id" class="form-control"/>
-                        @if ($errors->has('device_id'))
-                            <span class="text-danger"><strong>{{ $errors->first('device_id') }}</strong></span>
-                        @endif
-                        </div>
-                    </div>
                     <div class="footer-button float-end">
                         <a href="{{route('riders.index')}}" class="btn btn-light">Cancel</a>
                         <input type="submit" class="btn btn-success ">

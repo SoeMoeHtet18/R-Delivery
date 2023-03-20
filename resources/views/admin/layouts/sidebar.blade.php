@@ -43,7 +43,7 @@
             <li>
                 <a href="{{route('cities.index')}}">
                     <!-- <i class="fa fa-users"></i> -->
-                    <span class="title">Cities</span>
+                    <span class="title">City</span>
                 </a>
             </li>
             <li>
