@@ -103,6 +103,17 @@
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
+                        <label for="total_amount" class="col-2">
+                            <h4>Total Amount <b>:</b></h4>
+                        </label>
+                        <div class="col-10">
+                            <input type="text" id="total_amount" name="total_amount" class="form-control"/>
+                            @if ($errors->has('total_amount'))
+                            <span class="text-danger"><strong>{{ $errors->first('total_amount') }}</strong></span>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="row m-0 mb-3">
                         <label for="markup_delivery_fees" class="col-2">
                             <h4>Markup Delivery Fees <b>:</b></h4>
                         </label>
@@ -129,10 +140,13 @@
                             <h4>Status <b>:</b></h4>
                         </label>
                         <div class="col-10">
-                            <input type="text" id="status" name="status" class="form-control"/>
-                            @if ($errors->has('status'))
-                            <span class="text-danger"><strong>{{ $errors->first('status') }}</strong></span>
-                            @endif
+                            <select name="status" id="status_id" class="form-control">
+                                <option value="" selected disabled>Select Status for This Order</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="success">Success</option>
+                                    <option value="delay">Delay</option>
+                                    <option value="cancel">Cancel</option>
+                            </select>
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
@@ -140,10 +154,11 @@
                             <h4>Item Type <b>:</b></h4>
                         </label>
                         <div class="col-10">
-                            <input type="text" id="item_type" name="item_type" class="form-control"/>
-                            @if ($errors->has('item_type'))
-                            <span class="text-danger"><strong>{{ $errors->first('item_type') }}</strong></span>
-                            @endif
+                            <select name="item_type" id="item_type_id" class="form-control">
+                                <option value="" selected disabled>Select Item Type for This Order</option>
+                                <option value="normal">Normal</option>
+                                    <option value="luxuary">Luxuary</option>
+                            </select>
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
@@ -162,7 +177,7 @@
                             <h4>Schedule Date <b>:</b></h4>
                         </label>
                         <div class="col-10">
-                            <input type="text" id="schedule_date" name="schedule_date" class="form-control"/>
+                            <input type="date" id="schedule_date" name="schedule_date" class="form-control"/>
                             @if ($errors->has('schedule_date'))
                             <span class="text-danger"><strong>{{ $errors->first('schedule_date') }}</strong></span>
                             @endif
@@ -173,10 +188,12 @@
                             <h4>Type <b>:</b></h4>
                         </label>
                         <div class="col-10">
-                            <input type="text" id="type" name="type" class="form-control"/>
-                            @if ($errors->has('type'))
-                            <span class="text-danger"><strong>{{ $errors->first('type') }}</strong></span>
-                            @endif
+                            <select name="type" id="type_id" class="form-control">
+                                <option value="" selected disabled>Select the Type for This Order</option>
+                                    <option value="standard">Standard</option>
+                                    <option value="express">Express</option>
+                                    <option value="doortodoor">Door To Door</option>
+                            </select>
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
@@ -184,10 +201,11 @@
                             <h4>Collection Method <b>:</b></h4>
                         </label>
                         <div class="col-10">
-                            <input type="text" id="collection_method" name="collection_method" class="form-control"/>
-                            @if ($errors->has('collection_method'))
-                            <span class="text-danger"><strong>{{ $errors->first('collection_method') }}</strong></span>
-                            @endif
+                            <select name="collection_method" id="collection_method_id" class="form-control">
+                                <option value="" selected disabled>Select the Collection Method for This Order</option>
+                                    <option value="pickup">PickUp</option>
+                                    <option value="dropoff">Drop Off</option>
+                            </select>
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
@@ -211,3 +229,20 @@
         </div>
         
 @endsection
+
+@section('javascript')
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#township_id').select2();
+            $('#rider_id').select2();
+            $('#shop_id').select2();
+            $('#status_id').select2();
+            $('#item_type_id').select2();
+            $('#type_id').select2();
+            $('#collection_method_id').select2();
+        });
+
+    </script>
+@endsection    

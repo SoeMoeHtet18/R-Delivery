@@ -7,6 +7,7 @@ use App\Models\Rider;
 use App\Models\Shop;
 use App\Models\Township;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -64,6 +65,7 @@ class OrderController extends Controller
             'rider_id'              => 'required',
             'shop_id'               => 'required',
             'quantity'              => 'required',
+            'total_amount'          => 'required',
             'delivery_fees'         => 'required',
             'item_type'             => 'required',
             'type'                  => 'required',
@@ -79,6 +81,7 @@ class OrderController extends Controller
             'rider_id.required'                 => 'Rider field is required',
             'shop_id.required'                  => 'Shop field is required',
             'quantity.required'                 => 'Quantity field is required',
+            'total_amount'                      => 'Total Amount field is required',
             'delivery_fees.required'            => 'Delivery Fees is required',
             'item_type.required'                => 'Item Type field is required',
             'type.required'                     => 'Type field is required',
@@ -95,20 +98,21 @@ class OrderController extends Controller
             $order->customer_name =  $request->customer_name;
             $order->customer_phone_number =  $request->customer_phone_number;
             $order->township_id =  $request->township_id;
-            $order->rider_id =  $request->rider_id;
+            $order->rider_id =  $request->rider_id ?? null;
             $order->shop_id =  $request->shop_id;
             $order->quantity =  $request->quantity;
             $order->delivery_fees =  $request->delivery_fees;
+            $order->total_amount = $request->total_amount;
             $order->markup_delivery_fees =  $request->markup_delivery_fees ?? null;
             $order->remark =  $request->remark ?? null;
-            $order->status =  "pending";
+            $order->status =  $request->status;
             $order->item_type =  $request->item_type;
             $order->full_address =  $request->full_address ?? null;
             $order->schedule_date =  $request->schedule_date ?? null ;
             $order->type =  $request->type;
             $order->collection_method =  $request->collection_method;
             $order->proof_of_payment =  $request->proof_of_payment ?? null;
-            // $order->last_updated_by =  $request->last_updated_by;
+            $order->save();
         }
         return redirect()->route('orders.index');
     }
@@ -130,15 +134,84 @@ class OrderController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        
+        $order = Order::where('id', $id)->first();
+        $date = new Carbon($order->schedule_date);
+        $scheduledate = $date->format('Y-m-d');
+        $shops = Shop::all();
+        $riders = Rider::all();
+        $townships = Township::all();
+        if(!$order) {
+            abort(404);
+        }
+
+        return view('admin.order.edit', compact('order', 'shops', 'riders', 'townships', 'scheduledate'));
     }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-    {
-        //
+    {   
+        $rules = [
+            'order_code'            => 'required|unique:orders',
+            'customer_name'         => 'required',
+            'customer_phone_number' => 'required',
+            'township_id'           => 'required',
+            'rider_id'              => 'required',
+            'shop_id'               => 'required',
+            'quantity'              => 'required',
+            'total_amount'          => 'required',
+            'delivery_fees'         => 'required',
+            'item_type'             => 'required',
+            'type'                  => 'required',
+            'collection_method'     => 'required',
+        ];
+
+        $customErr = [
+            'order_code.required'               => 'Order Code field is required',
+            'order_code.unique'                 => 'Order Code already exists',
+            'customer_name.required'            => 'Customer Name field is required',
+            'customer_phone_number.required'    => 'Customer Phone Number field is required',
+            'township_id.required'              => 'Township field is required',
+            'rider_id.required'                 => 'Rider field is required',
+            'shop_id.required'                  => 'Shop field is required',
+            'quantity.required'                 => 'Quantity field is required',
+            'total_amount'                      => 'Total Amount field is required',
+            'delivery_fees.required'            => 'Delivery Fees is required',
+            'item_type.required'                => 'Item Type field is required',
+            'type.required'                     => 'Type field is required',
+            'collection_method.required'        => 'Collection Method field is required',
+            
+        ];
+
+        $validator = Validator::make($request->all(), $rules,$customErr);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        } else {
+            $order = Order::where('id',$id)->first();
+            $order->order_code =  $request->order_code;
+            $order->customer_name =  $request->customer_name;
+            $order->customer_phone_number =  $request->customer_phone_number;
+            $order->township_id =  $request->township_id;
+            $order->rider_id =  $request->rider_id ?? null;
+            $order->shop_id =  $request->shop_id;
+            $order->quantity =  $request->quantity;
+            $order->delivery_fees =  $request->delivery_fees;
+            $order->total_amount = $request->total_amount;
+            $order->markup_delivery_fees =  $request->markup_delivery_fees ?? null;
+            $order->remark =  $request->remark ?? null;
+            $order->status =  $request->status;
+            $order->item_type =  $request->item_type;
+            $order->full_address =  $request->full_address ?? null;
+            $order->schedule_date =  $request->schedule_date ?? null ;
+            $order->type =  $request->type;
+            $order->collection_method =  $request->collection_method;
+            $order->proof_of_payment =  $request->proof_of_payment ?? null;
+            $order->save();
+        }
+        return redirect()->route('orders.index');
+
     }
 
     /**
