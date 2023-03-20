@@ -22,7 +22,7 @@
                     <div class="create-button">
                     <a href="{{route('cities.edit' , $city->id)}}" class="btn btn-light">Edit</a>
                     </div>
-                    <form action="{{route('cities.destroy', $city->id)}}" method="post">
+                    <form action="{{route('cities.destroy', $city->id)}}" method="post" onclick="return confirm(`Are you sure you want to Delete this city?`);">
                     @csrf
                     @method('DELETE')
                     <input type="submit" value="Delete" class="btn btn-danger float-end">

@@ -31,7 +31,7 @@ class CityController extends Controller
                 ->addColumn('action', function($row){
                     $actionBtn = '<a href="' . route("cities.show", $row->id) . '" class="info btn btn-info btn-sm">View</a>
                     <a href="' . route("cities.edit", $row->id) . '" class="edit btn btn-light btn-sm">Edit</a>
-                    <form action="'.route("cities.destroy", $row->id) .'" method="post" class="d-inline">
+                    <form action="'.route("cities.destroy", $row->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this city?`);">
                         <input type="hidden" name="_token" value="'. csrf_token() .'">
                         <input type="hidden" name="_method" value="DELETE">
                         <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>

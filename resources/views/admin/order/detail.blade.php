@@ -22,7 +22,7 @@
                     <div class="create-button">
                     <a href="{{route('orders.edit' , $order->id)}}" class="btn btn-light">Edit</a>
                     </div>
-                    <form action="{{route('orders.destroy', $order->id)}}" method="post">
+                    <form action="{{route('orders.destroy', $order->id)}}" method="post" onclick="return confirm(`Are you sure you want to Delete this order?`);">
                         @csrf
                         @method('DELETE')
                         <input type="submit" value="Delete" class="btn btn-danger float-end">
