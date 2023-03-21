@@ -16,4 +16,5 @@ class OrderRepository
         $order = Order::get();
         return $order;
     }
+
 }

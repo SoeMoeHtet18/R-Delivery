@@ -1,10 +1,7 @@
 <?php
 
-<<<<<<< HEAD
 use App\Http\Controllers\Api\CityApiController;
-=======
 use App\Http\Controllers\Api\CustomerPaymentApiController;
->>>>>>> feature/customerpayment-crud
 use App\Http\Controllers\Api\RiderApiController;
 use App\Http\Controllers\Api\ShopApiController;
 use App\Http\Controllers\Api\ShopUserApiController;
