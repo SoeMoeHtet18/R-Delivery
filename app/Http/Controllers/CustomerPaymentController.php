@@ -31,7 +31,7 @@ class CustomerPaymentController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = CustomerPayment::leftJoin('orders','orders.id','customer_payments.order_id')->select('customer_payments.*','orders.order_code')->orderBy('id','DESC')->get();
+            $data = CustomerPayment::leftJoin('orders','orders.id','customer_payments.order_id')->select('customer_payments.*','orders.order_code')->orderBy('customer_payments.id','DESC')->get();
             return DataTables::of($data)
                 
                 ->addColumn('action', function($row){
