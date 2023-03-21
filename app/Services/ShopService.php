@@ -13,6 +13,7 @@ class ShopService
         $shop->address =  $data['address'];
         $shop->phone_number = $data['phone_number'];
         $shop->save();
+        return $shop;
     }
 
     public function updateShopByID($data, $shop)
@@ -21,6 +22,7 @@ class ShopService
         $shop->address =  $data['address'];
         $shop->phone_number = $data['phone_number'];
         $shop->save();
+        return $shop;
     }
 
     public function deleteShopByID($id)
