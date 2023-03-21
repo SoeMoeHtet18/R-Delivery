@@ -16,6 +16,7 @@ class RiderService
         $rider->password = bcrypt($data['password']);
         $rider->device_id = $data['device_id'] ?? null;
         $rider->save();
+        return $rider;
     }
 
     public function updateRiderByID($data, $rider)
@@ -28,6 +29,7 @@ class RiderService
         }
         $rider->device_id = $data['device_id'] ?? $rider->device_id;
         $rider->save();
+        return $rider;
     }
 
     public function deleteRiderByID($id)
