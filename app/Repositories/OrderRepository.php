@@ -11,4 +11,9 @@ class OrderRepository
         $order = Order::findOrFail($id);
         return $order;
     }
+    public function getAllOrder()
+    {
+        $order = Order::get();
+        return $order;
+    }
 }
