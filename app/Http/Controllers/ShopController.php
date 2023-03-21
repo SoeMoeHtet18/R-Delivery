@@ -160,6 +160,7 @@ class ShopController extends Controller
                 return $actionBtn;
             })
             ->rawColumns(['action'])
+            ->orderColumn('id', '-id $1')
             ->make(true);
         };
     }
@@ -178,6 +179,7 @@ class ShopController extends Controller
                     return $actionBtn;
                 })
                 ->rawColumns(['action'])
+                ->orderColumn('orders.id', '-id $1')
                 ->make(true);
         };
     }

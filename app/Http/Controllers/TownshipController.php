@@ -29,7 +29,7 @@ class TownshipController extends Controller
     public function index(Request $request)
     {   
         if ($request->ajax()) {
-            $data = Township::leftJoin('cities','cities.id','townships.city_id')->select('townships.*','cities.name as city_name')->get();
+            $data = Township::leftJoin('cities','cities.id','townships.city_id')->select('townships.*','cities.name as city_name');
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function($data){
@@ -44,6 +44,7 @@ class TownshipController extends Controller
                     return $actionBtn;
                 })
                 ->rawColumns(['action'])
+                ->orderColumn('townships.id', '-id $1')
                 ->make(true);
         }
         return view('admin.township.index');

@@ -51,6 +51,13 @@ class RiderApiController extends Controller
         return response()->json(['data' => $orders, 'message' => 'Successfully Get Order List By Rider ID', 'status' => 'success', 200]);
     }
 
+    public function getOrderList(Request $request)
+    {
+        $data = $request->all();
+        $orders = $this->riderRepository->getPendingOrderListForAuthenticatedRider($data);
+        return response()->json(['data' => $orders, 'message' => 'Successfully Get Order List By Rider ID', 'status' => 'success', 200]);
+    }
+
     public function getShopListByRiderID($id)
     {
         $shops = $this->riderRepository->getShopListByRiderID($id);

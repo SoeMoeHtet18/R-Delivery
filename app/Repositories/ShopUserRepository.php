@@ -6,9 +6,9 @@ use App\Models\ShopUser;
 
 class ShopUserRepository
 {
-    public function getAllShopUsersByDESC()
+    public function getAllShopUsers()
     {
-        $shop_users = ShopUser::all();
+        $shop_users = ShopUser::select('*');
         return $shop_users;
     }
 

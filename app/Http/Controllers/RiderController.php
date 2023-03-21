@@ -25,7 +25,7 @@ class RiderController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $riders = $this->riderRepository->getAllRidersByDESC();
+            $riders = $this->riderRepository->getAllRiders();
             return DataTables::of($riders)
                 ->addIndexColumn()
                 ->addColumn('action', function($riders){
@@ -40,6 +40,7 @@ class RiderController extends Controller
                     return $actionBtn;
                 })
                 ->rawColumns(['action'])
+                ->orderColumn('id', '-id $1')
                 ->make(true);
         }
         return view('admin.rider.index');
@@ -160,6 +161,7 @@ class RiderController extends Controller
                     return $actionBtn;
                 })
                 ->rawColumns(['action'])
+                ->orderColumn('orders.id', '-id $1')
                 ->make(true);
         };
         

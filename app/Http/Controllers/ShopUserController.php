@@ -27,7 +27,7 @@ class ShopUserController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $shop_users = $this->shopUserRepository->getAllShopUsersByDESC();
+            $shop_users = $this->shopUserRepository->getAllShopUsers();
             return DataTables::of($shop_users)
                 ->addIndexColumn()
                 ->addColumn('action', function($shop_users){
@@ -42,6 +42,7 @@ class ShopUserController extends Controller
                     return $actionBtn;
                 })
                 ->rawColumns(['action'])
+                ->orderColumn('id', '-id $1')
                 ->make(true);
         }
         return view('admin.shopuser.index');
@@ -119,8 +120,8 @@ class ShopUserController extends Controller
     {
         $rules = [ 
             'name'                  => 'required|string',
-            'phone_number'          => 'required|string|unique:shop_users,phone_number,'.$id,
-            'email'                 => 'unique:shop_users,email,'.$id,
+            'phone_number'          => 'required|string|unique:shop_users,phone_number,'. $id,
+            'email'                 => 'unique:shop_users,email,'. $id,
         ];
                 
         $customErr = [

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\CityApiController;
 use App\Http\Controllers\Api\RiderApiController;
+use App\Http\Controllers\Api\ShopApiController;
 use App\Http\Controllers\Api\ShopUserApiController;
 use App\Http\Controllers\Api\TownshipApiController;
 use Illuminate\Http\Request;
@@ -31,10 +32,11 @@ Route::middleware('auth:shop-user-api')->group( function () {
 Route::post('rider-login', [RiderApiController::class, 'riderLoginApi']);
 Route::middleware('auth:rider-api')->group(function() {
     Route::get('riders/{id}', [RiderApiController::class, 'show']);
-    Route::get('riders/{id}/get-order-list', [RiderApiController::class, 'getOrderListByRiderID']);
+    Route::post('riders/get-order-list?status=pending', [RiderApiController::class, 'getOrderList']);
     Route::get('riders/{id}/get-shop-list', [RiderApiController::class, 'getShopListByRiderID']);
 });
 
+Route::get('get-shop-list', [ShopApiController::class, 'getAllShopList']);
 Route::get('cities', [CityApiController::class, 'getAllCityList']);
 Route::get('townships', [TownshipApiController::class, 'getAllTownshipList']);
 Route::post('townships-get-by-city', [TownshipApiController::class, 'getAllTownshipListByCityID']);
