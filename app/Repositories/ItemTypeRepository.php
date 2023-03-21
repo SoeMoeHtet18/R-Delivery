@@ -11,4 +11,10 @@ class ItemTypeRepository
         $itemtype = ItemType::findOrFail($id);
         return $itemtype;
     }
+
+    public function getAllItemTypes()
+    {
+        $item_types = ItemType::all();
+        return $item_types;
+    }
 }

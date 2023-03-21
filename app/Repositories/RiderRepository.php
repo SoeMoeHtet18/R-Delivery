@@ -7,6 +7,12 @@ use App\Models\Rider;
 
 class RiderRepository
 {
+    public function getAllRiders()
+    {
+        $riders = Rider::all();
+        return $riders;
+    }
+
     public function getAllRidersByDESC()
     {
         $riders = Rider::select('*')->orderBy('id','DESC');

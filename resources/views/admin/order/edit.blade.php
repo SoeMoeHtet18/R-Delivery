@@ -43,6 +43,19 @@
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
+                        <label for="city_id" class="col-2">
+                            <h4>City Name <b>:</b></h4>
+                        </label>
+                       <div class="col-10">
+                            <select name="city_id" id="city_id" class="form-control">
+                                <option value="" selected disabled>Select the City for This Order</option>
+                                @foreach ( $cities as $city)
+                                    <option value="{{$city->id}}" @if($order->city_id == $city->id) {{'selected'}}@endif>{{$city->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div> 
+                    <div class="row m-0 mb-3">
                         <label for="township_id" class="col-2">
                             <h4>Township Name <b>:</b></h4>
                         </label>
@@ -234,6 +247,7 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function() {
+            $('#city_id').select2();
             $('#township_id').select2();
             $('#rider_id').select2();
             $('#shop_id').select2();
@@ -241,6 +255,26 @@
             $('#item_type_id').select2();
             $('#type_id').select2();
             $('#collection_method_id').select2();
+
+            $('#city_id').change(function() {
+                console.log('success');
+                var city_id = $('#city_id').val();
+                $.ajax({
+                    url: '/api/townships-get-by-city',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { city_id: city_id },
+                    success: function(response) {
+                        var townships = '<option value="" selected disabled>Select the Township for This Order</option>';
+                        if(response.data){
+                            for(let i = 0; i < response.data.length; i++){
+                                townships += '<option value="'+ response.data[i].id + '">' + response.data[i].name+'</option>';
+                            }                            
+                        }
+                        $('#township_id').html(townships);
+                    },
+                })
+            })
         });
 
     </script>

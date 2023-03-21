@@ -2,10 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\City;
+use App\Models\ItemType;
 use App\Models\Order;
 use App\Models\Rider;
 use App\Models\Shop;
 use App\Models\Township;
+use App\Repositories\CityRepository;
+use App\Repositories\ItemTypeRepository;
+use App\Repositories\OrderRepository;
+use App\Repositories\RiderRepository;
+use App\Repositories\ShopRepository;
+use App\Repositories\TownshipRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
@@ -13,13 +21,34 @@ use Yajra\DataTables\Facades\DataTables;
 
 class OrderController extends Controller
 {
+    protected $shopRepository;
+    protected $riderRepository;
+    protected $cityRepository;
+    protected $itemTypeRepository;
+    protected $orderRepository;
+    protected $townshipRepository;
+
+    public function __construct(ShopRepository $shopRepository, 
+        RiderRepository $riderRepository, 
+        CityRepository $cityRepository, 
+        ItemTypeRepository $itemTypeRepository, 
+        OrderRepository $orderRepository,
+        TownshipRepository $townshipRepository)
+    {
+        $this->shopRepository = $shopRepository;
+        $this->riderRepository = $riderRepository;
+        $this->cityRepository = $cityRepository;
+        $this->itemTypeRepository = $itemTypeRepository;
+        $this->orderRepository = $orderRepository;
+        $this->townshipRepository = $townshipRepository;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Order::leftJoin('townships','townships.id','orders.township_id')->leftJoin('riders','riders.id','orders.rider_id')->leftJoin('shops','shops.id','orders.shop_id')->leftJoin('users','users.id','orders.last_updated_by')->select('orders.*','townships.name as township_name','shops.name as shop_name','riders.name as rider_name','users.name as last_updated_by_name');
+            $data = Order::leftJoin('townships','townships.id','orders.township_id')->leftJoin('riders','riders.id','orders.rider_id')->leftJoin('shops','shops.id','orders.shop_id')->leftJoin('users','users.id','orders.last_updated_by')->select('orders.*','townships.name as township_name','shops.name as shop_name','riders.name as rider_name','users.name as last_updated_by_name')->get();
 
             return DataTables::of($data)
                 ->addIndexColumn()
@@ -45,11 +74,12 @@ class OrderController extends Controller
      */
     public function create()
     {   
-        $shops = Shop::all();
-        $riders = Rider::all();
-        $townships = Township::all();
+        $shops = $this->shopRepository->getAllShops();
+        $riders = $this->riderRepository->getAllRiders();
+        $cities = $this->cityRepository->getAllCities();
+        $item_types = $this->itemTypeRepository->getAllItemTypes();
         
-        return view('admin.order.create',compact('shops', 'riders', 'townships'));
+        return view('admin.order.create',compact('shops', 'riders', 'cities', 'item_types'));
     }
 
     /**
@@ -61,8 +91,8 @@ class OrderController extends Controller
             'order_code'            => 'required|unique:orders',
             'customer_name'         => 'required',
             'customer_phone_number' => 'required',
+            'city_id'               => 'required',
             'township_id'           => 'required',
-            'rider_id'              => 'required',
             'shop_id'               => 'required',
             'quantity'              => 'required',
             'total_amount'          => 'required',
@@ -77,8 +107,8 @@ class OrderController extends Controller
             'order_code.unique'                 => 'Order Code already exists',
             'customer_name.required'            => 'Customer Name field is required',
             'customer_phone_number.required'    => 'Customer Phone Number field is required',
+            'city_id.required'                  => 'City field is required',
             'township_id.required'              => 'Township field is required',
-            'rider_id.required'                 => 'Rider field is required',
             'shop_id.required'                  => 'Shop field is required',
             'quantity.required'                 => 'Quantity field is required',
             'total_amount'                      => 'Total Amount field is required',
@@ -97,6 +127,7 @@ class OrderController extends Controller
             $order->order_code =  $request->order_code;
             $order->customer_name =  $request->customer_name;
             $order->customer_phone_number =  $request->customer_phone_number;
+            $order->city_id =  $request->city_id;
             $order->township_id =  $request->township_id;
             $order->rider_id =  $request->rider_id ?? null;
             $order->shop_id =  $request->shop_id;
@@ -134,18 +165,19 @@ class OrderController extends Controller
      */
     public function edit(string $id)
     {
+        $order = $this->orderRepository->getOrderByID($id);
+        $shops = $this->shopRepository->getAllShops();
+        $riders = $this->riderRepository->getAllRiders();
+        $cities = $this->cityRepository->getAllCities();
+        $item_types = $this->itemTypeRepository->getAllItemTypes();
+        $city_id = $order->city_id;
+        $townships = $this->townshipRepository->getAllTownshipsByCityID($city_id);
         
-        $order = Order::where('id', $id)->first();
+        
         $date = new Carbon($order->schedule_date);
         $scheduledate = $date->format('Y-m-d');
-        $shops = Shop::all();
-        $riders = Rider::all();
-        $townships = Township::all();
-        if(!$order) {
-            abort(404);
-        }
 
-        return view('admin.order.edit', compact('order', 'shops', 'riders', 'townships', 'scheduledate'));
+        return view('admin.order.edit', compact('order', 'shops', 'riders', 'townships', 'cities', 'scheduledate'));
     }
 
     /**

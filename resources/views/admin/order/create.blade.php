@@ -42,15 +42,26 @@
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
+                        <label for="city_id" class="col-2">
+                            <h4>City Name <b>:</b></h4>
+                        </label>
+                        <div class="col-10">
+                            <select name="city_id" id="city_id" class="form-control">
+                                <option value="" selected disabled>Select the City for This Order</option>
+                                @foreach ( $cities as $city)
+                                    <option value="{{$city->id}}">{{$city->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row m-0 mb-3">
                         <label for="township_id" class="col-2">
                             <h4>Township Name <b>:</b></h4>
                         </label>
                         <div class="col-10">
                             <select name="township_id" id="township_id" class="form-control">
                                 <option value="" selected disabled>Select the Township for This Order</option>
-                                @foreach ( $townships as $township)
-                                    <option value="{{$township->id}}">{{$township->name}}</option>
-                                @endforeach
+                               
                             </select>
                         </div>
                     </div>
@@ -127,13 +138,7 @@
                             <h4>Status <b>:</b></h4>
                         </label>
                         <div class="col-10">
-                            <select name="status" id="status_id" class="form-control">
-                                <option value="" selected disabled>Select Status for This Order</option>
-                                    <option value="pending">Pending</option>
-                                    <option value="success">Success</option>
-                                    <option value="delay">Delay</option>
-                                    <option value="cancel">Cancel</option>
-                            </select>
+                            <input type='text' name="status" id="status" class="form-control" value="pending" readonly>
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
@@ -143,8 +148,9 @@
                         <div class="col-10">
                             <select name="item_type" id="item_type_id" class="form-control">
                                 <option value="" selected disabled>Select Item Type for This Order</option>
-                                <option value="normal">Normal</option>
-                                    <option value="luxuary">Luxuary</option>
+                                @foreach($item_types as $item_type)
+                                    <option value="{{$item_type->name}}">{{$item_type->name}}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -190,8 +196,8 @@
                         <div class="col-10">
                             <select name="collection_method" id="collection_method_id" class="form-control">
                                 <option value="" selected disabled>Select the Collection Method for This Order</option>
-                                    <option value="pickup">PickUp</option>
-                                    <option value="dropoff">Drop Off</option>
+                                <option value="pickup">Pick Up</option>
+                                <option value="dropoff">Drop Off</option>
                             </select>
                         </div>
                     </div>
@@ -222,12 +228,33 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function() {
+            $('#city_id').select2();
             $('#township_id').select2();
             $('#shop_id').select2();
             $('#status_id').select2();
             $('#item_type_id').select2();
             $('#type_id').select2();
             $('#collection_method_id').select2();
+
+            $('#city_id').change(function() {
+                console.log('success');
+                var city_id = $('#city_id').val();
+                $.ajax({
+                    url: '/api/townships-get-by-city',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { city_id: city_id },
+                    success: function(response) {
+                        var townships = '<option value="" selected disabled>Select the Township for This Order</option>';
+                        if(response.data){
+                            for(let i = 0; i < response.data.length; i++){
+                                townships += '<option value="'+ response.data[i].id + '">' + response.data[i].name+'</option>';
+                            }                            
+                        }
+                        $('#township_id').html(townships);
+                    },
+                })
+            })
         });
 
     </script>
