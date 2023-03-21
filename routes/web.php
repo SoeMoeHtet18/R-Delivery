@@ -39,6 +39,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/shops/get-shop-orders-by-shop-id/{id}', [ShopController::class, 'getShopOrdersTable']);
     Route::resource('/orders', OrderController::class);
     Route::resource('/cities', CityController::class);
+    Route::get('/cities/{id}/townships', [CityController::class, 'getTownshipsTable']);
     Route::resource('/itemtypes', ItemTypeController::class);
     Route::resource('/shoppayments', ShopPaymentController::class);
     Route::resource('/customer-payments', CustomerPaymentController::class);

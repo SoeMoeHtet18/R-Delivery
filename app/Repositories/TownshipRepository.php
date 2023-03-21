@@ -20,7 +20,7 @@ class TownshipRepository
 
     public function getAllTownshipsByCityID($id)
     {
-        $townships = Township::where('city_id', $id)->orderBy('id','DESC')->get();
+        $townships = Township::where('city_id', $id);
         return $townships;
     }
 }

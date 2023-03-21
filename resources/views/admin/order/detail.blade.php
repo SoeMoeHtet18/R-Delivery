@@ -51,19 +51,29 @@
                         <div class="col-10 p-3">
                             {{ $order->customer_phone_number }}
                         </div>
-                    </div><div class="row m-0 mb-3">
+                    </div>
+                    <div class="row m-0 mb-3">
+                        <div class="col-2">
+                            <h4>City Name <b>:</b></h4>
+                        </div>
+                        <div class="col-10 p-3">
+                            {{ $order->city->name }}
+                        </div>
+                    </div>
+                    <div class="row m-0 mb-3">
                         <div class="col-2">
                         <h4>Township Name <b>:</b></h4>
                         </div>
                         <div class="col-10 p-3">
                             {{ $order->township->name }}
                         </div>
-                    </div><div class="row m-0 mb-3">
+                    </div>
+                    <div class="row m-0 mb-3">
                         <div class="col-2">
                         <h4>Rider Name <b>:</b></h4>
                         </div>
                         <div class="col-10 p-3">
-                            {{ $order->rider->name }}
+                            @if($order->rider !== null){{ $order->rider->name }} @endif
                         </div>
                     </div><div class="row m-0 mb-3">
                         <div class="col-2">

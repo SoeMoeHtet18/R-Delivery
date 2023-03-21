@@ -24,7 +24,7 @@ class TownshipApiController extends Controller
     public function getAllTownshipListByCityID(Request $request)
     {
         $city_id = $request->city_id;
-        $townships = $this->townshipRepository->getAllTownshipsByCityID($city_id) ;
+        $townships = $this->townshipRepository->getAllTownshipsByCityID($city_id)->orderBy('id','DESC')->get() ;
         return response()->json(['data' => $townships, 'message' => 'Successfully Get Townships List', 'status' => 'success', 200]);
     }
 }
