@@ -11,4 +11,8 @@ class CustomerPayment extends Model
     protected $fillable = [
         'order_id', 'amount', 'type', 'proof_of_payment', 'paid_at', 'last_updated_by'
     ];
+
+    public function order() {
+        return $this->belongsTo(Order::class);
+    }
 }
