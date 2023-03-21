@@ -4,7 +4,7 @@
         <div class="card card-container">
             <div class="card-body">
                 <h2 class="ps-1 card-header-title">
-                    <strong>Add New ShopUser</strong>
+                    <strong>Add New Shop Payment</strong>
                 </h2>
                 <form action="{{route('shoppayments.store')}}" method="POST">
                     @csrf
@@ -13,7 +13,7 @@
                             <h4>Shop Name <b>:</b></h4>
                         </label>
                         <div class="col-10">
-                            <select name="shop_id" id="shop" class="form-control">
+                            <select name="shop_id" id="shop_name" class="form-control">
                                 <option value="" selected disabled>Select the Shop of this Payment</option>
                                 @foreach($shops as $shop)
                                     <option value="{{$shop->id}}">{{$shop->name}}</option>

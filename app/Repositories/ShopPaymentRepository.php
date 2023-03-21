@@ -8,7 +8,7 @@ class ShopPaymentRepository
 {
     public function getAllShopPaymentsByDESC()
     {
-        $shop_payments = ShopPayment::leftJoin('shops','shops.id','shop_payments.shop_id')->select('shop_payments.*','shops.name as shop_name');
+        $shop_payments = ShopPayment::leftJoin('shops','shops.id','shop_payments.shop_id')->select('shop_payments.*','shops.name as shop_name')->orderBy('id','DESC')->get();
         return $shop_payments;
     }
 

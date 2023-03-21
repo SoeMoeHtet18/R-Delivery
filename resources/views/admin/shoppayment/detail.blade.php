@@ -16,7 +16,7 @@
         <div class="card card-container">
             <div class="card-body">
                     <h2 class="ps-1">
-                        <strong>ShopPayment Detail</strong>
+                        <strong>Shop Payment Detail</strong>
                     </h2>
                     <div class="card-toolbar">
                     <div class="create-button">
