@@ -48,7 +48,7 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Order::leftJoin('townships','townships.id','orders.township_id')->leftJoin('riders','riders.id','orders.rider_id')->leftJoin('shops','shops.id','orders.shop_id')->leftJoin('users','users.id','orders.last_updated_by')->select('orders.*','townships.name as township_name','shops.name as shop_name','riders.name as rider_name','users.name as last_updated_by_name')->get();
+            $data = Order::leftJoin('townships','townships.id','orders.township_id')->leftJoin('riders','riders.id','orders.rider_id')->leftJoin('shops','shops.id','orders.shop_id')->leftJoin('users','users.id','orders.last_updated_by')->leftJoin('cities','cities.id','orders.city_id')->select('orders.*','townships.name as township_name','shops.name as shop_name','riders.name as rider_name','users.name as last_updated_by_name','cities.name as city_name')->get();
 
             return DataTables::of($data)
                 ->addIndexColumn()
@@ -74,8 +74,8 @@ class OrderController extends Controller
      */
     public function create()
     {   
-        $shops = $this->shopRepository->getAllShops();
-        $riders = $this->riderRepository->getAllRiders();
+        $shops = $this->shopRepository->getAllShops()->get();
+        $riders = $this->riderRepository->getAllRiders()->get();
         $cities = $this->cityRepository->getAllCities();
         $item_types = $this->itemTypeRepository->getAllItemTypes();
         
@@ -166,12 +166,12 @@ class OrderController extends Controller
     public function edit(string $id)
     {
         $order = $this->orderRepository->getOrderByID($id);
-        $shops = $this->shopRepository->getAllShops();
-        $riders = $this->riderRepository->getAllRiders();
+        $shops = $this->shopRepository->getAllShops()->get();
+        $riders = $this->riderRepository->getAllRiders()->get();
         $cities = $this->cityRepository->getAllCities();
         $item_types = $this->itemTypeRepository->getAllItemTypes();
         $city_id = $order->city_id;
-        $townships = $this->townshipRepository->getAllTownshipsByCityID($city_id);
+        $townships = $this->townshipRepository->getAllTownshipsByCityID($city_id)->orderBy('id','DESC')->get();
         
         
         $date = new Carbon($order->schedule_date);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\City;
 use App\Repositories\CityRepository;
+use App\Repositories\TownshipRepository;
 use App\Services\CityService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -14,10 +15,13 @@ class CityController extends Controller
 
     protected $cityRepository;
     protected $cityService;
-    public function __construct(CityRepository $cityRepository, CityService $cityService)
+    protected $townshipRepository;
+
+    public function __construct(CityRepository $cityRepository, CityService $cityService, TownshipRepository $townshipRepository)
     {
         $this->cityRepository = $cityRepository;
         $this->cityService    = $cityService;
+        $this->townshipRepository = $townshipRepository;
     }
     /**
      * Display a listing of the resource.
@@ -125,5 +129,22 @@ class CityController extends Controller
     {
         $this->cityService->deleteCityByID($id);
         return redirect()->route('cities.index');
+    }
+
+    public function getTownshipsTable($id)
+    {
+        $townships = $this->townshipRepository->getAllTownshipsByCityID($id);
+        return DataTables::of($townships)
+            ->addIndexColumn()
+            ->addColumn('action', function($townships){
+                $actionBtn = '
+                        <a href="'. route("townships.show", $townships->id) .'" class="btn btn-info btn-sm">View</a> 
+                        <a href="'. route("townships.edit", $townships->id) .'" class="btn btn-light btn-sm">Edit</a> 
+                        ';
+                return $actionBtn;
+            })
+            ->rawColumns(['action'])
+            ->orderColumn('id', '-id $1')
+            ->make(true);
     }
 }

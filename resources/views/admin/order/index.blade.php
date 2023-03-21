@@ -25,6 +25,7 @@
                     <th>Order Code</th>
                     <th>Customer Name</th>
                     <th>Customer Phone Number</th>
+                    <th>City</th>
                     <th>Township</th>
                     <th>Rider</th>
                     <th>Shop</th>
@@ -72,6 +73,7 @@
             {data: 'order_code', name: 'order_code'},
             {data: 'customer_name', name: 'customer_name'},
             {data: 'customer_phone_number', name: 'customer_phone_number'},
+            {data: 'city_name', name: 'city'},
             {data: 'township_name', name: 'township'},
             {data: 'rider_name', name: 'rider'},
             {data: 'shop_name', name: 'shop'},

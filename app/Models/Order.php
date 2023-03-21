@@ -28,4 +28,9 @@ class Order extends Model
     public function user() {
         return $this->belongsTo(User::class, 'last_updated_by', 'id');
     }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class, 'city_id', 'id');
+    }
 }
