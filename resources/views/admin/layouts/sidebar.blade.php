@@ -59,6 +59,12 @@
                 </a>
             </li>
             <li>
+                <a href="{{route('customer-payments.index')}}">
+                    <!-- <i class="fa fa-users"></i> -->
+                    <span class="title">Customer Payment</span>
+                </a>
+            </li>
+            <li>
             <a class="dropdown-item" href="{{ route('logout') }}"
                 onclick="event.preventDefault();
                                 document.getElementById('logout-form').submit();">
