@@ -6,6 +6,7 @@ use App\Http\Controllers\ItemTypeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RiderController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\ShopPaymentController;
 use App\Http\Controllers\ShopUserController;
 use App\Http\Controllers\TownshipController;
 use Illuminate\Support\Facades\Auth;
@@ -38,6 +39,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/orders', OrderController::class);
     Route::resource('/cities', CityController::class);
     Route::resource('/itemtypes', ItemTypeController::class);
+    Route::resource('/shoppayments', ShopPaymentController::class);
 
 });
 Auth::routes();

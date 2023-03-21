@@ -49,7 +49,13 @@
             <li>
                 <a href="{{route('itemtypes.index')}}">
                     <!-- <i class="fa fa-users"></i> -->
-                    <span class="title">Item Types</span>
+                    <span class="title">Item Type</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{route('shoppayments.index')}}">
+                    <!-- <i class="fa fa-users"></i> -->
+                    <span class="title">Shop Payment</span>
                 </a>
             </li>
             <li>
