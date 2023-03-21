@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CustomerPayment;
 use App\Repositories\CustomerPaymentRepository;
-use App\Repositories\OrdersRepository;
+use App\Repositories\OrderRepository;
 use App\Services\CustomerPaymentService;
 use Carbon\Carbon;
 use DateTime;
@@ -19,7 +19,7 @@ class CustomerPaymentController extends Controller
     protected $customerPaymentService;
     protected $customerPaymentRepository;
 
-    public function __construct(OrdersRepository $orderRepository, CustomerPaymentService $customerPaymentService, CustomerPaymentRepository $customerPaymentRepository)
+    public function __construct(OrderRepository $orderRepository, CustomerPaymentService $customerPaymentService, CustomerPaymentRepository $customerPaymentRepository)
     {
         $this->orderRepository = $orderRepository;
         $this->customerPaymentService = $customerPaymentService;
