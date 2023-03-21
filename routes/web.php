@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\CustomerPaymentController;
 use App\Http\Controllers\ItemTypeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\RiderController;
@@ -38,6 +39,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/orders', OrderController::class);
     Route::resource('/cities', CityController::class);
     Route::resource('/itemtypes', ItemTypeController::class);
+    Route::resource('/customer-payments', CustomerPaymentController::class);
 
 });
 Auth::routes();
