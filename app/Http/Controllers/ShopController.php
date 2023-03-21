@@ -26,7 +26,7 @@ class ShopController extends Controller
     {
         if($request->ajax()) {
 
-            $shops = $this->shopRepository->getAllShopsByDESC();
+            $shops = $this->shopRepository->getAllShops();
 
             return DataTables::of($shops)
                 ->addIndexColumn()
@@ -42,6 +42,7 @@ class ShopController extends Controller
                     return $actionBtns;
                 })
                 ->rawColumns(['action'])
+                ->orderColumn('id', '-id $1')
                 ->make(true);
         }
 

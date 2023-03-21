@@ -8,16 +8,10 @@ use App\Models\ShopUser;
 use Yajra\DataTables\Facades\DataTables;
 
 class ShopRepository
-{
+{   
     public function getAllShops()
     {
-        $shops = Shop::all();
-        return $shops;
-    }
-    
-    public function getAllShopsByDESC()
-    {
-        $shops = Shop::select('*')->orderBy('id','DESC');
+        $shops = Shop::select('*');
         return $shops;
     }
 
