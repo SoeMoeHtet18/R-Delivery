@@ -64,7 +64,7 @@
                         <div class="card-body">
                             <div class="portlet box green">
                                 <div class="portlet-title">
-                                    <div class="caption">ShopOrder Lists</div>
+                                    <div class="caption">Order Lists</div>
                                 </div>
                                 <div class="portlet-body">
                                     <table id="rider-order-datatable" class="table table-striped table-hover table-responsive datatable">
@@ -75,7 +75,6 @@
                                                 <th>Customer Name</th>
                                                 <th>Customer Phone Number</th>
                                                 <th>Township</th>
-                                                <th>Rider</th>
                                                 <th>Shop</th>
                                                 <th>Quantity</th>
                                                 <th>Total Amount</th>
@@ -126,7 +125,6 @@
                     {data: 'customer_name', name: 'customer_name'},
                     {data: 'customer_phone_number', name: 'customer_phone_number'},
                     {data: 'township_name', name: 'township'},
-                    {data: 'rider_name', name: 'rider'},
                     {data: 'shop_name', name: 'shop'},
                     {data: 'quantity', name: 'quantity'},
                     {data: 'total_amount', name: 'total_amount'},

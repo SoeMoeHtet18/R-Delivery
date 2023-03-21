@@ -149,7 +149,7 @@ class RiderController extends Controller
     public function getRiderOrdersTable(Request $request, $id)
     {
         if ($request->ajax()) {
-            $data = $this->riderRepository->getOrdersByShopID($id);
+            $data = $this->riderRepository->getOrderListByRiderID($id);
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function($row){

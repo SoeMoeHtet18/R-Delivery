@@ -44,4 +44,16 @@ class RiderApiController extends Controller
         $rider = $this->riderRepository->getRiderByID($id);
         return response()->json(['data'=> $rider, 'message'=> 'Successfully Get Rider Detail', 'status' => 'success', 200]);
     }
+
+    public function getOrderListByRiderID($id)
+    {
+        $orders = $this->riderRepository->getOrderListByRiderID($id);
+        return response()->json(['data' => $orders, 'message' => 'Successfully Get Order List By Rider ID', 'status' => 'success', 200]);
+    }
+
+    public function getShopListByRiderID($id)
+    {
+        $shops = $this->riderRepository->getShopListByRiderID($id);
+        return response()->json(['data' => $shops, 'message' => 'Successfully Get Shop List By Rider ID', 'status' => 'success', 200]);
+    }
 }

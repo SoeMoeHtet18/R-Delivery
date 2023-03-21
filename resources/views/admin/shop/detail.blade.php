@@ -98,7 +98,6 @@
                                         <th>Customer Phone Number</th>
                                         <th>Township</th>
                                         <th>Rider</th>
-                                        <th>Shop</th>
                                         <th>Quantity</th>
                                         <th>Total Amount</th>
                                         <th>Delivery Fees</th>
@@ -159,7 +158,6 @@
                     {data: 'customer_phone_number', name: 'customer_phone_number'},
                     {data: 'township_name', name: 'township'},
                     {data: 'rider_name', name: 'rider'},
-                    {data: 'shop_name', name: 'shop'},
                     {data: 'quantity', name: 'quantity'},
                     {data: 'total_amount', name: 'total_amount'},
                     {data: 'delivery_fees', name: 'delivery_fees'},
