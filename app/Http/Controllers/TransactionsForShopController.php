@@ -6,6 +6,7 @@ use App\Repositories\ShopRepository;
 use App\Repositories\TransactionsForShopRepository;
 use App\Services\TransactionsForShopService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
 class TransactionsForShopController extends Controller
@@ -59,8 +60,28 @@ class TransactionsForShopController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        //
+    {   
+        $rules = [
+            'shop_id'   => 'required|string',
+            'amount'    => 'required',
+            'type'      => 'required',
+            'paid_by'   => 'required'
+        ];
+
+        $customErr = [
+            'shop_id.required'      => 'Name field is required',
+            'amount.required'       => 'Amount field is required',
+            'type.required'         => 'Type is required',
+            'paid_by.required'      => 'This Field is required',
+        ];
+        $validator = Validator::make($request->all(), $rules, $customErr);
+        if  ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        } else {
+            $data = $request->all();
+            $this->transactionsForShopService->saveTransactionForShopData($data);
+        }
+        return redirect(route('transactions-for-shop.index'));
     }
 
     /**
@@ -68,7 +89,8 @@ class TransactionsForShopController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $transaction_for_shops = $this->transactionsForShopRepository->getTransactionsForShopByID($id);
+        return view('admin.transactionsforshop.detail', compact('transaction_for_shops'));
     }
 
     /**
@@ -76,7 +98,11 @@ class TransactionsForShopController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $transaction_for_shop = $this->transactionsForShopRepository->getTransactionsForShopByID($id);
+
+        $shops = $this->shopRepository->getAllShops();
+
+        return view('admin.transactionsforshop.edit',compact('transaction_for_shop','shops'));
     }
 
     /**
@@ -84,7 +110,28 @@ class TransactionsForShopController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $rules = [
+            'shop_id'   => 'required|string',
+            'amount'    => 'required',
+            'type'      => 'required',
+            'paid_by'   => 'required'
+        ];
+
+        $customErr = [
+            'shop_id.required'      => 'Name field is required',
+            'amount.required'       => 'Amount field is required',
+            'type.required'         => 'Type is required',
+            'paid_by.required'      => 'This Field is required',
+        ];
+        $validator = Validator::make($request->all(), $rules, $customErr);
+        if  ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        } else {
+            $transaction_for_shop = $this->transactionsForShopRepository->getTransactionsForShopByID($id);
+            $data = $request->all();
+            $this->transactionsForShopService->updateTransactionForShopByID($data, $transaction_for_shop);
+        }
+        return redirect()->route('transactions-for-shop.show', $id);
     }
 
     /**
@@ -92,6 +139,7 @@ class TransactionsForShopController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $this->transactionsForShopService->deleteTransactionForShopByID($id);
+        return redirect()->route('transactions-for-shop.index');
     }
 }

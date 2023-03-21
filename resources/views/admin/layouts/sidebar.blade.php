@@ -61,7 +61,7 @@
             <li>
                 <a href="{{route('transactions-for-shop.index')}}">
                     <!-- <i class="fa fa-users"></i> -->
-                    <span class="title">Company - Shop Payment</span>
+                    <span class="title">Company - Shop Transaction</span>
                 </a>
             </li>
             <li>

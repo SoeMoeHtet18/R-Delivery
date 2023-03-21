@@ -56,7 +56,7 @@
             {data: 'shop_name', name: 'shop_name'},
             {data: 'amount', name: 'amount'},
             {data: 'type', name: 'type'},
-            {data: 'paid_by', name: 'type'},
+            {data: 'paid_by', name: 'paid_by'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });

@@ -14,5 +14,10 @@ class TransactionsForShop extends Model
     {
         return $this->belongsTo(Shop::class, 'shop_id', 'id');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'paid_by', 'id');
+    }
     
 }
