@@ -10,6 +10,7 @@ use App\Http\Controllers\ShopController;
 use App\Http\Controllers\ShopPaymentController;
 use App\Http\Controllers\ShopUserController;
 use App\Http\Controllers\TownshipController;
+use App\Http\Controllers\TransactionsForShopController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -43,6 +44,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/itemtypes', ItemTypeController::class);
     Route::resource('/shoppayments', ShopPaymentController::class);
     Route::resource('/customer-payments', CustomerPaymentController::class);
+    Route::resource('/transactions-for-shop', TransactionsForShopController::class);
 
 });
 Auth::routes();

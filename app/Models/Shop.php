@@ -20,4 +20,8 @@ class Shop extends Model
     {
         return $this->hasMany(ShopPayment::class);
     }
+    public function payments_from_company()
+    {
+        return $this->hasMany(TransactionsForShop::class);
+    }
 }
