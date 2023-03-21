@@ -16,4 +16,8 @@ class Shop extends Model
     {
         return $this->hasMany(ShopUser::class);
     }
+    public function shop_payments()
+    {
+        return $this->hasMany(ShopPayment::class);
+    }
 }

@@ -11,4 +11,8 @@ class ShopPayment extends Model
     protected $fillable = [
         'shop_id', 'amount', 'image', 'type'
     ];
+
+    public function shop() {
+        return $this->belongsTo(Shop::class, 'shop_id', 'id');
+    }
 }
