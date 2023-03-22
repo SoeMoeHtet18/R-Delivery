@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CityRequest;
 use App\Repositories\CityRepository;
 use App\Repositories\TownshipRepository;
 use App\Services\CityService;
@@ -59,22 +60,10 @@ class CityController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CityRequest $request)
     {
-        $rules = [ 
-            'name'                  => 'required|string',
-        ];
-            
-        $customErr = [
-            'name.required'                 => 'Name field is required.',
-        ];
-        $validator = Validator::make($request->all(), $rules,$customErr);
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        } else {
-            $data = $request->all();
-            $this->cityService->saveCityData($data);
-        }
+        $data = $request->all();
+        $this->cityService->saveCityData($data);
 
         return redirect()->route('cities.index');
     }
@@ -100,24 +89,12 @@ class CityController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(CityRequest $request, string $id)
     {
-        $rules = [ 
-            'name'                  => 'required|string',
-        ];
-            
-        $customErr = [
-            'name.required'                 => 'Name field is required.',
-        ];
-        $validator = Validator::make($request->all(), $rules,$customErr);
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        } else {
-            $data = $request->all();
-            $city = $this->cityRepository->getByCityID($id);
-            $this->cityService->updateCityByID($data,$city);
-        }
-
+        $data = $request->all();
+        $city = $this->cityRepository->getByCityID($id);
+        $this->cityService->updateCityByID($data,$city);
+        
         return redirect(route('cities.show', $id));
     }
 
