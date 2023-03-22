@@ -88,7 +88,6 @@
                                                 <th>Type</th>
                                                 <th>Collection Method</th>
                                                 <th>Last Updated By</th>
-                                                <th>Action</th>
                                             </tr>
                                         </thead>
 
@@ -138,10 +137,8 @@
                     {data: 'type', name: 'type'},
                     {data: 'collection_method', name: 'collection_method'},
                     {data: 'last_updated_by_name', name: 'last_updated_by'},
-                    {data: 'action', name: 'action', orderable: false, searchable: false},
                 ]
             });
-      
         });
     </script>
 @endsection

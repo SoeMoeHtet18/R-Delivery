@@ -144,17 +144,10 @@ class TownshipController extends Controller
         $townships = $this->townshipRepository->getAllTownshipsByCityID($id);
         return DataTables::of($townships)
             ->addColumn('name', function($townships) {
-                return '<a href="/townships/' . $townships->id . '">' . $townships->name . '</a>';
+                return '<a href="'. route("townships.show",$townships->id) . '">' . $townships->name . '</a>';
             })
             ->addIndexColumn()
-            ->addColumn('action', function($townships){
-                $actionBtn = '
-                        <a href="'. route("townships.show", $townships->id) .'" class="btn btn-info btn-sm">View</a> 
-                        <a href="'. route("townships.edit", $townships->id) .'" class="btn btn-light btn-sm">Edit</a> 
-                        ';
-                return $actionBtn;
-            })
-            ->rawColumns(['name','action'])
+            ->rawColumns(['name'])
             ->orderColumn('id', '-id $1')
             ->make(true);
     }
