@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CustomerPaymentRequest;
 use App\Models\CustomerPayment;
 use App\Repositories\CustomerPaymentRepository;
 use App\Repositories\OrderRepository;
@@ -64,27 +65,11 @@ class CustomerPaymentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        $rules = [
-            'order_id'            => 'required',
-            'amount'              => 'required',
-            'type'                => 'required',     
-        ];
-
-        $customErr = [
-            'order_id.required'          => 'Order field is required',
-            'amount.required'            => 'Amount field is required',
-            'type.required'              => 'Customer Phone Number field is required',        
-        ];
-
-        $validator = Validator::make($request->all(), $rules,$customErr);
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        } else {
-            $data = $request->all();
-            $this->customerPaymentService->saveCustomerPayment($data);
-        }
+    public function store(CustomerPaymentRequest $request)
+    { 
+        $data = $request->all();
+        $this->customerPaymentService->saveCustomerPayment($data);
+        
         return redirect()->route('customer-payments.index');
     }
 
@@ -115,28 +100,12 @@ class CustomerPaymentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        $rules = [
-            'order_id'            => 'required',
-            'amount'              => 'required',
-            'type'                => 'required',     
-        ];
-
-        $customErr = [
-            'order_id.required'          => 'Order field is required',
-            'amount.required'            => 'Amount field is required',
-            'type.required'              => 'Customer Phone Number field is required',        
-        ];
-
-        $validator = Validator::make($request->all(), $rules,$customErr);
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        } else {
-            $data = $request->all();
-            $customer_payment = $this->customerPaymentRepository->getCustomerPaymentByID($id);
-            $this->customerPaymentService->updateCustomerPaymentByID($data,$customer_payment);
-        }
+    public function update(CustomerPaymentRequest $request, string $id)
+    {  
+        $data = $request->all();
+        $customer_payment = $this->customerPaymentRepository->getCustomerPaymentByID($id);
+        $this->customerPaymentService->updateCustomerPaymentByID($data,$customer_payment);
+        
         return redirect()->route('customer-payments.index');
     }
 
