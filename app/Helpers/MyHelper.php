@@ -1,10 +1,13 @@
 <?php
 
+namespace App\Helpers;
+
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
-if(!function_exists('nomenclature')) {
-    function nomenclature($array = array())
+
+class MyHelper {
+    public static function nomenclature($array = array())
     {
         $column_name = $array['column_name'];
         $carbon = Carbon::now()->format('ymd');
@@ -14,4 +17,4 @@ if(!function_exists('nomenclature')) {
         $lastId = (int)$lastId;
         return $array['prefix'] . $carbon . '-' . str_pad($lastId + 1, 2, '0', STR_PAD_LEFT);
     }
-}
+}   
