@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShopUserCreateApiRequest;
 use App\Http\Requests\ShopUserCreateRequest;
+use App\Http\Requests\ShopUserLoginRequest;
 use App\Http\Requests\ShopUserUpdateApiRequest;
 use App\Models\ShopUser;
 use App\Repositories\ShopRepository;
@@ -31,18 +32,9 @@ class ShopUserApiController extends Controller
 
     }
 
-    public function shopUsersLoginApi(Request $request)
+    public function shopUsersLoginApi(ShopUserLoginRequest $request)
     {
-        $validator = Validator::make($request->all(),[
-            'phone_number' => 'required',
-            'password' => 'required',
-        ]);
         
-        if ($validator->fails()) {
-            return response()->json(['data' => [], 'message' => $validator->messages()->first(), 'status' => 'fail'], 401);
-        }
-        // dd($request->all());
-
         if(Auth::guard('shopuser')->attempt(['phone_number' => request('phone_number'), 'password' => request('password')])){ 
             $shopuser = ShopUser::where('id', Auth::guard('shopuser')->user()->id)->first();
             $shopuser->token =  $shopuser->createToken('ShopUser')->accessToken;
