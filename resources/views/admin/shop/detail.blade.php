@@ -75,7 +75,6 @@
                                         <th>Name</th>
                                         <th>Phone Number</th>
                                         <th>Email</th>
-                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -110,7 +109,6 @@
                                         <th>Type</th>
                                         <th>Collection Method</th>
                                         <th>Last Updated By</th>
-                                        <th>Action</th>
                                     </tr>
                                 </thead>
 
@@ -144,7 +142,6 @@
                     {data: 'name', name: 'name'},
                     {data: 'phone_number', name: 'phone_number'},
                     {data: 'email', name: 'email'},
-                    {data: 'action', name: 'action', orderable: false, searchable: false},
                 ], 
             });
             $('#shop-order-datatable').DataTable({
@@ -170,7 +167,6 @@
                     {data: 'type', name: 'type'},
                     {data: 'collection_method', name: 'collection_method'},
                     {data: 'last_updated_by_name', name: 'last_updated_by'},
-                    {data: 'action', name: 'action', orderable: false, searchable: false},
                 ]
             });
         });

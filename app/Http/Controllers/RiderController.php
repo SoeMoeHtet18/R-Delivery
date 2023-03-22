@@ -152,15 +152,11 @@ class RiderController extends Controller
         if ($request->ajax()) {
             $data = $this->riderRepository->getOrderListByRiderID($id);
             return DataTables::of($data)
-                ->addIndexColumn()
-                ->addColumn('action', function($row){
-                    $actionBtn = '
-                        <a href="'. route("orders.show", $row->id) .'" class="btn btn-info btn-sm">View</a> 
-                        <a href="'. route("orders.edit", $row->id) .'" class="btn btn-light btn-sm">Edit</a> 
-                        ';
-                    return $actionBtn;
+                ->addColumn('order_code', function($data) {
+                    return '<a href="' . route("orders.show", $data->id ) . '">' . $data->order_code . '</a>';
                 })
-                ->rawColumns(['action'])
+                ->addIndexColumn()
+                ->rawColumns(['order_code'])
                 ->orderColumn('orders.id', '-id $1')
                 ->make(true);
         };
