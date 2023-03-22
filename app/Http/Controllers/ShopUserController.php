@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ShopUserCreateRequest;
+use App\Http\Requests\ShopUserUpdateRequest;
 use App\Repositories\ShopRepository;
 use App\Repositories\ShopUserRepository;
 use App\Services\ShopUserService;
@@ -61,33 +63,12 @@ class ShopUserController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ShopUserCreateRequest $request)
     {   
-        $rules = [
-            'name'              => 'required|string',
-            'phone_number'      => 'required|string|unique:shop_users',
-            'email'             => 'unique:shop_users',
-            'password'          => 'required|min:8',
-        ];
-
-        $customErr = [
-            'name.required'              => 'Name field is required',
-            'phone_number.required'      => 'Phone Number is required',
-            'phone_number.unique'        => 'Phone Number already exists',
-            'email'                      => 'Email already exists',
-            'password.required'          => 'Password is required',
-            'password.min'               => 'Password should be a minimum of 8 characters.',
-        ];
         
-        $validator = Validator::make($request->all(), $rules,$customErr);
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        } else {
-            $data = $request->all();
-
-            $this->shopUserService->saveShopUserData($data);
-        }
-
+        $data = $request->all();
+        $this->shopUserService->saveShopUserData($data);
+        
         return redirect()->route('shopusers.index');
     }
 
@@ -116,30 +97,11 @@ class ShopUserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ShopUserUpdateRequest $request, string $id)
     {
-        $rules = [ 
-            'name'                  => 'required|string',
-            'phone_number'          => 'required|string|unique:shop_users,phone_number,'. $id,
-            'email'                 => 'unique:shop_users,email,'. $id,
-        ];
-                
-        $customErr = [
-            'name.required'                 => 'Name field is required.',
-            'phone_number.required'         => 'Phone Number is required.',
-            'phone_number.unique'           => 'Phone Number already exists.',
-            'email.unique'                  => 'Email already exists.',
-        ];
-            
-        $validator = Validator::make($request->all(), $rules,$customErr);
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        } else {
-            $shop_user = $this->shopUserRepository->getShopUserByID($id);
-
-            $data = $request->all();
-            $this->shopUserService->updateShopUserByID($data, $shop_user);
-        }
+        $shop_user = $this->shopUserRepository->getShopUserByID($id);
+        $data = $request->all();
+        $this->shopUserService->updateShopUserByID($data, $shop_user); 
     
         return redirect()->route('shopusers.show', $id);
         
