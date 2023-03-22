@@ -27,7 +27,7 @@ class AdminController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = User::select('*')->orderBy('id','DESC');
+            $data = $this->adminRepository->getAllUsersQuery();
             return DataTables::of($data)
                 
                 ->addColumn('action', function($row){
@@ -42,6 +42,7 @@ class AdminController extends Controller
                 })
                 ->rawColumns(['action'])
                 ->addIndexColumn()
+                ->orderColumn('id', '-id $1')
                 ->make(true);
         }
         return view('admin.user.index');

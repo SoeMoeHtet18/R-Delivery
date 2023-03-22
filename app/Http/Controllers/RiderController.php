@@ -27,7 +27,7 @@ class RiderController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $riders = $this->riderRepository->getAllRiders();
+            $riders = $this->riderRepository->getAllRidersQuery();
             return DataTables::of($riders)
                 ->addIndexColumn()
                 ->addColumn('action', function($riders){

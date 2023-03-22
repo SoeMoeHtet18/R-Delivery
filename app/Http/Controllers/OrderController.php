@@ -49,7 +49,7 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Order::leftJoin('townships','townships.id','orders.township_id')->leftJoin('riders','riders.id','orders.rider_id')->leftJoin('shops','shops.id','orders.shop_id')->leftJoin('users','users.id','orders.last_updated_by')->leftJoin('cities','cities.id','orders.city_id')->select('orders.*','townships.name as township_name','shops.name as shop_name','riders.name as rider_name','users.name as last_updated_by_name','cities.name as city_name')->get();
+            $data = $this->orderRepository->getAllOrdersQuery();
 
             return DataTables::of($data)
                 ->addIndexColumn()
@@ -65,6 +65,7 @@ class OrderController extends Controller
                     return $actionBtn;
                 })
                 ->rawColumns(['action'])
+                ->orderColumn('id', '-orders.id')
                 ->make(true);
         }
         return view('admin.order.index');
@@ -75,10 +76,14 @@ class OrderController extends Controller
      */
     public function create()
     {   
-        $shops = $this->shopRepository->getAllShops()->get();
-        $riders = $this->riderRepository->getAllRiders()->get();
+        $shops = $this->shopRepository->getAllShops();
+        $shops = $shops->sortByDesc('id');
+        $riders = $this->riderRepository->getAllRiders();
+        $riders = $riders->sortByDesc('id');
         $cities = $this->cityRepository->getAllCities();
+        $cities = $cities->sortByDesc('id');
         $item_types = $this->itemTypeRepository->getAllItemTypes();
+        $item_types = $item_types->sortByDesc('id');
         $order_code = nomenclature(['table_name'=>'orders','prefix'=>'OD','column_name'=>'order_code']);
         
         return view('admin.order.create',compact('shops', 'riders', 'cities', 'item_types', 'order_code'));
@@ -168,13 +173,18 @@ class OrderController extends Controller
     public function edit(string $id)
     {
         $order = $this->orderRepository->getOrderByID($id);
-        $shops = $this->shopRepository->getAllShops()->get();
-        $riders = $this->riderRepository->getAllRiders()->get();
+        $shops = $this->shopRepository->getAllShops();
+        $shops = $shops->sortByDesc('id');
+        $riders = $this->riderRepository->getAllRiders();
+        $riders = $riders->sortByDesc('id');
         $cities = $this->cityRepository->getAllCities();
+        $cities = $cities->sortByDesc('id');
         $item_types = $this->itemTypeRepository->getAllItemTypes();
-        $city_id = $order->city_id;
-        $townships = $this->townshipRepository->getAllTownshipsByCityID($city_id)->orderBy('id','DESC')->get();
+        $item_types = $item_types->sortByDesc('id');
         
+        $city_id = $order->city_id;
+        $townships = $this->townshipRepository->getAllTownshipsByCityID($city_id);
+        $townships = $townships->sortByDesc('id');
         
         $date = new Carbon($order->schedule_date);
         $scheduledate = $date->format('Y-m-d');

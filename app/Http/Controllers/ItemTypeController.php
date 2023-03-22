@@ -24,7 +24,7 @@ class ItemTypeController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = ItemType::select('*')->orderBy('id','DESC');
+            $data = $this->itemTypeRepository->getAllItemTypesQuery();
             return DataTables::of($data)
                 
                 ->addColumn('action', function($row){
@@ -39,6 +39,7 @@ class ItemTypeController extends Controller
                 })
                 ->rawColumns(['action'])
                 ->addIndexColumn()
+                ->orderColumn('id','-id $1')
                 ->make(true);
         }
         return view('admin.itemtype.index');
