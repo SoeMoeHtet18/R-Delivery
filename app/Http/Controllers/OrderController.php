@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
+require_once app_path('helpers/helpers.php');
 
 class OrderController extends Controller
 {
@@ -78,8 +79,9 @@ class OrderController extends Controller
         $riders = $this->riderRepository->getAllRiders()->get();
         $cities = $this->cityRepository->getAllCities();
         $item_types = $this->itemTypeRepository->getAllItemTypes();
+        $order_code = nomenclature(['table_name'=>'orders','prefix'=>'OD','column_name'=>'order_code']);
         
-        return view('admin.order.create',compact('shops', 'riders', 'cities', 'item_types'));
+        return view('admin.order.create',compact('shops', 'riders', 'cities', 'item_types', 'order_code'));
     }
 
     /**

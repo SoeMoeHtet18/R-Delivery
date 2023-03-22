@@ -14,7 +14,7 @@
                             <h4>Order Code <b>:</b></h4>
                         </label>
                         <div class="col-10">
-                            <input type="text" id="order_code" name="order_code" value="{{$order->order_code}}"class="form-control"/>
+                            <input type="text" id="order_code" name="order_code" value="{{$order->order_code}}"class="form-control" readonly/>
                             @if ($errors->has('order_code'))
                                 <span class="text-danger"><strong>{{ $errors->first('order_code') }}</strong></span>
                             @endif
