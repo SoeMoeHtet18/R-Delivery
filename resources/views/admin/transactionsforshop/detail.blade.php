@@ -57,7 +57,7 @@
                         <h4>Paid By <b>:</b></h4>
                         </div>
                         <div class="col-10 p-3">
-                            {{ $transaction_for_shops->paid_by }}
+                            {{ $transaction_for_shops->user->name }}
                         </div>
                     </div>
             </div>

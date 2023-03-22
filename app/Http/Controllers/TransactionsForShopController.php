@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\AdminRepository;
 use App\Repositories\ShopRepository;
 use App\Repositories\TransactionsForShopRepository;
 use App\Services\TransactionsForShopService;
@@ -14,12 +15,14 @@ class TransactionsForShopController extends Controller
     protected $transactionsForShopRepository;
     protected $transactionsForShopService;
     protected $shopRepository;
+    protected $adminRepository;
 
-    public function __construct(TransactionsForShopRepository $transactionsForShopRepository ,TransactionsForShopService $transactionsForShopService,ShopRepository $shopRepository)
+    public function __construct(TransactionsForShopRepository $transactionsForShopRepository ,TransactionsForShopService $transactionsForShopService,ShopRepository $shopRepository,AdminRepository $adminRepository)
     {
         $this->transactionsForShopRepository = $transactionsForShopRepository;
         $this->transactionsForShopService = $transactionsForShopService;
         $this->shopRepository = $shopRepository;
+        $this->adminRepository = $adminRepository;
     }
     /**
      * Display a listing of the resource.
@@ -52,8 +55,9 @@ class TransactionsForShopController extends Controller
      */
     public function create()
     {
-        $shops = $this->shopRepository->getAllShops();
-        return view('admin.transactionsforshop.create', compact('shops'));
+        $shops = $this->shopRepository->getAllShops()->orderByDESC('id')->get();
+        $users = $this->adminRepository->getAllUsers()->orderByDESC('id')->get();
+        return view('admin.transactionsforshop.create', compact('shops', 'users'));
     }
 
     /**
@@ -100,9 +104,10 @@ class TransactionsForShopController extends Controller
     {
         $transaction_for_shop = $this->transactionsForShopRepository->getTransactionsForShopByID($id);
 
-        $shops = $this->shopRepository->getAllShops();
+        $shops = $this->shopRepository->getAllShops()->orderByDESC('id')->get();
+        $users = $this->adminRepository->getAllUsers()->orderByDESC('id')->get();
 
-        return view('admin.transactionsforshop.edit',compact('transaction_for_shop','shops'));
+        return view('admin.transactionsforshop.edit',compact('transaction_for_shop','shops','users'));
     }
 
     /**

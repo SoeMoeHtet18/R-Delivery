@@ -52,7 +52,7 @@ class ShopPaymentController extends Controller
      */
     public function create()
     {
-        $shops = $this->shopRepository->getAllShops();
+        $shops = $this->shopRepository->getAllShops()->orderByDESC('id')->get();
         return view('admin.shoppayment.create', compact('shops'));
     }
 
@@ -98,8 +98,7 @@ class ShopPaymentController extends Controller
     {   
         $shop_payment = $this->shopPaymentRepository->getShopPaymentByID($id);
 
-        $shops = $this->shopRepository->getAllShops();
-
+        $shops = $this->shopRepository->getAllShops()->orderByDESC('id')->get();
         return view('admin.shoppayment.edit',compact('shop_payment','shops'));
     }
 

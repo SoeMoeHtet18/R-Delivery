@@ -25,8 +25,8 @@
                             <h4>Shop Name <b>:</b></h4>
                         </label>
                         <div class="col-10">
-                            <select name="shop_id" id="shop" class="form-control">
-                                <option value="" disabled>Select the shop of this user</option>
+                            <select name="shop_id" id="shop_name" class="form-control">
+                                <option value="" disabled>Select the Shop of this user</option>
                                 @foreach($shops as $shop)
                                     <option value="{{$shop->id}}" @if($shop->id == $shop_user->shop_id) {{'selected'}} @endif>{{$shop->name}}</option>
                                 @endforeach
@@ -72,3 +72,10 @@
         </div>
         
 @endsection
+@section('javascript')
+    <script>
+        $(document).ready(function() {
+            $('#shop_name').select2();
+        });
+    </script>
+@endsection   

@@ -108,7 +108,7 @@ class ShopUserController extends Controller
     {
         $shop_user = $this->shopUserRepository->getShopUserByID($id);
 
-        $shops = $this->shopRepository->getAllShops();
+        $shops = $this->shopRepository->getAllShops()->orderByDESC('id')->get();
 
         return view('admin.shopuser.edit',compact('shop_user','shops'));
     }

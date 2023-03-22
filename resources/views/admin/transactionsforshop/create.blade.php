@@ -61,10 +61,12 @@
                             <h4>Paid By <b>:</b></h4>
                         </label>
                         <div class="col-10">
-                            <input type="text" id="paid_by" name="paid_by" class="form-control"/>
-                            @if ($errors->has('paid_by'))
-                                <span class="text-danger"><strong>{{ $errors->first('paid_by') }}</strong></span>
-                            @endif
+                            <select name="paid_by" id="paid_by" class="form-control">
+                                <option value="" selected disabled>Select the User of this Payment</option>
+                                @foreach($users as $user)
+                                    <option value="{{$user->id}}">{{$user->name}}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                     <div class="footer-button float-end">
@@ -81,6 +83,7 @@
         $(document).ready(function() {
             $('#shop_name').select2();
             $('#type').select2();
+            $('#paid_by').select2();
         });
     </script>
 @endsection

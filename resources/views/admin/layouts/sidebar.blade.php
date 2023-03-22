@@ -62,11 +62,12 @@
                 <a href="{{route('customer-payments.index')}}">
                     <!-- <i class="fa fa-users"></i> -->
                     <span class="title">Customer Payment</span>
+                </a>
             </li>           
             <li>
                 <a href="{{route('transactions-for-shop.index')}}">
                     <!-- <i class="fa fa-users"></i> -->
-                    <span class="title">Company - Shop Transaction</span>
+                    <span class="title">Transaction For Shop</span>
                 </a>
             </li>
             <li>
