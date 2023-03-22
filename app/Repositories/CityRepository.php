@@ -6,6 +6,12 @@ use App\Models\City;
 
 class CityRepository
 {   
+    public function getAllCitiesQuery()
+    {
+        $cities = City::select('*');
+        return $cities;
+    }
+
     public function getAllCities()
     {
         $shops = City::all();

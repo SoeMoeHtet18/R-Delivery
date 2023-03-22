@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\City;
 use App\Repositories\CityRepository;
 use App\Repositories\TownshipRepository;
 use App\Services\CityService;
@@ -29,9 +28,8 @@ class CityController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = City::select('*')->orderBy('id','DESC');
+            $data = $this->cityRepository->getAllCitiesQuery();
             return DataTables::of($data)
-                
                 ->addColumn('action', function($row){
                     $actionBtn = '<a href="' . route("cities.show", $row->id) . '" class="info btn btn-info btn-sm">View</a>
                     <a href="' . route("cities.edit", $row->id) . '" class="edit btn btn-light btn-sm">Edit</a>
@@ -44,6 +42,7 @@ class CityController extends Controller
                 })
                 ->rawColumns(['action'])
                 ->addIndexColumn()
+                ->orderColumn('id', '-id $1')
                 ->make(true);
         }
         return view('admin.city.index');
@@ -129,22 +128,5 @@ class CityController extends Controller
     {
         $this->cityService->deleteCityByID($id);
         return redirect()->route('cities.index');
-    }
-
-    public function getTownshipsTable($id)
-    {
-        $townships = $this->townshipRepository->getAllTownshipsByCityID($id);
-        return DataTables::of($townships)
-            ->addIndexColumn()
-            ->addColumn('action', function($townships){
-                $actionBtn = '
-                        <a href="'. route("townships.show", $townships->id) .'" class="btn btn-info btn-sm">View</a> 
-                        <a href="'. route("townships.edit", $townships->id) .'" class="btn btn-light btn-sm">Edit</a> 
-                        ';
-                return $actionBtn;
-            })
-            ->rawColumns(['action'])
-            ->orderColumn('id', '-id $1')
-            ->make(true);
     }
 }
