@@ -50,8 +50,8 @@
                         <div class="col-10">
                             <select name="type" id="type" class="form-control">
                                 <option value="" selected disabled>Select the Type for This Payment</option>
-                                    <option value="delivery_payment">Delivery Payment</option>
-                                    <option value="remaining_payment">Remaining Payment</option>
+                                    <option value="fully_payment">Fully Payment</option>
+                                    <option value="loan_payment">Loan Payment</option>
                                     
                             </select>
                         </div>

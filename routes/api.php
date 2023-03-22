@@ -33,10 +33,12 @@ Route::middleware('auth:shop-user-api')->group( function () {
     Route::post('update-shop-user/{id}', [ShopUserApiController::class, 'update']);
 });
 Route::post('rider-login', [RiderApiController::class, 'riderLoginApi']);
+Route::post('create-rider', [RiderApiController::class, 'create']);
 Route::middleware('auth:rider-api')->group(function() {
     Route::get('riders/{id}', [RiderApiController::class, 'show']);
     Route::post('riders/get-order-list?status=pending', [RiderApiController::class, 'getOrderList']);
     Route::get('riders/{id}/get-shop-list', [RiderApiController::class, 'getShopListByRiderID']);
+    Route::post('update-rider/{id}', [RiderApiController::class, 'update']);
     Route::post('create-customer-payment-by-rider', [CustomerPaymentApiController::class, 'insertCustomerPayment']);
 });
 
