@@ -32,12 +32,12 @@ Route::get('/', function () {
 Route::group(['middleware' => 'auth'], function () {
     Route::resource('/users', AdminController::class);
     Route::resource('/riders', RiderController::class);
-    Route::get('/riders/get-orders-by-rider-id/{id}', [RiderController::class, 'getRiderOrdersTable']);
+    Route::get('/riders/get-orders-by-rider-id/{id}', [OrderController::class, 'getRiderOrdersTable']);
     Route::resource('/shopusers', ShopUserController::class);
     Route::resource('/townships',TownshipController::class);
     Route::resource('/shops', ShopController::class);
-    Route::get('/shops/get-shop-users-by-shop-id/{id}', [ShopController::class, 'getShopUsersTable']);
-    Route::get('/shops/get-shop-orders-by-shop-id/{id}', [ShopController::class, 'getShopOrdersTable']);
+    Route::get('/shops/get-shop-users-by-shop-id/{id}', [ShopUserController::class, 'getShopUsersTable']);
+    Route::get('/shops/get-shop-orders-by-shop-id/{id}', [OrderController::class, 'getShopOrdersTable']);
     Route::resource('/orders', OrderController::class);
     Route::resource('/cities', CityController::class);
     Route::get('/cities/{id}/townships', [TownshipController::class, 'getTownshipsTableByCityID']);

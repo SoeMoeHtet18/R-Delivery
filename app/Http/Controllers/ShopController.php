@@ -146,34 +146,4 @@ class ShopController extends Controller
         
         return redirect(route('shops.index'));
     }
-
-    public function getShopUsersTable(Request $request, $id)
-    {
-        if ($request->ajax()) {
-            $data = $this->shopRepository->getShopUsersByShopID($id);
-            return DataTables::of($data)
-            ->addColumn('name', function($data) {
-                return '<a href="' . route("shopusers.show", $data->id) . '">' . $data->name . '</a>';
-            })
-            ->addIndexColumn()
-            ->rawColumns(['name'])
-            ->orderColumn('id', '-id $1')
-            ->make(true);
-        };
-    }
-
-    public function getShopOrdersTable(Request $request, $id)
-    {
-        if ($request->ajax()) {
-            $data = $this->shopRepository->getShopOrdersByShopID($id);
-            return DataTables::of($data)
-                ->addColumn('order_code', function($data) {
-                    return '<a href="' . route("orders.show", $data->id ) . '">' . $data->order_code . '</a>';
-                })
-                ->addIndexColumn()
-                ->rawColumns(['order_code'])
-                ->orderColumn('orders.id', '-id $1')
-                ->make(true);
-        };
-    }
 }
