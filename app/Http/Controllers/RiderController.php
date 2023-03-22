@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RiderCreateRequest;
+use App\Http\Requests\RiderUpdateRequest;
 use App\Models\Rider;
 use App\Repositories\RiderRepository;
 use App\Services\RiderService;
@@ -57,33 +59,11 @@ class RiderController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(RiderCreateRequest $request)
     {
-        $rules = [ 
-            'name'                  => 'required|string',
-            'phone_number'          => 'required|string|unique:riders',
-            'email'                 => 'unique:riders',
-            'password'              => 'required|min:8'
-        ];
-            
-        $customErr = [
-            'name.required'                 => 'Name field is required.',
-            'phone_number.required'         => 'Phone Number is required.',
-            'phone_number.unique'           => 'Phone Number already exists.',
-            'email'                         => 'Email already exists',
-            'password.required'             => 'Password is required', 
-            'password.min'                  => 'Password should be a minimum of 8 characters.',
-        ];
 
-        $validator = Validator::make($request->all(), $rules,$customErr);
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        } else {
-            $data = $request->all();
-            
-            $this->riderService->saveRiderData($data);
-        }
-
+        $data = $request->all();
+        $this->riderService->saveRiderData($data);
         return redirect(route('riders.index'));
     }
 
@@ -110,30 +90,11 @@ class RiderController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(RiderUpdateRequest $request, string $id)
     {
         $rider = $this->riderRepository->getRiderByID($id);
-
-        $rules = [ 
-            'name'                  => 'required|string',
-            'phone_number'          => 'required|string|unique:riders,phone_number,' . $id,
-            'email'                 => 'unique:riders,email,' . $id,
-        ];
-            
-        $customErr = [
-            'name.required'                 => 'Name field is required.',
-            'phone_number.required'         => 'Phone Number is required.',
-            'phone_number.unique'           => 'Phone Number already exists.',
-            'email.unique'                  => 'Email already exists',
-        ];
-
-        $validator = Validator::make($request->all(), $rules,$customErr);
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        } else {
-            $data = $request->all();
-            $this->riderService->updateRiderByID($data,$rider);
-        }
+        $data = $request->all();
+        $this->riderService->updateRiderByID($data,$rider);
 
         return redirect(route('riders.show', $id));
     }

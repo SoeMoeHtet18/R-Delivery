@@ -50,6 +50,7 @@
                             <input type="password" id="password" name="password" class="form-control" placeholder="Leave empty to keep the same"/>
                         </div>
                     </div>
+                    <input type="hidden" id="id" name="id" value="{{$rider->id}}" class="form-control"/>
                     <div class="footer-button float-end">
                         <a href="{{url()->previous() }}" class="btn btn-light">Cancel</a>
                         <input type="submit" class="btn btn-success ">
