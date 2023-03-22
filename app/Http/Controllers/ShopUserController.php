@@ -27,7 +27,7 @@ class ShopUserController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $shop_users = $this->shopUserRepository->getAllShopUsers();
+            $shop_users = $this->shopUserRepository->getAllShopUsersQuery();
             return DataTables::of($shop_users)
                 ->addIndexColumn()
                 ->addColumn('action', function($shop_users){
@@ -53,7 +53,8 @@ class ShopUserController extends Controller
      */
     public function create()
     {
-        $shops = $this->shopRepository->getAllShops()->orderByDESC('id')->get();
+        $shops = $this->shopRepository->getAllShops();
+        $shops = $shops->sortByDesc('id');
 
         return view('admin.shopuser.create', compact('shops'));
     }
@@ -108,7 +109,8 @@ class ShopUserController extends Controller
     {
         $shop_user = $this->shopUserRepository->getShopUserByID($id);
 
-        $shops = $this->shopRepository->getAllShops()->orderByDESC('id')->get();
+        $shops = $this->shopRepository->getAllShops();
+        $shops = $shops->sortByDesc('id');
 
         return view('admin.shopuser.edit',compact('shop_user','shops'));
     }

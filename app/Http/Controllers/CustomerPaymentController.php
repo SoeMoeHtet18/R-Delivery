@@ -31,9 +31,8 @@ class CustomerPaymentController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = CustomerPayment::leftJoin('orders','orders.id','customer_payments.order_id')->select('customer_payments.*','orders.order_code')->orderBy('customer_payments.id','DESC')->get();
+            $data = $this->customerPaymentRepository->getAllCustomerPaymentsQuery();
             return DataTables::of($data)
-                
                 ->addColumn('action', function($row){
                     $actionBtn = '<a href="' . route("customer-payments.show", $row->id) . '" class="info btn btn-info btn-sm">View</a>
                     <a href="' . route("customer-payments.edit", $row->id) . '" class="edit btn btn-light btn-sm" >Edit</a>
@@ -46,6 +45,7 @@ class CustomerPaymentController extends Controller
                 })
                 ->rawColumns(['action'])
                 ->addIndexColumn()
+                ->orderColumn('id','-customer_payments.id')
                 ->make(true);
         }
         return view('admin.customerpayment.index');
@@ -56,7 +56,8 @@ class CustomerPaymentController extends Controller
      */
     public function create()
     {
-        $orders = $this->orderRepository->getAllOrder();
+        $orders = $this->orderRepository->getAllOrders();
+        $orders = $orders->sortByDesc('id');
         
         return view('admin.customerpayment.create',compact('orders'));
     }
@@ -102,7 +103,8 @@ class CustomerPaymentController extends Controller
      */
     public function edit(string $id)
     {
-        $orders = $this->orderRepository->getAllOrder();
+        $orders = $this->orderRepository->getAllOrders();
+        $orders = $orders->sortByDesc('id');
         $customer_payment = $this->customerPaymentRepository->getCustomerPaymentByID($id);
         $paid_at = null;
         if($customer_payment->paid_at) {

@@ -6,10 +6,10 @@ use App\Models\TransactionsForShop;
 
 class TransactionsForShopRepository
 {
-    public function getAllTransactionsForShopByDESC()
+    public function getAllTransactionsForShopQuery()
     {
-        $transaction_for_shops = TransactionsForShop::leftJoin('shops', 'shops.id','transactions_for_shops.shop_id')->leftJoin('users','users.id','transactions_for_shops.paid_by')->select('transactions_for_shops.*','shops.name as shop_name','users.name as paid_by')->orderBy('id','DESC')->get();
-        return $transaction_for_shops;
+        $query = TransactionsForShop::leftJoin('shops', 'shops.id','transactions_for_shops.shop_id')->leftJoin('users','users.id','transactions_for_shops.paid_by')->select('transactions_for_shops.*','shops.name as shop_name','users.name as paid_by');
+        return $query;
     }
 
     public function getTransactionsForShopByID($id)

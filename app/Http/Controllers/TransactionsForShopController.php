@@ -31,7 +31,7 @@ class TransactionsForShopController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $transaction_for_shops = $this->transactionsForShopRepository->getAllTransactionsForShopByDESC();
+            $transaction_for_shops = $this->transactionsForShopRepository->getAllTransactionsForShopQuery();
             return DataTables::of($transaction_for_shops)
                 ->addIndexColumn()
                 ->addColumn('action', function($transaction_for_shops){
@@ -46,6 +46,7 @@ class TransactionsForShopController extends Controller
                     return $actionBtn;
                 })
                 ->rawColumns(['action'])
+                ->orderColumn('id','-transactions_for_shops.id')
                 ->make(true);
         }
         return view('admin.transactionsforshop.index');
@@ -56,8 +57,10 @@ class TransactionsForShopController extends Controller
      */
     public function create()
     {
-        $shops = $this->shopRepository->getAllShops()->orderByDESC('id')->get();
-        $users = $this->adminRepository->getAllUsers()->orderByDESC('id')->get();
+        $shops = $this->shopRepository->getAllShops();
+        $shops = $shops->sortByDesc('id');
+        $users = $this->adminRepository->getAllUsers();
+        $users = $users->sortByDESC('id');
         return view('admin.transactionsforshop.create', compact('shops', 'users'));
     }
 
@@ -87,9 +90,11 @@ class TransactionsForShopController extends Controller
     {
         $transaction_for_shop = $this->transactionsForShopRepository->getTransactionsForShopByID($id);
 
-        $shops = $this->shopRepository->getAllShops()->orderByDESC('id')->get();
-        $users = $this->adminRepository->getAllUsers()->orderByDESC('id')->get();
-
+        $shops = $this->shopRepository->getAllShops();
+        $shops = $shops->sortByDesc('id');
+        $users = $this->adminRepository->getAllUsers();
+        $users = $users->sortByDESC('id');
+        
         return view('admin.transactionsforshop.edit',compact('transaction_for_shop','shops','users'));
     }
 

@@ -29,7 +29,7 @@ class TownshipController extends Controller
     public function index(Request $request)
     {   
         if ($request->ajax()) {
-            $data = Township::leftJoin('cities','cities.id','townships.city_id')->select('townships.*','cities.name as city_name');
+            $data = $this->townshipRepository->getAllTownshipsQuery();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function($data){
@@ -44,7 +44,7 @@ class TownshipController extends Controller
                     return $actionBtn;
                 })
                 ->rawColumns(['action'])
-                ->orderColumn('townships.id', '-id $1')
+                ->orderColumn('id', '-townships.id $1')
                 ->make(true);
         }
         return view('admin.township.index');
@@ -56,6 +56,7 @@ class TownshipController extends Controller
     public function create()
     {   
         $cities = $this->cityRepository->getAllCities();
+        $cities = $cities->sortByDesc('id');
         return view('admin.township.create',compact('cities'));
     }
 
@@ -101,6 +102,7 @@ class TownshipController extends Controller
     {
         $township = $this->townshipRepository->getTownshipById($id);
         $cities = $this->cityRepository->getAllCities();
+        $cities = $cities->sortByDesc('id');
         return view('admin.township.edit',compact('township', 'cities'));
     }
 
@@ -141,7 +143,7 @@ class TownshipController extends Controller
 
     public function getTownshipsTableByCityID($id)
     {
-        $townships = $this->townshipRepository->getAllTownshipsByCityID($id);
+        $townships = $this->townshipRepository->getAllTownshipsByCityIDQuery($id);
         return DataTables::of($townships)
             ->addColumn('name', function($townships) {
                 return '<a href="'. route("townships.show",$townships->id) . '">' . $townships->name . '</a>';

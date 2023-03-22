@@ -28,7 +28,7 @@ class ShopController extends Controller
     {
         if($request->ajax()) {
 
-            $shops = $this->shopRepository->getAllShops();
+            $shops = $this->shopRepository->getAllShopsQuery();
 
             return DataTables::of($shops)
                 ->addIndexColumn()

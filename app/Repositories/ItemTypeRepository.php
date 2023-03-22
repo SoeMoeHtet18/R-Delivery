@@ -17,4 +17,10 @@ class ItemTypeRepository
         $item_types = ItemType::all();
         return $item_types;
     }
+
+    public function getAllItemTypesQuery()
+    {
+        $query = ItemType::select('*');
+        return $query;
+    }
 }

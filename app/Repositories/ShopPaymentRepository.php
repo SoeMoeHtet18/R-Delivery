@@ -6,10 +6,10 @@ use App\Models\ShopPayment;
 
 class ShopPaymentRepository
 {
-    public function getAllShopPaymentsByDESC()
+    public function getAllShopPaymentsQuery()
     {
-        $shop_payments = ShopPayment::leftJoin('shops','shops.id','shop_payments.shop_id')->select('shop_payments.*','shops.name as shop_name')->orderBy('id','DESC')->get();
-        return $shop_payments;
+        $query = ShopPayment::leftJoin('shops','shops.id','shop_payments.shop_id')->select('shop_payments.*','shops.name as shop_name');
+        return $query;
     }
 
     public function getShopPaymentByID($id)
