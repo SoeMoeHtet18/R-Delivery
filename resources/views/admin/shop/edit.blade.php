@@ -42,6 +42,7 @@
                             @endif
                         </div>
                     </div>
+                    <input type="hidden" id="id" name="id" value="{{$shop->id}}" class="form-control"/>
                     <div class="footer-button float-end">
                         <a href="{{url()->previous() }}" class="btn btn-light">Cancel</a>
                         <input type="submit" class="btn btn-success float-end">

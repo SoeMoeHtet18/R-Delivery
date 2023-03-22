@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ShopCreateRequest;
+use App\Http\Requests\ShopUpdateRequest;
 use App\Repositories\ShopRepository;
 use App\Services\ShopService;
 use Illuminate\Http\Request;
@@ -60,29 +62,11 @@ class ShopController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        $rules = [
-            'name' => 'required|string',
-            'address' => 'required|string',
-            'phone_number' => 'required|string|unique:shops'
-        ];
-
-        $customErr = [
-            'name.required' => 'Name field is required',
-            'address.required' => 'Address field is required',
-            'phone_number.required' => 'Phone Number is required',
-            'phone_number.unique' => 'Phone Number already exists'
-        ];
-
-        $validator = Validator::make($request->all(), $rules, $customErr);
-        if  ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        } else {
-            $data = $request->all();
-
-            $this->shopService->saveShopData($data);
-        }
+    public function store(ShopCreateRequest $request)
+    {    
+        $data = $request->all();
+        $this->shopService->saveShopData($data);
+        
         return redirect(route('shops.index'));
     }
 
@@ -109,31 +93,12 @@ class ShopController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ShopUpdateRequest $request, string $id)
     {
         $shop = $this->shopRepository->getShopByID($id);
-
-        $rules = [
-            'name' => 'required|string',
-            'address' => 'required|string',
-            'phone_number' => 'required|string|unique:shops,phone_number,' . $id
-        ];
-
-        $customErr = [
-            'name.required' => 'Name field is required',
-            'address.required' => 'Address field is required',
-            'phone_number.required' => 'Phone Number is required',
-            'phone_number.unique' => 'Phone Number already exists'
-        ];
-
-        $validator = Validator::make($request->all(), $rules, $customErr);
-        if  ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        } else {
-            $data = $request->all();
-
-            $this->shopService->updateShopByID($data, $shop);
-        }
+        $data = $request->all();
+        $this->shopService->updateShopByID($data, $shop);
+        
         return redirect(route('shops.show', $id));
     }
 
