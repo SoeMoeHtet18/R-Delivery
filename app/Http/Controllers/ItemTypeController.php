@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ItemType;
+use App\Http\Requests\ItemTypeRequest;
 use App\Repositories\ItemTypeRepository;
 use App\Services\ItemTypeService;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Support\Facades\Validator;
 
 class ItemTypeController extends Controller
 {   
@@ -56,23 +55,11 @@ class ItemTypeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ItemTypeRequest $request)
     {
-        $rules = [ 
-            'name'                  => 'required|string',
-        ];
-            
-        $customErr = [
-            'name.required'         => 'Name field is required.',
-        ];
-        $validator = Validator::make($request->all(), $rules,$customErr);
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        } else {
-            $data = $request->all();
-            $this->itemTypeService->saveitemTypeData($data);
-        }
-
+        
+        $data = $request->all();
+        $this->itemTypeService->saveitemTypeData($data);
         return redirect()->route('itemtypes.index');
     }
 
@@ -97,23 +84,12 @@ class ItemTypeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ItemTypeRequest $request, string $id)
     {
-        $rules = [ 
-            'name'                  => 'required|string',
-        ];
-            
-        $customErr = [
-            'name.required'                 => 'Name field is required.',
-        ];
-        $validator = Validator::make($request->all(), $rules,$customErr);
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        } else {
-            $data = $request->all();
-            $itemtype = $this->itemTypeRepository->getByItemTypeID($id);
-            $this->itemTypeService->updateItemTypeByID($data,$itemtype);
-        }
+        
+        $data = $request->all();
+        $itemtype = $this->itemTypeRepository->getByItemTypeID($id);
+        $this->itemTypeService->updateItemTypeByID($data,$itemtype);
 
         return redirect(route('itemtypes.show', $id));
     }
