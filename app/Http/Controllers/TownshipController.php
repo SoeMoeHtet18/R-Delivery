@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TownshipRequest;
 use App\Models\City;
 use App\Models\Township;
 use App\Repositories\CityRepository;
@@ -62,25 +63,10 @@ class TownshipController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        $rules = [
-            'name'           => 'required|string',
-            'city'           => 'required',
-        ];
-
-        $customErr = [
-            'name.required'     => 'Name field is required',
-            'city.required'     => 'City field is required',
-        ];
-        
-        $validator = Validator::make($request->all(), $rules,$customErr);
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        } else {
-            $data = $request->all();
-            $this->townshipService->saveTownshipData($data);
-        }
+    public function store(TownshipRequest $request)
+    {   
+        $data = $request->all();
+        $this->townshipService->saveTownshipData($data);
 
         return redirect()->route('townships.index');
     }
@@ -107,25 +93,11 @@ class TownshipController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(TownshipRequest $request, string $id)
     {   
-        $rules = [ 
-            'name'                  => 'required|string',
-            'city'                  => 'required',
-        ];
-            
-        $customErr = [
-            'name.required'         => 'Name field is required.',
-            'city.required'         => 'City field is required.',
-        ];
-        $validator = Validator::make($request->all(), $rules,$customErr);
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        } else {
-            $data = $request->all();
-            $township = $this->townshipRepository->getTownshipById($id);
-            $this->townshipService->updateTownshipByID($data,$township);
-        }
+        $data = $request->all();
+        $township = $this->townshipRepository->getTownshipById($id);
+        $this->townshipService->updateTownshipByID($data,$township);
 
         return redirect(route('townships.show', $id));
     }
