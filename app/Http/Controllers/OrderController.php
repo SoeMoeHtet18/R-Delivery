@@ -252,10 +252,25 @@ class OrderController extends Controller
         return redirect()->route('orders.index');
     }
 
-    public function getRiderOrdersTable(Request $request, $id)
+    public function getPendingOrdersTableByRiderID(Request $request, $id)
     {
         if ($request->ajax()) {
-            $data = $this->riderRepository->getOrderListByRiderID($id);
+            $data = $this->riderRepository->getPendingOrderListByRiderID($id);
+            return DataTables::of($data)
+                ->addColumn('order_code', function($data) {
+                    return '<a href="' . route("orders.show", $data->id ) . '">' . $data->order_code . '</a>';
+                })
+                ->addIndexColumn()
+                ->rawColumns(['order_code'])
+                ->orderColumn('orders.id', '-id $1')
+                ->make(true);
+        };
+    }
+    
+    public function getOrderHistoryTableByRiderID(Request $request, $id)
+    {
+        if ($request->ajax()) {
+            $data = $this->riderRepository->getOrderHistoryListByRiderID($id);
             return DataTables::of($data)
                 ->addColumn('order_code', function($data) {
                     return '<a href="' . route("orders.show", $data->id ) . '">' . $data->order_code . '</a>';
