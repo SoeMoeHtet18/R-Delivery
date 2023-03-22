@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserCreateRequest;
+use App\Http\Requests\UserUpdateRequest;
 use App\Models\User;
 use App\Repositories\AdminRepository;
 use App\Services\AdminService;
@@ -56,31 +58,11 @@ class AdminController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(UserCreateRequest $request)
     {
-        $rules = [ 
-            'name'                  => 'required|string',
-            'phone_number'          => 'required|string|unique:users',
-            'email'                 => 'unique:users',
-            'password'              => 'required|min:8',
-        ];
-            
-        $customErr = [
-            'name.required'                 => 'Name field is required.',
-            'phone_number.required'         => 'Phone Number is required.',
-            'phone_number.unique'           => 'Phone Number already exists.',
-            'email.unique'                  => 'Email already exists.',
-            'password.required'             => 'Password is required',
-            'password.min'                  => 'Password should be a minimum of 8 characters.',
-        ];
-        $validator = Validator::make($request->all(), $rules,$customErr);
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        } else {
-            $data = $request->all();
-            $this->adminService->saveAdminData($data);
-        }
-
+        $data = $request->all();
+        $this->adminService->saveAdminData($data);
+        
         return redirect()->route('users.index');
     }
 
@@ -106,28 +88,11 @@ class AdminController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UserUpdateRequest $request, string $id)
     {
-        $rules = [ 
-            'name'                  => 'required|string',
-            'phone_number'          => 'required|string|unique:users,phone_number,'.$id,
-            'email'                 => 'unique:users,email,'.$id,
-        ];
-            
-        $customErr = [
-            'name.required'                 => 'Name field is required.',
-            'phone_number.required'         => 'Phone Number is required.',
-            'phone_number.unique'           => 'Phone Number already exists.',
-            'email.unique'                  => 'Email already exists.',
-        ];
-        $validator = Validator::make($request->all(), $rules,$customErr);
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        } else {
-            $user = $this->adminRepository->getUserById($id);
-            $data = $request->all();
-            $this->adminService->updateAdminData($data,$user);
-        }
+        $user = $this->adminRepository->getUserById($id);
+        $data = $request->all();
+        $this->adminService->updateAdminData($data,$user);    
 
         return redirect()->route('users.index');
     }
