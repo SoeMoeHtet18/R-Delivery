@@ -21,14 +21,16 @@
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
-                        <label for="customer_name" class="col-2">
-                            <h4>Customer Name <b>:</b></h4>
+                        <label for="shop_id" class="col-2">
+                            <h4>Shop Name <b>:</b></h4>
                         </label>
                         <div class="col-10">
-                            <input type="text" id="customer_name" name="customer_name" value="{{$order->customer_name}}" class="form-control"/>
-                            @if ($errors->has('customer_name'))
-                            <span class="text-danger"><strong>{{ $errors->first('customer_name') }}</strong></span>
-                            @endif
+                            <select name="shop_id" id="shop_id" class="form-control">
+                                <option value="" selected disabled>Select the Shop for This Order</option>
+                                @foreach ( $shops as $shop)
+                                    <option value="{{$shop->id}}" @if($order->shop_id == $shop->id) {{'selected'}} @endif>{{$shop->name}}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
@@ -39,6 +41,17 @@
                             <input type="text" id="customer_phone_number" name="customer_phone_number" value="{{$order->customer_phone_number}}" class="form-control"/>
                             @if ($errors->has('customer_phone_number'))
                             <span class="text-danger"><strong>{{ $errors->first('customer_phone_number') }}</strong></span>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="row m-0 mb-3">
+                        <label for="customer_name" class="col-2">
+                            <h4>Customer Name <b>:</b></h4>
+                        </label>
+                        <div class="col-10">
+                            <input type="text" id="customer_name" name="customer_name" value="{{$order->customer_name}}" class="form-control"/>
+                            @if ($errors->has('customer_name'))
+                            <span class="text-danger"><strong>{{ $errors->first('customer_name') }}</strong></span>
                             @endif
                         </div>
                     </div>
@@ -77,19 +90,6 @@
                                 <option value="" selected disabled>Select the Rider for This Order</option>
                                 @foreach ( $riders as $rider)
                                     <option value="{{$rider->id}}" @if($order->rider_id == $rider->id) {{'selected'}} @endif>{{$rider->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row m-0 mb-3">
-                        <label for="shop_id" class="col-2">
-                            <h4>Shop Name <b>:</b></h4>
-                        </label>
-                        <div class="col-10">
-                            <select name="shop_id" id="shop_id" class="form-control">
-                                <option value="" selected disabled>Select the Shop for This Order</option>
-                                @foreach ( $shops as $shop)
-                                    <option value="{{$shop->id}}" @if($order->shop_id == $shop->id) {{'selected'}} @endif>{{$shop->name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -170,8 +170,9 @@
                         <div class="col-10">
                             <select name="item_type" id="item_type_id" class="form-control">
                                 <option value="" selected disabled>Select Item Type for This Order</option>
-                                <option value="normal" @if($order->item_type == "normal") {{'selected'}} @endif>Normal</option>
-                                    <option value="luxuary" @if($order->item_type == "luxuary") {{'selected'}} @endif>Luxuary</option>
+                                @foreach($item_types as $item_type)
+                                    <option value="{{$item_type->name}}"@if($order->item_type == $item_type->id) {{'selected'}} @endif>{{$item_type->name}}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>

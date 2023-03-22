@@ -21,14 +21,16 @@
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
-                        <label for="customer_name" class="col-2">
-                            <h4>Customer Name <b>:</b></h4>
+                        <label for="shop_id" class="col-2">
+                            <h4>Shop Name <b>:</b></h4>
                         </label>
                         <div class="col-10">
-                            <input type="text" id="customer_name" name="customer_name" class="form-control"/>
-                            @if ($errors->has('customer_name'))
-                            <span class="text-danger"><strong>{{ $errors->first('customer_name') }}</strong></span>
-                            @endif
+                            <select name="shop_id" id="shop_id" class="form-control">
+                                <option value="" selected disabled>Select the Shop for This Order</option>
+                                @foreach ( $shops as $shop)
+                                    <option value="{{$shop->id}}">{{$shop->name}}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
@@ -39,6 +41,17 @@
                             <input type="text" id="customer_phone_number" name="customer_phone_number" class="form-control"/>
                             @if ($errors->has('customer_phone_number'))
                             <span class="text-danger"><strong>{{ $errors->first('customer_phone_number') }}</strong></span>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="row m-0 mb-3">
+                        <label for="customer_name" class="col-2">
+                            <h4>Customer Name <b>:</b></h4>
+                        </label>
+                        <div class="col-10">
+                            <input type="text" id="customer_name" name="customer_name" class="form-control"/>
+                            @if ($errors->has('customer_name'))
+                            <span class="text-danger"><strong>{{ $errors->first('customer_name') }}</strong></span>
                             @endif
                         </div>
                     </div>
@@ -67,19 +80,6 @@
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
-                        <label for="shop_id" class="col-2">
-                            <h4>Shop Name <b>:</b></h4>
-                        </label>
-                        <div class="col-10">
-                            <select name="shop_id" id="shop_id" class="form-control">
-                                <option value="" selected disabled>Select the Shop for This Order</option>
-                                @foreach ( $shops as $shop)
-                                    <option value="{{$shop->id}}">{{$shop->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row m-0 mb-3">
                         <label for="quantity" class="col-2">
                             <h4>Quantity <b>:</b></h4>
                         </label>
@@ -91,17 +91,6 @@
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
-                        <label for="delivery_fees" class="col-2">
-                            <h4>Delivery Fees <b>:</b></h4>
-                        </label>
-                        <div class="col-10">
-                            <input type="text" id="delivery_fees" name="delivery_fees" class="form-control"/>
-                            @if ($errors->has('delivery_fees'))
-                            <span class="text-danger"><strong>{{ $errors->first('delivery_fees') }}</strong></span>
-                            @endif
-                        </div>
-                    </div>
-                    <div class="row m-0 mb-3">
                         <label for="total_amount" class="col-2">
                             <h4>Total Amount <b>:</b></h4>
                         </label>
@@ -109,6 +98,17 @@
                             <input type="text" id="total_amount" name="total_amount" class="form-control"/>
                             @if ($errors->has('total_amount'))
                             <span class="text-danger"><strong>{{ $errors->first('total_amount') }}</strong></span>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="row m-0 mb-3">
+                        <label for="delivery_fees" class="col-2">
+                            <h4>Delivery Fees <b>:</b></h4>
+                        </label>
+                        <div class="col-10">
+                            <input type="text" id="delivery_fees" name="delivery_fees" class="form-control"/>
+                            @if ($errors->has('delivery_fees'))
+                            <span class="text-danger"><strong>{{ $errors->first('delivery_fees') }}</strong></span>
                             @endif
                         </div>
                     </div>
@@ -132,14 +132,6 @@
                             @if ($errors->has('remark'))
                             <span class="text-danger"><strong>{{ $errors->first('remark') }}</strong></span>
                             @endif
-                        </div>
-                    </div>
-                    <div class="row m-0 mb-3">
-                        <label for="status" class="col-2">
-                            <h4>Status <b>:</b></h4>
-                        </label>
-                        <div class="col-10">
-                            <input type='text' name="status" id="status" class="form-control" value="pending" readonly>
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
@@ -202,18 +194,6 @@
                             </select>
                         </div>
                     </div>
-                    <div class="row m-0 mb-3">
-                        <label for="proof_of_payment" class="col-2">
-                            <h4>Proof of Payment <b>:</b></h4>
-                        </label>
-                        <div class="col-10">
-                            <input type="file" id="proof_of_payment" name="proof_of_payment" class="form-control"/>
-                            @if ($errors->has('proof_of_payment'))
-                            <span class="text-danger"><strong>{{ $errors->first('proof_of_payment') }}</strong></span>
-                            @endif
-                        </div>
-                    </div>
-                    
                     <div class="footer-button float-end">
                         <a href="{{route('orders.index')}}" class="btn btn-light">Cancel</a>
                         <input type="submit" class="btn btn-success ">
