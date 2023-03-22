@@ -20,12 +20,12 @@
                     </h2>
                     <div class="card-toolbar">
                     <div class="create-button">
-                    <a href="{{route('shopusers.edit' , $shopuser->id)}}" class="btn btn-light">Edit</a>
+                        <a href="{{route('shopusers.edit' , $shop_user->id)}}" class="btn btn-light">Edit</a>
                     </div>
-                    <form action="{{route('shopusers.destroy', $shopuser->id)}}" method="post">
+                    <form action="{{route('shopusers.destroy', $shop_user->id)}}" method="post" onclick="return confirm(`Are you sure you want to Delete this shop user?`);">
                     @csrf
                     @method('DELETE')
-                    <input type="submit" value="Delete" class="btn btn-danger float-end">
+                        <input type="submit" value="Delete" class="btn btn-danger float-end">
                     </form>
                 </div>
                     <div class="row m-0 mb-3">
@@ -33,7 +33,15 @@
                             <h4>Name <b>:</b></h4>
                         </div>
                         <div class="col-10 p-3">
-                            {{ $shopuser->name }}
+                            {{ $shop_user->name }}
+                        </div>
+                    </div>
+                    <div class="row m-0 mb-3">
+                        <div class="col-2">
+                            <h4>Shop Name <b>:</b></h4>
+                        </div>
+                        <div class="col-10 p-3">
+                            {{ $shop_user->shop->name }}
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
@@ -41,7 +49,7 @@
                         <h4>Phone Number <b>:</b></h4>
                         </div>
                         <div class="col-10 p-3">
-                            {{ $shopuser->phone_number }}
+                            {{ $shop_user->phone_number }}
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
@@ -49,7 +57,7 @@
                             <h4>Email <b>:</b></h4>
                         </div>
                         <div class="col-10 p-3">
-                            {{ $shopuser->email }}
+                            {{ $shop_user->email }}
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
@@ -57,7 +65,7 @@
                             <h4>Device ID <b>:</b></h4>
                         </div>
                         <div class="col-10 p-3">
-                            {{ $shopuser->device_id }}
+                            {{ $shop_user->device_id }}
                         </div>
                     </div>
             </div>

@@ -26,9 +26,9 @@
 </div>
 @include('admin.layouts.loading')
 
+@include('admin.layouts.script')
 @stack('javascript')
 @yield('javascript')
-{{--@include('admin.layouts.footer')--}}
 
 </body>
 </html>

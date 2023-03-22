@@ -4,11 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Passport\HasApiTokens;
 
-class ShopUser extends Model
+class ShopUser extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, HasApiTokens;
+    protected $guarded = [];
     protected $fillable = [
-        'name', 'phone_number', 'email', 'email_verified_at', 'password', 'device_id'
+        'name', 'phone_number', 'email', 'email_verified_at', 'password', 'device_id','token'
     ];
+
+    public function shop()
+    {
+        return $this->belongsTo(Shop::class);
+    }
 }

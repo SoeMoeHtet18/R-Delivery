@@ -11,7 +11,7 @@
                 </a>
             </li>
             <li>
-                <a href="#">
+                <a href="{{route('shops.index')}}">
                     <!-- <i class="fa fa-users"></i> -->
                     <span class="title">Shop</span>
                 </a>
@@ -27,6 +27,59 @@
                     <!-- <i class="fa fa-users"></i> -->
                     <span class="title">Shop User</span>
                 </a>
+            </li>
+            <li>
+                <a href="{{route('townships.index')}}">
+                    <!-- <i class="fa fa-users"></i> -->
+                    <span class="title">Township</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{route('orders.index')}}">
+                    <!-- <i class="fa fa-users"></i> -->
+                    <span class="title">Order</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{route('cities.index')}}">
+                    <!-- <i class="fa fa-users"></i> -->
+                    <span class="title">City</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{route('itemtypes.index')}}">
+                    <!-- <i class="fa fa-users"></i> -->
+                    <span class="title">Item Type</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{route('shoppayments.index')}}">
+                    <!-- <i class="fa fa-users"></i> -->
+                    <span class="title">Shop Payment</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{route('customer-payments.index')}}">
+                    <!-- <i class="fa fa-users"></i> -->
+                    <span class="title">Customer Payment</span>
+                </a>
+            </li>           
+            <li>
+                <a href="{{route('transactions-for-shop.index')}}">
+                    <!-- <i class="fa fa-users"></i> -->
+                    <span class="title">Transaction For Shop</span>
+                </a>
+            </li>
+            <li>
+            <a class="dropdown-item" href="{{ route('logout') }}"
+                onclick="event.preventDefault();
+                                document.getElementById('logout-form').submit();">
+                {{ __('Logout') }}
+            </a>
+
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                @csrf
+            </form>
             </li>
         </ul>
     </div>

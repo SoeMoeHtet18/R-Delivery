@@ -20,6 +20,19 @@
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
+                        <label for="shop" class="col-2">
+                            <h4>Shop Name <b>:</b></h4>
+                        </label>
+                        <div class="col-10">
+                            <select name="shop_id" id="shop" class="form-control">
+                                <option value="" selected disabled>Select the shop of this user</option>
+                                @foreach($shops as $shop)
+                                    <option value="{{$shop->id}}">{{$shop->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row m-0 mb-3">
                         <label for="phone_number" class="col-2">
                             <h4>Phone Number <b>:</b></h4>
                         </label>
@@ -52,17 +65,6 @@
                             @endif
                         </div>
                     </div>
-                    <div class="row m-0 mb-3">
-                        <label for="device_id" class="col-2">
-                            <h4>Device ID <b>:</b></h4>
-                        </label>
-                        <div class="col-10">
-                            <input type="text" id="device_id" name="device_id" class="form-control"/>
-                            @if ($errors->has('device_id'))
-                                <span class="text-danger"><strong>{{ $errors->first('device_id') }}</strong></span>
-                            @endif
-                        </div>
-                    </div>
                     <div class="footer-button float-end">
                         <a href="{{route('shopusers.index')}}" class="btn btn-light">Cancel</a>
                         <input type="submit" class="btn btn-success ">
@@ -71,4 +73,11 @@
             </div>
         </div>
         
+@endsection
+@section('javascript')
+    <script>
+        $(document).ready(function() {
+            $('#shop').select2();
+        });
+    </script>
 @endsection

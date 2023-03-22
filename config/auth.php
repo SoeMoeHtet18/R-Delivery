@@ -40,6 +40,22 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'shopuser' => [
+            'driver' => 'session',
+            'provider' => 'shop_users',
+        ],
+        'shop-user-api' => [
+            'driver' => 'passport',
+            'provider' => 'shop_users',
+        ],
+        'rider' => [
+            'driver' => 'session',
+            'provider' => 'riders'
+        ],
+        'rider-api' => [
+            'driver' => 'passport',
+            'provider' => 'riders'
+        ]
     ],
 
     /*
@@ -69,6 +85,15 @@ return [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
+        'shop_users' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\ShopUser::class,
+        ],
+
+        'riders' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Rider::class
+        ]
     ],
 
     /*

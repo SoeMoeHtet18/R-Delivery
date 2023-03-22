@@ -12,4 +12,16 @@ class Shop extends Model
         'name', 'address', 'phone_number'
     ];
 
+    public function shop_users()
+    {
+        return $this->hasMany(ShopUser::class);
+    }
+    public function shop_payments()
+    {
+        return $this->hasMany(ShopPayment::class);
+    }
+    public function payments_from_company()
+    {
+        return $this->hasMany(TransactionsForShop::class);
+    }
 }

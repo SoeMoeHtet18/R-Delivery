@@ -36,7 +36,7 @@ class OrderFactory extends Factory
             'township_id' => Township::all()->random()->id,
             'rider_id' => Rider::all()->random()->id,
             'shop_id' => Shop::all()->random()->id,
-            'quantity' => fake()->random_int(1, 10),
+            'quantity' => fake()->randomNumber(),
             'total_amount' => fake()->randomDigit(),
             'delivery_fees' => fake()->randomDigit(),
             'markup_delivery_fees' => fake()->randomDigit(),

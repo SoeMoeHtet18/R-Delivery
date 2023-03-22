@@ -50,17 +50,6 @@
                             <input type="password" id="password" name="password" class="form-control" placeholder="Leave empty to keep the same"/>
                         </div>
                     </div>
-                    <div class="row m-0 mb-3">
-                        <label for="device_id" class="col-2">
-                            <h4>Device ID <b>:</b></h4>
-                        </label>
-                        <div class="col-10">
-                            <input type="text" id="device_id" name="device_id" value="{{$rider->device_id}}" class="form-control"/>
-                            @if ($errors->has('device_id'))
-                                <span class="text-danger"><strong>{{ $errors->first('device_id') }}</strong></span>
-                            @endif
-                        </div>
-                    </div>
                     <div class="footer-button float-end">
                         <a href="{{url()->previous() }}" class="btn btn-light">Cancel</a>
                         <input type="submit" class="btn btn-success ">

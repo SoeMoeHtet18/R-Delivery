@@ -26,6 +26,11 @@ class User extends Authenticatable
         'device_id'
     ];
 
+    public function payments_from_company()
+    {
+        return $this->hasOne(TransactionsForShop::class);
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

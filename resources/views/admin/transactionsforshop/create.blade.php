@@ -1,0 +1,89 @@
+@extends('admin.layouts.master')
+
+@section('content')
+        <div class="card card-container">
+            <div class="card-body">
+                <h2 class="ps-1 card-header-title">
+                    <strong>Add New Transaction</strong>
+                </h2>
+                <form action="{{route('transactions-for-shop.store')}}" method="POST">
+                    @csrf
+                    <div class="row m-0 mb-3">
+                        <label for="shop" class="col-2">
+                            <h4>Shop Name <b>:</b></h4>
+                        </label>
+                        <div class="col-10">
+                            <select name="shop_id" id="shop_name" class="form-control">
+                                <option value="" selected disabled>Select the Shop of this Payment</option>
+                                @foreach($shops as $shop)
+                                    <option value="{{$shop->id}}">{{$shop->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row m-0 mb-3">
+                        <label for="amount" class="col-2">
+                            <h4>Amount <b>:</b></h4>
+                        </label>
+                        <div class="col-10">
+                            <input type="text" id="amount" name="amount" class="form-control"/>
+                            @if ($errors->has('amount'))
+                                <span class="text-danger"><strong>{{ $errors->first('amount') }}</strong></span>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="row m-0 mb-3">
+                        <label for="image" class="col-2">
+                            <h4>Image <b>:</b></h4>
+                        </label>
+                        <div class="col-10">
+                            <input type="file" id="image" name="image" class="form-control"/>
+                            @if ($errors->has('image'))
+                            <span class="text-danger"><strong>{{ $errors->first('image') }}</strong></span>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="row m-0 mb-3">
+                        <label for="type" class="col-2">
+                            <h4>Type <b>:</b></h4>
+                        </label>
+                        <div class="col-10">
+                            <select name="type" id="type" class="form-control">
+                                <option value="" selected disabled>Select the Type for This Payment</option>
+                                    <option value="fully_payment">Fully Payment</option>
+                                    <option value="loan_payment">Loan Payment</option>
+                                    
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row m-0 mb-3">
+                        <label for="paid_by" class="col-2">
+                            <h4>Paid By <b>:</b></h4>
+                        </label>
+                        <div class="col-10">
+                            <select name="paid_by" id="paid_by" class="form-control">
+                                <option value="" selected disabled>Select the User of this Payment</option>
+                                @foreach($users as $user)
+                                    <option value="{{$user->id}}">{{$user->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="footer-button float-end">
+                        <a href="{{route('transactions-for-shop.index')}}" class="btn btn-light">Cancel</a>
+                        <input type="submit" class="btn btn-success ">
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+@endsection
+@section('javascript')
+    <script>
+        $(document).ready(function() {
+            $('#shop_name').select2();
+            $('#type').select2();
+            $('#paid_by').select2();
+        });
+    </script>
+@endsection
