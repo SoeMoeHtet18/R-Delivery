@@ -6,10 +6,10 @@ use App\Models\ShopUser;
 
 class ShopUserRepository
 {
-    public function getAllShopUsers()
+    public function getAllShopUsersQuery()
     {
-        $shop_users = ShopUser::select('*');
-        return $shop_users;
+        $query = ShopUser::select('*');
+        return $query;
     }
 
     public function getShopUserByID($id)

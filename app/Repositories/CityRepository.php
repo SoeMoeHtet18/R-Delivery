@@ -8,8 +8,8 @@ class CityRepository
 {   
     public function getAllCitiesQuery()
     {
-        $cities = City::select('*');
-        return $cities;
+        $query = City::select('*');
+        return $query;
     }
 
     public function getAllCities()

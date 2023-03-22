@@ -27,7 +27,7 @@ class ShopPaymentController extends Controller
     public function index(Request $request)
     {   
         if ($request->ajax()) {
-            $shop_payments = $this->shopPaymentRepository->getAllShopPaymentsByDESC();
+            $shop_payments = $this->shopPaymentRepository->getAllShopPaymentsQuery();
             return DataTables::of($shop_payments)
                 ->addIndexColumn()
                 ->addColumn('action', function($shop_payments){
@@ -42,6 +42,7 @@ class ShopPaymentController extends Controller
                     return $actionBtn;
                 })
                 ->rawColumns(['action'])
+                ->orderColumn('id', '-shop_payments.id')
                 ->make(true);
         }
         return view('admin.shoppayment.index');
@@ -52,7 +53,9 @@ class ShopPaymentController extends Controller
      */
     public function create()
     {
-        $shops = $this->shopRepository->getAllShops()->orderByDESC('id')->get();
+        $shops = $this->shopRepository->getAllShops();
+        $shops = $shops->sortByDesc('id');
+
         return view('admin.shoppayment.create', compact('shops'));
     }
 
@@ -98,7 +101,9 @@ class ShopPaymentController extends Controller
     {   
         $shop_payment = $this->shopPaymentRepository->getShopPaymentByID($id);
 
-        $shops = $this->shopRepository->getAllShops()->orderByDESC('id')->get();
+        $shops = $this->shopRepository->getAllShops();
+        $shops = $shops->sortByDesc('id');
+        
         return view('admin.shoppayment.edit',compact('shop_payment','shops'));
     }
 
