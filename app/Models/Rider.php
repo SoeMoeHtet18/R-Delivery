@@ -10,6 +10,6 @@ class Rider extends Authenticatable
 {
     use HasFactory, HasApiTokens;
     protected $fillable = [
-        'name', 'phone_number', 'email', 'email_verified_at', 'password', 'device_id','token'
+        'name', 'phone_number', 'email', 'email_verified_at', 'password', 'device_id','token','refresh_token'
     ];
 }
