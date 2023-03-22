@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ShopPaymentRequest;
 use App\Repositories\ShopPaymentRepository;
 use App\Repositories\ShopRepository;
 use App\Services\ShopPaymentService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
 class ShopPaymentController extends Controller
@@ -62,26 +62,11 @@ class ShopPaymentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ShopPaymentRequest $request)
     {   
-        $rules = [
-            'shop_id'   => 'required|string',
-            'amount'    => 'required',
-            'type'      => 'required'
-        ];
-
-        $customErr = [
-            'shop_id.required'      => 'Name field is required',
-            'amount.required'       => 'Amount field is required',
-            'type.required'         => 'Type is required',
-        ];
-        $validator = Validator::make($request->all(), $rules, $customErr);
-        if  ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        } else {
-            $data = $request->all();
-            $this->shopPaymentService->saveShopPaymentData($data);
-        }
+        
+        $data = $request->all();
+        $this->shopPaymentService->saveShopPaymentData($data);
         return redirect(route('shoppayments.index'));
     }
 
@@ -110,27 +95,12 @@ class ShopPaymentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ShopPaymentRequest $request, string $id)
     {   
-        $rules = [
-            'shop_id'   => 'required|string',
-            'amount'    => 'required',
-            'type'      => 'required'
-        ];
-
-        $customErr = [
-            'shop_id.required'      => 'Name field is required',
-            'amount.required'       => 'Amount field is required',
-            'type.required'         => 'Type is required',
-        ];
-        $validator = Validator::make($request->all(), $rules, $customErr);
-        if  ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        } else {
-            $shop_payment = $this->shopPaymentRepository->getShopPaymentByID($id);
-            $data = $request->all();
-            $this->shopPaymentService->updateShopPaymentByID($data, $shop_payment);
-        }
+        
+        $shop_payment = $this->shopPaymentRepository->getShopPaymentByID($id);
+        $data = $request->all();
+        $this->shopPaymentService->updateShopPaymentByID($data, $shop_payment);
         return redirect()->route('shoppayments.show', $id);
     }
 

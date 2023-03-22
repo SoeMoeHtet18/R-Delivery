@@ -28,8 +28,8 @@
                         </label>
                         <div class="col-10">
                             <input type="text" id="amount" name="amount" value="{{$shop_payment->amount}}" class="form-control"/>
-                            @if ($errors->has('phone_number'))
-                                <span class="text-danger"><strong>{{ $errors->first('phone_number') }}</strong></span>
+                            @if ($errors->has('amount'))
+                                <span class="text-danger"><strong>{{ $errors->first('amount') }}</strong></span>
                             @endif
                         </div>
                     </div>
