@@ -43,7 +43,8 @@ class ShopUserApiController extends Controller
         if(Auth::guard('shopuser')->attempt(['phone_number' => request('phone_number'), 'password' => request('password')])){ 
             $shopuser = ShopUser::where('id', Auth::guard('shopuser')->user()->id)->first();
             $shopuser->token =  $shopuser->createToken('ShopUser')->accessToken;
-            ShopUser::where('phone_number',request('phone_number'))->update(['token' => $shopuser->token]);       
+            $shopuser->refresh_token =  $shopuser->createToken('ShopUser')->accessToken;
+            ShopUser::where('phone_number',request('phone_number'))->update(['token' => $shopuser->token,'refresh_token' => $shopuser->refresh_token]);       
             return response()->json( ['data' => $shopuser, 'message' => 'Successfully Logged In', 'status' => 'success'], 200); 
         }else{
             return response()->json(['data' => [], 'message' => 'Invalid credentials.', 'status' => 'fail'], 401); 
@@ -88,7 +89,8 @@ class ShopUserApiController extends Controller
             $data = $request->all();
             $shop_user = $this->shopUserService->saveShopUserData($data);
             $shop_user->token =  $shop_user->createToken('ShopUser')->accessToken;
-            ShopUser::where('id',$shop_user->id)->update(['token' => $shop_user->token]);       
+            $shop_user->refresh_token =  $shop_user->createToken('ShopUser')->accessToken;
+            ShopUser::where('id',$shop_user->id)->update(['token' => $shop_user->token,'refresh_token' => $shop_user->refresh_token]);       
 
             return response()->json( ['data' => $shop_user, 'message' => 'Successfully Create Shop User', 'status' => 'success'], 200); 
         }

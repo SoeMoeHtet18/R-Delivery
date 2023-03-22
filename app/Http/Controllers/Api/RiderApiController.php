@@ -35,7 +35,8 @@ class RiderApiController extends Controller
         if(Auth::guard('rider')->attempt(['phone_number' => request('phone_number'), 'password' => request('password')])){ 
             $rider = Rider::where('id', Auth::guard('rider')->user()->id)->first();
             $rider->token =  $rider->createToken('rider')->accessToken;
-            Rider::where('phone_number',request('phone_number'))->update(['token' => $rider->token]);       
+            $rider->refresh_token =  $rider->createToken('rider')->accessToken;
+            Rider::where('phone_number',request('phone_number'))->update(['token' => $rider->token,'refresh_token' => $rider->refresh_token]);       
             return response()->json( ['data' => $rider, 'message' => 'Successfully Logged In', 'status' => 'success'], 200); 
         }else{
             return response()->json(['data' => [], 'message' => 'Invalid credentials.', 'status' => 'fail'], 401); 
@@ -83,7 +84,8 @@ class RiderApiController extends Controller
             $data = $request->all();
             $rider = $this->riderService->saveRiderData($data);
             $rider->token =  $rider->createToken('rider')->accessToken;
-            Rider::where('id',$rider->id)->update(['token' => $rider->token]);       
+            $rider->refresh_token =  $rider->createToken('rider')->accessToken;
+            Rider::where('id',$rider->id)->update(['token' => $rider->token,'refresh_token' => $rider->refresh_token]);       
 
             return response()->json( ['data' => $rider, 'message' => 'Successfully Create Rider', 'status' => 'success'], 200); 
         }
