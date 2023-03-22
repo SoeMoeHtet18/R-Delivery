@@ -188,11 +188,9 @@ class OrderController extends Controller
     public function update(Request $request, string $id)
     {   
         $rules = [
-            'order_code'            => 'required|unique:orders',
             'customer_name'         => 'required',
             'customer_phone_number' => 'required',
             'township_id'           => 'required',
-            'rider_id'              => 'required',
             'shop_id'               => 'required',
             'quantity'              => 'required',
             'total_amount'          => 'required',
@@ -203,12 +201,9 @@ class OrderController extends Controller
         ];
 
         $customErr = [
-            'order_code.required'               => 'Order Code field is required',
-            'order_code.unique'                 => 'Order Code already exists',
             'customer_name.required'            => 'Customer Name field is required',
             'customer_phone_number.required'    => 'Customer Phone Number field is required',
             'township_id.required'              => 'Township field is required',
-            'rider_id.required'                 => 'Rider field is required',
             'shop_id.required'                  => 'Shop field is required',
             'quantity.required'                 => 'Quantity field is required',
             'total_amount'                      => 'Total Amount field is required',
@@ -224,9 +219,9 @@ class OrderController extends Controller
             return redirect()->back()->withErrors($validator)->withInput();
         } else {
             $order = Order::where('id',$id)->first();
-            $order->order_code =  $request->order_code;
             $order->customer_name =  $request->customer_name;
             $order->customer_phone_number =  $request->customer_phone_number;
+            $order->city_id = $request->city_id;
             $order->township_id =  $request->township_id;
             $order->rider_id =  $request->rider_id ?? null;
             $order->shop_id =  $request->shop_id;

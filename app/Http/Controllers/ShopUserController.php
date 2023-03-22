@@ -53,7 +53,7 @@ class ShopUserController extends Controller
      */
     public function create()
     {
-        $shops = $this->shopRepository->getAllShops();
+        $shops = $this->shopRepository->getAllShops()->orderByDESC('id')->get();
 
         return view('admin.shopuser.create', compact('shops'));
     }
