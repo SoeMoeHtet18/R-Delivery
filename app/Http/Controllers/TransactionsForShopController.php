@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TransactionForShopRequest;
 use App\Repositories\AdminRepository;
 use App\Repositories\ShopRepository;
 use App\Repositories\TransactionsForShopRepository;
@@ -63,28 +64,10 @@ class TransactionsForShopController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(TransactionForShopRequest $request)
     {   
-        $rules = [
-            'shop_id'   => 'required|string',
-            'amount'    => 'required',
-            'type'      => 'required',
-            'paid_by'   => 'required'
-        ];
-
-        $customErr = [
-            'shop_id.required'      => 'Name field is required',
-            'amount.required'       => 'Amount field is required',
-            'type.required'         => 'Type is required',
-            'paid_by.required'      => 'This Field is required',
-        ];
-        $validator = Validator::make($request->all(), $rules, $customErr);
-        if  ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        } else {
-            $data = $request->all();
-            $this->transactionsForShopService->saveTransactionForShopData($data);
-        }
+        $data = $request->all();
+        $this->transactionsForShopService->saveTransactionForShopData($data);
         return redirect(route('transactions-for-shop.index'));
     }
 
@@ -113,29 +96,12 @@ class TransactionsForShopController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(TransactionForShopRequest $request, string $id)
     {
-        $rules = [
-            'shop_id'   => 'required|string',
-            'amount'    => 'required',
-            'type'      => 'required',
-            'paid_by'   => 'required'
-        ];
-
-        $customErr = [
-            'shop_id.required'      => 'Name field is required',
-            'amount.required'       => 'Amount field is required',
-            'type.required'         => 'Type is required',
-            'paid_by.required'      => 'This Field is required',
-        ];
-        $validator = Validator::make($request->all(), $rules, $customErr);
-        if  ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        } else {
-            $transaction_for_shop = $this->transactionsForShopRepository->getTransactionsForShopByID($id);
-            $data = $request->all();
-            $this->transactionsForShopService->updateTransactionForShopByID($data, $transaction_for_shop);
-        }
+        $transaction_for_shop = $this->transactionsForShopRepository->getTransactionsForShopByID($id);
+        $data = $request->all();
+        $this->transactionsForShopService->updateTransactionForShopByID($data, $transaction_for_shop);
+        
         return redirect()->route('transactions-for-shop.show', $id);
     }
 
