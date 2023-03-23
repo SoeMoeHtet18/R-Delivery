@@ -75,7 +75,9 @@
                         <div class="col-10">
                             <select name="township_id" id="township_id" class="form-control">
                                 <option value="" selected disabled>Select the Township for This Order</option>
-                               
+                                @foreach ( $townships as $township)
+                                    <option value="{{$township->id}}">{{$township->name}}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -226,16 +228,50 @@
                     dataType: 'json',
                     data: { city_id: city_id },
                     success: function(response) {
-                        var townships = '<option value="" selected disabled>Select the Township for This Order</option>';
+                        var township_id = $('#township_id').val();
+                        var townships = '<option value="" disabled>Select the Township for This Order</option>';
                         if(response.data){
-                            for(let i = 0; i < response.data.length; i++){
-                                townships += '<option value="'+ response.data[i].id + '">' + response.data[i].name+'</option>';
+                            for(var i = 0; i < (response.data.length); i++){
+                                if(township_id == response.data[i].id){
+                                    townships += '<option value="'+ response.data[i].id +'" selected>' + response.data[i].name+'</option>';
+                                } else {
+                                    townships += '<option value="'+ response.data[i].id +'">' + response.data[i].name+'</option>';
+                                }
                             }                            
                         }
+                        console.log(townships);
                         $('#township_id').html(townships);
                     },
                 })
             })
+            $('#customer_phone_number').on('keyup', debounce(function() {
+            var phone = $(this).val();
+
+            $.ajax({
+                url: '/get-data-by-customer-phone/' + phone,
+                method: 'GET',
+                success: function(response) {
+                    console.log(response)
+                    if(response.status == 'success'){
+                        var data = response.data;
+                        $('#customer_name').val(data.customer_name);
+                        $('#city_id').val(data.city_id).trigger('change');
+                        $('#township_id').val(data.township_id).trigger('change');
+                        console.log($('#township_id').val());
+                    }
+                }
+            });
+        }, 300));
+
+            function debounce(func, delay) {
+            let timer;
+            return function(...args) {
+                clearTimeout(timer);
+                timer = setTimeout(() => {
+                    func.apply(this, args);
+                }, delay);
+            }
+            }
         });
 
     </script>

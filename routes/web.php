@@ -40,6 +40,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/shops/get-shop-users-by-shop-id/{id}', [ShopUserController::class, 'getShopUsersTable']);
     Route::get('/shops/get-shop-orders-by-shop-id/{id}', [OrderController::class, 'getShopOrdersTable']);
     Route::resource('/orders', OrderController::class);
+    Route::get('/get-data-by-customer-phone/{phone}', [OrderController::class, 'getDataByCustomerPhoneNumber']);
     Route::resource('/cities', CityController::class);
     Route::get('/cities/{id}/townships', [TownshipController::class, 'getTownshipsTableByCityID']);
     Route::resource('/itemtypes', ItemTypeController::class);

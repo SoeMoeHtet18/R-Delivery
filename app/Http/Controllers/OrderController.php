@@ -14,6 +14,7 @@ use App\Repositories\TownshipRepository;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Laravel\Ui\Presets\React;
 use Yajra\DataTables\Facades\DataTables;
 require_once app_path('helpers/helpers.php');
 
@@ -54,6 +55,9 @@ class OrderController extends Controller
 
             return DataTables::of($data)
                 ->addIndexColumn()
+                ->addColumn('order_code', function($data) {
+                    return '<a href="' . route("orders.show", $data->id ) . '">' . $data->order_code . '</a>';
+                })
                 ->addColumn('action', function($row){
                     $actionBtn = '
                         <a href="'. route("orders.show", $row->id) .'" class="btn btn-info btn-sm">View</a> 
@@ -65,7 +69,7 @@ class OrderController extends Controller
                         </form>';
                     return $actionBtn;
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['action', 'order_code'])
                 ->orderColumn('id', '-orders.id')
                 ->make(true);
         }
@@ -83,11 +87,13 @@ class OrderController extends Controller
         $riders = $riders->sortByDesc('id');
         $cities = $this->cityRepository->getAllCities();
         $cities = $cities->sortByDesc('id');
+        $townships = $this->townshipRepository->getAllTownships();
+        $townships = $townships->sortByDesc('id');
         $item_types = $this->itemTypeRepository->getAllItemTypes();
         $item_types = $item_types->sortByDesc('id');
         $order_code = nomenclature(['table_name'=>'orders','prefix'=>'OD','column_name'=>'order_code']);
         
-        return view('admin.order.create',compact('shops', 'riders', 'cities', 'item_types', 'order_code'));
+        return view('admin.order.create',compact('shops', 'riders', 'cities', 'item_types', 'order_code', 'townships'));
     }
 
     /**
@@ -199,5 +205,17 @@ class OrderController extends Controller
                 ->orderColumn('orders.id', '-id $1')
                 ->make(true);
         };
+    }
+
+    public function getDataByCustomerPhoneNumber($phone)
+    {
+        $data = $this->orderRepository->getOrderByCustomerPhoneNumber($phone);
+
+        if($data != null) {
+            return response()->json(['data'=>$data, 'status'=>'success', 'message'=>'Successfully get order',200]);
+        }
+        else {
+            return response()->json(['data'=>null, 'status'=>'fail', 'message'=>'Fail to get order',200]);
+        }
     }
 }
