@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\OrderCreateRequest;
 use App\Http\Requests\OrderUpdateRequest;
+use App\Helpers\MyHelper;
 use App\Models\Order;
 use App\Repositories\CityRepository;
 use App\Repositories\ItemTypeRepository;
@@ -16,7 +17,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Laravel\Ui\Presets\React;
 use Yajra\DataTables\Facades\DataTables;
-require_once app_path('helpers/helpers.php');
 
 class OrderController extends Controller
 {
@@ -91,7 +91,7 @@ class OrderController extends Controller
         $townships = $townships->sortByDesc('id');
         $item_types = $this->itemTypeRepository->getAllItemTypes();
         $item_types = $item_types->sortByDesc('id');
-        $order_code = nomenclature(['table_name'=>'orders','prefix'=>'OD','column_name'=>'order_code']);
+        $order_code = MyHelper::nomenclature(['table_name'=>'orders','prefix'=>'OD','column_name'=>'order_code']);
         
         return view('admin.order.create',compact('shops', 'riders', 'cities', 'item_types', 'order_code', 'townships'));
     }
