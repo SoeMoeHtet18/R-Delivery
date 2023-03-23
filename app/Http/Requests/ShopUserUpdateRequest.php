@@ -26,6 +26,7 @@ class ShopUserUpdateRequest extends FormRequest
             'name'                  => 'required|string',
             'phone_number'          => 'required|string|unique:shop_users,phone_number,'. $id,
             'email'                 => 'unique:shop_users,email,'. $id,
+            'password'              => 'confirmed',
         ];
     }
 

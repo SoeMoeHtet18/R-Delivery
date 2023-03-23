@@ -25,7 +25,7 @@ class ShopUserCreateRequest extends FormRequest
             'name'              => 'required|string',
             'phone_number'      => 'required|string|unique:shop_users',
             'email'             => 'unique:shop_users',
-            'password'          => 'required|min:8',
+            'password'          => 'required|min:8|confirmed',
         ];
     }
 
