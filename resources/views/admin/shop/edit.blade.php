@@ -1,12 +1,12 @@
 @extends('admin.layouts.master')
 
 @section('content')
-        <div class="card">
+        <div class="card card-container action-form-card">
             <div class="card-body">
                 <h2 class="ps-1 card-header-title">
                     <strong>Update Shop</strong>
                 </h2>
-                <form action="{{route('shops.update', $shop->id)}}" method="POST">
+                <form action="{{route('shops.update', $shop->id)}}" method="POST" class="action-form">
                     @csrf
                     @method('PUT')
                     <div class="row m-0 mb-3">

@@ -18,11 +18,8 @@
           rel="stylesheet"
           type="text/css"/>
 
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet"
           href="{{ asset('quickadmin/css/font-awesome.min.css') }}"/>
-    <link rel="stylesheet"
-          href="{{ asset('quickadmin/css/bootstrap.min.css') }}"/>
     <link rel="stylesheet"
           href="{{ asset('quickadmin/css/components.css') }}"/>
     <link rel="stylesheet" href="{{ asset('quickadmin/css/quickadmin-layout.css') }}"/>
@@ -50,7 +47,7 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('quickadmin/css/AdminLTE.min.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     @include('admin.layouts.css')
     @stack('style')
     @yield('style')

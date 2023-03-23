@@ -13,9 +13,9 @@
         margin-bottom: 10px;
     }
 </style>
-        <div class="card card-container">
+        <div class="card card-container detail-card">
             <div class="card-body">
-                    <h2 class="ps-1">
+                    <h2 class="ps-1 card-header-title">
                         <strong>ShopUser Detail</strong>
                     </h2>
                     <div class="card-toolbar">
@@ -28,11 +28,12 @@
                         <input type="submit" value="Delete" class="btn btn-danger float-end">
                     </form>
                 </div>
+                <div class="detail-infos">
                     <div class="row m-0 mb-3">
                         <div class="col-2">
                             <h4>Name <b>:</b></h4>
                         </div>
-                        <div class="col-10 p-3">
+                        <div class="col-10">
                             {{ $shop_user->name }}
                         </div>
                     </div>
@@ -40,7 +41,7 @@
                         <div class="col-2">
                             <h4>Shop Name <b>:</b></h4>
                         </div>
-                        <div class="col-10 p-3">
+                        <div class="col-10">
                             {{ $shop_user->shop->name }}
                         </div>
                     </div>
@@ -48,7 +49,7 @@
                         <div class="col-2">
                         <h4>Phone Number <b>:</b></h4>
                         </div>
-                        <div class="col-10 p-3">
+                        <div class="col-10">
                             {{ $shop_user->phone_number }}
                         </div>
                     </div>
@@ -56,7 +57,7 @@
                         <div class="col-2">
                             <h4>Email <b>:</b></h4>
                         </div>
-                        <div class="col-10 p-3">
+                        <div class="col-10">
                             {{ $shop_user->email }}
                         </div>
                     </div>
@@ -64,10 +65,12 @@
                         <div class="col-2">
                             <h4>Device ID <b>:</b></h4>
                         </div>
-                        <div class="col-10 p-3">
+                        <div class="col-10">
                             {{ $shop_user->device_id }}
                         </div>
                     </div>
+                </div>
+                    
             </div>
         </div>
 @endsection

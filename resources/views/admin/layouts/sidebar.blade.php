@@ -70,16 +70,16 @@
                     <span class="title">Transaction For Shop</span>
                 </a>
             </li>
-            <li>
-            <a class="dropdown-item" href="{{ route('logout') }}"
-                onclick="event.preventDefault();
-                                document.getElementById('logout-form').submit();">
-                {{ __('Logout') }}
-            </a>
+            <li class="mt-5">
+                <a class="dropdown-item" href="{{ route('logout') }}"
+                    onclick="event.preventDefault();
+                                    document.getElementById('logout-form').submit();">
+                    <span class="title">{{ __('Logout') }}</span>
+                </a>
 
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                @csrf
-            </form>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                    @csrf
+                </form>
             </li>
         </ul>
     </div>

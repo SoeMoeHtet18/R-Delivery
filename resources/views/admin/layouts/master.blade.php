@@ -10,9 +10,11 @@
 
             <div class="row">
                 <div class="col-md-12">
-                    
-                    @yield('content')
-
+                    <div class="card">
+                        <div class="card-body">
+                            @yield('content')
+                        </div>
+                    </div>
                 </div>
             </div>
 
