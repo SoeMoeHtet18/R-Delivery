@@ -47,7 +47,20 @@
                             <h4>Password <b>:</b></h4>
                         </label>
                         <div class="col-10">
-                            <input type="password" id="password" name="password" class="form-control" placeholder="Leave empty to keep the same"/>
+                            <input type="password" id="password" name="password" class="form-control @error('password') is-invalid @enderror" autocomplete="new-password"/>
+                            @if ($errors->has('password'))
+                                <span class="text-danger"><strong>{{ $errors->first('password') }}</strong></span>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="row m-0 mb-3">
+                        <label for="password-confirm" class="col-2">
+                            <h4>Confirm Password <b>:</b></h4>
+                        </label>
+                        <div class="col-10">
+                            <input type="password" id="password-confirm" name="password_confirmation" class="form-control" autocomplete="new-password"/>
+                            
                         </div>
                     </div>
                     <input type="hidden" id="id" name="id" value="{{$rider->id}}" class="form-control"/>

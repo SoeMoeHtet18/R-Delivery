@@ -25,7 +25,7 @@ class UserCreateRequest extends FormRequest
             'name'                  => 'required|string',
             'phone_number'          => 'required|string|unique:users',
             'email'                 => 'unique:users',
-            'password'              => 'required|min:8',
+            'password'              => 'required|min:8|confirmed',
         ];
     }
 
