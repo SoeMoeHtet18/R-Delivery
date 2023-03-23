@@ -6,10 +6,10 @@ use Illuminate\Http\UploadedFile;
 
 trait FileUploadTrait
 {
-    public function uploadFile(UploadedFile $file, $path)
+    public function uploadFile(UploadedFile $file,  $disk= 'public', $directory = '')
     {
         $fileName = uniqid() . '.' . $file->getClientOriginalExtension();
-        $file->move(public_path($path), $fileName);
+        $file->store($directory, $disk);
         return $fileName;
     }
 }

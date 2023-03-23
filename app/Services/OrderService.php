@@ -2,10 +2,12 @@
 
 namespace App\Services;
 
+use App\Http\Traits\FileUploadTrait;
 use App\Models\Order;
 
 class OrderService
 {   
+    use FileUploadTrait;
     public function saveOrderData($data)
     {
         $order = new Order();
@@ -58,7 +60,7 @@ class OrderService
         return $order;
     }
 
-    public function updateOrderByID($data, $order)
+    public function updateOrderByID($data, $order, $file)
     {
         $order->shop_id =  $data['shop_id'];
         $order->customer_name =  $data['customer_name'];
@@ -77,7 +79,12 @@ class OrderService
         $order->schedule_date =  $data['schedule_date'] ?? null ;
         $order->type =  $data['type'];
         $order->collection_method =  $data['collection_method'];
-        $order->proof_of_payment =  $data['proof_of_payment'] ?? null;
+        if($file) {
+            $file_name = $this->uploadFile($file, 'public', 'customer payment');
+            $order->proof_of_payment = $file_name;
+        } else {
+            $order->proof_of_payment =  $order->proof_of_payment;
+        }
         $order->save();
         return $order;
     }

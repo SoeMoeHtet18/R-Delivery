@@ -64,9 +64,9 @@ class ShopPaymentController extends Controller
      */
     public function store(ShopPaymentRequest $request)
     {   
-        
         $data = $request->all();
-        $this->shopPaymentService->saveShopPaymentData($data);
+        $file = $request->file('image');
+        $this->shopPaymentService->saveShopPaymentData($data, $file);
         return redirect(route('shoppayments.index'));
     }
 
@@ -100,7 +100,8 @@ class ShopPaymentController extends Controller
         
         $shop_payment = $this->shopPaymentRepository->getShopPaymentByID($id);
         $data = $request->all();
-        $this->shopPaymentService->updateShopPaymentByID($data, $shop_payment);
+        $file = $request->file('image');
+        $this->shopPaymentService->updateShopPaymentByID($data, $shop_payment, $file);
         return redirect()->route('shoppayments.show', $id);
     }
 
