@@ -25,7 +25,7 @@ class RiderCreateRequest extends FormRequest
             'name'                  => 'required|string',
             'phone_number'          => 'required|string|unique:riders',
             'email'                 => 'unique:riders',
-            'password'              => 'required|min:8'
+            'password'              => 'required|min:8|confirmed'
         ];
     }
 
