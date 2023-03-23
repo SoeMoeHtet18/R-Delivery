@@ -16,14 +16,14 @@ class ShopUserApiController extends Controller
 {
     protected $shopUserRepository;
     protected $shopRepository;
-    protected $ordersService;
+    protected $orderService;
     protected $shopUserService;
 
-    public function __construct(ShopUserRepository $shopUserRepository,ShopRepository $shopRepository,OrdersService $ordersService,ShopUserService $shopUserService)
+    public function __construct(ShopUserRepository $shopUserRepository,ShopRepository $shopRepository,OrderService $orderService,ShopUserService $shopUserService)
     {
         $this->shopUserRepository = $shopUserRepository;
         $this->shopRepository = $shopRepository;
-        $this->ordersService = $ordersService;
+        $this->ordersService = $orderService;
         $this->shopUserService = $shopUserService;
 
     }
@@ -68,7 +68,7 @@ class ShopUserApiController extends Controller
     {   
         $shop_user = $this->shopUserRepository->getShopUserByID($id);
         $data = $request->all();
-        $orders = $this->ordersService->saveOrderByShopID($data, $shop_user->shop_id);
+        $orders = $this->orderService->saveOrderByShopID($data, $shop_user->shop_id);
         return response()->json( ['data' => $orders, 'message' => 'Successfully Created Order By Shop Owner', 'status' => 'success'], 200); 
     }
 

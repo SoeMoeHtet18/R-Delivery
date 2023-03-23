@@ -38,10 +38,10 @@
                     </div>
                     <div class="row m-0 mb-3">
                         <div class="col-2">
-                        <h4>Customer Name <b>:</b></h4>
+                        <h4>Shop Name <b>:</b></h4>
                         </div>
                         <div class="col-10 p-3">
-                            {{ $order->customer_name }}
+                            {{ $order->shop->name }}
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
@@ -50,6 +50,14 @@
                         </div>
                         <div class="col-10 p-3">
                             {{ $order->customer_phone_number }}
+                        </div>
+                    </div>
+                    <div class="row m-0 mb-3">
+                        <div class="col-2">
+                        <h4>Customer Name <b>:</b></h4>
+                        </div>
+                        <div class="col-10 p-3">
+                            {{ $order->customer_name }}
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
@@ -75,28 +83,32 @@
                         <div class="col-10 p-3">
                             @if($order->rider !== null){{ $order->rider->name }} @endif
                         </div>
-                    </div><div class="row m-0 mb-3">
-                        <div class="col-2">
-                        <h4>Shop Name <b>:</b></h4>
-                        </div>
-                        <div class="col-10 p-3">
-                            {{ $order->shop->name }}
-                        </div>
-                    </div><div class="row m-0 mb-3">
+                    </div>
+                    <div class="row m-0 mb-3">
                         <div class="col-2">
                         <h4>Quantity <b>:</b></h4>
                         </div>
                         <div class="col-10 p-3">
                             {{ $order->quantity }}
                         </div>
-                    </div><div class="row m-0 mb-3">
+                    </div>
+                    <div class="row m-0 mb-3">
+                        <div class="col-2">
+                        <h4>Total Amount <b>:</b></h4>
+                        </div>
+                        <div class="col-10 p-3">
+                            {{ $order->total_amount }}
+                        </div>
+                    </div>
+                    <div class="row m-0 mb-3">
                         <div class="col-2">
                         <h4>Delivery Fees <b>:</b></h4>
                         </div>
                         <div class="col-10 p-3">
                             {{ $order->delivery_fees }}
                         </div>
-                    </div><div class="row m-0 mb-3">
+                    </div>
+                    <div class="row m-0 mb-3">
                         <div class="col-2">
                         <h4>Markup Delivery Fees <b>:</b></h4>
                         </div>
