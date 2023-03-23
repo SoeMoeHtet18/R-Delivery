@@ -13,9 +13,9 @@
         margin-bottom: 10px;
     }
 </style>
-        <div class="card">
+        <div class="card card-container detail-card">
             <div class="card-body">
-                    <h2 class="ps-1">
+                    <h2 class="ps-1 card-header-title">
                         <strong>Shop Detail</strong>
                     </h2>
                     <div class="card-toolbar">
@@ -28,30 +28,33 @@
                             <input type="submit" value="Delete" class="btn btn-danger float-end">
                         </form>
                     </div>
-                    <div class="row m-0 mb-3">
-                        <div class="col-2">
-                            <h4>Name <b>:</b></h4>
+                    <div class="detail-infos">
+                        <div class="row m-0 mb-3">
+                            <div class="col-2">
+                                <h4>Name <b>:</b></h4>
+                            </div>
+                            <div class="col-10">
+                                {{ $shop->name }}
+                            </div>
                         </div>
-                        <div class="col-10 p-3">
-                            {{ $shop->name }}
+                        <div class="row m-0 mb-3">
+                            <div class="col-2">
+                                <h4>Address <b>:</b></h4>
+                            </div>
+                            <div class="col-10">
+                                {{ $shop->address }}
+                            </div>
+                        </div>
+                        <div class="row m-0 mb-3">
+                            <div class="col-2">
+                            <h4>Phone Number <b>:</b></h4>
+                            </div>
+                            <div class="col-10">
+                                {{ $shop->phone_number }}
+                            </div>
                         </div>
                     </div>
-                    <div class="row m-0 mb-3">
-                        <div class="col-2">
-                            <h4>Email <b>:</b></h4>
-                        </div>
-                        <div class="col-10 p-3">
-                            {{ $shop->address }}
-                        </div>
-                    </div>
-                    <div class="row m-0 mb-3">
-                        <div class="col-2">
-                        <h4>Phone Number <b>:</b></h4>
-                        </div>
-                        <div class="col-10 p-3">
-                            {{ $shop->phone_number }}
-                        </div>
-                </div>
+                    
                 <hr>
                 <ul class="nav nav-tabs mb-4">
                     <li class="nav-item">

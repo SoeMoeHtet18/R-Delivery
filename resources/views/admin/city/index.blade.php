@@ -1,13 +1,6 @@
 @extends('admin.layouts.master')
 
 @section('content')
-<style>
-    .create-button { 
-        width: 100px;
-        height: 30px;
-        margin-bottom: 10px;
-    }
-</style>
 
 <div class="create-button">
     <a class="btn btn-success" href="{{route('cities.create')}}">Add City</a>

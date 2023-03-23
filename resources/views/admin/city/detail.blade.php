@@ -13,9 +13,9 @@
         margin-bottom: 10px;
     }
 </style>
-        <div class="card card-container">
+        <div class="card card-container detail-card">
             <div class="card-body">
-                    <h2 class="ps-1">
+                    <h2 class="ps-1 card-header-title">
                         <strong>City Detail</strong>
                     </h2>
                     <div class="card-toolbar">
@@ -28,31 +28,35 @@
                     <input type="submit" value="Delete" class="btn btn-danger float-end">
                     </form>
                 </div>
+                <div class="detail-infos">
                     <div class="row m-0 mb-3">
                         <div class="col-2">
                             <h4>Name <b>:</b></h4>
                         </div>
-                        <div class="col-10 p-3">
+                        <div class="col-10">
                             {{ $city->name }}
                         </div>
                     </div>
-                    <div class="portlet box green">
-                        <div class="portlet-title">
-                            <div class="caption">Township Lists</div>
+                </div>
+                <hr>
+                        <div class="portlet box green">
+                            <div class="portlet-title">
+                                <div class="caption">Township Lists</div>
+                            </div>
+                            <div class="portlet-body">
+                                <table id="datatable" class="table table-striped table-hover table-responsive datatable">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Name</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                        <div class="portlet-body">
-                            <table id="datatable" class="table table-striped table-hover table-responsive datatable">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Name</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                    
             </div>
         </div>
 @endsection

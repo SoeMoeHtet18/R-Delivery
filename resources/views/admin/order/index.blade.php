@@ -1,13 +1,6 @@
 @extends('admin.layouts.master')
 
 @section('content')
-<style>
-    .create-button { 
-        width: 100px;
-        height: 30px;
-        margin-bottom: 10px;
-    }
-</style>
 
 <div class="create-button">
     <a class="btn btn-success" href="{{route('orders.create')}}">Add Order</a>
@@ -41,7 +34,7 @@
                     <th>Type</th>
                     <th>Collection Method</th>
                     <th>Last Updated By</th>
-                    <th>Action</th>
+                    <th class="d-flex">Action</th>
                 </tr>
             </thead>
 

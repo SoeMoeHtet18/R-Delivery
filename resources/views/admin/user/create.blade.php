@@ -1,12 +1,12 @@
 @extends('admin.layouts.master')
 
 @section('content')
-        <div class="card card-container">
+        <div class="card card-container action-form-card">
             <div class="card-body">
                 <h2 class="ps-1 card-header-title">
                     <strong>Add New User</strong>
                 </h2>
-                <form action="{{route('users.store')}}" method="POST">
+                <form action="{{route('users.store')}}" method="POST" class="action-form">
                     @csrf
                     <div class="row m-0 mb-3">
                         <label for="name" class="col-2">

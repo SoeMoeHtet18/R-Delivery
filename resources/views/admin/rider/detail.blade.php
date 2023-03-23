@@ -13,12 +13,12 @@
         margin-bottom: 10px;
     }
 </style>
-        <div class="card card-container">
+        <div class="card card-container detail-card">
             <div class="card-body">
-                    <h2 class="ps-1">
-                        <strong>Rider Detail</strong>
-                    </h2>
-                    <div class="card-toolbar">
+                <h2 class="ps-1 card-header-title">
+                    <strong>Rider Detail</strong>
+                </h2>
+                <div class="card-toolbar">
                     <div class="create-button">
                     <a href="{{route('riders.edit' , $rider->id)}}" class="btn btn-light">Edit</a>
                     </div>
@@ -28,11 +28,12 @@
                         <input type="submit" value="Delete" class="btn btn-danger float-end">
                     </form>
                 </div>
+                <div class="detail-infos">
                     <div class="row m-0 mb-3">
                         <div class="col-2">
                             <h4>Name <b>:</b></h4>
                         </div>
-                        <div class="col-10 p-3">
+                        <div class="col-10">
                             {{ $rider->name }}
                         </div>
                     </div>
@@ -40,7 +41,7 @@
                         <div class="col-2">
                         <h4>Phone Number <b>:</b></h4>
                         </div>
-                        <div class="col-10 p-3">
+                        <div class="col-10">
                             {{ $rider->phone_number }}
                         </div>
                     </div>
@@ -48,7 +49,7 @@
                         <div class="col-2">
                             <h4>Email <b>:</b></h4>
                         </div>
-                        <div class="col-10 p-3">
+                        <div class="col-10">
                             {{ $rider->email }}
                         </div>
                     </div>
@@ -56,22 +57,22 @@
                         <div class="col-2">
                             <h4>Device ID <b>:</b></h4>
                         </div>
-                        <div class="col-10 p-3">
+                        <div class="col-10">
                             {{ $rider->device_id }}
                         </div>
                     </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <ul class="nav nav-tabs mb-4">
-                                <li class="nav-item">
-                                    <a href="#pending-order-display" id="pending-order-tab" class="nav-link active" data-toggle="tab">Pending Orders</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="#order-history-display" id="order-history-tab" class="nav-link" data-toggle="tab">Orders History</a>
-                                </li>
-                            </ul>
-                            <input type="hidden" id="current_screen" value="pending-order-tab">
-                            <div class="tab-content">
+                </div>
+                <hr>
+                <ul class="nav nav-tabs mb-4">
+                    <li class="nav-item">
+                        <a href="#pending-order-display" id="pending-order-tab" class="nav-link active" data-toggle="tab">Pending Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#order-history-display" id="order-history-tab" class="nav-link" data-toggle="tab">Orders History</a>
+                    </li>
+                </ul>
+                <input type="hidden" id="current_screen" value="pending-order-tab">
+                <div class="tab-content">
                                 <div id="pending-order-display" class="portlet box green tab-pane active">
                                     <div class="portlet-title">
                                         <div class="caption">Pending Orders</div>
@@ -141,8 +142,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
                     
             </div>
         </div>
