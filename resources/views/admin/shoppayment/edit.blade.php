@@ -6,7 +6,7 @@
                 <h2 class="ps-1 card-header-title">
                     <strong>Update Shop Payment</strong>
                 </h2>
-                <form action="{{route('shoppayments.update', $shop_payment->id)}}" method="POST" class="action-form">
+                <form action="{{route('shoppayments.update', $shop_payment->id)}}" method="POST" enctype="multipart/form-data" class="action-form">
                     @csrf
                     @method('PUT')
                     <div class="row m-0 mb-3">

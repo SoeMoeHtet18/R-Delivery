@@ -69,7 +69,8 @@ class CustomerPaymentController extends Controller
     public function store(CustomerPaymentRequest $request)
     { 
         $data = $request->all();
-        $this->customerPaymentService->saveCustomerPayment($data);
+        $file = $request->file('proof_of_payment');
+        $this->customerPaymentService->saveCustomerPayment($data, $file);
         
         return redirect()->route('customer-payments.index');
     }
@@ -105,8 +106,9 @@ class CustomerPaymentController extends Controller
     public function update(CustomerPaymentRequest $request, string $id)
     {  
         $data = $request->all();
+        $file = $request->file('proof_of_payment');
         $customer_payment = $this->customerPaymentRepository->getCustomerPaymentByID($id);
-        $this->customerPaymentService->updateCustomerPaymentByID($data,$customer_payment);
+        $this->customerPaymentService->updateCustomerPaymentByID($data,$customer_payment, $file);
         
         return redirect()->route('customer-payments.index');
     }

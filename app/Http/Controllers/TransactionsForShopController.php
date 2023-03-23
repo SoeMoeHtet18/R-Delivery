@@ -70,7 +70,8 @@ class TransactionsForShopController extends Controller
     public function store(TransactionForShopRequest $request)
     {   
         $data = $request->all();
-        $this->transactionsForShopService->saveTransactionForShopData($data);
+        $file = $request->file('image');
+        $this->transactionsForShopService->saveTransactionForShopData($data, $file);
         return redirect(route('transactions-for-shop.index'));
     }
 
@@ -105,7 +106,8 @@ class TransactionsForShopController extends Controller
     {
         $transaction_for_shop = $this->transactionsForShopRepository->getTransactionsForShopByID($id);
         $data = $request->all();
-        $this->transactionsForShopService->updateTransactionForShopByID($data, $transaction_for_shop);
+        $file = $request->file('image');
+        $this->transactionsForShopService->updateTransactionForShopByID($data, $transaction_for_shop, $file);
         
         return redirect()->route('transactions-for-shop.show', $id);
     }

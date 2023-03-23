@@ -147,7 +147,8 @@ class OrderController extends Controller
     {   
         $order = $this->orderRepository->getOrderByID($id);
         $data = $request->all();
-        $this->orderService->updateOrderByID($data,$order);
+        $file = $request->file('proof_of_payment');
+        $this->orderService->updateOrderByID($data,$order, $file);
 
         return redirect()->route('orders.index');
 

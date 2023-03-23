@@ -6,7 +6,7 @@
                 <h2 class="ps-1 card-header-title">
                     <strong>Add New Shop Payment</strong>
                 </h2>
-                <form action="{{route('shoppayments.store')}}" method="POST" class="action-form">
+                <form action="{{route('shoppayments.store')}}" method="POST" class="action-form" enctype="multipart/form-data">
                     @csrf
                     <div class="row m-0 mb-3">
                         <label for="shop" class="col-2">

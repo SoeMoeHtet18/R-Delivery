@@ -6,7 +6,7 @@
                 <h2 class="ps-1 card-header-title">
                     <strong>Update Order</strong>
                 </h2>
-                <form action="{{route('orders.update', $order->id)}}" method="POST" class="action-form">
+                <form action="{{route('orders.update', $order->id)}}" method="POST" class="action-form" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <div class="row m-0 mb-3">
@@ -171,7 +171,7 @@
                             <select name="item_type" id="item_type_id" class="form-control">
                                 <option value="" selected disabled>Select Item Type for This Order</option>
                                 @foreach($item_types as $item_type)
-                                    <option value="{{$item_type->name}}"@if($order->item_type == $item_type->id) {{'selected'}} @endif>{{$item_type->name}}</option>
+                                    <option value="{{$item_type->name}}"@if($order->item_type == $item_type->name) {{'selected'}} @endif>{{$item_type->name}}</option>
                                 @endforeach
                             </select>
                         </div>
