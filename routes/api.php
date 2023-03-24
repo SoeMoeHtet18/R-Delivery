@@ -38,6 +38,9 @@ Route::middleware('auth:shop-user-api')->group( function () {
     Route::get('get-shop-info/{id}', [ShopApiController::class, 'getShopDetailInfo']);
     Route::post('delete-shop-user', [ShopUserApiController::class,'delete']);
     Route::post('delete-shop',[ShopApiController::class, 'delete']);
+    Route::post('shop_users/{id}/change-order-status',[ShopUserApiController::class, 'changeOrderStatus']);
+    Route::get('shop_users/{id}/get-shop_payment-list', [ShopPaymentApiController::class, 'getShopPaymentListByShopID']);
+    Route::post('shop_users/{id}/get-shop_payment-detail', [ShopPaymentApiController::class, 'getShopPaymentDetailByID']);
 });
 Route::post('rider-login', [RiderApiController::class, 'riderLoginApi']);
 Route::post('create-rider', [RiderApiController::class, 'create']);
@@ -47,6 +50,7 @@ Route::middleware('auth:rider-api')->group(function() {
     Route::get('riders/{id}/get-shop-list', [RiderApiController::class, 'getShopListByRiderID']);
     Route::post('update-rider/{id}', [RiderApiController::class, 'update']);
     Route::post('create-customer-payment-by-rider', [CustomerPaymentApiController::class, 'insertCustomerPayment']);
+    Route::post('riders/{id}/change-order-status',[RiderApiController::class, 'changeOrderStatus']);
 });
 
 Route::get('get-shop-list', [ShopApiController::class, 'getAllShopList']);

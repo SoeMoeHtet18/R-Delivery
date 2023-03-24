@@ -93,4 +93,10 @@ class OrderService
     {
         Order::destroy($id);
     }
+
+    public function changeStatus($order, $status)
+    {
+        $order->status = $status;
+        $order->save();
+    }
 }
