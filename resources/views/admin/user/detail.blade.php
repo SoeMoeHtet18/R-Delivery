@@ -53,14 +53,7 @@
                             {{ $user->email }}
                         </div>
                     </div>
-                    <div class="row m-0 mb-3">
-                        <div class="col-2">
-                            <h4>Device ID <b>:</b></h4>
-                        </div>
-                        <div class="col-10">
-                            {{ $user->device_id }}
-                        </div>
-                    </div>
+                    
                 </div>
                     
             </div>
