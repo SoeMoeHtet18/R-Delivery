@@ -17,4 +17,10 @@ class CustomerPaymentRepository
         $customer_payment = CustomerPayment::where('id',$id)->first();
         return $customer_payment;
     }
+
+    public function getCustomerPaymentList()
+    {
+        $data = CustomerPayment::get();
+        return $data;
+    }
 }
