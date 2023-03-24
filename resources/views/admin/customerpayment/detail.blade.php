@@ -61,6 +61,14 @@
                             {{ $customer_payment->paid_at }}
                         </div>
                     </div>
+                    <div class="row m-0 mb-3">
+                        <div class="col-2">
+                            <h4>Proof of payment <b>:</b></h4>
+                        </div>
+                        <div class="col-10">
+                            <img src="{{asset('/storage/customer payment/' . $customer_payment->proof_of_payment)}}" alt="" style="width: 200px;">
+                        </div>
+                    </div>
                 </div>
                     
             </div>
