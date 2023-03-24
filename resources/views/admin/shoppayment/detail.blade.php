@@ -45,6 +45,14 @@
                             {{ $shop_payment->amount }}
                         </div>
                     </div>
+                    <div class="row m-0">
+                        <div class="col-2">
+                            <h4>Image <b>:</b></h4>
+                        </div>
+                        <div class="col-10">
+                            <img src="{{asset('/storage/shop payment/' . $shop_payment->image)}}" alt="" style ="width: 200px">
+                        </div>
+                    </div>
                     <div class="row m-0 mb-3">
                         <div class="col-2">
                         <h4>Type <b>:</b></h4>
