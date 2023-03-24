@@ -55,6 +55,8 @@ Route::middleware('auth:rider-api')->group(function() {
     Route::post('update-rider/{id}', [RiderApiController::class, 'update']);
     Route::post('create-customer-payment-by-rider', [CustomerPaymentApiController::class, 'insertCustomerPayment']);
     Route::post('riders/{id}/change-order-status',[RiderApiController::class, 'changeOrderStatus']);
+    Route::get('customer-payment/{id}', [CustomerPaymentApiController::class, 'customerPaymentDetail']);
+    Route::get('get-customer-payment-list', [CustomerPaymentApiController::class, 'getCustomerPaymentList']);
 });
 
 Route::get('get-shop-list', [ShopApiController::class, 'getAllShopList']);
