@@ -68,4 +68,11 @@ class ShopApiController extends Controller
         $shop = $this->shopRepository->getShopByID($id);
         return response()->json( ['data' => $shop, 'message' => 'Successfully Get Shop Info', 'status' => 'success'], 200); 
     }
+
+    public function delete(Request $request)
+    {
+        $shop_id = $request->shop_id;
+        $this->shopService->deleteShopByID($shop_id);
+        return response()->json(['message' => 'Successfully Delete Shop', 'status' => 'success'], 200); 
+    }
 }
