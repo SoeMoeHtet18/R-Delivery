@@ -17,4 +17,10 @@ class ShopPaymentRepository
         $shop_payments = ShopPayment::with('shop')->findOrFail($id);
         return $shop_payments;
     }
+
+    public function getShopPaymentListByShopID($id)
+    {
+        $shop_payments = ShopPayment::where('shop_id', $id)->get();
+        return $shop_payments;
+    }
 }

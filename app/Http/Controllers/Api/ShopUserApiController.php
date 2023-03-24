@@ -97,6 +97,6 @@ class ShopUserApiController extends Controller
         $status = $request->status;
         $order = $this->orderRepository->getOrderByID($order_id);
         $this->orderService->changeStatus($order,$status);
-        return response()->json(['data' => [], 'message' => 'Successfull Change Order Status', 'status' => 'success','200']);
+        return response()->json(['data' => [], 'message' => 'Successfull Change Order Status', 'status' => 'success',200]);
     }
 }
