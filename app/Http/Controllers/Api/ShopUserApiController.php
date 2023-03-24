@@ -10,6 +10,7 @@ use App\Http\Requests\ShopUserUpdateApiRequest;
 use App\Models\ShopUser;
 use App\Repositories\ShopRepository;
 use App\Repositories\ShopUserRepository;
+use App\Services\OrderService;
 use App\Services\OrdersService;
 use App\Services\ShopUserService;
 use Illuminate\Http\Request;
@@ -27,7 +28,7 @@ class ShopUserApiController extends Controller
     {
         $this->shopUserRepository = $shopUserRepository;
         $this->shopRepository = $shopRepository;
-        $this->ordersService = $orderService;
+        $this->orderService = $orderService;
         $this->shopUserService = $shopUserService;
 
     }
@@ -89,5 +90,12 @@ class ShopUserApiController extends Controller
 
             return response()->json( ['data' => $data, 'message' => 'Successfully Update Shop User', 'status' => 'success'], 200); 
         
+    }
+
+    public function delete(Request $request)
+    {
+        $shop_user_id = $request->shop_user_id;
+        $this->shopUserService->deleteShopUserByID($shop_user_id);
+        return response()->json(['message' => 'Successfully Delete Shop User', 'status' => 'success'], 200); 
     }
 }

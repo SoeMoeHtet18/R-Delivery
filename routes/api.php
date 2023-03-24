@@ -36,6 +36,7 @@ Route::middleware('auth:shop-user-api')->group( function () {
     Route::post('create-shop-payment-by-shop-owner', [ShopPaymentApiController::class, 'insertShopPayment']);
     Route::post('update-shop/{id}', [ShopApiController::class, 'update']);
     Route::get('get-shop-info/{id}', [ShopApiController::class, 'getShopDetailInfo']);
+    Route::post('delete-shop-user', [ShopUserApiController::class,'delete']);
 });
 Route::post('rider-login', [RiderApiController::class, 'riderLoginApi']);
 Route::post('create-rider', [RiderApiController::class, 'create']);
