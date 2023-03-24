@@ -23,4 +23,10 @@ class ShopPaymentRepository
         $shop_payments = ShopPayment::where('shop_id', $id)->get();
         return $shop_payments;
     }
+
+    public function getShopPaymentDetailByID($id)
+    {
+        $shop_payment = ShopPayment::where('id', $id)->first();
+        return $shop_payment;
+    }
 }

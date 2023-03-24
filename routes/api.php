@@ -38,6 +38,7 @@ Route::middleware('auth:shop-user-api')->group( function () {
     Route::get('get-shop-info/{id}', [ShopApiController::class, 'getShopDetailInfo']);
     Route::post('shop_users/{id}/change-order-status',[ShopUserApiController::class, 'changeOrderStatus']);
     Route::get('shop_users/{id}/get-shop_payment-list', [ShopPaymentApiController::class, 'getShopPaymentListByShopID']);
+    Route::post('shop_users/{id}/get-shop_payment-detail', [ShopPaymentApiController::class, 'getShopPaymentDetailByID']);
 });
 Route::post('rider-login', [RiderApiController::class, 'riderLoginApi']);
 Route::post('create-rider', [RiderApiController::class, 'create']);

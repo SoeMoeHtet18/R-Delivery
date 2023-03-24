@@ -7,6 +7,7 @@ use App\Http\Requests\ShopPaymentRequest;
 use App\Repositories\ShopPaymentRepository;
 use App\Repositories\ShopRepository;
 use App\Services\ShopPaymentService;
+use Illuminate\Http\Request;
 
 class ShopPaymentApiController extends Controller
 {
@@ -35,5 +36,12 @@ class ShopPaymentApiController extends Controller
         $shop_id = $this->shopRepository->getShopIDByShopUserID($id);
         $shop_payments = $this->shopPaymentRepository->getShopPaymentListByShopID($shop_id);
         return response()->json(['data' => $shop_payments, 'message' => 'Successfully Get Shop Payments By Shop ID','status'=> 'success', 200]);
+    }
+
+    public function getShopPaymentDetailByID(Request $request)
+    {
+        $id = $request->id;
+        $shop_payment = $this->shopPaymentRepository->getShopPaymentDetailByID($id);
+        return response()->json(['data' => $shop_payment, 'message' => 'Successfully Get Shop Payment Detail By ID','status'=> 'success', 200]);
     }
 }
