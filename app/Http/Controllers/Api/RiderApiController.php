@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Rider;
+use App\Repositories\OrderRepository;
 use App\Repositories\RiderRepository;
+use App\Services\OrderService;
 use App\Services\RiderService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,11 +16,15 @@ class RiderApiController extends Controller
 {
     protected $riderRepository;
     protected $riderService;
+    protected $orderRepository;
+    protected $orderService;
 
-    public function __construct(RiderRepository $riderRepository,RiderService $riderService)
+    public function __construct(RiderRepository $riderRepository,RiderService $riderService, OrderRepository $orderRepository, OrderService $orderService)
     {
         $this->riderRepository = $riderRepository;
         $this->riderService = $riderService;
+        $this->orderRepository = $orderRepository;
+        $this->orderService = $orderService;
     }
     public function riderLoginApi(Request $request)
     {
@@ -51,7 +57,7 @@ class RiderApiController extends Controller
 
     public function getOrderListByRiderID($id)
     {
-        $orders = $this->riderRepository->getOrderListByRiderID($id);
+        $orders = $this->riderRepository->getOrderHistoryListByRiderID($id);
         return response()->json(['data' => $orders, 'message' => 'Successfully Get Order List By Rider ID', 'status' => 'success', 200]);
     }
 
@@ -107,5 +113,14 @@ class RiderApiController extends Controller
 
             return response()->json( ['data' => $data, 'message' => 'Successfully Update Rider', 'status' => 'success'], 200); 
         }
+    }
+
+    public function changeOrderStatus(Request $request)
+    {
+        $order_id = $request->order_id;
+        $status = $request->status;
+        $order = $this->orderRepository->getOrderByID($order_id);
+        $this->orderService->changeStatus($order,$status);
+        return response()->json(['data' => [], 'message' => 'Successfull Change Order Status', 'status' => 'success','200']);
     }
 }
