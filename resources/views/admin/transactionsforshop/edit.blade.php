@@ -51,8 +51,8 @@
                         <div class="col-10">
                             <select name="type" id="type" class="form-control">
                                 <option value="" selected disabled>Select Type for This Payment</option>
-                                <option value="delivery_payment" @if($transaction_for_shop->type == "fully_payment") {{'selected'}} @endif>Fully Payment</option>
-                                <option value="remaining_payment" @if($transaction_for_shop->type == "loan_payment") {{'selected'}} @endif>Loan Payment</option>
+                                <option value="fully_payment" @if($transaction_for_shop->type == "fully_payment") {{'selected'}} @endif>Fully Payment</option>
+                                <option value="loan_payment" @if($transaction_for_shop->type == "loan_payment") {{'selected'}} @endif>Loan Payment</option>
                             </select>
                         </div>
                     </div>

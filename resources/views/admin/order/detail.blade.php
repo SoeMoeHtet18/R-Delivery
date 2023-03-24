@@ -178,7 +178,7 @@
                             <h4>Proof of Payment <b>:</b></h4>
                         </div>
                         <div class="col-10">
-                            {{ $order->proof_of_payment }}
+                            <img src="{{ asset('/storage/customer payment/' . $order->proof_of_payment) }}" alt="proof of payment" width="200px" height="200px">
                         </div>
                     </div>
                 </div>

@@ -61,8 +61,15 @@
                             {{ $transaction_for_shops->user->name }}
                         </div>
                     </div>
+                    <div class="row m-0">
+                        <div class="col-2">
+                            <h4>Proof of payment <b>:</b></h4>
+                        </div>
+                        <div class="col-10">
+                            <img src="{{asset('/storage/transactions for shop/' . $transaction_for_shops->image)}}" alt="">
+                        </div>
+                    </div>
                 </div>
-                    
             </div>
         </div>
 @endsection
