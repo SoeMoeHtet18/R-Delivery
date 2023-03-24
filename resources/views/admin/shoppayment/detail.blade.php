@@ -50,7 +50,7 @@
                             <h4>Image <b>:</b></h4>
                         </div>
                         <div class="col-10">
-                            <img src="{{asset('/storage/shop payment/' . $shop_payment->image)}}" alt="">
+                            <img src="{{asset('/storage/shop payment/' . $shop_payment->image)}}" alt="" style ="width: 200px">
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
