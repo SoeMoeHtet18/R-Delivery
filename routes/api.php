@@ -7,6 +7,8 @@ use App\Http\Controllers\Api\ShopApiController;
 use App\Http\Controllers\Api\ShopPaymentApiController;
 use App\Http\Controllers\Api\ShopUserApiController;
 use App\Http\Controllers\Api\TownshipApiController;
+use App\Http\Controllers\TransactionForShopApiController;
+use App\Models\TransactionsForShop;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -41,6 +43,8 @@ Route::middleware('auth:shop-user-api')->group( function () {
     Route::post('shop_users/{id}/change-order-status',[ShopUserApiController::class, 'changeOrderStatus']);
     Route::get('shop_users/{id}/get-shop_payment-list', [ShopPaymentApiController::class, 'getShopPaymentListByShopID']);
     Route::post('shop_users/{id}/get-shop_payment-detail', [ShopPaymentApiController::class, 'getShopPaymentDetailByID']);
+    Route::get('transactions-for-shop/{id}/get-transactions-for-shop-list', [TransactionForShopApiController::class, 'getTransactionForShopListByShopID']);
+    Route::get('transactions-for-shop/{id}/get-transactions-for-shop-detail', [TransactionForShopApiController::class, 'getTransactionForShopDetailByID']);
 });
 Route::post('rider-login', [RiderApiController::class, 'riderLoginApi']);
 Route::post('create-rider', [RiderApiController::class, 'create']);

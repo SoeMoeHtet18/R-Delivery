@@ -17,4 +17,16 @@ class TransactionsForShopRepository
         $transaction_for_shops = TransactionsForShop::with('shop', 'user')->findOrFail($id);
         return $transaction_for_shops;
     }
+
+    public function getTransactionsForShopListByShopID($id)
+    {
+        $transaction_for_shops = TransactionsForShop::where('shop_id', $id)->get();
+        return $transaction_for_shops;
+    }
+
+    public function getTransactionsForShopDetailByID($id)
+    {
+        $transaction_for_shops = TransactionsForShop::where('id', $id)->first();
+        return $transaction_for_shops;
+    }
 }
