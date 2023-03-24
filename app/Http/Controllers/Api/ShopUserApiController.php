@@ -8,28 +8,29 @@ use App\Http\Requests\ShopUserCreateRequest;
 use App\Http\Requests\ShopUserLoginRequest;
 use App\Http\Requests\ShopUserUpdateApiRequest;
 use App\Models\ShopUser;
+use App\Repositories\OrderRepository;
 use App\Repositories\ShopRepository;
 use App\Repositories\ShopUserRepository;
-use App\Services\OrdersService;
+use App\Services\OrderService;
 use App\Services\ShopUserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 
 class ShopUserApiController extends Controller
 {
     protected $shopUserRepository;
     protected $shopRepository;
+    protected $orderRepository;
     protected $orderService;
     protected $shopUserService;
 
-    public function __construct(ShopUserRepository $shopUserRepository,ShopRepository $shopRepository,OrderService $orderService,ShopUserService $shopUserService)
+    public function __construct(ShopUserRepository $shopUserRepository,ShopRepository $shopRepository,OrderService $orderService,ShopUserService $shopUserService, OrderRepository $orderRepository)
     {
         $this->shopUserRepository = $shopUserRepository;
         $this->shopRepository = $shopRepository;
-        $this->ordersService = $orderService;
+        $this->orderRepository = $orderRepository;
+        $this->orderService = $orderService;
         $this->shopUserService = $shopUserService;
-
     }
 
     public function shopUsersLoginApi(ShopUserLoginRequest $request)
@@ -89,5 +90,13 @@ class ShopUserApiController extends Controller
 
             return response()->json( ['data' => $data, 'message' => 'Successfully Update Shop User', 'status' => 'success'], 200); 
         
+    }
+    public function changeOrderStatus(Request $request)
+    {
+        $order_id = $request->order_id;
+        $status = $request->status;
+        $order = $this->orderRepository->getOrderByID($order_id);
+        $this->orderService->changeStatus($order,$status);
+        return response()->json(['data' => [], 'message' => 'Successfull Change Order Status', 'status' => 'success','200']);
     }
 }
