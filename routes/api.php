@@ -25,6 +25,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('create-shop', [ShopApiController::class, 'create']);
 Route::post('shop_user_login', [ShopUserApiController::class, 'shopUsersLoginApi']);
 Route::post('create-shop-user', [ShopUserApiController::class, 'create']);
 Route::middleware('auth:shop-user-api')->group( function () {
@@ -33,6 +34,8 @@ Route::middleware('auth:shop-user-api')->group( function () {
     Route::get('shopowner-create-order-list/{id}', [ShopUserApiController::class, 'orderCreateByShopOwner']);
     Route::post('update-shop-user/{id}', [ShopUserApiController::class, 'update']);
     Route::post('create-shop-payment-by-shop-owner', [ShopPaymentApiController::class, 'insertShopPayment']);
+    Route::post('update-shop/{id}', [ShopApiController::class, 'update']);
+    Route::get('get-shop-info/{id}', [ShopApiController::class, 'getShopDetailInfo']);
 });
 Route::post('rider-login', [RiderApiController::class, 'riderLoginApi']);
 Route::post('create-rider', [RiderApiController::class, 'create']);
