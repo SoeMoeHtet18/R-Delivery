@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\Order;
 use App\Models\Rider;
 
 class RiderService
@@ -16,6 +15,10 @@ class RiderService
         $rider->password = bcrypt($data['password']);
         $rider->device_id = $data['device_id'] ?? null;
         $rider->save();
+        $townships = $data['township_id'];
+        if($townships) {
+            $rider->townships()->sync($townships);
+        }
         return $rider;
     }
 
@@ -28,6 +31,10 @@ class RiderService
             $rider->password =  bcrypt($data['password']);
         }
         $rider->device_id = $data['device_id'] ?? $rider->device_id;
+        $townships = $data['township_id'];
+        if($townships) {
+            $rider->townships()->sync($townships);
+        }
         $rider->save();
         return $rider;
     }
@@ -35,5 +42,11 @@ class RiderService
     public function deleteRiderByID($id)
     {
         Rider::destroy($id);
+    }
+
+    public function assignTownship($rider, $data)
+    {
+        $townships = $data['township_id'];
+        $rider->townships()->sync($townships);
     }
 }

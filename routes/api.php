@@ -63,3 +63,4 @@ Route::get('get-shop-list', [ShopApiController::class, 'getAllShopList']);
 Route::get('cities', [CityApiController::class, 'getAllCityList']);
 Route::get('townships', [TownshipApiController::class, 'getAllTownshipList']);
 Route::post('townships-get-by-city', [TownshipApiController::class, 'getAllTownshipListByCityID']);
+Route::post('riders-get-by-township', [RiderApiController::class, 'getAllRidersByTownshipID']);

@@ -34,12 +34,16 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/riders', RiderController::class);
     Route::get('/riders/get-pending-orders-by-rider-id/{id}', [OrderController::class, 'getPendingOrdersTableByRiderID']);
     Route::get('/riders/get-order-history-by-rider-id/{id}', [OrderController::class, 'getOrderHistoryTableByRiderID']);
+    Route::get('/riders/{id}/assign-township', [RiderController::class, 'assignTownship']);
+    Route::put('/riders/{id}/assign-township', [RiderController::class, 'assignTownshipToRider']);
     Route::resource('/shopusers', ShopUserController::class);
     Route::resource('/townships',TownshipController::class);
     Route::resource('/shops', ShopController::class);
     Route::get('/shops/get-shop-users-by-shop-id/{id}', [ShopUserController::class, 'getShopUsersTable']);
     Route::get('/shops/get-shop-orders-by-shop-id/{id}', [OrderController::class, 'getShopOrdersTable']);
     Route::resource('/orders', OrderController::class);
+    Route::get('/orders/{id}/assign-rider', [OrderController::class, 'assignRider']);
+    Route::post('/orders/{id}/assign-rider', [OrderController::class, 'assignRiderToOrder']);
     Route::get('/get-data-by-customer-phone/{phone}', [OrderController::class, 'getDataByCustomerPhoneNumber']);
     Route::resource('/cities', CityController::class);
     Route::get('/cities/{id}/townships', [TownshipController::class, 'getTownshipsTableByCityID']);

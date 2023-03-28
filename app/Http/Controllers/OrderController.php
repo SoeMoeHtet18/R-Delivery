@@ -60,6 +60,7 @@ class OrderController extends Controller
                 })
                 ->addColumn('action', function($row){
                     $actionBtn = '
+                        <a href="'. url("/orders/" . $row->id . "/assign-rider") .'" class="btn btn-secondary btn-sm">Assign Rider</a>
                         <a href="'. route("orders.show", $row->id) .'" class="btn btn-info btn-sm">View</a> 
                         <a href="'. route("orders.edit", $row->id) .'" class="btn btn-light btn-sm">Edit</a> 
                         <form action="'.route("orders.destroy", $row->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this order?`);">
@@ -123,8 +124,6 @@ class OrderController extends Controller
         $order = $this->orderRepository->getOrderByID($id);
         $shops = $this->shopRepository->getAllShops();
         $shops = $shops->sortByDesc('id');
-        $riders = $this->riderRepository->getAllRiders();
-        $riders = $riders->sortByDesc('id');
         $cities = $this->cityRepository->getAllCities();
         $cities = $cities->sortByDesc('id');
         $item_types = $this->itemTypeRepository->getAllItemTypes();
@@ -133,6 +132,10 @@ class OrderController extends Controller
         $city_id = $order->city_id;
         $townships = $this->townshipRepository->getAllTownshipsByCityID($city_id);
         $townships = $townships->sortByDesc('id');
+
+        $township = $this->townshipRepository->getTownshipById($order->township_id);
+        $riders = $township->riders;
+        $riders = $riders->sortByDesc('id');
         
         $date = new Carbon($order->schedule_date);
         $scheduledate = $date->format('Y-m-d');
@@ -218,5 +221,21 @@ class OrderController extends Controller
         else {
             return response()->json(['data'=>null, 'status'=>'fail', 'message'=>'Fail to get order',200]);
         }
+    }
+
+    public function assignRider($id)
+    {
+        $order = $this->orderRepository->getOrderByID($id);
+        $township = $this->townshipRepository->getTownshipById($order->township_id);
+        $riders = $township->riders;
+        return view('admin.order.assign_rider', compact('order', 'township', 'riders'));
+    }
+
+    public function assignRiderToOrder(Request $request, $id)
+    {
+        $order = $this->orderRepository->getOrderByID($id);
+        $data = $request->all();
+        $this->orderService->assignRider($order, $data);
+        return redirect()->route('orders.index');
     }
 }

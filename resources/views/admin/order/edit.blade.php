@@ -273,9 +273,32 @@
                             }                            
                         }
                         $('#township_id').html(townships);
+                        var riders = '<option value="" selected disabled>Select the Rider for This Order</option>';
+                        $('#rider_id').html(riders);
                     },
                 })
-            })
+            });
+
+            $('#township_id').change(function() {
+                console.log('township changed');
+                var township_id = $('#township_id').val();
+                console.log(township_id)
+                $.ajax({
+                    url: '/api/riders-get-by-township',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: { township_id: township_id },
+                    success: function(response) {
+                        var riders = '<option value="" selected disabled>Select the Rider for This Order</option>';
+                        if(response.data){
+                            for(let i = 0; i < response.data.length; i++){
+                                riders += '<option value="'+ response.data[i].id + '">' + response.data[i].name+'</option>';
+                            }                            
+                        }
+                        $('#rider_id').html(riders);
+                    },
+                })
+            });
         });
 
     </script>

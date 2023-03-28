@@ -6,6 +6,7 @@ use App\Http\Requests\RiderCreateRequest;
 use App\Http\Requests\RiderUpdateRequest;
 use App\Models\Rider;
 use App\Repositories\RiderRepository;
+use App\Repositories\TownshipRepository;
 use App\Services\RiderService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -15,11 +16,13 @@ class RiderController extends Controller
 {
     protected $riderRepository;
     protected $riderService;
-
-    public function __construct(RiderRepository $riderRepository, RiderService $riderService)
+    protected $townshipRepository;
+    
+    public function __construct(RiderRepository $riderRepository, RiderService $riderService, TownshipRepository $townshipRepository)
     {
         $this->riderRepository = $riderRepository;
         $this->riderService = $riderService;
+        $this->townshipRepository = $townshipRepository;
     }
     /**
      * Display a listing of the resource.
@@ -32,6 +35,7 @@ class RiderController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function($riders){
                     $actionBtn = '
+                        <a href="'. url("/riders/" . $riders->id . "/assign-township") .'" class="btn btn-secondary btn-sm">Assign Township</a>
                         <a href="'. route("riders.show", $riders->id) .'" class="edit btn btn-info btn-sm">View</a> 
                         <a href="'. route("riders.edit", $riders->id) .'" class="edit btn btn-light btn-sm">Edit</a> 
                         <form action="'.route("riders.destroy", $riders->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this rider?`);">
@@ -53,7 +57,9 @@ class RiderController extends Controller
      */
     public function create()
     {
-        return view('admin.rider.create');
+        $townships = $this->townshipRepository->getAllTownships();
+        $townships = $townships->sortByDesc('id');
+        return view('admin.rider.create', compact('townships'));
     }
 
     /**
@@ -61,7 +67,6 @@ class RiderController extends Controller
      */
     public function store(RiderCreateRequest $request)
     {
-
         $data = $request->all();
         $this->riderService->saveRiderData($data);
         return redirect(route('riders.index'));
@@ -73,8 +78,9 @@ class RiderController extends Controller
     public function show(string $id)
     {
         $rider = $this->riderRepository->getRiderByID($id);
+        $townships = $this->townshipRepository->getAllTownships();
 
-        return view('admin.rider.detail', compact('rider'));
+        return view('admin.rider.detail', compact('rider', 'townships'));
     }
 
     /**
@@ -83,8 +89,9 @@ class RiderController extends Controller
     public function edit(string $id)
     {
         $rider = $this->riderRepository->getRiderByID($id);
-
-        return view('admin.rider.edit', compact('rider'));
+        $townships = $this->townshipRepository->getAllTownships();
+        $townships = $townships->sortByDesc('id');
+        return view('admin.rider.edit', compact('rider', 'townships'));
     }
 
     /**
@@ -106,5 +113,21 @@ class RiderController extends Controller
     {
         $this->riderService->deleteRiderByID($id);
         return redirect(route('riders.index'));
+    }
+
+    public function assignTownship($id)
+    {
+        $townships = $this->townshipRepository->getAllTownships();
+        $townships = $townships->sortByDesc('id');
+        $rider = $this->riderRepository->getRiderByID($id);
+        return view('admin.rider.assign_township', compact('rider', 'townships'));
+    }
+
+    public function assignTownshipToRider(Request $request, $id)
+    {
+        $rider = $this->riderRepository->getRiderByID($id);
+        $data = $request->all();
+        $this->riderService->assignTownship($rider, $data);
+        return redirect(route('riders.show', $id));
     }
 }

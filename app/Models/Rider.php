@@ -13,4 +13,9 @@ class Rider extends Authenticatable
     protected $fillable = [
         'name', 'phone_number', 'email', 'email_verified_at', 'password', 'device_id','token','refresh_token'
     ];
+
+    public function townships()
+    {
+        return $this->belongsToMany(Township::class, 'rider_township','rider_id','township_id');
+    }
 }

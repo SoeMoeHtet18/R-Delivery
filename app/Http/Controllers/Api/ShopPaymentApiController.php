@@ -28,7 +28,7 @@ class ShopPaymentApiController extends Controller
             $file = $request->file('image');
             $shop_payment = $this->shopPaymentService->saveShopPaymentData($data, $file);
 
-            return response()->json( ['data' => $shop_payment, 'message' => 'Successfully Create Shop Payment ', 'status' => 'success'], 200); 
+            return response()->json(['data' => $shop_payment, 'message' => 'Successfully Create Shop Payment ', 'status' => 'success'], 200); 
     }
 
     public function getShopPaymentListByShopID($id)

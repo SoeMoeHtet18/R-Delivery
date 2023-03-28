@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CustomerPaymentRequest;
 use App\Repositories\CustomerPaymentRepository;
 use App\Services\CustomerPaymentService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class CustomerPaymentApiController extends Controller
 {

@@ -16,4 +16,9 @@ class Township extends Model
     public function city() {
         return $this->belongsTo(City::class, 'city_id', 'id');
     }
+
+    public function riders()
+    {
+        return $this->belongsToMany(Rider::class, 'rider_township', 'township_id', 'rider_id');
+    }
 }
