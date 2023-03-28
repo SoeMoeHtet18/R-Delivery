@@ -97,8 +97,6 @@ $(document).ready(function() {
             {data: 'email', name: 'email'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ],
-    
-        
     });
     $('.search_filter').click(function(){
             var name = $('#name').val();
@@ -109,10 +107,10 @@ $(document).ready(function() {
         $("#reset").click(function(){
             $("#name").val("").trigger("change");
             $("#phone_number").val("").trigger("change");
-            var shop_name = $('#name').val();
+            var name = $('#name').val();
             var phone_number = $('#phone_number').val();
             table.destroy();
-            get_ajax_dynamic_data(shop_name,phone_number);
+            get_ajax_dynamic_data(name,phone_number);
         });
     }
   });
