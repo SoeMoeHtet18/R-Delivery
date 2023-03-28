@@ -47,6 +47,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/shoppayments', ShopPaymentController::class);
     Route::resource('/customer-payments', CustomerPaymentController::class);
     Route::resource('/transactions-for-shop', TransactionsForShopController::class);
+    Route::get('/ajax-get-orders-data', [OrderController::class, 'getAjaxOrderData']);
 
 });
 Auth::routes();

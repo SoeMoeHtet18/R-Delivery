@@ -17,8 +17,10 @@
                 <div>
                     <select name="status" id="status" class="form-control">
                         <option value="" selected disabled>Select the Status for This Order</option>
-                <option value="">Status</option>
-                        
+                        <option value="pending">Pending</option>
+                        <option value="success">Success</option>
+                        <option value="delay">Delay</option>
+                        <option value="cancel">Cancel</option>
                     </select>
                 </div>
             </div>
@@ -29,7 +31,9 @@
                 <div>
                     <select name="township" id="township" class="form-control">
                         <option value="" selected disabled>Select the Status for This Order</option>
-                <option value="">Township</option>
+                        @foreach($townships as $township)
+                            <option value="{{$township->id}}">{{$township->name}}</option>
+                        @endforeach
                     </select>
                 </div>
             </div>
@@ -38,7 +42,7 @@
           </div>
         <div class="d-flex flex-row-reverse pb-3">
         <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 btncenter margin-btn">
-            <button class="btn btn-primary">Filter</button>
+            <button class="btn btn-primary search_filter">Filter</button>
 
             <button class="btn btn-secondary" id="reset">Reset</button>
           </div>
@@ -106,37 +110,60 @@
   $(document).ready(function() {
     $('#status').select2();
     $('#township').select2();
-
-    $(function () {
-    var table = $('.datatable').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: "{{ route('orders.index') }}",
-        columns: [
-            {data: 'DT_RowIndex', name: 'id'},
-            {data: 'order_code', name: 'order_code'},
-            {data: 'customer_name', name: 'customer_name'},
-            {data: 'customer_phone_number', name: 'customer_phone_number'},
-            {data: 'city_name', name: 'city'},
-            {data: 'township_name', name: 'township'},
-            {data: 'rider_name', name: 'rider'},
-            {data: 'shop_name', name: 'shop'},
-            {data: 'quantity', name: 'quantity'},
-            {data: 'total_amount', name: 'total_amount'},
-            {data: 'delivery_fees', name: 'delivery_fees'},
-            {data: 'markup_delivery_fees', name: 'markup_delivery_fees'},
-            {data: 'remark', name: 'remark'},
-            {data: 'status', name: 'status'},
-            {data: 'item_type', name: 'item_type'},
-            {data: 'full_address', name: 'full_address'},
-            {data: 'schedule_date', name: 'schedule_date'},
-            {data: 'type', name: 'type'},
-            {data: 'collection_method', name: 'collection_method'},
-            {data: 'last_updated_by_name', name: 'last_updated_by'},
-            {data: 'action', name: 'action', orderable: false, searchable: false},
-        ]
-    });
-    });
+    
+    get_ajax_dynamic_data(status='',township='');
+    function get_ajax_dynamic_data(status,township) {
+        var table = $('.datatable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                "url": '/ajax-get-orders-data',
+                "type": "GET",
+                "data" : function( r ) {
+                    r.status = status;
+                    r.township = township;
+                }
+            },
+            columns: [
+                {data: 'DT_RowIndex', name: 'id'},
+                {data: 'order_code', name: 'order_code'},
+                {data: 'customer_name', name: 'customer_name'},
+                {data: 'customer_phone_number', name: 'customer_phone_number'},
+                {data: 'city_name', name: 'city'},
+                {data: 'township_name', name: 'township'},
+                {data: 'rider_name', name: 'rider'},
+                {data: 'shop_name', name: 'shop'},
+                {data: 'quantity', name: 'quantity'},
+                {data: 'total_amount', name: 'total_amount'},
+                {data: 'delivery_fees', name: 'delivery_fees'},
+                {data: 'markup_delivery_fees', name: 'markup_delivery_fees'},
+                {data: 'remark', name: 'remark'},
+                {data: 'status', name: 'status'},
+                {data: 'item_type', name: 'item_type'},
+                {data: 'full_address', name: 'full_address'},
+                {data: 'schedule_date', name: 'schedule_date'},
+                {data: 'type', name: 'type'},
+                {data: 'collection_method', name: 'collection_method'},
+                {data: 'last_updated_by_name', name: 'last_updated_by'},
+                {data: 'action', name: 'action', orderable: false, searchable: false},
+            ]
+        });
+        $('.search_filter').click(function(){
+            var status = $('#status').val();
+            var township = $('#township').val();
+            table.destroy();
+            get_ajax_dynamic_data(status,township);
+        });
+        $("#reset").click(function(){
+            $("#status").val("").trigger("change");
+            $("#township").val("").trigger("change");
+            var status = $("#status").val();
+            var township = $('#township').val();
+            table.destroy();
+            get_ajax_dynamic_data(status,township);
+        });
+    };
+    
   });
 </script>
 @endsection 
