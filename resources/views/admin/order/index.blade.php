@@ -9,14 +9,14 @@
         </div>
       </div>
       <div class="row">
-        <div class="d-flex">
-            <div class="mb-3 p-3">
+        <div class="filter-box">
+            <div class="mb-3 p-3 col-4">
                 <label for="status">
-                    <h5>Status</h5>
+                    <strong>Status</strong>
                 </label>
-                <div>
+                <div class="col-10">
                     <select name="status" id="status" class="form-control">
-                        <option value="" selected disabled>Select the Status for This Order</option>
+                        <option value="" selected disabled>Select</option>
                         <option value="pending">Pending</option>
                         <option value="success">Success</option>
                         <option value="delay">Delay</option>
@@ -24,13 +24,13 @@
                     </select>
                 </div>
             </div>
-            <div class="mb-3 p-3">
-                <label for="status">
-                    <h5>Township</h5>
+            <div class="mb-3 p-3 col-4">
+                <label for="township">
+                    <strong>Township</strong>
                 </label>
-                <div>
+                <div class="col-10">
                     <select name="township" id="township" class="form-control">
-                        <option value="" selected disabled>Select the Status for This Order</option>
+                        <option value="" selected disabled>Select</option>
                         @foreach($townships as $township)
                             <option value="{{$township->id}}">{{$township->name}}</option>
                         @endforeach

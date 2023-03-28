@@ -53,4 +53,8 @@
         font-size: 16px;
         padding-top: 3px;
     }
+
+    .filter-box{
+        display: flex;
+    }
 </style>
