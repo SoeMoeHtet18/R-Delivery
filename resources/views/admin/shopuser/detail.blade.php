@@ -58,7 +58,21 @@
                             <h4>Email <b>:</b></h4>
                         </div>
                         <div class="col-10">
+                            @if(!$shop_user->email)
+                            N/A
+                            @endif
                             {{ $shop_user->email }}
+                        </div>
+                    </div>
+                    <div class="row m-0 mb-3">
+                        <div class="col-2">
+                            <h4>Device ID <b>:</b></h4>
+                        </div>
+                        <div class="col-10">                    
+                            @if(!$shop_user->device_id)
+                            N/A
+                            @endif
+                            {{ $shop_user->device_id }}
                         </div>
                     </div>
                     

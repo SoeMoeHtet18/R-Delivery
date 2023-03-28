@@ -52,29 +52,42 @@
                             <h4>Email <b>:</b></h4>
                         </div>
                         <div class="col-10">
+                            @if(!$rider->email)
+                            N/A
+                            @endif
                             {{ $rider->email }}
                         </div>
                     </div>
-                        <div class="row m-0 mb-3">
-                            <div class="col-2">
-                                <h4>Townships <b>:</b></h4>
-                            </div>
-                            <div class="col-10">
-                                @if(!$rider->townships()->exists()) 
-                                N/A
-                                @endif
-                                <ul class="ul-style">
-                                @foreach($rider->townships as $rider_township)
-                                @foreach($townships as $township)
-                                    @if($rider_township->id == $township->id)
-                                        <li>{{$township->name}}</li>
-                                    
-                                    @endif                            
-                                @endforeach
-                                @endforeach
-                                </ul>
-                            </div>
+                    <div class="row m-0 mb-3">
+                        <div class="col-2">
+                            <h4>Device ID <b>:</b></h4>
                         </div>
+                        <div class="col-10">                    
+                            @if(!$rider->device_id)
+                            N/A
+                            @endif
+                            {{ $rider->device_id }}
+                        </div>
+                    </div>
+                    <div class="row m-0 mb-3">
+                        <div class="col-2">
+                            <h4>Townships <b>:</b></h4>
+                        </div>
+                        <div class="col-10">
+                            @if(!$rider->townships()->exists()) 
+                            N/A
+                            @endif
+                            <ul class="ul-style">
+                            @foreach($rider->townships as $rider_township)
+                            @foreach($townships as $township)
+                                @if($rider_township->id == $township->id)
+                                    <li>{{$township->name}}</li>
+                                @endif                            
+                            @endforeach
+                            @endforeach
+                            </ul>
+                        </div>
+                    </div>
                 </div>
                 <hr>
                 <ul class="nav nav-tabs mb-4">
