@@ -9,42 +9,114 @@
     </div>
     </div>
     <div class="row">
-    <div class="filter-box">
-        <div class="mb-3 p-3 col-4">
-            <label for="status">
-                <strong>Status</strong>
-            </label>
-            <div class="col-10">
-                <select name="status" id="status" class="form-control">
-                    <option value="" selected disabled>Select</option>
-                    <option value="pending">Pending</option>
-                    <option value="success">Success</option>
-                    <option value="delay">Delay</option>
-                    <option value="cancel">Cancel</option>
-                </select>
+        <div class="filter-box">
+            <div class="mb-3 p-3 col-4">
+                <label for="order_code">
+                    <strong>Order Code</strong>
+                </label>
+                <div class="col-10">
+                    <input type="text" id="order_code" name="order_code" class="form-control"/>
+                </div>
+            </div>
+            <div class="mb-3 p-3 col-4">
+                <label for="customer_name">
+                    <strong>Customer Name</strong>
+                </label>
+                <div class="col-10">
+                    <input type="text" id="customer_name" name="customer_name" class="form-control"/>
+                </div>
+            </div>
+            <div class="mb-3 p-3 col-4">
+                <label for="customer_phone_number">
+                    <strong>Customer Phone Number</strong>
+                </label>
+                <div class="col-10">
+                    <input type="text" id="customer_phone_number" name="customer_phone_number" class="form-control"/>
+                </div>
             </div>
         </div>
-        <div class="mb-3 p-3 col-4">
-            <label for="township">
-                <strong>Township</strong>
-            </label>
-            <div class="col-10">
-                <select name="township" id="township" class="form-control">
-                    <option value="" selected disabled>Select</option>
-                    @foreach($townships as $township)
-                        <option value="{{$township->id}}">{{$township->name}}</option>
-                    @endforeach
-                </select>
+        
+    </div>
+
+    <div class="row">
+        <div class="filter-box">
+            <div class="mb-3 p-3 col-4">
+                <label for="city">
+                    <strong>City</strong>
+                </label>
+                <div class="col-10">
+                    <select name="city" id="city" class="form-control">
+                        <option value="" selected disabled>Select</option>
+                        @foreach($cities as $city)
+                            <option value="{{$city->id}}">{{$city->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="mb-3 p-3 col-4">
+                <label for="status">
+                    <strong>Status</strong>
+                </label>
+                <div class="col-10">
+                    <select name="status" id="status" class="form-control">
+                        <option value="" selected disabled>Select</option>
+                        <option value="pending">Pending</option>
+                        <option value="success">Success</option>
+                        <option value="delay">Delay</option>
+                        <option value="cancel">Cancel</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mb-3 p-3 col-4">
+                <label for="township">
+                    <strong>Township</strong>
+                </label>
+                <div class="col-10">
+                    <select name="township" id="township" class="form-control">
+                        <option value="" selected disabled>Select</option>
+                        @foreach($townships as $township)
+                            <option value="{{$township->id}}">{{$township->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
         </div>
     </div>
-        
+    <div class="row">
+        <div class="filter-box">
+            <div class="mb-3 p-3 col-4">
+                <label for="city">
+                    <strong>Rider</strong>
+                </label>
+                <div class="col-10">
+                    <select name="rider" id="rider" class="form-control">
+                        <option value="" selected disabled>Select</option>
+                        @foreach($riders as $rider)
+                            <option value="{{$rider->id}}">{{$rider->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="mb-3 p-3 col-4">
+                <label for="township">
+                    <strong>Shop</strong>
+                </label>
+                <div class="col-10">
+                    <select name="shop" id="shop" class="form-control">
+                        <option value="" selected disabled>Select</option>
+                        @foreach($shops as $shop)
+                            <option value="{{$shop->id}}">{{$shop->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
         </div>
+    </div>
     <div class="d-flex flex-row-reverse pb-3">
-    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 btncenter margin-btn">
-        <button class="btn btn-primary search_filter">Filter</button>
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 btncenter margin-btn">
+            <button class="btn btn-primary search_filter">Filter</button>
 
-        <button class="btn btn-secondary" id="reset">Reset</button>
+            <button class="btn btn-secondary" id="reset">Reset</button>
         </div>
     </div>
 </div>
@@ -105,11 +177,14 @@
 
 <script type="text/javascript">
   $(document).ready(function() {
+    $('#city').select2();
     $('#status').select2();
     $('#township').select2();
+    $('#rider').select2();
+    $('#shop').select2();
     
-    get_ajax_dynamic_data(status='',township='');
-    function get_ajax_dynamic_data(status,township) {
+    get_ajax_dynamic_data(order_code='',customer_name='',customer_phone_number='',city='',rider='',shop='',status='',township='');
+    function get_ajax_dynamic_data(order_code,customer_name,customer_phone_number,city,rider,shop,status,township) {
         var table = $('.datatable').DataTable({
             processing: true,
             serverSide: true,
@@ -117,6 +192,12 @@
                 "url": '/ajax-get-orders-data',
                 "type": "GET",
                 "data" : function( r ) {
+                    r.order_code = order_code;
+                    r.customer_name = customer_name;
+                    r.customer_phone_number = customer_phone_number;
+                    r.city  = city;
+                    r.rider = rider;
+                    r.shop  = shop;
                     r.status = status;
                     r.township = township;
                 }
@@ -148,16 +229,34 @@
         $('.search_filter').click(function(){
             var status = $('#status').val();
             var township = $('#township').val();
+            var order_code = $('#order_code').val();
+            var customer_name = $('#customer_name').val();
+            var customer_phone_number = $('#customer_phone_number').val(); 
+            var rider = $('#rider').val();
+            var city = $('#city').val();
+            var shop = $('#shop').val();
             table.destroy();
-            get_ajax_dynamic_data(status,township);
+            get_ajax_dynamic_data(order_code,customer_name,customer_phone_number,city,rider,shop,status,township);
         });
         $("#reset").click(function(){
             $("#status").val("").trigger("change");
             $("#township").val("").trigger("change");
+            $("#order_code").val("").trigger("change");
+            $("#customer_name").val("").trigger("change");
+            $("#customer_phone_number").val("").trigger("change");
+            $("#rider").val("").trigger("change");
+            $("#city").val("").trigger("change");
+            $("#shop").val("").trigger("change");
             var status = $("#status").val();
             var township = $('#township').val();
+            var order_code = $('#order_code').val();
+            var customer_name = $('#customer_name').val();
+            var customer_phone_number = $('#customer_phone_number').val(); 
+            var rider = $('#rider').val();
+            var city = $('#city').val();
+            var shop = $('#shop').val();
             table.destroy();
-            get_ajax_dynamic_data(status,township);
+            get_ajax_dynamic_data(order_code,customer_name,customer_phone_number,city,rider,shop,status,township);
         });
     };
     

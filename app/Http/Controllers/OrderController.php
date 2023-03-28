@@ -50,9 +50,12 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
+        $cities = $this->cityRepository->getAllCities();
         $townships = $this->townshipRepository->getAllTownships();
+        $riders = $this->riderRepository->getAllRiders();
+        $shops  = $this->shopRepository->getAllShops();
 
-        return view('admin.order.index',compact('townships'));
+        return view('admin.order.index',compact('cities','townships','riders','shops'));
     }
 
     /**
@@ -203,12 +206,36 @@ class OrderController extends Controller
     {
         $status = $request->status;
         $township = $request->township;
+        $order_code = $request->order_code;
+        $customer_name = $request->customer_name;
+        $customer_phone_number = $request->customer_phone_number;
+        $city = $request->city;
+        $rider = $request->rider;
+        $shop  = $request->shop;
         $data = $this->orderRepository->getAllOrdersQuery();
         if($status != null) {
             $data = $data->where('orders.status',$status);
         }
         if($township != null) {
             $data = $data->where('orders.township_id',$township);
+        }
+        if($order_code != null) {
+            $data = $data->where('orders.order_code','like', '%' . $order_code . '%');
+        }
+        if($customer_name != null) {
+            $data = $data->where('orders.customer_name','like','%' . $customer_name . '%');
+        }
+        if($customer_phone_number != null) {
+            $data = $data->where('orders.customer_phone_number','like','%'.$customer_phone_number.'%');
+        }
+        if($city != null) {
+            $data = $data->where('orders.city_id',$city);
+        }
+        if($rider != null) {
+            $data = $data->where('orders.rider_id',$rider);
+        }
+        if($shop != null) {
+            $data = $data->where('orders.shop_id',$shop);
         }
 
         return DataTables::of($data)
