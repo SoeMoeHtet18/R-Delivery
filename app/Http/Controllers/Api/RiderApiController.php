@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Rider;
 use App\Repositories\OrderRepository;
 use App\Repositories\RiderRepository;
+use App\Repositories\TownshipRepository;
 use App\Services\OrderService;
 use App\Services\RiderService;
 use Illuminate\Http\Request;
@@ -18,14 +19,17 @@ class RiderApiController extends Controller
     protected $riderService;
     protected $orderRepository;
     protected $orderService;
+    protected $townshipRepository;
 
-    public function __construct(RiderRepository $riderRepository,RiderService $riderService, OrderRepository $orderRepository, OrderService $orderService)
+    public function __construct(RiderRepository $riderRepository,RiderService $riderService, OrderRepository $orderRepository, OrderService $orderService, TownshipRepository $townshipRepository)
     {
         $this->riderRepository = $riderRepository;
         $this->riderService = $riderService;
         $this->orderRepository = $orderRepository;
         $this->orderService = $orderService;
+        $this->townshipRepository = $townshipRepository;
     }
+
     public function riderLoginApi(Request $request)
     {
         $validator = Validator::make($request->all(),[
@@ -122,5 +126,13 @@ class RiderApiController extends Controller
         $order = $this->orderRepository->getOrderByID($order_id);
         $this->orderService->changeStatus($order,$status);
         return response()->json(['data' => [], 'message' => 'Successfull Change Order Status', 'status' => 'success',200]);
+    }
+
+    public function getAllRidersByTownshipID(Request $request)
+    {
+        $township_id = $request->township_id;
+        $township = $this->townshipRepository->getTownshipById($township_id);
+        $riders = $township->riders;
+        return response()->json(['data' => $riders, 'message' => 'Successfull Get Riders By Township', 'status' => 'success',200]); 
     }
 }

@@ -19,8 +19,11 @@
                         <strong>Order Detail</strong>
                     </h2>
                     <div class="card-toolbar">
+                    <div>
+                        <a href="{{url('/orders/'.$order->id.'/assign-rider')}}" class="btn btn-secondary me-3">Assign Rider</a>
+                    </div>
                     <div class="create-button">
-                    <a href="{{route('orders.edit' , $order->id)}}" class="btn btn-light">Edit</a>
+                        <a href="{{route('orders.edit' , $order->id)}}" class="btn btn-light">Edit</a>
                     </div>
                     <form action="{{route('orders.destroy', $order->id)}}" method="post" onclick="return confirm(`Are you sure you want to Delete this order?`);">
                         @csrf

@@ -7,10 +7,11 @@
         flex-direction: row;
         justify-content: flex-end;
     }
-    .create-button { 
-        width: 70px;
-        height: 30px;
-        margin-bottom: 10px;
+
+    .ul-style {
+        list-style: none;
+        padding: 0;
+        line-height: 2rem;
     }
 </style>
         <div class="card card-container detail-card">
@@ -19,6 +20,7 @@
                     <strong>Rider Detail</strong>
                 </h2>
                 <div class="card-toolbar">
+                    <a href="{{url('/riders/'.$rider->id.'/assign-township')}}" class="btn btn-secondary me-3">Assign Township</a>
                     <div class="create-button">
                     <a href="{{route('riders.edit' , $rider->id)}}" class="btn btn-light">Edit</a>
                     </div>
@@ -53,7 +55,26 @@
                             {{ $rider->email }}
                         </div>
                     </div>
-                    
+                        <div class="row m-0 mb-3">
+                            <div class="col-2">
+                                <h4>Townships <b>:</b></h4>
+                            </div>
+                            <div class="col-10">
+                                @if(!$rider->townships()->exists()) 
+                                N/A
+                                @endif
+                                <ul class="ul-style">
+                                @foreach($rider->townships as $rider_township)
+                                @foreach($townships as $township)
+                                    @if($rider_township->id == $township->id)
+                                        <li>{{$township->name}}</li>
+                                    
+                                    @endif                            
+                                @endforeach
+                                @endforeach
+                                </ul>
+                            </div>
+                        </div>
                 </div>
                 <hr>
                 <ul class="nav nav-tabs mb-4">

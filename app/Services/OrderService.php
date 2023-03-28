@@ -99,4 +99,10 @@ class OrderService
         $order->status = $status;
         $order->save();
     }
+
+    public function assignRider($order, $data)
+    {
+        $order->rider_id = $data['rider_id'];
+        $order->save();
+    }
 }

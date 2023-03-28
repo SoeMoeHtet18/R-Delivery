@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CustomerPaymentRequest;
 use App\Services\CustomerPaymentService;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class CustomerPaymentApiController extends Controller
 {

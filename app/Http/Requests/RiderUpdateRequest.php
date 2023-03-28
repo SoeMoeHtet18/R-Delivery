@@ -24,7 +24,7 @@ class RiderUpdateRequest extends FormRequest
         $id = $this->input('id');
         return [
             'name'          => 'required|string',
-            'phone_number'  => 'required|string|unique:users,phone_number,'.$id,
+            'phone_number'  => 'required|string|unique:riders,phone_number,'.$id,
             'email'         => 'unique:riders,email,' . $id,
             'password'      => 'confirmed'
 

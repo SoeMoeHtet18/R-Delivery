@@ -64,6 +64,18 @@
                             
                         </div>
                     </div>
+                    <div class="row m-0 mb-3">
+                        <label for="township_id" class="col-2">
+                            <h4>Township Name <b>:</b></h4>
+                        </label>
+                        <div class="col-10">
+                            <select name="township_id[]" id="township_id" class="form-control" multiple>
+                                @foreach($townships as $township)
+                                    <option value="{{$township->id}}">{{$township->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
                     <div class="footer-button float-end">
                         <a href="{{route('riders.index')}}" class="btn btn-light">Cancel</a>
                         <input type="submit" class="btn btn-success ">
@@ -71,4 +83,14 @@
                 </form>
             </div>
         </div>
+@endsection
+@section('javascript')
+<script type="text/javascript">
+  $(function () {
+      $('#township_id').select2({
+        placeholder: 'Select Townships',
+        allowClear: true
+    });   
+  });
+</script>
 @endsection
