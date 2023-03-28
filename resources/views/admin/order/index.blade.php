@@ -2,10 +2,56 @@
 
 @section('content')
 
+<div class="card">
+<div class="row tdFilter">
+        <div class="col-md-12 col-sm-12 m-3"> 
+          <h2>Filter</h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="d-flex">
+            <div class="mb-3 p-3">
+                <label for="status">
+                    <h5>Status</h5>
+                </label>
+                <div>
+                    <select name="status" id="status" class="form-control">
+                        <option value="" selected disabled>Select the Status for This Order</option>
+                <option value="">Status</option>
+                        
+                    </select>
+                </div>
+            </div>
+            <div class="mb-3 p-3">
+                <label for="status">
+                    <h5>Township</h5>
+                </label>
+                <div>
+                    <select name="township" id="township" class="form-control">
+                        <option value="" selected disabled>Select the Status for This Order</option>
+                <option value="">Township</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+          
+          </div>
+        <div class="d-flex flex-row-reverse pb-3">
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 btncenter margin-btn">
+            <button class="btn btn-primary">Filter</button>
+
+            <button class="btn btn-secondary" id="reset">Reset</button>
+          </div>
+        </div>
+
+
+      </div>
+</div>
+
+
 <div class="create-button">
     <a class="btn btn-success" href="{{route('orders.create')}}">Add Order</a>
 </div>
-
 <div class="portlet box green">
     <div class="portlet-title">
         <div class="caption">Order Lists</div>
@@ -54,9 +100,14 @@
     <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.11.4/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 <script type="text/javascript">
-  $(function () {
-      
+  $(document).ready(function() {
+    $('#status').select2();
+    $('#township').select2();
+
+    $(function () {
     var table = $('.datatable').DataTable({
         processing: true,
         serverSide: true,
@@ -85,7 +136,7 @@
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });
-      
+    });
   });
 </script>
-@endsection
+@endsection 
