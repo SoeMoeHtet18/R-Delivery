@@ -94,10 +94,10 @@ class AdminController extends Controller
         $phone_number = $request->phone_number;
         $data = $this->adminRepository->getAllUsersQuery();
         if($name != null) {
-            $data = $data->where('users.name', $name);
+            $data = $data->where('users.name','like', '%' . $name . '%');
         }
         if($phone_number != null) {
-            $data = $data->where('users.phone_number', $phone_number);
+            $data = $data->where('users.phone_number','like', '%' . $phone_number . '%');
         }
             return DataTables::of($data)
                 

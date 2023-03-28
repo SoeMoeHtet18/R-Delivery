@@ -28,25 +28,6 @@ class ShopUserController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $shop_users = $this->shopUserRepository->getAllShopUsersQuery();
-            return DataTables::of($shop_users)
-                ->addIndexColumn()
-                ->addColumn('action', function($shop_users){
-                    $actionBtn = '
-                            <a href="'. route("shopusers.show", $shop_users->id) .'" class="edit btn btn-info btn-sm">View</a> 
-                            <a href="'. route("shopusers.edit", $shop_users->id) .'" class="edit btn btn-light btn-sm">Edit</a> 
-                            <form action="'.route("shopusers.destroy", $shop_users->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this shop user?`);">
-                                <input type="hidden" name="_token" value="'. csrf_token() .'">
-                                <input type="hidden" name="_method" value="DELETE">
-                                <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
-                            </form>';
-                    return $actionBtn;
-                })
-                ->rawColumns(['action'])
-                ->orderColumn('id', '-id $1')
-                ->make(true);
-        }
         return view('admin.shopuser.index');
     }
 
@@ -131,5 +112,35 @@ class ShopUserController extends Controller
             ->orderColumn('id', '-id $1')
             ->make(true);
         };
+    }
+
+    public function getAjaxShopUserData(Request $request)
+    {
+        $shop_user_name = $request->name;
+        $phone_number = $request->phone_number;
+        $data = $this->shopUserRepository->getAllShopUsersQuery();
+        if($shop_user_name != null) {
+            $data = $data->where('shop_users.name','like', '%'. $shop_user_name . '%');
+        }
+        if($phone_number != null) {
+            $data = $data->where('shop_users.phone_number', 'like','%'. $phone_number . '%');
+        }
+            return DataTables::of($data)
+
+                ->addIndexColumn()
+                ->addColumn('action', function($shop_users){
+                    $actionBtn = '
+                            <a href="'. route("shopusers.show", $shop_users->id) .'" class="edit btn btn-info btn-sm">View</a> 
+                            <a href="'. route("shopusers.edit", $shop_users->id) .'" class="edit btn btn-light btn-sm">Edit</a> 
+                            <form action="'.route("shopusers.destroy", $shop_users->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this shop user?`);">
+                                <input type="hidden" name="_token" value="'. csrf_token() .'">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
+                            </form>';
+                    return $actionBtn;
+                })
+                ->rawColumns(['action'])
+                ->orderColumn('id', '-id $1')
+                ->make(true);
     }
 }
