@@ -49,7 +49,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/transactions-for-shop', TransactionsForShopController::class);
     Route::get('/ajax-get-orders-data', [OrderController::class, 'getAjaxOrderData']);
     Route::get('/ajax-get-users-data', [AdminController::class, 'getAjaxUserData']);
-
+    Route::get('/ajax-get-shops-data', [ShopController::class, 'getAjaxShopData']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
