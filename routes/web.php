@@ -51,6 +51,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/ajax-get-users-data', [AdminController::class, 'getAjaxUserData']);
     Route::get('/ajax-get-shops-data', [ShopController::class, 'getAjaxShopData']);
     Route::get('/ajax-get-shop-users-data', [ShopUserController::class, 'getAjaxShopUserData']);
+    Route::get('/ajax-get-city-data', [CityController::class, 'getAjaxCityData']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
