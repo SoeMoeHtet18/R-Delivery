@@ -2,54 +2,51 @@
 
 @section('content')
 
-<div class="card">
+<div class="card m-3">
 <div class="row tdFilter">
-        <div class="col-md-12 col-sm-12 m-3"> 
-          <h2>Filter</h2>
-        </div>
-      </div>
-      <div class="row">
-        <div class="filter-box">
-            <div class="mb-3 p-3 col-4">
-                <label for="status">
-                    <strong>Status</strong>
-                </label>
-                <div class="col-10">
-                    <select name="status" id="status" class="form-control">
-                        <option value="" selected disabled>Select</option>
-                        <option value="pending">Pending</option>
-                        <option value="success">Success</option>
-                        <option value="delay">Delay</option>
-                        <option value="cancel">Cancel</option>
-                    </select>
-                </div>
-            </div>
-            <div class="mb-3 p-3 col-4">
-                <label for="township">
-                    <strong>Township</strong>
-                </label>
-                <div class="col-10">
-                    <select name="township" id="township" class="form-control">
-                        <option value="" selected disabled>Select</option>
-                        @foreach($townships as $township)
-                            <option value="{{$township->id}}">{{$township->name}}</option>
-                        @endforeach
-                    </select>
-                </div>
+    <div class="col-md-12 col-sm-12 m-3"> 
+        <h2>Filter</h2>
+    </div>
+    </div>
+    <div class="row">
+    <div class="filter-box">
+        <div class="mb-3 p-3 col-4">
+            <label for="status">
+                <strong>Status</strong>
+            </label>
+            <div class="col-10">
+                <select name="status" id="status" class="form-control">
+                    <option value="" selected disabled>Select</option>
+                    <option value="pending">Pending</option>
+                    <option value="success">Success</option>
+                    <option value="delay">Delay</option>
+                    <option value="cancel">Cancel</option>
+                </select>
             </div>
         </div>
-          
-          </div>
-        <div class="d-flex flex-row-reverse pb-3">
-        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 btncenter margin-btn">
-            <button class="btn btn-primary search_filter">Filter</button>
-
-            <button class="btn btn-secondary" id="reset">Reset</button>
-          </div>
+        <div class="mb-3 p-3 col-4">
+            <label for="township">
+                <strong>Township</strong>
+            </label>
+            <div class="col-10">
+                <select name="township" id="township" class="form-control">
+                    <option value="" selected disabled>Select</option>
+                    @foreach($townships as $township)
+                        <option value="{{$township->id}}">{{$township->name}}</option>
+                    @endforeach
+                </select>
+            </div>
         </div>
+    </div>
+        
+        </div>
+    <div class="d-flex flex-row-reverse pb-3">
+    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 btncenter margin-btn">
+        <button class="btn btn-primary search_filter">Filter</button>
 
-
-      </div>
+        <button class="btn btn-secondary" id="reset">Reset</button>
+        </div>
+    </div>
 </div>
 
 
