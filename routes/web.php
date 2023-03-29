@@ -51,7 +51,18 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/shoppayments', ShopPaymentController::class);
     Route::resource('/customer-payments', CustomerPaymentController::class);
     Route::resource('/transactions-for-shop', TransactionsForShopController::class);
-
+    Route::get('/ajax-get-orders-data', [OrderController::class, 'getAjaxOrderData']);
+    Route::get('/ajax-get-users-data', [AdminController::class, 'getAjaxUserData']);
+    Route::get('/ajax-get-shops-data', [ShopController::class, 'getAjaxShopData']);
+    Route::get('/ajax-get-shop-users-data', [ShopUserController::class, 'getAjaxShopUserData']);
+    Route::get('/ajax-get-city-data', [CityController::class, 'getAjaxCityData']);
+    Route::get('/ajax-get-item-type-data', [ItemTypeController::class, 'getAjaxItemTypeData']);
+    Route::get('/ajax-get-riders-data', [RiderController::class, 'getAjaxRiderData']);
+    Route::get('/ajax-get-shop-payment-data', [ShopPaymentController::class, 'getAjaxShopPaymentData']);
+    Route::get('/ajax-get-customer-payment-data', [CustomerPaymentController::class, 'getAjaxCustomerPaymentData']);
+    Route::get('/ajax-get-townships-data', [TownshipController::class, 'getAjaxTownshipData']);
+    Route::get('/ajax-get-transactions-data', [TransactionsForShopController::class, 'getAjaxTransactionForShopData']);
+    
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

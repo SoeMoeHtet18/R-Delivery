@@ -9,6 +9,7 @@ use App\Repositories\TransactionsForShopRepository;
 use App\Services\TransactionsForShopService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Laravel\Ui\Presets\React;
 use Yajra\DataTables\Facades\DataTables;
 
 class TransactionsForShopController extends Controller
@@ -30,26 +31,10 @@ class TransactionsForShopController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $transaction_for_shops = $this->transactionsForShopRepository->getAllTransactionsForShopQuery();
-            return DataTables::of($transaction_for_shops)
-                ->addIndexColumn()
-                ->addColumn('action', function($transaction_for_shops){
-                    $actionBtn = '
-                            <a href="'. route("transactions-for-shop.show", $transaction_for_shops->id) .'" class="edit btn btn-info btn-sm">View</a> 
-                            <a href="'. route("transactions-for-shop.edit", $transaction_for_shops->id) .'" class="edit btn btn-light btn-sm">Edit</a> 
-                            <form action="'.route("transactions-for-shop.destroy", $transaction_for_shops->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this shop user?`);">
-                                <input type="hidden" name="_token" value="'. csrf_token() .'">
-                                <input type="hidden" name="_method" value="DELETE">
-                                <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
-                            </form>';
-                    return $actionBtn;
-                })
-                ->rawColumns(['action'])
-                ->orderColumn('id','-transactions_for_shops.id')
-                ->make(true);
-        }
-        return view('admin.transactionsforshop.index');
+        $shops  = $this->shopRepository->getAllShops();
+        $paid_users  = $this->adminRepository->getAllUsers();
+
+        return view('admin.transactionsforshop.index',compact('shops', 'paid_users'));
     }
 
     /**
@@ -119,5 +104,43 @@ class TransactionsForShopController extends Controller
     {
         $this->transactionsForShopService->deleteTransactionForShopByID($id);
         return redirect()->route('transactions-for-shop.index');
+    }
+
+    public function getAjaxTransactionForShopData(Request $request)
+    {   
+        $shop_name = $request->shop_name;
+        $amount = $request->amount;
+        $type = $request->type;
+        $paid_by = $request->paid_by;
+        $data = $this->transactionsForShopRepository->getAllTransactionsForShopQuery();
+
+        if($shop_name != null) {
+            $data = $data->where('transactions_for_shops.shop_id',$shop_name);
+        }
+        if($amount != null) {
+            $data = $data->where('transactions_for_shops.amount',$amount);
+        }
+        if($type != null) {
+            $data = $data->where('transactions_for_shops.type',$type);
+        }
+        if($paid_by != null) {
+            $data = $data->where('transactions_for_shops.paid_by',$paid_by);
+        }
+        return DataTables::of($data)
+            ->addIndexColumn()
+            ->addColumn('action', function($transaction_for_shops){
+                $actionBtn = '
+                        <a href="'. route("transactions-for-shop.show", $transaction_for_shops->id) .'" class="edit btn btn-info btn-sm">View</a> 
+                        <a href="'. route("transactions-for-shop.edit", $transaction_for_shops->id) .'" class="edit btn btn-light btn-sm">Edit</a> 
+                        <form action="'.route("transactions-for-shop.destroy", $transaction_for_shops->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this shop user?`);">
+                            <input type="hidden" name="_token" value="'. csrf_token() .'">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
+                        </form>';
+                return $actionBtn;
+            })
+            ->rawColumns(['action'])
+            ->orderColumn('id','-transactions_for_shops.id')
+            ->make(true);
     }
 }
