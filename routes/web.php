@@ -56,6 +56,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/ajax-get-riders-data', [RiderController::class, 'getAjaxRiderData']);
     Route::get('/ajax-get-shop-payment-data', [ShopPaymentController::class, 'getAjaxShopPaymentData']);
     Route::get('/ajax-get-customer-payment-data', [CustomerPaymentController::class, 'getAjaxCustomerPaymentData']);
+    Route::get('/ajax-get-townships-data', [TownshipController::class, 'getAjaxTownshipData']);
+    Route::get('/ajax-get-transactions-data', [TransactionsForShopController::class, 'getAjaxTransactionForShopData']);
+    
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
