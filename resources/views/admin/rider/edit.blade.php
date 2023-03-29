@@ -90,12 +90,12 @@
         
 @endsection
 @section('javascript')
-<script type="text/javascript">
-  $(function () {
-      $('#township_id').select2({
-        placeholder: 'Select Townships',
-        allowClear: true
-    });   
-  });
-</script>
+    <script type="text/javascript">
+    $(function () {
+        $('#township_id').select2({
+            placeholder: 'Select Townships',
+            allowClear: true
+        });   
+    });
+    </script>
 @endsection

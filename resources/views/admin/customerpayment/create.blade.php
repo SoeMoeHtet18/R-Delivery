@@ -82,8 +82,6 @@
 @endsection
 
 @section('javascript')
-<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
     <script>
         $(document).ready(function() {
             $('#order_id').select2();

@@ -3132,19 +3132,6 @@ table {
         margin-left: 0px;
     }
 
-    div.page-sidebar {
-        width: 55px;
-        transition: width 0.05s ease;
-    }
-
-    div.page-sidebar:hover {
-        width: 250px;
-    }
-
-    div.page-sidebar .page-sidebar-menu li span {
-        display: none;
-    }
-
     div.page-sidebar:hover .page-sidebar-menu li span {
         display: inline;
     }

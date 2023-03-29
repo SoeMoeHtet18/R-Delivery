@@ -53,4 +53,45 @@
         font-size: 16px;
         padding-top: 3px;
     }
+    .customize-collapse {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    .customize-collapse li {
+        display: block;
+        margin: 0;
+        padding: 0;
+        border-top: 1px solid #484848;
+    }
+    .customize-collapse a {
+        text-decoration: none;
+        color: #d9d9d9;
+        display: block;
+        position: relative;
+        margin: 0;
+        border: 0px;
+        padding: 10px 15px;
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: 300;
+    }
+
+    .arrow {
+        display: inline-block;
+        width: 0;
+        height: 0;
+        position: absolute;
+        right: 30px;
+        bottom: 46%;
+        border-style: solid;
+        border-width: 5px 4px 0 4px;
+        border-color: #fff transparent transparent transparent;
+        transition-duration: 0.5s;
+    }
+    .arrow.up {
+        transform: rotate(180deg);
+        transition-duration: 0.5s;
+    }
+    
 </style>
