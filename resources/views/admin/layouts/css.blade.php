@@ -93,5 +93,9 @@
         transform: rotate(180deg);
         transition-duration: 0.5s;
     }
-    
+    .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active > a, .page-sidebar-closed.page-sidebar-fixed .page-sidebar:hover .page-sidebar-menu > li.active.open > a, .page-sidebar .page-sidebar-menu > ul li.active > a, .page-sidebar .page-sidebar-menu > li.active.open > a {
+        background: #8c8c85;
+        border-top-color: transparent;
+        color: #ffffff;
+    }
 </style>

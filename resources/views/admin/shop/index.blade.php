@@ -1,7 +1,14 @@
 @extends('admin.layouts.master')
 
 @section('content')
-
+<div class="mb-5">
+    <h3>Dashboard</h3>
+    <ol>
+        <li>R-Delivery</li>
+        <li>Dashboard</li>
+        <li>Shops</li>
+    </ol>
+</div>
 <div class="create-button">
     <a href="{{route('shops.create')}}" class="btn btn-success">Add Shop</a>
 </div>
