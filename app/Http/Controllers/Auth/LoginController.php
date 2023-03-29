@@ -7,7 +7,7 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
-
+use ReCaptcha\ReCaptcha;
 class LoginController extends Controller
 {
     /*
@@ -47,11 +47,37 @@ class LoginController extends Controller
     }
 
     protected function validateLogin(Request $request)
-    {
-        $this->validate($request, [
-            'phone_number' => 'required|string',
-            'password' => 'required|string',
-        ]);
+    {   
+
+        $vars = array(
+            'secret' => env('RECAPTCHA_SECRET_KEY'),
+            "response" => $request->input('recaptcha_v3')
+        );
+        $url = "https://www.google.com/recaptcha/api/siteverify";
+        $ch = curl_init();
+        dd($ch);
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $vars);
+        $encoded_response = curl_exec($ch);
+        $response = json_decode($encoded_response, true);
+        curl_close($ch);
+        if($response['success'] && $response['action'] == 'login' && $response['score']>0.5) {
+            //continue basic login logic
+            $this->validate($request, [
+                'phone_number' => 'required|string',
+                'password' => 'required|string',
+            ]);
+        } else {
+            //then probably this is a bot
+            //you can do your logic here pass it or deny or do something special
+            //score check value of 0.5 you can set which you want form 0 to 1
+            //score 1 is probably human score 0 is probably bot
+            dd("I Am Robotttt :D");
+        }
+
+        
+       
     }
 
     protected function credentials(Request $request)
