@@ -77,10 +77,7 @@
     grecaptcha.ready(function() {
         grecaptcha.execute("{{env('RECAPTCHA_SITE_KEY')}}", {action: 'login'}).then(function(token) {
             if(token) {
-                //js
                 document.getElementById('recaptcha_v3').value = token;
-                //if you use jquery library
-                //$("#recaptcha_v3").val(token);
             }
         });
     });
