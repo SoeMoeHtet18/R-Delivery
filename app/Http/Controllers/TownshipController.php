@@ -29,26 +29,8 @@ class TownshipController extends Controller
      */
     public function index(Request $request)
     {   
-        if ($request->ajax()) {
-            $data = $this->townshipRepository->getAllTownshipsQuery();
-            return DataTables::of($data)
-                ->addIndexColumn()
-                ->addColumn('action', function($data){
-                    $actionBtn = '
-                            <a href="'. route("townships.show", $data->id) .'" class="btn btn-info btn-sm">View</a> 
-                            <a href="'. route("townships.edit", $data->id) .'" class="btn btn-light btn-sm">Edit</a> 
-                            <form action="'.route("townships.destroy", $data->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this township?`);">
-                            <input type="hidden" name="_token" value="'. csrf_token() .'">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
-                        </form>';
-                    return $actionBtn;
-                })
-                ->rawColumns(['action'])
-                ->orderColumn('id', '-townships.id $1')
-                ->make(true);
-        }
-        return view('admin.township.index');
+        $cities = $this->cityRepository->getAllCities();
+        return view('admin.township.index',compact('cities'));
     }
 
     /**
@@ -123,6 +105,36 @@ class TownshipController extends Controller
             ->addIndexColumn()
             ->rawColumns(['name'])
             ->orderColumn('id', '-id $1')
+            ->make(true);
+    }
+
+    public function getAjaxTownshipData(Request $request)
+    {
+        $township_name = $request->township_name;
+        $city = $request->city;
+        $data = $this->townshipRepository->getAllTownshipsQuery();
+        if($township_name != null) {
+            $data = $data->where('townships.name','like','%' . $township_name . '%');
+        }
+        if($city != null) {
+            $data = $data->where('townships.city_id',$city);
+        }
+        return DataTables::of($data)
+
+            ->addIndexColumn()
+            ->addColumn('action', function($data){
+                $actionBtn = '
+                        <a href="'. route("townships.show", $data->id) .'" class="btn btn-info btn-sm">View</a> 
+                        <a href="'. route("townships.edit", $data->id) .'" class="btn btn-light btn-sm">Edit</a> 
+                        <form action="'.route("townships.destroy", $data->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this township?`);">
+                        <input type="hidden" name="_token" value="'. csrf_token() .'">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
+                    </form>';
+                return $actionBtn;
+            })
+            ->rawColumns(['action'])
+            ->orderColumn('id', '-townships.id $1')
             ->make(true);
     }
 }

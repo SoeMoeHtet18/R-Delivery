@@ -29,26 +29,6 @@ class RiderController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $riders = $this->riderRepository->getAllRidersQuery();
-            return DataTables::of($riders)
-                ->addIndexColumn()
-                ->addColumn('action', function($riders){
-                    $actionBtn = '
-                        <a href="'. url("/riders/" . $riders->id . "/assign-township") .'" class="btn btn-secondary btn-sm">Assign Township</a>
-                        <a href="'. route("riders.show", $riders->id) .'" class="edit btn btn-info btn-sm">View</a> 
-                        <a href="'. route("riders.edit", $riders->id) .'" class="edit btn btn-light btn-sm">Edit</a> 
-                        <form action="'.route("riders.destroy", $riders->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this rider?`);">
-                            <input type="hidden" name="_token" value="'. csrf_token() .'">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
-                        </form>';
-                    return $actionBtn;
-                })
-                ->rawColumns(['action'])
-                ->orderColumn('id', '-id $1')
-                ->make(true);
-        }
         return view('admin.rider.index');
     }
 
@@ -129,5 +109,35 @@ class RiderController extends Controller
         $data = $request->all();
         $this->riderService->assignTownship($rider, $data);
         return redirect(route('riders.show', $id));
+    }
+    public function getAjaxRiderData(Request $request)
+    {   
+        $rider_name = $request->rider_name;
+        $phone_number = $request->phone_number;
+
+        $data = $this->riderRepository->getAllRidersQuery();
+            if($rider_name != null) {
+                $data = $data->where('riders.name','like', '%' . $rider_name . '%');
+            }
+            if($phone_number != null) {
+                $data = $data->where('riders.phone_number','like', '%' . $phone_number . '%');
+            }
+            return DataTables::of($data)
+
+                ->addIndexColumn()
+                ->addColumn('action', function($riders){
+                    $actionBtn = '
+                        <a href="'. route("riders.show", $riders->id) .'" class="edit btn btn-info btn-sm">View</a> 
+                        <a href="'. route("riders.edit", $riders->id) .'" class="edit btn btn-light btn-sm">Edit</a> 
+                        <form action="'.route("riders.destroy", $riders->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this rider?`);">
+                            <input type="hidden" name="_token" value="'. csrf_token() .'">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
+                        </form>';
+                    return $actionBtn;
+                })
+                ->rawColumns(['action'])
+                ->orderColumn('id', '-id $1')
+                ->make(true);
     }
 }

@@ -26,28 +26,6 @@ class ShopController extends Controller
      */
     public function index(Request $request)
     {
-        if($request->ajax()) {
-
-            $shops = $this->shopRepository->getAllShopsQuery();
-
-            return DataTables::of($shops)
-                ->addIndexColumn()
-                ->addColumn('action', function($shops) {
-                    $actionBtns =  '
-                        <a href="'. route("shops.show", $shops->id) .'" class="btn btn-info btn-sm">View</a>
-                        <a href="'. route("shops.edit", $shops->id) .'" class="btn btn-light btn-sm">Edit</a>
-                        <form action="'. route("shops.destroy", $shops->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this shop?`);">
-                            <input type="hidden" name="_token" value="'. csrf_token() .'"/>
-                            <input type="hidden" name="_method" value="DELETE"/>
-                            <input type="submit" value="Delete" class="btn btn-danger btn-sm"/>
-                        </form>';
-                    return $actionBtns;
-                })
-                ->rawColumns(['action'])
-                ->orderColumn('id', '-id $1')
-                ->make(true);
-        }
-
         return view('admin.shop.index');
     }
 
@@ -110,5 +88,35 @@ class ShopController extends Controller
         $this->shopService->deleteShopByID($id);
         
         return redirect(route('shops.index'));
+    }
+
+    public function getAjaxShopData(Request $request)
+    {   
+        $shop_name = $request->shop_name;
+        $phone_number = $request->phone_number;
+        $data = $this->shopRepository->getAllShopsQuery();
+        if($shop_name != null) {
+            $data = $data->where('shops.name','like', '%'. $shop_name . '%');
+        }
+        if($phone_number != null) {
+            $data = $data->where('shops.phone_number', 'like', '%'. $phone_number . '%');
+        }
+            return DataTables::of($data)
+
+                ->addIndexColumn()
+                ->addColumn('action', function($shops) {
+                    $actionBtns =  '
+                        <a href="'. route("shops.show", $shops->id) .'" class="btn btn-info btn-sm">View</a>
+                        <a href="'. route("shops.edit", $shops->id) .'" class="btn btn-light btn-sm">Edit</a>
+                        <form action="'. route("shops.destroy", $shops->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this shop?`);">
+                            <input type="hidden" name="_token" value="'. csrf_token() .'"/>
+                            <input type="hidden" name="_method" value="DELETE"/>
+                            <input type="submit" value="Delete" class="btn btn-danger btn-sm"/>
+                        </form>';
+                    return $actionBtns;
+                })
+                ->rawColumns(['action'])
+                ->orderColumn('id', '-id $1')
+                ->make(true);
     }
 }

@@ -50,31 +50,12 @@ class OrderController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $data = $this->orderRepository->getAllOrdersQuery();
+        $cities = $this->cityRepository->getAllCities();
+        $townships = $this->townshipRepository->getAllTownships();
+        $riders = $this->riderRepository->getAllRiders();
+        $shops  = $this->shopRepository->getAllShops();
 
-            return DataTables::of($data)
-                ->addIndexColumn()
-                ->addColumn('order_code', function($data) {
-                    return '<a href="' . route("orders.show", $data->id ) . '">' . $data->order_code . '</a>';
-                })
-                ->addColumn('action', function($row){
-                    $actionBtn = '
-                        <a href="'. url("/orders/" . $row->id . "/assign-rider") .'" class="btn btn-secondary btn-sm">Assign Rider</a>
-                        <a href="'. route("orders.show", $row->id) .'" class="btn btn-info btn-sm">View</a> 
-                        <a href="'. route("orders.edit", $row->id) .'" class="btn btn-light btn-sm">Edit</a> 
-                        <form action="'.route("orders.destroy", $row->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this order?`);">
-                            <input type="hidden" name="_token" value="'. csrf_token() .'">
-                            <input type="hidden" name="_method" value="DELETE">
-                            <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
-                        </form>';
-                    return $actionBtn;
-                })
-                ->rawColumns(['action', 'order_code'])
-                ->orderColumn('id', '-orders.id')
-                ->make(true);
-        }
-        return view('admin.order.index');
+        return view('admin.order.index',compact('cities','townships','riders','shops'));
     }
 
     /**
@@ -237,5 +218,61 @@ class OrderController extends Controller
         $data = $request->all();
         $this->orderService->assignRider($order, $data);
         return redirect()->route('orders.index');
+    }
+    public function getAjaxOrderData(Request $request)
+    {
+        $status = $request->status;
+        $township = $request->township;
+        $order_code = $request->order_code;
+        $customer_name = $request->customer_name;
+        $customer_phone_number = $request->customer_phone_number;
+        $city = $request->city;
+        $rider = $request->rider;
+        $shop  = $request->shop;
+        $data = $this->orderRepository->getAllOrdersQuery();
+        if($status != null) {
+            $data = $data->where('orders.status',$status);
+        }
+        if($township != null) {
+            $data = $data->where('orders.township_id',$township);
+        }
+        if($order_code != null) {
+            $data = $data->where('orders.order_code','like', '%' . $order_code . '%');
+        }
+        if($customer_name != null) {
+            $data = $data->where('orders.customer_name','like','%' . $customer_name . '%');
+        }
+        if($customer_phone_number != null) {
+            $data = $data->where('orders.customer_phone_number','like','%'.$customer_phone_number.'%');
+        }
+        if($city != null) {
+            $data = $data->where('orders.city_id',$city);
+        }
+        if($rider != null) {
+            $data = $data->where('orders.rider_id',$rider);
+        }
+        if($shop != null) {
+            $data = $data->where('orders.shop_id',$shop);
+        }
+
+        return DataTables::of($data)
+            ->addIndexColumn()
+            ->addColumn('order_code', function($data) {
+                return '<a href="' . route("orders.show", $data->id ) . '">' . $data->order_code . '</a>';
+            })
+            ->addColumn('action', function($row){
+                $actionBtn = '
+                    <a href="'. route("orders.show", $row->id) .'" class="btn btn-info btn-sm">View</a> 
+                    <a href="'. route("orders.edit", $row->id) .'" class="btn btn-light btn-sm">Edit</a> 
+                    <form action="'.route("orders.destroy", $row->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this order?`);">
+                        <input type="hidden" name="_token" value="'. csrf_token() .'">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
+                    </form>';
+                return $actionBtn;
+            })
+            ->rawColumns(['action', 'order_code'])
+            ->orderColumn('id', '-orders.id')
+            ->make(true);
     }
 }

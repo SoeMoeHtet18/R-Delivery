@@ -2,6 +2,47 @@
 
 @section('content')
 
+<div class="card m-3">
+<div class="row tdFilter">
+    <div class="col-md-12 col-sm-12 m-3"> 
+        <h2>Filter</h2>
+    </div>
+    </div>
+    <div class="row">
+    <div class="filter-box">
+        <div class="mb-3 p-3 col-4">
+            <label for="township_name">
+                <strong>Township Name</strong>
+            </label>
+            <div class="col-10">
+                <input type="text" id="township_name" name="township_name" class="form-control"/>
+            </div>
+        </div>
+        <div class="mb-3 p-3 col-4">
+            <label for="city">
+                <strong>City</strong>
+            </label>
+            <div class="col-10">
+                <select name="city" id="city" class="form-control">
+                    <option value="" selected disabled>Select</option>
+                    @foreach($cities as $city)
+                        <option value="{{$city->id}}">{{$city->name}}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+    </div>
+        
+        </div>
+    <div class="d-flex flex-row-reverse pb-3">
+    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 btncenter margin-btn">
+        <button class="btn btn-primary search_filter">Filter</button>
+
+        <button class="btn btn-secondary" id="reset">Reset</button>
+        </div>
+    </div>
+</div>
+
 <div class="create-button">
     <a href="{{route('townships.create')}}" class="btn btn-success">Add Township</a>
 </div>
@@ -28,22 +69,46 @@
 
 @endsection
 @section('javascript')
-    <script type="text/javascript">
-    $(function () {
-        
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#city').select2();
+
+    get_ajax_dynamic_data(township_name='',city='');
+    function get_ajax_dynamic_data(township_name,city) {
         var table = $('.datatable').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: "{{route('townships.index')}}",
-            columns: [
-                {data: 'DT_RowIndex', name: 'id'},
-                {data: 'name', name: 'name'},
-                {data: 'city_name', name: 'city'},
-                {data: 'action', name: 'action', orderable: false, searchable: false},
-            ],
-            
-        });
-        
+        processing: true,
+        serverSide: true,
+        ajax: {
+            "url": '/ajax-get-townships-data',
+            "type": "GET",
+            "data" : function( r ) {
+                r.township_name = township_name;
+                r.city = city;
+            }
+        },
+        columns: [
+            {data: 'DT_RowIndex', name: 'id'},
+            {data: 'name', name: 'name'},
+            {data: 'city_name', name: 'city'},
+            {data: 'action', name: 'action', orderable: false, searchable: false},
+        ],
     });
-    </script>
+    $('.search_filter').click(function(){
+        var township_name = $('#township_name').val();
+        var city = $('#city').val();
+        table.destroy();
+        get_ajax_dynamic_data(township_name,city);
+    });
+    $("#reset").click(function(){
+        $("#township_name").val("").trigger("change");
+        $("#city").val("").trigger("change");
+        var township_name = $('#township_name').val();
+        var city = $('#city').val();
+        table.destroy();
+        get_ajax_dynamic_data(township_name,city);
+    })
+    };
+  });
+</script>
 @endsection

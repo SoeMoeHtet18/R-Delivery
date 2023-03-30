@@ -110,4 +110,7 @@
     .page-sidebar ul li a:hover {
         background-color: #282D36 !important;
     }
+    .filter-box{
+        display: flex;
+    }
 </style>

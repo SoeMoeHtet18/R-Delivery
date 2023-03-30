@@ -22,25 +22,6 @@ class ItemTypeController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $data = $this->itemTypeRepository->getAllItemTypesQuery();
-            return DataTables::of($data)
-                
-                ->addColumn('action', function($row){
-                    $actionBtn = '<a href="' . route("itemtypes.show", $row->id) . '" class="info btn btn-info btn-sm">View</a>
-                    <a href="' . route("itemtypes.edit", $row->id) . '" class="edit btn btn-light btn-sm">Edit</a>
-                    <form action="'.route("itemtypes.destroy", $row->id) .'" method="post" class="d-inline">
-                        <input type="hidden" name="_token" value="'. csrf_token() .'">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
-                    </form>';
-                    return $actionBtn;
-                })
-                ->rawColumns(['action'])
-                ->addIndexColumn()
-                ->orderColumn('id','-id $1')
-                ->make(true);
-        }
         return view('admin.itemtype.index');
     }
 
@@ -101,5 +82,31 @@ class ItemTypeController extends Controller
     {
         $this->itemTypeService->deleteItemTypeByID($id);
         return redirect()->route('itemtypes.index');
+    }
+
+    public function getAjaxItemTypeData(Request $request)
+    {
+        $name = trim($request->name);
+        $data = $this->itemTypeRepository->getAllItemTypesQuery();
+        if($name != null) {
+            $data = $data->where('name','like', '%' . $name . '%');
+        }
+        return DataTables::of($data)
+            
+            ->addColumn('action', function($row){
+                $actionBtn = '<a href="' . route("itemtypes.show", $row->id) . '" class="info btn btn-info btn-sm">View</a>
+                <a href="' . route("itemtypes.edit", $row->id) . '" class="edit btn btn-light btn-sm">Edit</a>
+                <form action="'.route("itemtypes.destroy", $row->id) .'" method="post" class="d-inline">
+                    <input type="hidden" name="_token" value="'. csrf_token() .'">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
+                </form>';
+                return $actionBtn;
+            })
+            ->rawColumns(['action'])
+            ->addIndexColumn()
+            ->orderColumn('id','-id $1')
+            ->make(true);
+        
     }
 }

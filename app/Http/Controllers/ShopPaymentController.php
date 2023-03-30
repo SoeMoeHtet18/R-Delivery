@@ -26,26 +26,8 @@ class ShopPaymentController extends Controller
      */
     public function index(Request $request)
     {   
-        if ($request->ajax()) {
-            $shop_payments = $this->shopPaymentRepository->getAllShopPaymentsQuery();
-            return DataTables::of($shop_payments)
-                ->addIndexColumn()
-                ->addColumn('action', function($shop_payments){
-                    $actionBtn = '
-                            <a href="'. route("shoppayments.show", $shop_payments->id) .'" class="edit btn btn-info btn-sm">View</a> 
-                            <a href="'. route("shoppayments.edit", $shop_payments->id) .'" class="edit btn btn-light btn-sm">Edit</a> 
-                            <form action="'.route("shoppayments.destroy", $shop_payments->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this shop user?`);">
-                                <input type="hidden" name="_token" value="'. csrf_token() .'">
-                                <input type="hidden" name="_method" value="DELETE">
-                                <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
-                            </form>';
-                    return $actionBtn;
-                })
-                ->rawColumns(['action'])
-                ->orderColumn('id', '-shop_payments.id')
-                ->make(true);
-        }
-        return view('admin.shoppayment.index');
+        $shops = $this->shopRepository->getAllShops();
+        return view('admin.shoppayment.index', compact('shops'));
     }
 
     /**
@@ -112,5 +94,38 @@ class ShopPaymentController extends Controller
     {
         $this->shopPaymentService->deleteShopPaymentByID($id);
         return redirect()->route('shoppayments.index');
+    }
+
+    public function getAjaxShopPaymentData(Request $request)
+    {
+        $item_type     = $request->item_type;
+        $shop_name     = $request->shop_name;
+        $amount        = $request->amount;
+        $shop_payments = $this->shopPaymentRepository->getAllShopPaymentsQuery();
+        if($item_type != null) {
+            $shop_payments = $shop_payments->where('type',$item_type);
+        }
+        if($shop_name != null) {
+            $shop_payments = $shop_payments->where('shop_id',$shop_name);
+        }
+        if($amount != null) {
+            $shop_payments = $shop_payments->where('amount',$amount);
+        }
+        return DataTables::of($shop_payments)
+            ->addIndexColumn()
+            ->addColumn('action', function($shop_payments){
+                $actionBtn = '
+                        <a href="'. route("shoppayments.show", $shop_payments->id) .'" class="edit btn btn-info btn-sm">View</a> 
+                        <a href="'. route("shoppayments.edit", $shop_payments->id) .'" class="edit btn btn-light btn-sm">Edit</a> 
+                        <form action="'.route("shoppayments.destroy", $shop_payments->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this shop user?`);">
+                            <input type="hidden" name="_token" value="'. csrf_token() .'">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
+                        </form>';
+                return $actionBtn;
+            })
+            ->rawColumns(['action'])
+            ->orderColumn('id', '-shop_payments.id')
+            ->make(true);
     }
 }
