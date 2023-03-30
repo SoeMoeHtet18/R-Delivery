@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Models\TransactionsForShop;
 use App\Repositories\ShopRepository;
 use App\Repositories\TransactionsForShopRepository;
@@ -22,13 +23,12 @@ class TransactionForShopApiController extends Controller
     {
         $shop_id = $this->shopRepository->getShopIDByShopUserID($id);
         $transactions_for_shop = $this->transactionsForShopRepository->getTransactionsForShopListByShopID($shop_id);
-        return response()->json(['data' => $transactions_for_shop, 'message' => 'Successfully Get Transactions For Shop By Shop ID','status'=> 'success', 200]);
+        return response()->json(['data' => $transactions_for_shop, 'message' => 'Successfully Get Transactions For Shop By Shop ID','status'=> 'success'], 200);
     }
 
-    public function getTransactionForShopDetailByID(Request $request)
+    public function getTransactionForShopDetailByID($id)
     {
-        $id = $request->id;
         $transactions_for_shop = $this->transactionsForShopRepository->getTransactionsForShopDetailByID($id);
-        return response()->json(['data' => $transactions_for_shop, 'message' => 'Successfully Get Transactions For Shop Detail By ID','status'=> 'success', 200]);
+        return response()->json(['data' => $transactions_for_shop, 'message' => 'Successfully Get Transactions For Shop Detail By ID','status'=> 'success'], 200);
     }
 }

@@ -27,4 +27,10 @@ class OrderRepository
         $data = Order::where('customer_phone_number',$phone_number)->first();
         return $data;
     }
+    
+    public function getOrdersByShopID($id)
+    {
+        $order = Order::where('shop_id',$id)->first();
+        return $order;
+    }
 }

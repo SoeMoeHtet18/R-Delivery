@@ -56,26 +56,26 @@ class RiderApiController extends Controller
     public function show($id)
     {
         $rider = $this->riderRepository->getRiderByID($id);
-        return response()->json(['data'=> $rider, 'message'=> 'Successfully Get Rider Detail', 'status' => 'success', 200]);
+        return response()->json(['data'=> $rider, 'message'=> 'Successfully Get Rider Detail', 'status' => 'success'], 200);
     }
 
     public function getOrderListByRiderID($id)
     {
         $orders = $this->riderRepository->getOrderHistoryListByRiderID($id);
-        return response()->json(['data' => $orders, 'message' => 'Successfully Get Order List By Rider ID', 'status' => 'success', 200]);
+        return response()->json(['data' => $orders, 'message' => 'Successfully Get Order List By Rider ID', 'status' => 'success'], 200);
     }
 
     public function getOrderList(Request $request)
     {
         $data = $request->all();
         $orders = $this->riderRepository->getPendingOrderListForAuthenticatedRider($data);
-        return response()->json(['data' => $orders, 'message' => 'Successfully Get Order List By Rider ID', 'status' => 'success', 200]);
+        return response()->json(['data' => $orders, 'message' => 'Successfully Get Order List By Rider ID', 'status' => 'success'], 200);
     }
 
     public function getShopListByRiderID($id)
     {
         $shops = $this->riderRepository->getShopListByRiderID($id);
-        return response()->json(['data' => $shops, 'message' => 'Successfully Get Shop List By Rider ID', 'status' => 'success', 200]);
+        return response()->json(['data' => $shops, 'message' => 'Successfully Get Shop List By Rider ID', 'status' => 'success'], 200);
     }
 
     public function create(Request $request)
@@ -124,8 +124,8 @@ class RiderApiController extends Controller
         $order_id = $request->order_id;
         $status = $request->status;
         $order = $this->orderRepository->getOrderByID($order_id);
-        $this->orderService->changeStatus($order,$status);
-        return response()->json(['data' => [], 'message' => 'Successfull Change Order Status', 'status' => 'success',200]);
+        $data = $this->orderService->changeStatus($order,$status);
+        return response()->json(['data' => $data, 'message' => 'Successfull Change Order Status', 'status' => 'success'],200);
     }
 
     public function getAllRidersByTownshipID(Request $request)
@@ -133,6 +133,6 @@ class RiderApiController extends Controller
         $township_id = $request->township_id;
         $township = $this->townshipRepository->getTownshipById($township_id);
         $riders = $township->riders;
-        return response()->json(['data' => $riders, 'message' => 'Successfull Get Riders By Township', 'status' => 'success',200]); 
+        return response()->json(['data' => $riders, 'message' => 'Successfull Get Riders By Township', 'status' => 'success'],200); 
     }
 }

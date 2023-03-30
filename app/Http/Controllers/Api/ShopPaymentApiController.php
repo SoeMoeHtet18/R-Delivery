@@ -35,13 +35,12 @@ class ShopPaymentApiController extends Controller
     {
         $shop_id = $this->shopRepository->getShopIDByShopUserID($id);
         $shop_payments = $this->shopPaymentRepository->getShopPaymentListByShopID($shop_id);
-        return response()->json(['data' => $shop_payments, 'message' => 'Successfully Get Shop Payments By Shop ID','status'=> 'success', 200]);
+        return response()->json(['data' => $shop_payments, 'message' => 'Successfully Get Shop Payments By Shop ID','status'=> 'success'], 200);
     }
 
-    public function getShopPaymentDetailByID(Request $request)
+    public function getShopPaymentDetailByID($id)
     {
-        $id = $request->id;
         $shop_payment = $this->shopPaymentRepository->getShopPaymentDetailByID($id);
-        return response()->json(['data' => $shop_payment, 'message' => 'Successfully Get Shop Payment Detail By ID','status'=> 'success', 200]);
+        return response()->json(['data' => $shop_payment, 'message' => 'Successfully Get Shop Payment Detail By ID','status'=> 'success'], 200);
     }
 }
