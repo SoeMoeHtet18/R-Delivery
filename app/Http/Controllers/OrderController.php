@@ -277,4 +277,58 @@ class OrderController extends Controller
             ->orderColumn('id', '-orders.id')
             ->make(true);
     }
+
+    public function getPendingOrderTableByTownshipID(Request $request, $id)
+    {
+        if($request->ajax()) {
+            $orderQuery = $this->orderRepository->getAllOrdersQuery();
+           
+            $orders = $orderQuery->where('township_id', $id)->where('status','pending')->orWhere('status','delay');
+           
+            return DataTables::of($orders)
+                    ->addColumn('order_code', function($data) {
+                        return '<a href="' . route("orders.show", $data->id ) . '">' . $data->order_code . '</a>';
+                    })
+                    ->addIndexColumn()
+                    ->rawColumns(['order_code'])
+                    ->orderColumn('orders.id', '-id $1')
+                    ->make(true);
+            }
+    }
+
+    public function getCompletedOrderTableByTownshipID(Request $request, $id)
+    {
+        if($request->ajax()) {
+            $orderQuery = $this->orderRepository->getAllOrdersQuery();
+           
+            $orders = $orderQuery->where('township_id', $id)->where('status','success');
+           
+            return DataTables::of($orders)
+                    ->addColumn('order_code', function($data) {
+                        return '<a href="' . route("orders.show", $data->id ) . '">' . $data->order_code . '</a>';
+                    })
+                    ->addIndexColumn()
+                    ->rawColumns(['order_code'])
+                    ->orderColumn('orders.id', '-id $1')
+                    ->make(true);
+            }
+    }
+
+    public function getCanceledOrderTableByTownshipID(Request $request, $id)
+    {
+        if($request->ajax()) {
+            $orderQuery = $this->orderRepository->getAllOrdersQuery();
+            
+            $orders = $orderQuery->where('township_id', $id)->where('status','cancel');
+            
+            return DataTables::of($orders)
+                    ->addColumn('order_code', function($data) {
+                        return '<a href="' . route("orders.show", $data->id ) . '">' . $data->order_code . '</a>';
+                    })
+                    ->addIndexColumn()
+                    ->rawColumns(['order_code'])
+                    ->orderColumn('orders.id', '-id $1')
+                    ->make(true);
+            }
+    }
 }

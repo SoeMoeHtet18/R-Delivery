@@ -98,6 +98,7 @@ class OrderService
     {
         $order->status = $status;
         $order->save();
+        return $order;
     }
 
     public function assignRider($order, $data)

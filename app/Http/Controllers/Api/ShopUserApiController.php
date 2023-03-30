@@ -56,7 +56,7 @@ class ShopUserApiController extends Controller
     public function orderListByShopOwnerID($id) 
     {   
         $shop_user = $this->shopUserRepository->getShopUserByID($id);
-        $order_list = $this->shopRepository->getShopOrdersByShopID($shop_user->shop_id);
+        $order_list = $this->orderRepository->getOrdersByShopID($shop_user->shop_id);
         return response()->json( ['data' => $order_list, 'message' => 'Successfully Get Order List', 'status' => 'success'], 200); 
     }
 
@@ -103,7 +103,7 @@ class ShopUserApiController extends Controller
         $order_id = $request->order_id;
         $status = $request->status;
         $order = $this->orderRepository->getOrderByID($order_id);
-        $this->orderService->changeStatus($order,$status);
-        return response()->json(['data' => [], 'message' => 'Successfull Change Order Status', 'status' => 'success',200]);
+        $data  = $this->orderService->changeStatus($order,$status);
+        return response()->json(['data' => $data, 'message' => 'Successfull Change Order Status', 'status' => 'success'],200);
     }
 }

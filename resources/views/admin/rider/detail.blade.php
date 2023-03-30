@@ -100,7 +100,7 @@
                 </ul>
                 <input type="hidden" id="current_screen" value="pending-order-tab">
                 <div class="tab-content">
-                                <div id="pending-order-display" class="portlet box green tab-pane active">
+                    <div id="pending-order-display" class="portlet box green tab-pane active">
                                     <div class="portlet-title">
                                         <div class="caption">Pending Orders</div>
                                     </div>

@@ -46,7 +46,7 @@ class RiderRepository
 
     public function getShopListByRiderID($id)
     {
-        $shops = Order::leftJoin('shops','shops.id','orders.shop_id')->select('shops.name as shop_name')->where('orders.rider_id',$id)->orderBy('orders.id','DESC')->get();
+        $shops = Order::leftJoin('shops','shops.id','orders.shop_id')->select('shops.*')->where('orders.rider_id',$id)->orderBy('orders.id','DESC')->get();
         return $shops;
     }
 }
