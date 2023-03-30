@@ -114,15 +114,11 @@ class RiderController extends Controller
 
     public function getAjaxRiderData(Request $request)
     {   
-        $rider_name = $request->rider_name;
-        $phone_number = $request->phone_number;
+        $search = $request->search;
 
         $data = $this->riderRepository->getAllRidersQuery();
-            if($rider_name != null) {
-                $data = $data->where('riders.name','like', '%' . $rider_name . '%');
-            }
-            if($phone_number != null) {
-                $data = $data->where('riders.phone_number','like', '%' . $phone_number . '%');
+            if($search) {
+                $data = $data->where('riders.name','like', '%' . $search . '%')->orWhere('riders.phone_number','like', '%' . $search . '%')->orWhere('riders.email','like', '%' . $search . '%');
             }
             return DataTables::of($data)
 
