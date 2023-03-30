@@ -38,6 +38,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('/riders/{id}/assign-township', [RiderController::class, 'assignTownshipToRider']);
     Route::resource('/shopusers', ShopUserController::class);
     Route::resource('/townships',TownshipController::class);
+    Route::get('townships/{id}/get-pending-orders-by-township-id', [OrderController::class, 'getPendingOrderTableByTownshipID']);
+    Route::get('townships/{id}/get-completed-orders-by-township-id', [OrderController::class, 'getCompletedOrderTableByTownshipID']);
+    Route::get('townships/{id}/get-canceled-orders-by-township-id', [OrderController::class, 'getCanceledOrderTableByTownshipID']);
     Route::resource('/shops', ShopController::class);
     Route::get('/shops/get-shop-users-by-shop-id/{id}', [ShopUserController::class, 'getShopUsersTable']);
     Route::get('/shops/get-shop-orders-by-shop-id/{id}', [OrderController::class, 'getShopOrdersTable']);
