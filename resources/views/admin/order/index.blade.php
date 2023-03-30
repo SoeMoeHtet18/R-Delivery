@@ -134,15 +134,15 @@
             <thead>
                 <tr>
                     <th>#</th>
+                    <th>Total Amount</th>
                     <th>Order Code</th>
+                    <th>Shop</th>
+                    <th>Rider</th>
                     <th>Customer Name</th>
                     <th>Customer Phone Number</th>
                     <th>City</th>
                     <th>Township</th>
-                    <th>Rider</th>
-                    <th>Shop</th>
                     <th>Quantity</th>
-                    <th>Total Amount</th>
                     <th>Delivery Fees</th>
                     <th>Markup Delivery Fees</th>
                     <th>Remark</th>
@@ -153,7 +153,7 @@
                     <th>Type</th>
                     <th>Collection Method</th>
                     <th>Last Updated By</th>
-                    <th class="d-flex">Action</th>
+                    <th>Action</th>
                 </tr>
             </thead>
 
@@ -195,15 +195,15 @@
             },
             columns: [
                 {data: 'DT_RowIndex', name: 'id'},
+                {data: 'total_amount', name: 'total_amount'},
                 {data: 'order_code', name: 'order_code'},
+                {data: 'shop_name', name: 'shop'},
+                {data: 'rider_name', name: 'rider'},
                 {data: 'customer_name', name: 'customer_name'},
                 {data: 'customer_phone_number', name: 'customer_phone_number'},
                 {data: 'city_name', name: 'city'},
                 {data: 'township_name', name: 'township'},
-                {data: 'rider_name', name: 'rider'},
-                {data: 'shop_name', name: 'shop'},
                 {data: 'quantity', name: 'quantity'},
-                {data: 'total_amount', name: 'total_amount'},
                 {data: 'delivery_fees', name: 'delivery_fees'},
                 {data: 'markup_delivery_fees', name: 'markup_delivery_fees'},
                 {data: 'remark', name: 'remark'},
