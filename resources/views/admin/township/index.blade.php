@@ -16,11 +16,11 @@
     <div class="row">
     <div class="filter-box">
         <div class="mb-3 p-3 col-4">
-            <label for="township_name">
-                <strong>Township Name</strong>
+            <label for="search">
+                <strong>Search</strong>
             </label>
             <div class="col-10">
-                <input type="text" id="township_name" name="township_name" class="form-control"/>
+                <input type="text" id="search" name="search" class="form-control"/>
             </div>
         </div>
         <div class="mb-3 p-3 col-4">
@@ -75,8 +75,8 @@
   $(document).ready(function() {
     $('#city').select2();
 
-    get_ajax_dynamic_data(township_name='',city='');
-    function get_ajax_dynamic_data(township_name,city) {
+    get_ajax_dynamic_data(search='',city='');
+    function get_ajax_dynamic_data(search,city) {
         var table = $('.datatable').DataTable({
         processing: true,
         serverSide: true,
@@ -84,7 +84,7 @@
             "url": '/ajax-get-townships-data',
             "type": "GET",
             "data" : function( r ) {
-                r.township_name = township_name;
+                r.search = search;
                 r.city = city;
             }
         },
@@ -96,18 +96,18 @@
         ],
     });
     $('.search_filter').click(function(){
-        var township_name = $('#township_name').val();
+        var search = $('#search').val();
         var city = $('#city').val();
         table.destroy();
-        get_ajax_dynamic_data(township_name,city);
+        get_ajax_dynamic_data(search,city);
     });
     $("#reset").click(function(){
-        $("#township_name").val("").trigger("change");
+        $("#search").val("").trigger("change");
         $("#city").val("").trigger("change");
-        var township_name = $('#township_name').val();
+        var search = $('#search').val();
         var city = $('#city').val();
         table.destroy();
-        get_ajax_dynamic_data(township_name,city);
+        get_ajax_dynamic_data(search,city);
     })
     };
   });

@@ -110,11 +110,11 @@ class TownshipController extends Controller
 
     public function getAjaxTownshipData(Request $request)
     {
-        $township_name = $request->township_name;
+        $search = $request->search;
         $city = $request->city;
         $data = $this->townshipRepository->getAllTownshipsQuery();
-        if($township_name != null) {
-            $data = $data->where('townships.name','like','%' . $township_name . '%');
+        if($search) {
+            $data = $data->where('townships.name','like','%' . $search . '%');
         }
         if($city != null) {
             $data = $data->where('townships.city_id',$city);
