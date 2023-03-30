@@ -91,10 +91,10 @@ class CityController extends Controller
 
     public function getAjaxCityData(Request $request)
     {
-        $name = trim($request->name);
+        $search = $request->search;
         $data = $this->cityRepository->getAllCitiesQuery();
-        if($name != null) {
-            $data = $data->where('name','like', '%' . $name . '%');
+        if($search) {
+            $data = $data->where('cities.name','like', '%' . $search . '%');
         }
         return DataTables::of($data)
             ->addColumn('action', function($row){
