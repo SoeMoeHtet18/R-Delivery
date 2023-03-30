@@ -16,11 +16,11 @@
     <div class="row">
     <div class="filter-box">
         <div class="mb-3 p-3 col-4">
-            <label for="name">
-                <strong>Item Name</strong>
+            <label for="search">
+                <strong>Search</strong>
             </label>
             <div class="col-10">
-                <input type="text" id="name" name="name" class="form-control"/>
+                <input type="text" id="search" name="search" class="form-control"/>
             </div>
         </div>
     </div>
@@ -60,8 +60,8 @@
 @section('javascript')
 <script type="text/javascript">
   $(document).ready(function() {
-    get_ajax_dynamic_data(name='');
-    function get_ajax_dynamic_data(name) {
+    get_ajax_dynamic_data(search='');
+    function get_ajax_dynamic_data(search) {
         var table = $('.datatable').DataTable({
             processing: true,
             serverSide: true,
@@ -69,7 +69,7 @@
                 "url": '/ajax-get-item-type-data',
                 "type": "GET",
                 "data" : function( r ) {
-                    r.name = name;
+                    r.search = search;
                 }
             },
             columns: [
@@ -80,15 +80,15 @@
         });
         
         $('.search_filter').click(function(){
-            var name = $('#name').val();
+            var search = $('#search').val();
             table.destroy();
-            get_ajax_dynamic_data(name);
+            get_ajax_dynamic_data(search);
         })
         $("#reset").click(function(){
-            $("#name").val("").trigger("change");
-            var name = $('#name').val();
+            $("#search").val("").trigger("change");
+            var search = $('#search').val();
             table.destroy();
-            get_ajax_dynamic_data(name);
+            get_ajax_dynamic_data(search);
         });
     };
 });

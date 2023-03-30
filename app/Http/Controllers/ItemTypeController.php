@@ -86,10 +86,10 @@ class ItemTypeController extends Controller
 
     public function getAjaxItemTypeData(Request $request)
     {
-        $name = trim($request->name);
+        $search = $request->search;
         $data = $this->itemTypeRepository->getAllItemTypesQuery();
-        if($name != null) {
-            $data = $data->where('name','like', '%' . $name . '%');
+        if($search) {
+            $data = $data->where('item_types.name','like', '%' . $search . '%');
         }
         return DataTables::of($data)
             
