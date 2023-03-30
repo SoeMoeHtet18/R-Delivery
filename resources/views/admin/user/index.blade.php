@@ -2,6 +2,11 @@
 
 @section('content')
 
+
+<div class="create-button">
+    <a class="btn btn-success" href="{{route('users.create')}}">Add User</a>
+</div>
+
 <div class="card m-3">
 <div class="row tdFilter">
     <div class="col-md-12 col-sm-12 m-3"> 
@@ -36,10 +41,6 @@
         <button class="btn btn-secondary" id="reset">Reset</button>
         </div>
     </div>
-</div>
-
-<div class="create-button">
-    <a class="btn btn-success" href="{{route('users.create')}}">Add User</a>
 </div>
 
 <div class="portlet box green">

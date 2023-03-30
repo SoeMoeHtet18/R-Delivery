@@ -2,6 +2,11 @@
 
 @section('content')
 
+
+<div class="create-button">
+    <a class="btn btn-success" href="{{route('orders.create')}}">Add Order</a>
+</div>
+
 <div class="card m-3">
 <div class="row tdFilter">
     <div class="col-md-12 col-sm-12 m-3"> 
@@ -121,10 +126,6 @@
     </div>
 </div>
 
-
-<div class="create-button">
-    <a class="btn btn-success" href="{{route('orders.create')}}">Add Order</a>
-</div>
 <div class="portlet box green">
     <div class="portlet-title">
         <div class="caption">Order Lists</div>
@@ -168,7 +169,7 @@
 @section('javascript')
 <script type="text/javascript">
   $(document).ready(function() {
-    $('#city').select2();
+    $('#city').select2([]);
     $('#status').select2();
     $('#township').select2();
     $('#rider').select2();
