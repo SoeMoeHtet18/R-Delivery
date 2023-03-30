@@ -64,6 +64,9 @@
         padding: 0;
         border-top: 1px solid #484848;
     }
+    .customize-collapse li.active :hover {
+        background-color: #282D36 !important;
+    }
     .customize-collapse a {
         text-decoration: none;
         color: #d9d9d9;
@@ -73,8 +76,12 @@
         border: 0px;
         padding: 10px 15px;
         text-decoration: none;
-        font-size: 16px;
         font-weight: 300;
+    }
+
+    .customize-collapse li a .title {
+        font-size: 14px;
+        margin-left: 15px;
     }
 
     .arrow {
@@ -97,5 +104,10 @@
         background: #8c8c85;
         border-top-color: transparent;
         color: #ffffff;
+        border-left: 3px solid orange;
+    }
+
+    .page-sidebar ul li a:hover {
+        background-color: #282D36 !important;
     }
 </style>

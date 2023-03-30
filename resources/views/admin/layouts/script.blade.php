@@ -22,5 +22,23 @@
             }
         });
     });
+
+    $(function() {
+        var pathName = window.location.pathname;
+
+        var endParts = pathName.split('/');
+        var endPart = endParts[1];
+
+        // for payments
+        if (['shoppayments', 'customer-payments', 'transactions-for-shop'].includes(endPart)) {
+            $("#paymentBoxCollapse").attr('aria-expanded', 'true');
+            $("#paymentBox.customize-collapse").toggleClass('show');
+        }
+        //fpr admin tools
+        if (['users', 'cities', 'townships', 'itemtypes'].includes(endPart)) {
+            $("#adminToolsCollapse").attr('aria-expanded', 'true');
+            $("#adminTools.customize-collapse").toggleClass('show');
+        }
+    })
     
 </script>
