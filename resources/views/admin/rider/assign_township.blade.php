@@ -30,6 +30,9 @@
                                         @endforeach>{{$township->name}}</option>
                                 @endforeach
                             </select>
+                            @if($errors->has('township_id'))
+                            <span class="text-danger"><strong>{{$errors->first('township_id')}}</strong></span>
+                            @endif
                         </div>
                     </div>
                     <input type="hidden" id="id" name="id" value="{{$rider->id}}" class="form-control"/>

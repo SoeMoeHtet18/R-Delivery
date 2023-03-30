@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\OrderCreateRequest;
 use App\Http\Requests\OrderUpdateRequest;
 use App\Helpers\MyHelper;
+use App\Http\Requests\RiderAssignRequest;
 use App\Models\Order;
 use App\Repositories\CityRepository;
 use App\Repositories\ItemTypeRepository;
@@ -212,13 +213,14 @@ class OrderController extends Controller
         return view('admin.order.assign_rider', compact('order', 'township', 'riders'));
     }
 
-    public function assignRiderToOrder(Request $request, $id)
+    public function assignRiderToOrder(RiderAssignRequest $request, $id)
     {
         $order = $this->orderRepository->getOrderByID($id);
         $data = $request->all();
         $this->orderService->assignRider($order, $data);
         return redirect()->route('orders.index');
     }
+
     public function getAjaxOrderData(Request $request)
     {
         $status = $request->status;

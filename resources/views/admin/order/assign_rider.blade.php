@@ -6,7 +6,7 @@
                 <h2 class="ps-1 card-header-title">
                     <strong>Assign Rider to Order</strong>
                 </h2>
-                <form action="{{url('/orders/'.$order->id.'/assign-rider-to-order')}}" method="post" class="action-form">
+                <form action="{{url('/orders/'.$order->id.'/assign-rider')}}" method="post" class="action-form">
                     @csrf
                     @method('post')
                     <div class="row m-0 mb-3">
@@ -28,6 +28,9 @@
                                 <option value="{{$rider->id}}">{{$rider->name}}</option>
                                 @endforeach
                             </select>
+                            @if ($errors->has('rider_id'))
+                            <span class="text-danger"><strong>{{ $errors->first('rider_id') }}</strong></span>
+                            @endif
                         </div>
                     </div>
                     <input type="submit" value="Assign" class="btn btn-success float-end">

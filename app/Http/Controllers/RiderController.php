@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RiderCreateRequest;
 use App\Http\Requests\RiderUpdateRequest;
+use App\Http\Requests\TownshipAssignRequest;
 use App\Models\Rider;
 use App\Repositories\RiderRepository;
 use App\Repositories\TownshipRepository;
@@ -103,13 +104,14 @@ class RiderController extends Controller
         return view('admin.rider.assign_township', compact('rider', 'townships'));
     }
 
-    public function assignTownshipToRider(Request $request, $id)
+    public function assignTownshipToRider(TownshipAssignRequest $request, $id)
     {
         $rider = $this->riderRepository->getRiderByID($id);
         $data = $request->all();
         $this->riderService->assignTownship($rider, $data);
         return redirect(route('riders.show', $id));
     }
+
     public function getAjaxRiderData(Request $request)
     {   
         $rider_name = $request->rider_name;

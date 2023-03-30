@@ -24,6 +24,7 @@ class OrderUpdateRequest extends FormRequest
         return [
             'customer_name'         => 'required',
             'customer_phone_number' => 'required',
+            'city_id'               => 'required',
             'township_id'           => 'required',
             'shop_id'               => 'required',
             'quantity'              => 'required',
@@ -45,10 +46,11 @@ class OrderUpdateRequest extends FormRequest
         return [
             'customer_name.required'            => 'Customer Name field is required',
             'customer_phone_number.required'    => 'Customer Phone Number field is required',
+            'city_id.required'                  => 'City field is required',
             'township_id.required'              => 'Township field is required',
             'shop_id.required'                  => 'Shop field is required',
             'quantity.required'                 => 'Quantity field is required',
-            'total_amount'                      => 'Total Amount field is required',
+            'total_amount.required'             => 'Total Amount field is required',
             'delivery_fees.required'            => 'Delivery Fees is required',
             'item_type.required'                => 'Item Type field is required',
             'type.required'                     => 'Type field is required',
