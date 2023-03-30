@@ -116,14 +116,10 @@ class ShopUserController extends Controller
 
     public function getAjaxShopUserData(Request $request)
     {
-        $shop_user_name = $request->name;
-        $phone_number = $request->phone_number;
+        $search = $request->search;
         $data = $this->shopUserRepository->getAllShopUsersQuery();
-        if($shop_user_name != null) {
-            $data = $data->where('shop_users.name','like', '%'. $shop_user_name . '%');
-        }
-        if($phone_number != null) {
-            $data = $data->where('shop_users.phone_number', 'like','%'. $phone_number . '%');
+        if($search) {
+            $data = $data->where('shop_users.name','like', '%'. $search . '%')->orWhere('shop_users.phone_number', 'like','%'. $search . '%')->orWhere('shop_users.email', 'like','%'. $search . '%');
         }
             return DataTables::of($data)
 
