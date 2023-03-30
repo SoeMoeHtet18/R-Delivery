@@ -16,19 +16,11 @@
     <div class="row">
     <div class="filter-box">
         <div class="mb-3 p-3 col-4">
-            <label for="name">
-                <strong>Name</strong>
+            <label for="search">
+                <strong>Search</strong>
             </label>
             <div class="col-10">
-                <input type="text" id="name" name="name" class="form-control"/>
-            </div>
-        </div>
-        <div class="mb-3 p-3 col-4">
-            <label for="phone_number">
-                <strong>Phone Number</strong>
-            </label>
-            <div class="col-10">
-                <input type="text" id="phone_number" name="phone_number" class="form-control"/>
+                <input type="text" id="search" name="search" class="form-control"/>
             </div>
         </div>
     </div>
@@ -70,8 +62,8 @@
 @section('javascript')
 
 <script type="text/javascript">
-    get_ajax_dynamic_data(name='',phone_number='');
-    function get_ajax_dynamic_data(name,phone_number) {
+    get_ajax_dynamic_data(search='');
+    function get_ajax_dynamic_data(search) {
         var table = $('.datatable').DataTable({
             processing: true,
             serverSide: true,
@@ -79,8 +71,7 @@
                 "url": '/ajax-get-users-data',
                 "type": "GET",
                 "data" : function( r ) {
-                    r.name = name;
-                    r.phone_number = phone_number;
+                    r.search = search;
                 }
             },
             columns: [
@@ -92,18 +83,15 @@
             ]
         });
         $('.search_filter').click(function(){
-            var name = $('#name').val();
-            var phone_number = $('#phone_number').val();
+            var search = $('#search').val();
             table.destroy();
-            get_ajax_dynamic_data(name,phone_number);
+            get_ajax_dynamic_data(search);
         })
         $("#reset").click(function(){
-            $("#name").val("").trigger("change");
-            $("#phone_number").val("").trigger("change");
-            var name = $('#name').val();
-            var phone_number = $('#phone_number').val();
+            $("#search").val("").trigger("change");
+            var search = $('#search').val();
             table.destroy();
-            get_ajax_dynamic_data(name,phone_number);
+            get_ajax_dynamic_data(search);
         });
   };
 </script>

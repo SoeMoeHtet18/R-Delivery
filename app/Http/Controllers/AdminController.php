@@ -90,14 +90,10 @@ class AdminController extends Controller
 
     public function getAjaxUserData(Request $request)
     {
-        $name = $request->name;
-        $phone_number = $request->phone_number;
+        $search = $request->search;
         $data = $this->adminRepository->getAllUsersQuery();
-        if($name != null) {
-            $data = $data->where('users.name','like', '%' . $name . '%');
-        }
-        if($phone_number != null) {
-            $data = $data->where('users.phone_number','like', '%' . $phone_number . '%');
+        if($search) {
+            $data = $data->where('users.name','like', '%' . $search . '%')->orWhere('users.phone_number','like', '%' . $search . '%')->orWhere('users.email','like', '%' . $search . '%');
         }
             return DataTables::of($data)
                 
