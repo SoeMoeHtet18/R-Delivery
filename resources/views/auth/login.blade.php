@@ -10,7 +10,7 @@
                 <div class="card-body">
                     <form method="POST" action="{{ route('login') }}">
                         @csrf
-
+                        <input type="hidden" name="recaptcha_v3" id="recaptcha_v3">
                         <div class="row mb-3">
                             <label for="phone_number" class="col-md-4 col-form-label text-md-end">{{ __('Phone Number') }}</label>
 
@@ -53,6 +53,7 @@
 
                         <div class="row mb-0">
                             <div class="col-md-8 offset-md-4">
+                            <input type="hidden" id="recaptcha" name="recaptcha">
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Login') }}
                                 </button>
@@ -70,4 +71,15 @@
         </div>
     </div>
 </div>
+
+<script src="https://www.google.com/recaptcha/api.js?render={{env('RECAPTCHA_SITE_KEY')}}"></script>
+<script>
+    grecaptcha.ready(function() {
+        grecaptcha.execute("{{env('RECAPTCHA_SITE_KEY')}}", {action: 'login'}).then(function(token) {
+            if(token) {
+                document.getElementById('recaptcha_v3').value = token;
+            }
+        });
+    });
+</script>
 @endsection
