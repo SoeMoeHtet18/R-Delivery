@@ -113,4 +113,57 @@
     .filter-box{
         display: flex;
     }
+    .select2-container .select2-selection--single
+    {
+        height: 37px;
+        display: flex;
+        align-items: center;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__arrow b
+    {
+        margin-top: 0px;
+        top: 15px;
+    }
+    .select2-container .select2-selection--single .select2-selection__rendered
+    {
+        margin-top: -1px;
+        font-size: 15px;
+    }
+
+    /* Mulit-Select  DropDown */
+    .select2-container--default .select2-selection--multiple .select2-selection__choice
+    {
+        background-color: royalblue;
+        margin-top: 4px;
+    }
+    .select2-container--default .select2-selection--multiple 
+    {
+        height: 37px;
+    }
+    .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+        top: 1.5px;
+    }
+    .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+        background-color: royalblue;
+        top: 1.5px;
+    }
+    /* Mulit-Select  DropDown  End*/
+
+    .select2-container--default .select2-search--inline .select2-search__field
+    {
+        height: 100%;
+    }
+    .select2-container--default .select2-selection--multiple .select2-selection__choice__display
+    {
+        display: block;
+        height: 1.7em;
+    }
+    .form-control
+    {
+        height: 37px;
+        font-size: 15px;
+    }
+
+    
+
 </style>
