@@ -15,19 +15,11 @@
     <div class="row">
     <div class="filter-box">
         <div class="mb-3 p-3 col-4">
-            <label for="shop_name">
-                <strong>Shop Name</strong>
+            <label for="search">
+                <strong>Search</strong>
             </label>
             <div class="col-10">
-                <input type="text" id="shop_name" name="shop_name" class="form-control"/>
-            </div>
-        </div>
-        <div class="mb-3 p-3 col-4">
-            <label for="phone_number">
-                <strong>Phone Number</strong>
-            </label>
-            <div class="col-10">
-                <input type="text" id="phone_number" name="phone_number" class="form-control"/>
+                <input type="text" id="search" name="search" class="form-control"/>
             </div>
         </div>
     </div>
@@ -70,8 +62,8 @@
 <script type="text/javascript">
 
   $(document).ready(function() {
-    get_ajax_dynamic_data(shop_name='',phone_number='');
-    function get_ajax_dynamic_data(shop_name,phone_number) {
+    get_ajax_dynamic_data(search='');
+    function get_ajax_dynamic_data(search) {
         var table = $('.datatable').DataTable({
         processing: true,
         serverSide: true,
@@ -79,8 +71,7 @@
             "url": '/ajax-get-shops-data',
             "type": "GET",
             "data" : function( r ) {
-                r.shop_name = shop_name;
-                r.phone_number = phone_number;
+                r.search = search;
             }
         },
         columns: [
@@ -92,18 +83,15 @@
         ],  
     });
         $('.search_filter').click(function(){
-            var shop_name = $('#shop_name').val();
-            var phone_number = $('#phone_number').val();
+            var search = $('#search').val();
             table.destroy();
-            get_ajax_dynamic_data(shop_name,phone_number);
+            get_ajax_dynamic_data(search);
         });
         $("#reset").click(function(){
-            $("#shop_name").val("").trigger("change");
-            $("#phone_number").val("").trigger("change");
-            var shop_name = $('#shop_name').val();
-            var phone_number = $('#phone_number').val();
+            $("#search").val("").trigger("change");
+            var search = $('#search').val();
             table.destroy();
-            get_ajax_dynamic_data(shop_name,phone_number);
+            get_ajax_dynamic_data(search);
         });
     }
   });

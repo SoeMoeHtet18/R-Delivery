@@ -92,14 +92,10 @@ class ShopController extends Controller
 
     public function getAjaxShopData(Request $request)
     {   
-        $shop_name = $request->shop_name;
-        $phone_number = $request->phone_number;
+        $search = $request->search;
         $data = $this->shopRepository->getAllShopsQuery();
-        if($shop_name != null) {
-            $data = $data->where('shops.name','like', '%'. $shop_name . '%');
-        }
-        if($phone_number != null) {
-            $data = $data->where('shops.phone_number', 'like', '%'. $phone_number . '%');
+        if($search) {
+            $data = $data->where('shops.name','like', '%'. $search . '%')->orWhere('shops.address', 'like', '%'. $search . '%')->orWhere('shops.phone_number', 'like', '%'. $search . '%');
         }
             return DataTables::of($data)
 
