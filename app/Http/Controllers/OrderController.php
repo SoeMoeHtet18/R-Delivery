@@ -225,9 +225,7 @@ class OrderController extends Controller
     {
         $status = $request->status;
         $township = $request->township;
-        $order_code = $request->order_code;
-        $customer_name = $request->customer_name;
-        $customer_phone_number = $request->customer_phone_number;
+        $search = $request->search;
         $city = $request->city;
         $rider = $request->rider;
         $shop  = $request->shop;
@@ -238,14 +236,8 @@ class OrderController extends Controller
         if($township != null) {
             $data = $data->where('orders.township_id',$township);
         }
-        if($order_code != null) {
-            $data = $data->where('orders.order_code','like', '%' . $order_code . '%');
-        }
-        if($customer_name != null) {
-            $data = $data->where('orders.customer_name','like','%' . $customer_name . '%');
-        }
-        if($customer_phone_number != null) {
-            $data = $data->where('orders.customer_phone_number','like','%'.$customer_phone_number.'%');
+        if($search) {
+            $data = $data->where('orders.order_code','like', '%' . $search . '%')->orWhere('orders.customer_name','like','%' . $search . '%')->orWhere('orders.customer_phone_number','like', '%' . $search . '%')->orWhere('orders.item_type','like', '%' . $search . '%')->orWhere('orders.full_address','like', '%' . $search . '%');
         }
         if($city != null) {
             $data = $data->where('orders.city_id',$city);

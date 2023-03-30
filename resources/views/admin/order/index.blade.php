@@ -16,27 +16,11 @@
     <div class="row">
         <div class="filter-box">
             <div class="mb-3 p-3 col-4">
-                <label for="order_code">
-                    <strong>Order Code</strong>
+                <label for="search">
+                    <strong>Search</strong>
                 </label>
                 <div class="col-10">
-                    <input type="text" id="order_code" name="order_code" class="form-control"/>
-                </div>
-            </div>
-            <div class="mb-3 p-3 col-4">
-                <label for="customer_name">
-                    <strong>Customer Name</strong>
-                </label>
-                <div class="col-10">
-                    <input type="text" id="customer_name" name="customer_name" class="form-control"/>
-                </div>
-            </div>
-            <div class="mb-3 p-3 col-4">
-                <label for="customer_phone_number">
-                    <strong>Customer Phone Number</strong>
-                </label>
-                <div class="col-10">
-                    <input type="text" id="customer_phone_number" name="customer_phone_number" class="form-control"/>
+                    <input type="text" id="search" name="search" class="form-control"/>
                 </div>
             </div>
         </div>
@@ -175,8 +159,8 @@
     $('#rider').select2();
     $('#shop').select2();
     
-    get_ajax_dynamic_data(order_code='',customer_name='',customer_phone_number='',city='',rider='',shop='',status='',township='');
-    function get_ajax_dynamic_data(order_code,customer_name,customer_phone_number,city,rider,shop,status,township) {
+    get_ajax_dynamic_data(search='',city='',rider='',shop='',status='',township='');
+    function get_ajax_dynamic_data(search,city,rider,shop,status,township) {
         var table = $('.datatable').DataTable({
             processing: true,
             serverSide: true,
@@ -184,9 +168,7 @@
                 "url": '/ajax-get-orders-data',
                 "type": "GET",
                 "data" : function( r ) {
-                    r.order_code = order_code;
-                    r.customer_name = customer_name;
-                    r.customer_phone_number = customer_phone_number;
+                    r.search = search;
                     r.city  = city;
                     r.rider = rider;
                     r.shop  = shop;
@@ -221,34 +203,28 @@
         $('.search_filter').click(function(){
             var status = $('#status').val();
             var township = $('#township').val();
-            var order_code = $('#order_code').val();
-            var customer_name = $('#customer_name').val();
-            var customer_phone_number = $('#customer_phone_number').val(); 
+            var search = $('#search').val();
             var rider = $('#rider').val();
             var city = $('#city').val();
             var shop = $('#shop').val();
             table.destroy();
-            get_ajax_dynamic_data(order_code,customer_name,customer_phone_number,city,rider,shop,status,township);
+            get_ajax_dynamic_data(search,city,rider,shop,status,township);
         });
         $("#reset").click(function(){
             $("#status").val("").trigger("change");
             $("#township").val("").trigger("change");
-            $("#order_code").val("").trigger("change");
-            $("#customer_name").val("").trigger("change");
-            $("#customer_phone_number").val("").trigger("change");
+            $("#search").val("").trigger("change");
             $("#rider").val("").trigger("change");
             $("#city").val("").trigger("change");
             $("#shop").val("").trigger("change");
             var status = $("#status").val();
             var township = $('#township').val();
-            var order_code = $('#order_code').val();
-            var customer_name = $('#customer_name').val();
-            var customer_phone_number = $('#customer_phone_number').val(); 
+            var search = $('#search').val();
             var rider = $('#rider').val();
             var city = $('#city').val();
             var shop = $('#shop').val();
             table.destroy();
-            get_ajax_dynamic_data(order_code,customer_name,customer_phone_number,city,rider,shop,status,township);
+            get_ajax_dynamic_data(search,city,rider,shop,status,township);
         });
     };
     
