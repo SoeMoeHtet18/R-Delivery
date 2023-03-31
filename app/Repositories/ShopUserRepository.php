@@ -17,4 +17,10 @@ class ShopUserRepository
         $shop_user = ShopUser::findOrFail($id);
         return $shop_user;
     }
+
+    public function getAllShopUserCount()
+    {
+        $shopusercount = ShopUser::count();
+        return $shopusercount;
+    }
 }

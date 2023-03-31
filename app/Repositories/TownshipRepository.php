@@ -36,4 +36,10 @@ class TownshipRepository
         return $query;
     }
 
+    public function getAllTownshipsCount()
+    {
+        $townshipcount = Township::count();
+        return $townshipcount;
+    }
+
 }

@@ -29,4 +29,10 @@ class TransactionsForShopRepository
         $transaction_for_shops = TransactionsForShop::where('id', $id)->first();
         return $transaction_for_shops;
     }
+
+    public function getAllTransactionsForShopCount()
+    {
+        $count = TransactionsForShop::count();
+        return $count;
+    }
 }

@@ -23,4 +23,10 @@ class AdminRepository
         $user = User::findOrFail($id); 
         return $user;
     }
+
+    public function getAllUsersCount()
+    {
+        $usercount = User::count();
+        return $usercount;
+    }
 }

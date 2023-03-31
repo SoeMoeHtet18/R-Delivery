@@ -33,4 +33,10 @@ class OrderRepository
         $order = Order::where('shop_id',$id)->first();
         return $order;
     }
+
+    public function getAllOrdersCount()
+    {
+        $count = Order::count();
+        return $count;
+    }
 }

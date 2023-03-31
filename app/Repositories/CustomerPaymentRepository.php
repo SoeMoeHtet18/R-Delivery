@@ -23,4 +23,10 @@ class CustomerPaymentRepository
         $data = CustomerPayment::get();
         return $data;
     }
+
+    public function getAllCustomerPaymentCount()
+    {
+        $count = CustomerPayment::count();
+        return $count;
+    }
 }
