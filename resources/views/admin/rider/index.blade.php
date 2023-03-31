@@ -4,7 +4,7 @@
 @section('content')
 
 <div class="create-button">
-    <a href="{{route('riders.create')}}" class="btn btn-success">Add Rider</a>
+    <a href="{{route('riders.create')}}" class="btn create-btn">Add Rider</a>
 </div>
 
 <div class="card m-3">

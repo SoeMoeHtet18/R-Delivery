@@ -5,7 +5,7 @@
 
 
 <div class="create-button">
-    <a class="btn btn-success" href="{{route('itemtypes.create')}}">Add ItemType</a>
+    <a class="btn create-btn" href="{{route('itemtypes.create')}}">Add ItemType</a>
 </div>
 
 <div class="card m-3">

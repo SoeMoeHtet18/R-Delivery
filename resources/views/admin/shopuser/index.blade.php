@@ -4,7 +4,7 @@
 
 
 <div class="create-button">
-    <a href="{{route('shopusers.create')}}" class="btn btn-success">Add ShopUser</a>
+    <a href="{{route('shopusers.create')}}" class="btn create-btn">Add ShopUser</a>
 </div>
 
 <div class="card m-3">

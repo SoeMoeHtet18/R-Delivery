@@ -5,7 +5,7 @@
 
 
 <div class="create-button">
-    <a href="{{route('townships.create')}}" class="btn btn-success">Add Township</a>
+    <a href="{{route('townships.create')}}" class="btn create-btn">Add Township</a>
 </div>
 
 <div class="card m-3">
