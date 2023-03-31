@@ -17,7 +17,7 @@
 
             </div>
             <div class="navbar-header">
-                <a href="{{ URL::to('/admin') }}" class="navbar-brand topbar-brand">
+                <a href="{{ URL::to('/dashboard') }}" class="navbar-brand topbar-brand">
                     R-Delivery
                 </a>
             </div>

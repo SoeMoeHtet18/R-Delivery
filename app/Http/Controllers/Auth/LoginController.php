@@ -26,7 +26,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/users';
+    protected $redirectTo = '/dashboard';
 
     /**
      * Create a new controller instance.
@@ -41,7 +41,7 @@ class LoginController extends Controller
     protected function authenticated(Request $request, $user)
     {
         
-        return \redirect('/users');
+        return \redirect('/dashboard');
     }
 
     protected function validateLogin(Request $request)
