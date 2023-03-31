@@ -216,4 +216,6 @@ return [
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
     ])->toArray(),
 
+    //Admin PhoneNumer
+    'admin_phone_number' => env('ADMIN_PHONE_NUMBER', '09123456789'),
 ];
