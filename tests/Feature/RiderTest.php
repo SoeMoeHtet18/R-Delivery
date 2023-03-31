@@ -70,7 +70,7 @@ class RiderTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_store_rider_shop(): void
+    public function test_store_rider(): void
     {
         $out = "test_store_create_rider";
         var_dump($out);
@@ -213,9 +213,9 @@ class RiderTest extends TestCase
         var_dump($out);
         $admin = $this->get_authenticated_user();
 
-        $shop_id = Rider::all()->random()->id;
+        $rider_id = Rider::all()->random()->id;
         
-        $response = $this->delete('/riders/' . $shop_id);
+        $response = $this->delete('/riders/' . $rider_id);
         $response->assertStatus(302);
     }
 }
