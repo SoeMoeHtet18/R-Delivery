@@ -1,5 +1,6 @@
 @extends('admin.layouts.master')
-
+@section('title','Payment')
+@section('sub-title','Shop Payment Create')
 @section('content')
         <div class="card card-container action-form-card">
             <div class="card-body">

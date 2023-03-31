@@ -1,5 +1,9 @@
 @extends('admin.layouts.master')
-
+@section('title','Dashboard')
+@section('sub-title','Rider')
+@section('more-sub-title')
+    <li class="page-sub-title">Assign Township</li>
+@endsection
 @section('content')
         <div class="card card-container action-form-card">
             <div class="card-body">

@@ -1,5 +1,6 @@
 @extends('admin.layouts.master')
-
+@section('title','Admin Tools')
+@section('sub-title','City Editing')
 @section('content')
         <div class="card card-container action-form-card">
             <div class="card-body">

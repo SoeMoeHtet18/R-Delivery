@@ -1,5 +1,6 @@
 @extends('admin.layouts.master')
-
+@section('title','Admin Tools')
+@section('sub-title','Township Listing')
 @section('content')
 
 

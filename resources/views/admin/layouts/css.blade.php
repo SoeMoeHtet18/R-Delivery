@@ -104,7 +104,7 @@
         background: #8c8c85;
         border-top-color: transparent;
         color: #ffffff;
-        border-left: 3px solid orange;
+        border-left: 3px solid #6ee0c9;
     }
 
     .page-sidebar ul li a:hover {
@@ -164,6 +164,57 @@
         font-size: 15px;
     }
 
-    
-
+    .page-content {
+        position: relative;
+        background: #f3f4f3;
+        margin: 0;
+        z-index: 22;
+    }
+    .page-content::before{
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        height: 160px;
+        z-index: -1;
+        background: #64c5b1;
+        content: '';
+        border-radius: 0;
+        left: 0;
+    }
+    .f_s_30 {
+        font-size: 30px;
+    }
+    .f_w_700 {
+        font-weight: 700;
+    }
+    .page-title-box {
+        margin-bottom: 25px;
+    }
+    .page-sub-title-box {
+        display: flex;
+        flex-wrap: wrap;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    .page-sub-title-box .page-sub-title {
+        font-size: 14px;
+        font-weight: 500;
+        color: #ffffff;
+    }
+    .page-sub-title-box .page-sub-title::before {
+        content: ">";
+        float: left;
+        padding: 0 0.5rem;
+    }
+    .page-sub-title-box .page-sub-title:first-child::before {
+        content: none;
+    }
+    .content-card {
+        border-radius: 10px !important;
+    }
+    .topbar-brand {
+        padding-left: 8px;
+    }
 </style>

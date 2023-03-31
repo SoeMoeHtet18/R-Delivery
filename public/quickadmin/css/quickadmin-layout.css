@@ -49,15 +49,15 @@ Page Header
 ***/
 .page-header.navbar {
     width: 100%;
-    padding: 0 20px 0 20px;
     margin: 0;
     border: 0px;
     padding: 0px;
     box-shadow: none;
-    height: 46px;
-    min-height: 46px;
+    height: 48px;
+    min-height: 48px;
     filter: none;
     background-image: none;
+    padding-bottom: 3px;
     /* Fixed header */
     /* Header logo */
     /* Search box */
