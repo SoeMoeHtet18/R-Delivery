@@ -68,7 +68,8 @@
 
 @endsection
 @section('javascript')
-
+@section('title','Dashboard')
+@section('sub-title','Shop User Listing')
 <script type="text/javascript">
 
 $(document).ready(function() {

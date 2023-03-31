@@ -1,5 +1,6 @@
 @extends('admin.layouts.master')
-
+@section('title','Admin Tools')
+@section('sub-title','City Detail')
 @section('content')
 <style>
     .card-toolbar{

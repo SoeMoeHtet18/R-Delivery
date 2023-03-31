@@ -1,5 +1,6 @@
 @extends('admin.layouts.master')
-
+@section('title','Payment')
+@section('sub-title','Shop Payment Listing')
 @section('content')
 
 

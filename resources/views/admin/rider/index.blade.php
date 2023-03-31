@@ -1,5 +1,6 @@
 @extends('admin.layouts.master')
-
+@section('title','Dashboard')
+@section('sub-title','Rider Listing')
 @section('content')
 
 <div class="create-button">

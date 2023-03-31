@@ -7,12 +7,26 @@
 
     <div class="page-content-wrapper">
         <div class="page-content">
-
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-body">
-                            @yield('content')
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="page-title-box">
+                            <h3 class="f_s_30 f_w_700 text-white">@yield('title')</h3>
+                            <ol class="page-sub-title-box">
+                                <li class="page-sub-title">R-Delivery</li>
+                                <li class="page-sub-title">@yield('title')</li>
+                                <li class="page-sub-title">@yield('sub-title')</li>
+                                @yield('more-sub-title')
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card content-card">
+                            <div class="card-body">
+                                @yield('content')
+                            </div>
                         </div>
                     </div>
                 </div>

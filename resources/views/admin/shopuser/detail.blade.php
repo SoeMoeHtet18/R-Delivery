@@ -1,5 +1,6 @@
 @extends('admin.layouts.master')
-
+@section('title','Dashboard')
+@section('sub-title','Shop User Detail')
 @section('content')
 <style>
     .card-toolbar{

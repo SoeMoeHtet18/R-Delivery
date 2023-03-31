@@ -1,15 +1,7 @@
 @extends('admin.layouts.master')
-
+@section('title','Dashboard')
+@section('sub-title','Shop Create')
 @section('content')
-<div class="mb-5">
-    <h3>Dashboard</h3>
-    <ol class="page-title-box">
-        <li class="page-title-items"><b>R-Delivery</b></li>
-        <li class="page-title-items"><b>Dashboard</b></li>
-        <li class="page-title-items"><b>Shop</b></li>
-        <li class="page-title-items"><b>Shop Create</b></li>
-    </ol>
-</div>
         <div class="card card-container action-form-card">
             <div class="card-body">
                 <h2 class="ps-1 card-header-title">

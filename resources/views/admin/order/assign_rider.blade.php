@@ -1,10 +1,14 @@
 @extends('admin.layouts.master')
-
+@section('title','Dashboard')
+@section('sub-title','Order')
+@section('more-sub-title')
+    <li class="page-sub-title">Assign Rider</li>
+@endsection
 @section('content')
         <div class="card card-container action-form-card">
             <div class="card-body">
                 <h2 class="ps-1 card-header-title">
-                    <strong>Assign Rider to Order</strong>
+                    <strong>Assign Rider To Order</strong>
                 </h2>
                 <form action="{{url('/orders/'.$order->id.'/assign-rider')}}" method="post" class="action-form">
                     @csrf

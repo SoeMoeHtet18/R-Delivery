@@ -1,5 +1,6 @@
 @extends('admin.layouts.master')
-
+@section('title','Dashboard')
+@section('sub-title','Order Editing')
 @section('content')
         <div class="card card-container action-form-card">
             <div class="card-body">
