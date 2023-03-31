@@ -22,4 +22,10 @@ class CityRepository
         $city = City::findOrFail($id);
         return $city;
     }
+
+    public function getAllCityCount()
+    {
+        $citycount = City::count();
+        return $citycount;
+    }
 }

@@ -49,4 +49,10 @@ class RiderRepository
         $shops = Order::leftJoin('shops','shops.id','orders.shop_id')->select('shops.*')->where('orders.rider_id',$id)->orderBy('orders.id','DESC')->get();
         return $shops;
     }
+
+    public function getAllRidersCount()
+    {
+        $count = Rider::count();
+        return $count;
+    }
 }

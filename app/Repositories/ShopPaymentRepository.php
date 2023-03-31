@@ -29,4 +29,10 @@ class ShopPaymentRepository
         $shop_payment = ShopPayment::where('id', $id)->first();
         return $shop_payment;
     }
+
+    public function getAllShopPaymentCount()
+    {
+        $shop_payment_count = ShopPayment::count();
+        return $shop_payment_count;
+    }
 }
