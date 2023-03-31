@@ -79,7 +79,6 @@ class ShopTest extends TestCase
 
     public function test_shop_detail_web(): void 
     {
-        $this->withoutExceptionHandling();
         $out = "test_shop_detail_web";
         var_dump($out);
         $admin = $this->get_authenticated_user();
