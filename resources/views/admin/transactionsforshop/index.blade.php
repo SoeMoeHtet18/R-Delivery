@@ -5,7 +5,7 @@
 
 
 <div class="create-button">
-    <a href="{{route('transactions-for-shop.create')}}" class="btn btn-success">Add New Transaction</a>
+    <a href="{{route('transactions-for-shop.create')}}" class="btn create-btn">Add New Transaction</a>
 </div>
 
 <div class="card m-3">

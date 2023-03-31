@@ -4,7 +4,7 @@
 @section('content')
 
 <div class="create-button">
-    <a class="btn btn-success" href="{{route('cities.create')}}">Add City</a>
+    <a class="btn create-btn" href="{{route('cities.create')}}">Add City</a>
 </div>
 <div class="card m-3">
 <div class="row tdFilter">

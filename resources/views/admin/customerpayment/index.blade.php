@@ -5,7 +5,7 @@
 
 
 <div class="create-button">
-    <a class="btn btn-success" href="{{route('customer-payments.create')}}">Add Customer Payment</a>
+    <a class="btn create-btn" href="{{route('customer-payments.create')}}">Add Customer Payment</a>
 </div>
 
 <div class="card m-3">

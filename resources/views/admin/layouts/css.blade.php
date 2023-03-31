@@ -113,6 +113,7 @@
     .filter-box{
         display: flex;
     }
+    /* Select2 Container */
     .select2-container .select2-selection--single
     {
         height: 37px;
@@ -130,10 +131,21 @@
         font-size: 15px;
     }
 
+    .select2-container--default .select2-search--inline .select2-search__field
+    {
+        height: 100%;
+    }
+    .select2-container--default .select2-selection--multiple .select2-selection__choice__display
+    {
+        display: block;
+        height: 1.7em;
+    }
+    /* Select2 Container End */
+
     /* Mulit-Select  DropDown */
     .select2-container--default .select2-selection--multiple .select2-selection__choice
     {
-        background-color: royalblue;
+        background-color: #64c5b1;
         margin-top: 4px;
     }
     .select2-container--default .select2-selection--multiple 
@@ -144,26 +156,19 @@
         top: 1.5px;
     }
     .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
-        background-color: royalblue;
+        background-color: #64c5b1;
         top: 1.5px;
     }
-    /* Mulit-Select  DropDown  End*/
+    /* Mulit-Select DropDown End */
 
-    .select2-container--default .select2-search--inline .select2-search__field
-    {
-        height: 100%;
-    }
-    .select2-container--default .select2-selection--multiple .select2-selection__choice__display
-    {
-        display: block;
-        height: 1.7em;
-    }
+    /* Input box  */
     .form-control
     {
         height: 37px;
         font-size: 15px;
     }
-
+    /* Input box  End */
+    /* Sub-Titel & Page Content */
     .page-content {
         position: relative;
         background: #f3f4f3;
@@ -216,5 +221,27 @@
     }
     .topbar-brand {
         padding-left: 8px;
+    }
+    /* Sub-Titel & Page Content End */
+    .card{
+        margin: 1rem 0rem !important;
+    }
+
+    /* Buttons */
+    .create-btn {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: #64c5b1;
+    --bs-btn-border-color: #64c5b1;
+    --bs-btn-hover-color: #64c5b1;
+    --bs-btn-hover-bg: ghostwhite;
+    --bs-btn-hover-border-color: #64c5b1;
+    --bs-btn-focus-shadow-rgb: 60,153,110;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #64c5b1;
+    --bs-btn-active-border-color: #13653f;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: #64c5b1;
+    --bs-btn-disabled-border-color: #64c5b1;
     }
 </style>
