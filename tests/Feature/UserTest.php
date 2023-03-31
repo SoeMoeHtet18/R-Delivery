@@ -94,9 +94,9 @@ class UserTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_update_create_user(): void
+    public function test_update_user(): void
     {
-        $out = "test_update_create_user";
+        $out = "test_update_user";
         var_dump($out);
         $admin = $this->get_authenticated_user();
 
@@ -115,7 +115,6 @@ class UserTest extends TestCase
 
     public function test_delete_user(): void 
     {   
-        $this->withoutExceptionHandling();
         $out = "test_delete_user";
         var_dump($out);
         $admin = $this->get_authenticated_user();
