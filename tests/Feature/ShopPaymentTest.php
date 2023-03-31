@@ -8,13 +8,14 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 
 class ShopPaymentTest extends TestCase
 {
     use DatabaseTransactions, WithFaker;
 
-    public function get_authticated_user()
+    public function get_authenticated_user()
     {
         $admin_phone_number = config('app.admin_phone_number');
         $admin = User::select('users.*')->where('phone_number',$admin_phone_number)->first();
@@ -28,7 +29,7 @@ class ShopPaymentTest extends TestCase
     {
         $out = "test_shop_payment_web";
         var_dump($out);
-        $admin = $this->get_authticated_user();
+        $admin = $this->get_authenticated_user();
 
         $response = $this->get('/shoppayments');
         $response->assertStatus(200);
@@ -57,21 +58,21 @@ class ShopPaymentTest extends TestCase
         ]);
     }
 
-    public function get_create_shop_payment_web(): void
+    public function test_get_create_shop_payment_web(): void
     {
-        $out = "get_create_shop_payment_web";
+        $out = " test_get_create_shop_payment_web";
         var_dump($out);
-        $admin = $this->get_authticated_user();
+        $admin = $this->get_authenticated_user();
         
         $response = $this->get('/shoppayments/create');
         $response->assertStatus(200);
     }
 
-    public function store_create_shop_payment(): void
+    public function  test_store_shop_payment(): void
     {
-        $out = "store_create_shop_payment";
+        $out = " test_store_shop_payment";
         var_dump($out);
-        $admin = $this->get_authticated_user();
+        $admin = $this->get_authenticated_user();
 
         $type = ['delivery_payment', 'remaining_payment'];
         $rand_type = $type[array_rand($type)];
@@ -85,40 +86,47 @@ class ShopPaymentTest extends TestCase
         $response->assertStatus(302);
     }
 
-    public function shop_payment_detail_web(): void 
+    public function  test_shop_payment_detail_web(): void 
     {
-        $out = "shop_payment_detail_web";
+        $out = " test_shop_payment_detail_web";
         var_dump($out);
-        $admin = $this->get_authticated_user();
+        $admin = $this->get_authenticated_user();
 
         $shop_payment_id = ShopPayment::all()->random()->id;
         $response = $this->get('/shoppayments/' . $shop_payment_id);
         $response->assertStatus(200);
     }
 
-    public function update_create_shop_payment(): void
+    public function  test_update_shop_payment(): void
     {
-        $out = "update_create_shop_payment";
+        $out = " test_update_shop_payment";
         var_dump($out);
-        $admin = $this->get_authticated_user();
+        $admin = $this->get_authenticated_user();
 
         $type = ['delivery_payment', 'remaining_payment'];
         $rand_type = $type[array_rand($type)];
 
-        $response = $this->put('/shoppayments', [
+        $file = UploadedFile::fake()->image('test.jpg');
+        $file_size = $file->size(235.354);
+
+        $shop_payment_id = ShopPayment::all()->random()->id;
+        $response = $this->put('/shoppayments/' . $shop_payment_id , [
             'shop_id' => Shop::all()->random()->id,
             'amount' => $this->faker->randomDigit,
-            'image' => $this->faker->image,
+            'image' => [
+                'name' => $file,
+                'size' => $file_size
+            ],
             'type' => $rand_type
         ]);
         $response->assertStatus(302);
     }
 
-    public function delete_shop_payment(): void 
+    public function  test_delete_shop_payment(): void 
     {
-        $out = "delete_shop_payment";
+        $out = " test_delete_shop_payment";
         var_dump($out);
-        $admin = $this->get_authticated_user();
+        $admin = $this->get_authenticated_user();
 
         $shop_payment_id = ShopPayment::all()->random()->id;
         $response = $this->delete('/shoppayments/' . $shop_payment_id);
