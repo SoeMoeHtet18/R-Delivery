@@ -247,8 +247,9 @@
             var phone = $(this).val();
 
             $.ajax({
-                url: '/get-data-by-customer-phone/' + phone,
-                method: 'GET',
+                url: '/api/get-data-by-customer-phone',
+                method: 'POST',
+                data: { phone_number : phone },
                 success: function(response) {
                     console.log(response)
                     if(response.status == 'success'){
