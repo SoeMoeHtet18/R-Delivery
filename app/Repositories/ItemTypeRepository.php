@@ -23,4 +23,10 @@ class ItemTypeRepository
         $query = ItemType::select('*');
         return $query;
     }
+
+    public function getAllItemTypesCount()
+    {
+        $itemTypeCount = ItemType::count();
+        return $itemTypeCount;
+    }
 }

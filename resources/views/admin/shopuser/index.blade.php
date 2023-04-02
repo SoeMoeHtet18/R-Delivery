@@ -84,6 +84,14 @@ $(document).ready(function() {
             {data: 'email', name: 'email'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ],
+        columnDefs: [
+            { 
+                "render": function ( data, type, row ) {
+                    return '<a href="/shopusers/' + row.id + '">' + row.name + '</a>';
+                },
+                "targets": 1
+            }, 
+        ]
     });
     $('.search_filter').click(function(){
             var search = $('#search').val();

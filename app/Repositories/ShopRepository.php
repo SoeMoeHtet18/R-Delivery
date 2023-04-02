@@ -45,4 +45,10 @@ class ShopRepository
         $shop_id = $shop_user->shop_id;
         return $shop_id;
     }
+
+    public function getAllShopCount()
+    {
+        $shopcount = Shop::count();
+        return $shopcount;
+    }
 }
