@@ -47,7 +47,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/orders', OrderController::class);
     Route::get('/orders/{id}/assign-rider', [OrderController::class, 'assignRider']);
     Route::post('/orders/{id}/assign-rider', [OrderController::class, 'assignRiderToOrder']);
-    Route::get('/get-data-by-customer-phone/{phone}', [OrderController::class, 'getDataByCustomerPhoneNumber']);
     Route::resource('/cities', CityController::class);
     Route::get('/cities/{id}/townships', [TownshipController::class, 'getTownshipsTableByCityID']);
     Route::resource('/itemtypes', ItemTypeController::class);

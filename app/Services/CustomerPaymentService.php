@@ -19,7 +19,7 @@ class CustomerPaymentService
             $file_name = $this->uploadFile($file, 'public', 'customer payment');
             $customer_payment->proof_of_payment =  $file_name;
         } else {
-            $customer_payment->proof_of_paymeny = null;
+            $customer_payment->proof_of_payment = null;
         }
         $customer_payment->paid_at =  $data['paid_at'] ?? null;
         $customer_payment->last_updated_by =  $data['last_updated_by'] ?? null;

@@ -193,18 +193,6 @@ class OrderController extends Controller
         };
     }
 
-    public function getDataByCustomerPhoneNumber($phone)
-    {
-        $data = $this->orderRepository->getOrderByCustomerPhoneNumber($phone);
-
-        if($data != null) {
-            return response()->json(['data'=>$data, 'status'=>'success', 'message'=>'Successfully get order',200]);
-        }
-        else {
-            return response()->json(['data'=>null, 'status'=>'fail', 'message'=>'Fail to get order',200]);
-        }
-    }
-
     public function assignRider($id)
     {
         $order = $this->orderRepository->getOrderByID($id);
