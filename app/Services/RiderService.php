@@ -15,8 +15,8 @@ class RiderService
         $rider->password = bcrypt($data['password']);
         $rider->device_id = $data['device_id'] ?? null;
         $rider->save();
-        $townships = $data['township_id'];
-        if($townships) {
+        if(isset($data['township_id'])) {
+            $townships = $data['township_id'];
             $rider->townships()->sync($townships);
         }
         return $rider;
@@ -31,8 +31,8 @@ class RiderService
             $rider->password =  bcrypt($data['password']);
         }
         $rider->device_id = $data['device_id'] ?? $rider->device_id;
-        $townships = $data['township_id'];
-        if($townships) {
+        if(isset($data['township_id'])) {
+            $townships = $data['township_id'];
             $rider->townships()->sync($townships);
         }
         $rider->save();

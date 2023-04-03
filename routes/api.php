@@ -48,12 +48,12 @@ Route::middleware('auth:shop-user-api')->group( function () {
     Route::get('get-transactions-for-shop-detail/{id}', [TransactionForShopApiController::class, 'getTransactionForShopDetailByID']);
 });
 Route::post('rider-login', [RiderApiController::class, 'riderLoginApi']);
-Route::post('create-rider', [RiderApiController::class, 'create']);
+Route::post('riders', [RiderApiController::class, 'create']);
 Route::middleware('auth:rider-api')->group(function() {
     Route::get('riders/{id}', [RiderApiController::class, 'show']);
-    Route::post('riders/get-order-list', [RiderApiController::class, 'getOrderList']);
+    Route::post('riders/{id}/get-order-list', [RiderApiController::class, 'getOrderList']);
     Route::get('riders/{id}/get-shop-list', [RiderApiController::class, 'getShopListByRiderID']);
-    Route::post('update-rider/{id}', [RiderApiController::class, 'update']);
+    Route::post('riders/{id}', [RiderApiController::class, 'update']);
     Route::post('create-customer-payment-by-rider', [CustomerPaymentApiController::class, 'insertCustomerPayment']);
     Route::post('riders/{id}/change-order-status',[RiderApiController::class, 'changeOrderStatus']);
     Route::get('customer-payment/{id}', [CustomerPaymentApiController::class, 'customerPaymentDetail']);

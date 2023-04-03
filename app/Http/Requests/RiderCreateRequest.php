@@ -24,7 +24,6 @@ class RiderCreateRequest extends FormRequest
         return [
             'name'                  => 'required|string',
             'phone_number'          => 'required|string|unique:riders',
-            'email'                 => 'unique:riders',
             'password'              => 'required|min:8|confirmed'
         ];
     }
@@ -40,7 +39,6 @@ class RiderCreateRequest extends FormRequest
             'name.required'                 => 'Name field is required.',
             'phone_number.required'         => 'Phone Number is required.',
             'phone_number.unique'           => 'Phone Number already exists.',
-            'email.unique'                  => 'Email already exists',
             'password.required'             => 'Password is required', 
             'password.min'                  => 'Password should be a minimum of 8 characters.',
         ];

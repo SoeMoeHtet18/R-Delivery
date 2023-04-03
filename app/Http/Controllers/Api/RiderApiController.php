@@ -59,16 +59,10 @@ class RiderApiController extends Controller
         return response()->json(['data'=> $rider, 'message'=> 'Successfully Get Rider Detail', 'status' => 'success'], 200);
     }
 
-    public function getOrderListByRiderID($id)
-    {
-        $orders = $this->riderRepository->getOrderHistoryListByRiderID($id);
-        return response()->json(['data' => $orders, 'message' => 'Successfully Get Order List By Rider ID', 'status' => 'success'], 200);
-    }
-
     public function getOrderList(Request $request)
     {
         $data = $request->all();
-        $orders = $this->riderRepository->getPendingOrderListForAuthenticatedRider($data);
+        $orders = $this->riderRepository->getOrderListForAuthenticatedRider($data);
         return response()->json(['data' => $orders, 'message' => 'Successfully Get Order List By Rider ID', 'status' => 'success'], 200);
     }
 
@@ -83,9 +77,7 @@ class RiderApiController extends Controller
         $validator = Validator::make($request->all(),[
             'name'                  => 'required|string',
             'phone_number'          => 'required|string|unique:riders',
-            'email'                 => 'unique:riders',
             'password'              => 'required|min:8',
-            'device_id'         => 'required',
         ]);
 
         if ($validator->fails()) {

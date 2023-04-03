@@ -18,6 +18,6 @@ class CityApiController extends Controller
     {
         $cities = $this->cityRepository->getAllCities();
         $cities = $cities->sortByDesc('id');
-        return response()->json(['data'=> $cities, 'message' => 'Successfully Get Cities List', 'status' => 'success', 200]);
+        return response()->json(['data'=> $cities, 'message' => 'Successfully Get Cities List', 'status' => 'success'],200);
     }
 }

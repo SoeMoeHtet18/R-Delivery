@@ -84,7 +84,8 @@ class CustomerPaymentTest extends TestCase
             'amount' => $this->faker->randomDigit,
             'type' => $rand_type,
             'paid_at' => Carbon::now(),
-            'proof_of_payment' => $this->faker->image
+            'proof_of_payment' => $this->faker->image,
+            'description' => $this->faker->text
         ]);
         $response->assertStatus(302);
     }
@@ -116,7 +117,8 @@ class CustomerPaymentTest extends TestCase
             'amount' => $this->faker->randomDigit,
             'type' => $rand_type,
             'paid_at' => Carbon::now(),
-            'proof_of_payment' => $this->faker->image
+            'proof_of_payment' => $this->faker->image,
+            'description' => $this->faker->text
         ]);
         $response->assertStatus(302);
     }
