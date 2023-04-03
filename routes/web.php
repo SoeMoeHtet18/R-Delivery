@@ -46,6 +46,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/shops', ShopController::class);
     Route::get('/shops/get-shop-users-by-shop-id/{id}', [ShopUserController::class, 'getShopUsersTable']);
     Route::get('/shops/get-shop-orders-by-shop-id/{id}', [OrderController::class, 'getShopOrdersTable']);
+    Route::get('/shops/{id}/get-shop-payment-by-shop-id', [ShopPaymentController::class, 'getShopPaymentTableByShopID']);
+    Route::get('/shops/{id}/get-transactions-for-shop-by-shop-id', [TransactionsForShopController::class, 'getTransactionsTableByShopID']);
     Route::resource('/orders', OrderController::class);
     Route::get('/orders/{id}/assign-rider', [OrderController::class, 'assignRider']);
     Route::post('/orders/{id}/assign-rider', [OrderController::class, 'assignRiderToOrder']);

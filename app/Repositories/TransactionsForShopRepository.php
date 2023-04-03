@@ -35,4 +35,10 @@ class TransactionsForShopRepository
         $count = TransactionsForShop::count();
         return $count;
     }
+
+    public function getTransactionsQueryByShopID($id)
+    {
+        $query = TransactionsForShop::where('shop_id',$id);
+        return $query;
+    }
 }

@@ -35,4 +35,10 @@ class ShopPaymentRepository
         $shop_payment_count = ShopPayment::count();
         return $shop_payment_count;
     }
+
+    public function getShopPaymentQueryByShopID($id)
+    {
+        $shop_payments = ShopPayment::where('shop_id', $id);
+        return $shop_payments;
+    }
 }

@@ -64,6 +64,12 @@
                     <li class="nav-item">
                         <a href="#shop-order-display" id="shop-order-tab" class="nav-link" data-toggle="tab">Shop Orders</a>
                     </li>
+                    <li>
+                        <a href="#shop-payment-display" id="shop-payment-tab" class="nav-link" data-toggle="tab">Shop Payments</a>
+                    </li>
+                    <li>
+                        <a href="#payment-for-shop-display" id="payment-for-shop-tab" class="nav-link" data-toggle="tab">Transactions For Shop</a>
+                    </li>
                 </ul>
                 <input type="hidden" id="current_screen" value="shop-user-display">
                 <div class="tab-content">
@@ -122,6 +128,48 @@
                             </table>
                         </div>
                     </div>
+                    <div id="shop-payment-display" class="portlet box green tab-pane">                 
+                        <div class="portlet-title">
+                            <div class="caption">Shop Payment Lists</div>
+                        </div>
+                        <div class="portlet-body">
+                            <table id="shop-payment-datatable" class="table table-striped table-hover table-responsive datatable">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Amount</th>
+                                        <th>Type</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="payment-for-shop-display" class="portlet box green tab-pane">
+                        <div class="portlet-title">
+                            <div class="caption">Transactions For Shop Lists</div>
+                        </div>
+                        <div class="portlet-body">
+                            <table id="transaction-for-shop-datatable" class="table table-striped table-hover table-responsive datatable">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Amount</th>
+                                        <th>Type</th>
+                                        <th>Paid By</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -164,6 +212,29 @@
                     {data: 'type', name: 'type'},
                     {data: 'collection_method', name: 'collection_method'},
                     {data: 'last_updated_by_name', name: 'last_updated_by'},
+                ]
+            });
+            $("#shop-payment-datatable").DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "/shops/" + shop_id +"/get-shop-payment-by-shop-id",
+                columns: [
+                    {data: 'DT_RowIndex', name: 'id'},
+                    {data: 'amount', name: 'amount'},
+                    {data: 'type', name: 'type'},
+                    {data: 'action', name: 'action', orderable: false, searchable: false},
+                ],
+            });
+            $("#transaction-for-shop-datatable").DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "/shops/" + shop_id +"/get-transactions-for-shop-by-shop-id",
+                columns: [
+                    {data: 'DT_RowIndex', name: 'id'},
+                    {data: 'amount', name: 'amount'},
+                    {data: 'type', name: 'type'},
+                    {data: 'paid_by', name: 'paid_by'},
+                    {data: 'action', name: 'action', orderable: false, searchable: false},
                 ]
             });
         });

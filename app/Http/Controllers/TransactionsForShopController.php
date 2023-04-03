@@ -143,4 +143,25 @@ class TransactionsForShopController extends Controller
             ->orderColumn('id','-transactions_for_shops.id')
             ->make(true);
     }
+
+    public function getTransactionsTableByShopID(Request $request, $id)
+    {
+        $data = $this->transactionsForShopRepository->getTransactionsQueryByShopID($id);
+        return DataTables::of($data)
+            ->addIndexColumn()
+            ->addColumn('action', function($transaction_for_shops){
+                $actionBtn = '
+                        <a href="'. route("transactions-for-shop.show", $transaction_for_shops->id) .'" class="edit btn btn-info btn-sm">View</a> 
+                        <a href="'. route("transactions-for-shop.edit", $transaction_for_shops->id) .'" class="edit btn btn-light btn-sm">Edit</a> 
+                        <form action="'.route("transactions-for-shop.destroy", $transaction_for_shops->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this shop user?`);">
+                            <input type="hidden" name="_token" value="'. csrf_token() .'">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
+                        </form>';
+                return $actionBtn;
+            })
+            ->rawColumns(['action'])
+            ->orderColumn('id','-transactions_for_shops.id')
+            ->make(true);
+    }
 }

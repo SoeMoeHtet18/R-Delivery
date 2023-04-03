@@ -128,4 +128,25 @@ class ShopPaymentController extends Controller
             ->orderColumn('id', '-shop_payments.id')
             ->make(true);
     }
+
+    public function getShopPaymentTableByShopID($id)
+    {
+        $data = $this->shopPaymentRepository->getShopPaymentQueryByShopID($id);
+        return DataTables::of($data)
+            ->addIndexColumn()
+            ->addColumn('action', function($shop_payments){
+                $actionBtn = '
+                        <a href="'. route("shoppayments.show", $shop_payments->id) .'" class="edit btn btn-info btn-sm">View</a> 
+                        <a href="'. route("shoppayments.edit", $shop_payments->id) .'" class="edit btn btn-light btn-sm">Edit</a> 
+                        <form action="'.route("shoppayments.destroy", $shop_payments->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this shop user?`);">
+                            <input type="hidden" name="_token" value="'. csrf_token() .'">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
+                        </form>';
+                return $actionBtn;
+            })
+            ->rawColumns(['action'])
+            ->orderColumn('id', '-shop_payments.id')
+            ->make(true);
+    }
 }
