@@ -46,7 +46,7 @@
                             {{ $shop_payment->amount }}
                         </div>
                     </div>
-                    <div class="row m-0">
+                    <div class="row m-0 mb-3">
                         <div class="col-2">
                             <h4>Image <b>:</b></h4>
                         </div>

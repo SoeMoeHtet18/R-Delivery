@@ -62,7 +62,7 @@
                             {{ $transaction_for_shops->user->name }}
                         </div>
                     </div>
-                    <div class="row m-0">
+                    <div class="row m-0 mb-3">
                         <div class="col-2">
                             <h4>Proof of payment <b>:</b></h4>
                         </div>
