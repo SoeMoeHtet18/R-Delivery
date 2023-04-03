@@ -128,9 +128,9 @@
                             </table>
                         </div>
                     </div>
-                    <div id="shop-payment-display" class="portlet box green tab-pane">                 
+                    <div id="shop-payment-display" class="portlet box green tab-pane">
                         <div class="portlet-title">
-                            <div class="caption">Shop Payment Lists</div>
+                            <div class="caption">Transactions For Shop Lists</div>
                         </div>
                         <div class="portlet-body">
                             <table id="shop-payment-datatable" class="table table-striped table-hover table-responsive datatable">
@@ -139,12 +139,11 @@
                                         <th>#</th>
                                         <th>Amount</th>
                                         <th>Type</th>
+                                        <th>Description</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-
                                 <tbody>
-                                
                                 </tbody>
                             </table>
                         </div>
@@ -161,6 +160,7 @@
                                         <th>Amount</th>
                                         <th>Type</th>
                                         <th>Paid By</th>
+                                        <th>Description</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -222,6 +222,7 @@
                     {data: 'DT_RowIndex', name: 'id'},
                     {data: 'amount', name: 'amount'},
                     {data: 'type', name: 'type'},
+                    {data: 'description', name: 'description'},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
                 ],
             });
@@ -234,6 +235,7 @@
                     {data: 'amount', name: 'amount'},
                     {data: 'type', name: 'type'},
                     {data: 'paid_by', name: 'paid_by'},
+                    {data: 'description', name: 'description'},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
                 ]
             });

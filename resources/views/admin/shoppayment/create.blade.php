@@ -57,6 +57,14 @@
                             </select>
                         </div>
                     </div>
+                    <div class="row m-0 mb-3">
+                        <label for="description" class="col-2">
+                            <h4>Description <b>:</b></h4>
+                        </label>
+                        <div class="col-10">
+                            <textarea name="description" id="description" class="form-control" style="height: 100px" placeholder="Write description here"></textarea>
+                        </div>
+                    </div>
                     <div class="footer-button float-end">
                         <a href="{{route('shoppayments.index')}}" class="btn btn-light">Cancel</a>
                         <input type="submit" class="btn btn-success ">

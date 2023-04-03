@@ -89,6 +89,7 @@
                     <th>Amount</th>
                     <th>Type</th>
                     <th>Paid By</th>
+                    <th>Description</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -128,6 +129,7 @@
             {data: 'amount', name: 'amount'},
             {data: 'type', name: 'type'},
             {data: 'paid_by', name: 'paid_by'},
+            {data: 'description', name: 'description'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });

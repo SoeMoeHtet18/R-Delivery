@@ -72,6 +72,7 @@
                     <th>Shop Name</th>
                     <th>Amount</th>
                     <th>Type</th>
+                    <th>Description</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -108,6 +109,7 @@
                 {data: 'shop_name', name: 'shop_name'},
                 {data: 'amount', name: 'amount'},
                 {data: 'type', name: 'type'},
+                {data: 'description', name: 'description'},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ]
         });

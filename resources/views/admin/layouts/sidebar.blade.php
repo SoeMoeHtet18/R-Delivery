@@ -36,18 +36,18 @@
                 
             </li>
             <ul class="collapse customize-collapse" id="paymentBox">
-                    <li class="@if(request()->is('shoppayments*')) {{'active'}} @endif">
-                        <a href="{{route('shoppayments.index')}}">
-                            <!-- <i class="fa fa-users"></i> -->
-                            <span class="title">Shop Payment</span>
-                        </a>
-                    </li>
                     <li class="@if(request()->is('customer-payments*')) {{'active'}} @endif">
                         <a href="{{route('customer-payments.index')}}">
                             <!-- <i class="fa fa-users"></i> -->
                             <span class="title">Customer Payment</span>
                         </a>
-                    </li>           
+                    </li>
+                    <li class="@if(request()->is('shoppayments*')) {{'active'}} @endif">
+                        <a href="{{route('shoppayments.index')}}">
+                            <!-- <i class="fa fa-users"></i> -->
+                            <span class="title">Shop Payment</span>
+                        </a>
+                    </li>        
                     <li class="@if(request()->is('transactions-for-shop*')) {{'active'}} @endif">
                         <a href="{{route('transactions-for-shop.index')}}">
                             <!-- <i class="fa fa-users"></i> -->

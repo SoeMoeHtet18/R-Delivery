@@ -74,6 +74,7 @@
                     <th>Amount</th>
                     <th>Type</th>
                     <th>Paid At</th>
+                    <th>Description</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -111,6 +112,7 @@
                 {data: 'amount', name: 'amount'},
                 {data: 'type', name: 'type'},
                 {data: 'paid_at', name: 'paid_at'},
+                {data: 'description', name: 'description'},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ]
         });

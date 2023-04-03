@@ -70,6 +70,14 @@
                             <img src="{{asset('/storage/transactions for shop/' . $transaction_for_shops->image)}}" alt="">
                         </div>
                     </div>
+                    <div class="row m-0 mb-3">
+                        <div class="col-2">
+                            <h4>Description <b>:</b></h4>
+                        </div>
+                        <div class="col-10">
+                            {{ $transaction_for_shops->description }}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

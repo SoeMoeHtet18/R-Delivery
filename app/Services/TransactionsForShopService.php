@@ -21,6 +21,7 @@ class TransactionsForShopService
         }
         $transactions_for_shops->type = $data['type'];
         $transactions_for_shops->paid_by = $data['paid_by'];
+        $transactions_for_shops->description = $data['description'] ?? null;
         $transactions_for_shops->save();
     }
 
@@ -36,6 +37,7 @@ class TransactionsForShopService
         }
         $transaction_for_shop->type = $data['type'];
         $transaction_for_shop->paid_by = $data['paid_by'];
+        $transaction_for_shop->description = $data['description'];
         $transaction_for_shop->save();
     }
 

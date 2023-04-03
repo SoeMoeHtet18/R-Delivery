@@ -21,6 +21,7 @@ class ShopPaymentService
             $shop_payment->image = null;
         }
         $shop_payment->type = $data['type'];
+        $shop_payment->description = $data['description'] ?? null;
         $shop_payment->save();
         return $shop_payment;
     }
@@ -36,6 +37,7 @@ class ShopPaymentService
             $shop_payment->image = $shop_payment->image;
         }
         $shop_payment->type = $data['type'];
+        $shop_payment->description = $data['description'];
         $shop_payment->save();
     }
 

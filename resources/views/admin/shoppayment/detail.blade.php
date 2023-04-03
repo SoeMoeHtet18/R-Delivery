@@ -62,6 +62,14 @@
                             {{ $shop_payment->type }}
                         </div>
                     </div>
+                    <div class="row m-0 mb-3">
+                        <div class="col-2">
+                            <h4>Description <b>:</b></h4>
+                        </div>
+                        <div class="col-10">
+                            {{ $shop_payment->description }}
+                        </div>
+                    </div>
                 </div>
                     
             </div>
