@@ -38,7 +38,7 @@ class TransactionsForShopRepository
 
     public function getTransactionsQueryByShopID($id)
     {
-        $query = TransactionsForShop::where('shop_id',$id);
+        $query = TransactionsForShop::where('shop_id',$id)->leftJoin('users','users.id','transactions_for_shops.paid_by')->select('transactions_for_shops.*','users.name as paid_by');
         return $query;
     }
 }
