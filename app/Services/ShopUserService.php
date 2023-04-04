@@ -14,7 +14,7 @@ class ShopUserService
         $shop_user->email = $data['email'] ?? null;
         $shop_user->password = $data['password'];
         $shop_user->device_id = $data['device_id'] ?? null;
-        $shop_user->shop_id = $data['shop_id'];
+        $shop_user->shop_id = $data['shop_id'] ?? null;
         $shop_user->save();
         return $shop_user;
     }
@@ -28,7 +28,7 @@ class ShopUserService
             $shop_user->password = bcrypt($data['password']);
         }
         $shop_user->device_id = $data['device_id'] ?? $shop_user->device_id;
-        $shop_user->shop_id = $data['shop_id'];
+        $shop_user->shop_id = $data['shop_id'] ?? $shop_user->shop_id;
         $shop_user->save();
         return $shop_user;
     }

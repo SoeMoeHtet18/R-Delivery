@@ -98,6 +98,7 @@ class ShopUserApiController extends Controller
         $this->shopUserService->deleteShopUserByID($shop_user_id);
         return response()->json(['message' => 'Successfully Delete Shop User', 'status' => 'success'], 200); 
     }
+    
     public function changeOrderStatus(Request $request)
     {
         $order_id = $request->order_id;

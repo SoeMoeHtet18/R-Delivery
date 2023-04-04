@@ -26,7 +26,6 @@ class ShopUserCreateApiRequest extends FormRequest
         return [
             'name'              => 'required|string',
             'phone_number'      => 'required|string|unique:shop_users',
-            'email'             => 'unique:shop_users',
             'password'          => 'required|min:8',
         ];
     }
@@ -42,7 +41,6 @@ class ShopUserCreateApiRequest extends FormRequest
             'name.required'              => 'Name field is required',
             'phone_number.required'      => 'Phone Number is required',
             'phone_number.unique'        => 'Phone Number already exists',
-            'email'                      => 'Email already exists',
             'password.required'          => 'Password is required',
             'password.min'               => 'Password should be a minimum of 8 characters.',
         ];

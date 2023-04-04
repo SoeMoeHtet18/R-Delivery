@@ -43,7 +43,11 @@
                             <h4>Shop Name <b>:</b></h4>
                         </div>
                         <div class="col-10">
-                            {{ $shop_user->shop->name }}
+                            @if($shop_user->shop_id)
+                                {{ $shop_user->shop->name }}
+                            @else                        
+                                N/A
+                            @endif
                         </div>
                     </div>
                     <div class="row m-0 mb-3">

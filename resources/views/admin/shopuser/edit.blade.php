@@ -27,7 +27,7 @@
                         </label>
                         <div class="col-10">
                             <select name="shop_id" id="shop_name" class="form-control">
-                                <option value="" disabled>Select the Shop of this user</option>
+                                <option value="" selected disabled>Select the Shop of this user</option>
                                 @foreach($shops as $shop)
                                     <option value="{{$shop->id}}" @if($shop->id == $shop_user->shop_id) {{'selected'}} @endif>{{$shop->name}}</option>
                                 @endforeach

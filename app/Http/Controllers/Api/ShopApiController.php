@@ -19,6 +19,7 @@ class ShopApiController extends Controller
         $this->shopService = $shopService;
         $this->shopRepository = $shopRepository;
     }
+    
     public function getAllShopList()
     {
         $shops = $this->shopRepository->getAllShops();
