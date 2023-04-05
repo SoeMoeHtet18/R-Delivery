@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
 class TownshipRequest extends FormRequest
@@ -38,5 +39,11 @@ class TownshipRequest extends FormRequest
             'name.required'     => 'Name field is required',
             'city.required'     => 'City field is required',
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        $this->flash($this->all());
+        parent::failedValidation($validator);
     }
 }

@@ -17,9 +17,12 @@
                             <select name="order_id" id="order_id" class="form-control">
                                 <option value="" selected disabled>Select the order for This Customer Payment</option>
                                 @foreach ($orders as $order)
-                                    <option value="{{$order->id}}">{{$order->order_code}}</option>
+                                    <option value="{{$order->id}}" @if($order->id == old('order_id')) selected @endif>{{$order->order_code}}</option>
                                 @endforeach
                             </select>
+                            @if ($errors->has('order_id'))
+                            <span class="text-danger"><strong>{{ $errors->first('order_id') }}</strong></span>
+                            @endif
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
@@ -27,7 +30,7 @@
                             <h4>Amount<b>:</b></h4>
                         </label>
                         <div class="col-10">
-                            <input type="text" id="amount" name="amount" class="form-control"/>
+                            <input type="text" id="amount" name="amount" value="{{old('amount')}}" class="form-control"/>
                             @if ($errors->has('amount'))
                             <span class="text-danger"><strong>{{ $errors->first('amount') }}</strong></span>
                             @endif
@@ -41,10 +44,13 @@
                         <div class="col-10">
                             <select name="type" id="type" class="form-control">
                                 <option value="" selected disabled>Select the Type for This Customer Pay</option>
-                                <option value="fully_paid">Fully Paid</option>
-                                <option value="delivery_fees_only">Delivery Fees Only</option>
-                                <option value="remaining_amount">Remaining Amount</option>
+                                <option value="fully_paid" @if(old('type') == 'fully_paid') selected @endif>Fully Paid</option>
+                                <option value="delivery_fees_only" @if(old('type') == 'delivery_fees_only') selected @endif>Delivery Fees Only</option>
+                                <option value="remaining_amount" @if(old('type') == 'remaining_amount') selected @endif>Remaining Amount</option>
                             </select>
+                            @if ($errors->has('type'))
+                            <span class="text-danger"><strong>{{ $errors->first('type') }}</strong></span>
+                            @endif
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
@@ -52,7 +58,7 @@
                             <h4>Paid at<b>:</b></h4>
                         </label>
                         <div class="col-10">
-                            <input type="date" id="paid_at" name="paid_at" class="form-control"/>
+                            <input type="date" id="paid_at" name="paid_at" value="{{old('paid_at')}}" class="form-control"/>
                             @if ($errors->has('paid_at'))
                             <span class="text-danger"><strong>{{ $errors->first('paid_at') }}</strong></span>
                             @endif
@@ -77,7 +83,7 @@
                             <h4>Description <b>:</b></h4>
                         </label>
                         <div class="col-10">
-                            <textarea name="description" id="description" class="form-control" style="height: 100px" placeholder="Write description here"></textarea>
+                            <textarea name="description" id="description" class="form-control" style="height: 100px" placeholder="Write description here">{{old('description')}}</textarea>
                         </div>
                     </div>
                     

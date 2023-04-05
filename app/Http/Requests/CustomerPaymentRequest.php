@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CustomerPaymentRequest extends FormRequest
@@ -40,5 +41,11 @@ class CustomerPaymentRequest extends FormRequest
             'amount.required'            => 'Amount field is required',
             'type.required'              => 'Customer Phone Number field is required',
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        $this->flash($this->all());
+        parent::failedValidation($validator);
     }
 }

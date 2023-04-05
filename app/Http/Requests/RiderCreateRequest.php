@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RiderCreateRequest extends FormRequest
@@ -42,5 +43,11 @@ class RiderCreateRequest extends FormRequest
             'password.required'             => 'Password is required', 
             'password.min'                  => 'Password should be a minimum of 8 characters.',
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        $this->flash($this->all() + ['township_id' => $this->input('township_id', [])]);
+        parent::failedValidation($validator);
     }
 }

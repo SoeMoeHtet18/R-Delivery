@@ -17,7 +17,7 @@
                             <select name="shop_id" id="shop_name" class="form-control">
                                 <option value="" selected disabled>Select the Shop of this Payment</option>
                                 @foreach($shops as $shop)
-                                    <option value="{{$shop->id}}">{{$shop->name}}</option>
+                                    <option value="{{$shop->id}}" @if($shop->id == old('shop_id')) selected @endif>{{$shop->name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -27,7 +27,7 @@
                             <h4>Amount <b>:</b></h4>
                         </label>
                         <div class="col-10">
-                            <input type="text" id="amount" name="amount" class="form-control"/>
+                            <input type="text" id="amount" name="amount" value="{{old('amount')}}" class="form-control"/>
                             @if ($errors->has('amount'))
                                 <span class="text-danger"><strong>{{ $errors->first('amount') }}</strong></span>
                             @endif
@@ -51,8 +51,8 @@
                         <div class="col-10">
                             <select name="type" id="type" class="form-control">
                                 <option value="" selected disabled>Select the Type for This Payment</option>
-                                    <option value="fully_payment">Fully Payment</option>
-                                    <option value="loan_payment">Loan Payment</option>
+                                    <option value="fully_payment"  @if(old('type') == 'fully_payment') selected @endif>Fully Payment</option>
+                                    <option value="loan_payment"  @if(old('type') == 'loan_payment') selected @endif>Loan Payment</option>
                                     
                             </select>
                         </div>
@@ -65,7 +65,7 @@
                             <select name="paid_by" id="paid_by" class="form-control">
                                 <option value="" selected disabled>Select the User of this Payment</option>
                                 @foreach($users as $user)
-                                    <option value="{{$user->id}}">{{$user->name}}</option>
+                                    <option value="{{$user->id}}" @if($user->id == old('paid_by')) selected @endif>{{$user->name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -75,7 +75,7 @@
                             <h4>Description <b>:</b></h4>
                         </label>
                         <div class="col-10">
-                            <textarea name="description" id="description" class="form-control" style="height: 100px" placeholder="Write description here"></textarea>
+                            <textarea name="description" id="description" class="form-control" style="height: 100px" placeholder="Write description here">{{old('description')}}</textarea>
                         </div>
                     </div>
                     <div class="footer-button float-end">

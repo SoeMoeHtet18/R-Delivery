@@ -16,7 +16,7 @@
                             <h4>Name <b>:</b></h4>
                         </label>
                         <div class="col-10">
-                            <input type="text" id="name" name="name" class="form-control"/>
+                            <input type="text" id="name" name="name" value="{{old('name')}}" class="form-control"/>
                             @if ($errors->has('name'))
                                 <span class="text-danger"><strong>{{ $errors->first('name') }}</strong></span>
                             @endif
@@ -27,7 +27,7 @@
                             <h4>Phone Number <b>:</b></h4>
                         </label>
                         <div class="col-10">
-                            <input type="text" id="phone_number" name="phone_number" class="form-control"/>
+                            <input type="text" id="phone_number" name="phone_number" value="{{old('phone_number')}}" class="form-control"/>
                         @if ($errors->has('phone_number'))
                             <span class="text-danger"><strong>{{ $errors->first('phone_number') }}</strong></span>
                         @endif
@@ -38,7 +38,7 @@
                             <h4>Email <b>:</b></h4>
                         </label>
                         <div class="col-10">
-                            <input type="email" id="email" name="email" class="form-control"/>
+                            <input type="email" id="email" name="email" value="{{old('email')}}" class="form-control"/>
                         @if ($errors->has('email'))
                             <span class="text-danger"><strong>{{ $errors->first('email') }}</strong></span>
                         @endif
@@ -57,7 +57,7 @@
                     </div>
 
                     <div class="row m-0 mb-3">
-                        <label for="password-confirm" class="col-2">
+                        <label for="password-confirm" class="col-2 text-nowrap">
                             <h4>Confirm Password <b>:</b></h4>
                         </label>
                         <div class="col-10">
@@ -72,7 +72,7 @@
                         <div class="col-10">
                             <select name="township_id[]" id="township_id" class="form-control" multiple>
                                 @foreach($townships as $township)
-                                    <option value="{{$township->id}}">{{$township->name}}</option>
+                                    <option value="{{$township->id}}" @if(in_array($township->id, old('township_id', []))) selected @endif>{{$township->name}}</option>
                                 @endforeach
                             </select>
                         </div>

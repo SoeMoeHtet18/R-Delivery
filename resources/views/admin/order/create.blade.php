@@ -29,9 +29,12 @@
                             <select name="shop_id" id="shop_id" class="form-control">
                                 <option value="" selected disabled>Select the Shop for This Order</option>
                                 @foreach ( $shops as $shop)
-                                    <option value="{{$shop->id}}">{{$shop->name}}</option>
+                                    <option value="{{$shop->id}}" @if($shop->id == old('shop_id')) selected @endif>{{$shop->name}}</option>
                                 @endforeach
                             </select>
+                            @if ($errors->has('shop_id'))
+                            <span class="text-danger"><strong>{{ $errors->first('shop_id') }}</strong></span>
+                            @endif
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
@@ -39,7 +42,7 @@
                             <h4>Customer PhoneNumber <b>:</b></h4>
                         </label>
                         <div class="col-10">
-                            <input type="text" id="customer_phone_number" name="customer_phone_number" class="form-control"/>
+                            <input type="text" id="customer_phone_number" name="customer_phone_number" value="{{old('customer_phone_number')}}" class="form-control"/>
                             @if ($errors->has('customer_phone_number'))
                             <span class="text-danger"><strong>{{ $errors->first('customer_phone_number') }}</strong></span>
                             @endif
@@ -50,7 +53,7 @@
                             <h4>Customer Name <b>:</b></h4>
                         </label>
                         <div class="col-10">
-                            <input type="text" id="customer_name" name="customer_name" class="form-control"/>
+                            <input type="text" id="customer_name" name="customer_name"value="{{old('customer_name')}}" class="form-control"/>
                             @if ($errors->has('customer_name'))
                             <span class="text-danger"><strong>{{ $errors->first('customer_name') }}</strong></span>
                             @endif
@@ -64,9 +67,12 @@
                             <select name="city_id" id="city_id" class="form-control">
                                 <option value="" selected disabled>Select the City for This Order</option>
                                 @foreach ( $cities as $city)
-                                    <option value="{{$city->id}}">{{$city->name}}</option>
+                                    <option value="{{$city->id}}" @if($city->id == old('city_id')) selected @endif>{{$city->name}}</option>
                                 @endforeach
                             </select>
+                            @if ($errors->has('city_id'))
+                            <span class="text-danger"><strong>{{ $errors->first('city_id') }}</strong></span>
+                            @endif
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
@@ -77,9 +83,12 @@
                             <select name="township_id" id="township_id" class="form-control">
                                 <option value="" selected disabled>Select the Township for This Order</option>
                                 @foreach ( $townships as $township)
-                                    <option value="{{$township->id}}">{{$township->name}}</option>
+                                    <option value="{{$township->id}}" @if($township->id == old('township_id')) selected @endif>{{$township->name}}</option>
                                 @endforeach
                             </select>
+                            @if ($errors->has('township_id'))
+                            <span class="text-danger"><strong>{{ $errors->first('township_id') }}</strong></span>
+                            @endif
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
@@ -87,7 +96,7 @@
                             <h4>Quantity <b>:</b></h4>
                         </label>
                         <div class="col-10">
-                            <input type="text" id="quantity" name="quantity" class="form-control"/>
+                            <input type="text" id="quantity" name="quantity" value="{{old('quantity')}}" class="form-control"/>
                             @if ($errors->has('quantity'))
                             <span class="text-danger"><strong>{{ $errors->first('quantity') }}</strong></span>
                             @endif
@@ -98,7 +107,7 @@
                             <h4>Total Amount <b>:</b></h4>
                         </label>
                         <div class="col-10">
-                            <input type="text" id="total_amount" name="total_amount" class="form-control"/>
+                            <input type="text" id="total_amount" name="total_amount" value="{{old('total_amount')}}" class="form-control"/>
                             @if ($errors->has('total_amount'))
                             <span class="text-danger"><strong>{{ $errors->first('total_amount') }}</strong></span>
                             @endif
@@ -109,7 +118,7 @@
                             <h4>Delivery Fees <b>:</b></h4>
                         </label>
                         <div class="col-10">
-                            <input type="text" id="delivery_fees" name="delivery_fees" class="form-control"/>
+                            <input type="text" id="delivery_fees" name="delivery_fees" value="{{old('delivery_fees')}}" class="form-control"/>
                             @if ($errors->has('delivery_fees'))
                             <span class="text-danger"><strong>{{ $errors->first('delivery_fees') }}</strong></span>
                             @endif
@@ -120,7 +129,7 @@
                             <h4>Markup Delivery Fees <b>:</b></h4>
                         </label>
                         <div class="col-10">
-                            <input type="text" id="markup_delivery_fees" name="markup_delivery_fees" class="form-control"/>
+                            <input type="text" id="markup_delivery_fees" name="markup_delivery_fees" value="{{old('markup_delivery_fees')}}" class="form-control"/>
                             @if ($errors->has('markup_delivery_fees'))
                             <span class="text-danger"><strong>{{ $errors->first('markup_delivery_fees') }}</strong></span>
                             @endif
@@ -131,7 +140,7 @@
                             <h4>Remark <b>:</b></h4>
                         </label>
                         <div class="col-10">
-                            <input type="text" id="remark" name="remark" class="form-control"/>
+                            <textarea id="remark" name="remark" class="form-control" style="height: 100px">{{old('remark')}}</textarea>
                             @if ($errors->has('remark'))
                             <span class="text-danger"><strong>{{ $errors->first('remark') }}</strong></span>
                             @endif
@@ -145,9 +154,12 @@
                             <select name="item_type" id="item_type_id" class="form-control">
                                 <option value="" selected disabled>Select Item Type for This Order</option>
                                 @foreach($item_types as $item_type)
-                                    <option value="{{$item_type->name}}">{{$item_type->name}}</option>
+                                    <option value="{{$item_type->name}}" @if($item_type->name == old('item_type')) selected @endif>{{$item_type->name}}</option>
                                 @endforeach
                             </select>
+                            @if ($errors->has('item_type'))
+                            <span class="text-danger"><strong>{{ $errors->first('item_type') }}</strong></span>
+                            @endif
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
@@ -155,7 +167,7 @@
                             <h4>Address <b>:</b></h4>
                         </label>
                         <div class="col-10">
-                            <input type="text" id="full_address" name="full_address" class="form-control"/>
+                            <input type="text" id="full_address" name="full_address" value="{{old('full_address')}}" class="form-control"/>
                             @if ($errors->has('full_address'))
                             <span class="text-danger"><strong>{{ $errors->first('full_address') }}</strong></span>
                             @endif
@@ -166,7 +178,7 @@
                             <h4>Schedule Date <b>:</b></h4>
                         </label>
                         <div class="col-10">
-                            <input type="date" id="schedule_date" name="schedule_date" class="form-control"/>
+                            <input type="date" id="schedule_date" name="schedule_date" value="{{old('schedule_date')}}" class="form-control"/>
                             @if ($errors->has('schedule_date'))
                             <span class="text-danger"><strong>{{ $errors->first('schedule_date') }}</strong></span>
                             @endif
@@ -179,10 +191,13 @@
                         <div class="col-10">
                             <select name="type" id="type_id" class="form-control">
                                 <option value="" selected disabled>Select the Type for This Order</option>
-                                    <option value="standard">Standard</option>
-                                    <option value="express">Express</option>
-                                    <option value="doortodoor">Door To Door</option>
+                                    <option value="standard" @if(old('type') == 'standard') selected @endif>Standard</option>
+                                    <option value="express" @if(old('type') == 'express') selected @endif>Express</option>
+                                    <option value="doortodoor" @if(old('type') == 'doortodoor') selected @endif>Door To Door</option>
                             </select>
+                            @if ($errors->has('type'))
+                            <span class="text-danger"><strong>{{ $errors->first('type') }}</strong></span>
+                            @endif
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
@@ -192,9 +207,12 @@
                         <div class="col-10">
                             <select name="collection_method" id="collection_method_id" class="form-control">
                                 <option value="" selected disabled>Select the Collection Method for This Order</option>
-                                <option value="pickup">Pick Up</option>
-                                <option value="dropoff">Drop Off</option>
+                                <option value="pickup" @if(old('collection_method') == 'pickup') selected @endif>Pick Up</option>
+                                <option value="dropoff" @if(old('collection_method') == 'dropoff') selected @endif>Drop Off</option>
                             </select>
+                            @if ($errors->has('collection_method'))
+                            <span class="text-danger"><strong>{{ $errors->first('collection_method') }}</strong></span>
+                            @endif
                         </div>
                     </div>
                     <div class="footer-button float-end">

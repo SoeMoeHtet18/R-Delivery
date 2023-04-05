@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ShopPaymentRequest extends FormRequest
@@ -42,5 +43,9 @@ class ShopPaymentRequest extends FormRequest
         ];
     }
 
-    
+    protected function failedValidation(Validator $validator)
+    {
+        $this->flash($this->all());
+        parent::failedValidation($validator);
+    }
 }

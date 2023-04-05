@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class ShopCreateRequest extends FormRequest
 {
@@ -41,5 +43,11 @@ class ShopCreateRequest extends FormRequest
             'phone_number.required' => 'Phone Number is required',
             'phone_number.unique' => 'Phone Number already exists'
         ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        $this->flash($this->all());
+        parent::failedValidation($validator);
     }
 }
