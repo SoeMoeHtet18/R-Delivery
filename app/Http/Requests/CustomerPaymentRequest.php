@@ -26,6 +26,7 @@ class CustomerPaymentRequest extends FormRequest
             'order_id'            => 'required',
             'amount'              => 'required',
             'type'                => 'required', 
+            'proof_of_payment'    => 'mimes:jpg,jpeg,webp,png,bmp'
         ];
     }
 
@@ -40,6 +41,7 @@ class CustomerPaymentRequest extends FormRequest
             'order_id.required'          => 'Order field is required',
             'amount.required'            => 'Amount field is required',
             'type.required'              => 'Customer Phone Number field is required',
+            'proof_of_payment.mimes'     => 'The proof of payment must be in JPG, JPEG, WEBP, PNG or BMP format'
         ];
     }
 

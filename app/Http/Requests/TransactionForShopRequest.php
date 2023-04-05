@@ -26,7 +26,8 @@ class TransactionForShopRequest extends FormRequest
             'shop_id'   => 'required|string',
             'amount'    => 'required',
             'type'      => 'required',
-            'paid_by'   => 'required'
+            'paid_by'   => 'required',
+            'image'     => 'mimes:jpeg,jpg,webp,png,bmp'
         ];
     }
 
@@ -37,6 +38,7 @@ class TransactionForShopRequest extends FormRequest
             'amount.required'       => 'Amount field is required',
             'type.required'         => 'Type is required',
             'paid_by.required'      => 'This Field is required',
+            'image.mimes'           => 'The image must be in JPG, JPEG, WEBP, PNG or BMP format'
         ];
     }
 

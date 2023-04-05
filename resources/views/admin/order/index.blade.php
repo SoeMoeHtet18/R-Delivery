@@ -9,10 +9,10 @@
 </div>
 
 <div class="card m-3">
-<div class="row tdFilter">
-    <div class="col-md-12 col-sm-12 m-3"> 
-        <h2>Filter</h2>
-    </div>
+    <div class="row tdFilter">
+        <div class="col-md-12 col-sm-12 m-3">
+            <h2>Filter</h2>
+        </div>
     </div>
     <div class="row">
         <div class="filter-box">
@@ -21,11 +21,11 @@
                     <strong>Search</strong>
                 </label>
                 <div class="col-10">
-                    <input type="text" id="search" name="search" class="form-control"/>
+                    <input type="text" id="search" name="search" class="form-control" />
                 </div>
             </div>
         </div>
-        
+
     </div>
 
     <div class="row">
@@ -38,7 +38,7 @@
                     <select name="city" id="city" class="form-control">
                         <option value="" selected disabled>Select</option>
                         @foreach($cities as $city)
-                            <option value="{{$city->id}}">{{$city->name}}</option>
+                        <option value="{{$city->id}}">{{$city->name}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -65,7 +65,7 @@
                     <select name="township" id="township" class="form-control">
                         <option value="" selected disabled>Select</option>
                         @foreach($townships as $township)
-                            <option value="{{$township->id}}">{{$township->name}}</option>
+                        <option value="{{$township->id}}">{{$township->name}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -82,7 +82,7 @@
                     <select name="rider" id="rider" class="form-control">
                         <option value="" selected disabled>Select</option>
                         @foreach($riders as $rider)
-                            <option value="{{$rider->id}}">{{$rider->name}}</option>
+                        <option value="{{$rider->id}}">{{$rider->name}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -95,7 +95,7 @@
                     <select name="shop" id="shop" class="form-control">
                         <option value="" selected disabled>Select</option>
                         @foreach($shops as $shop)
-                            <option value="{{$shop->id}}">{{$shop->name}}</option>
+                        <option value="{{$shop->id}}">{{$shop->name}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -144,7 +144,7 @@
             </thead>
 
             <tbody>
-               
+
             </tbody>
         </table>
     </div>
@@ -153,82 +153,147 @@
 @endsection
 @section('javascript')
 <script type="text/javascript">
-  $(document).ready(function() {
-    $('#city').select2([]);
-    $('#status').select2();
-    $('#township').select2();
-    $('#rider').select2();
-    $('#shop').select2();
-    
-    get_ajax_dynamic_data(search='',city='',rider='',shop='',status='',township='');
-    function get_ajax_dynamic_data(search,city,rider,shop,status,township) {
-        var table = $('.datatable').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: {
-                "url": '/ajax-get-orders-data',
-                "type": "GET",
-                "data" : function( r ) {
-                    r.search = search;
-                    r.city  = city;
-                    r.rider = rider;
-                    r.shop  = shop;
-                    r.status = status;
-                    r.township = township;
-                }
-            },
-            columns: [
-                {data: 'DT_RowIndex', name: 'id'},
-                {data: 'total_amount', name: 'total_amount'},
-                {data: 'order_code', name: 'order_code'},
-                {data: 'shop_name', name: 'shop'},
-                {data: 'rider_name', name: 'rider'},
-                {data: 'customer_name', name: 'customer_name'},
-                {data: 'customer_phone_number', name: 'customer_phone_number'},
-                {data: 'city_name', name: 'city'},
-                {data: 'township_name', name: 'township'},
-                {data: 'quantity', name: 'quantity'},
-                {data: 'delivery_fees', name: 'delivery_fees'},
-                {data: 'markup_delivery_fees', name: 'markup_delivery_fees'},
-                {data: 'remark', name: 'remark'},
-                {data: 'status', name: 'status'},
-                {data: 'item_type', name: 'item_type'},
-                {data: 'full_address', name: 'full_address'},
-                {data: 'schedule_date', name: 'schedule_date'},
-                {data: 'type', name: 'type'},
-                {data: 'collection_method', name: 'collection_method'},
-                {data: 'last_updated_by_name', name: 'last_updated_by'},
-                {data: 'action', name: 'action', orderable: false, searchable: false},
-            ]
-        });
-        $('.search_filter').click(function(){
-            var status = $('#status').val();
-            var township = $('#township').val();
-            var search = $('#search').val();
-            var rider = $('#rider').val();
-            var city = $('#city').val();
-            var shop = $('#shop').val();
-            table.destroy();
-            get_ajax_dynamic_data(search,city,rider,shop,status,township);
-        });
-        $("#reset").click(function(){
-            $("#status").val("").trigger("change");
-            $("#township").val("").trigger("change");
-            $("#search").val("").trigger("change");
-            $("#rider").val("").trigger("change");
-            $("#city").val("").trigger("change");
-            $("#shop").val("").trigger("change");
-            var status = $("#status").val();
-            var township = $('#township').val();
-            var search = $('#search').val();
-            var rider = $('#rider').val();
-            var city = $('#city').val();
-            var shop = $('#shop').val();
-            table.destroy();
-            get_ajax_dynamic_data(search,city,rider,shop,status,township);
-        });
-    };
-    
-  });
+    $(document).ready(function() {
+        $('#city').select2([]);
+        $('#status').select2();
+        $('#township').select2();
+        $('#rider').select2();
+        $('#shop').select2();
+
+        get_ajax_dynamic_data(search = '', city = '', rider = '', shop = '', status = '', township = '');
+
+        function get_ajax_dynamic_data(search, city, rider, shop, status, township) {
+            var table = $('.datatable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    "url": '/ajax-get-orders-data',
+                    "type": "GET",
+                    "data": function(r) {
+                        r.search = search;
+                        r.city = city;
+                        r.rider = rider;
+                        r.shop = shop;
+                        r.status = status;
+                        r.township = township;
+                    }
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'id'
+                    },
+                    {
+                        data: 'total_amount',
+                        name: 'total_amount'
+                    },
+                    {
+                        data: 'order_code',
+                        name: 'order_code'
+                    },
+                    {
+                        data: 'shop_name',
+                        name: 'shop'
+                    },
+                    {
+                        data: 'rider_name',
+                        name: 'rider'
+                    },
+                    {
+                        data: 'customer_name',
+                        name: 'customer_name'
+                    },
+                    {
+                        data: 'customer_phone_number',
+                        name: 'customer_phone_number'
+                    },
+                    {
+                        data: 'city_name',
+                        name: 'city'
+                    },
+                    {
+                        data: 'township_name',
+                        name: 'township'
+                    },
+                    {
+                        data: 'quantity',
+                        name: 'quantity'
+                    },
+                    {
+                        data: 'delivery_fees',
+                        name: 'delivery_fees'
+                    },
+                    {
+                        data: 'markup_delivery_fees',
+                        name: 'markup_delivery_fees'
+                    },
+                    {
+                        data: 'remark',
+                        name: 'remark'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status'
+                    },
+                    {
+                        data: 'item_type',
+                        name: 'item_type'
+                    },
+                    {
+                        data: 'full_address',
+                        name: 'full_address'
+                    },
+                    {
+                        data: 'schedule_date',
+                        name: 'schedule_date'
+                    },
+                    {
+                        data: 'type',
+                        name: 'type'
+                    },
+                    {
+                        data: 'collection_method',
+                        name: 'collection_method'
+                    },
+                    {
+                        data: 'last_updated_by_name',
+                        name: 'last_updated_by'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
+                ]
+            });
+            $('.search_filter').click(function() {
+                var status = $('#status').val();
+                var township = $('#township').val();
+                var search = $('#search').val();
+                var rider = $('#rider').val();
+                var city = $('#city').val();
+                var shop = $('#shop').val();
+                table.destroy();
+                get_ajax_dynamic_data(search, city, rider, shop, status, township);
+            });
+            $("#reset").click(function() {
+                $("#status").val("").trigger("change");
+                $("#township").val("").trigger("change");
+                $("#search").val("").trigger("change");
+                $("#rider").val("").trigger("change");
+                $("#city").val("").trigger("change");
+                $("#shop").val("").trigger("change");
+                var status = $("#status").val();
+                var township = $('#township').val();
+                var search = $('#search').val();
+                var rider = $('#rider').val();
+                var city = $('#city').val();
+                var shop = $('#shop').val();
+                table.destroy();
+                get_ajax_dynamic_data(search, city, rider, shop, status, township);
+            });
+        };
+
+    });
 </script>
-@endsection 
+@endsection

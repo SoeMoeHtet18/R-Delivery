@@ -24,6 +24,7 @@
     .create-button { 
         height: 30px;
         margin-bottom: 10px;
+        margin-right: 10px;
     }
     .current-user {
         display: inline-block;
@@ -243,5 +244,11 @@
     --bs-btn-disabled-color: #fff;
     --bs-btn-disabled-bg: #64c5b1;
     --bs-btn-disabled-border-color: #64c5b1;
+    }
+
+    .card-toolbar{
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
     }
 </style>

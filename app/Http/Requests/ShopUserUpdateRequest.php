@@ -25,7 +25,6 @@ class ShopUserUpdateRequest extends FormRequest
         return [
             'name'                  => 'required|string',
             'phone_number'          => 'required|string|unique:shop_users,phone_number,'. $id,
-            'email'                 => 'unique:shop_users,email,'. $id,
             'password'              => 'confirmed',
         ];
     }
@@ -41,7 +40,6 @@ class ShopUserUpdateRequest extends FormRequest
             'name.required'                 => 'Name field is required.',
             'phone_number.required'         => 'Phone Number is required.',
             'phone_number.unique'           => 'Phone Number already exists.',
-            'email.unique'                  => 'Email already exists.',
         ];
     }
 }

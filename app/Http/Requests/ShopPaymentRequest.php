@@ -25,7 +25,8 @@ class ShopPaymentRequest extends FormRequest
         return [
             'shop_id'   => 'required|string',
             'amount'    => 'required',
-            'type'      => 'required'
+            'type'      => 'required',
+            'image'     => 'mimes:jpeg,jpg,webp,png,bmp'
         ];
     }
 
@@ -40,6 +41,7 @@ class ShopPaymentRequest extends FormRequest
             'shop_id.required'      => 'Name field is required',
             'amount.required'       => 'Amount field is required',
             'type.required'         => 'Type is required',
+            'image.mimes'           => 'The image must be in JPG, JPEG, WEBP, PNG or BMP format'
         ];
     }
 

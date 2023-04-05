@@ -10,7 +10,7 @@
 
 <div class="card m-3">
     <div class="row tdFilter">
-        <div class="col-md-12 col-sm-12 m-3"> 
+        <div class="col-md-12 col-sm-12 m-3">
             <h2>Filter</h2>
         </div>
     </div>
@@ -23,8 +23,8 @@
                 <div class="col-10">
                     <select name="item_type" id="item_type" class="form-control">
                         <option value="" selected disabled>Select</option>
-                            <option value="delivery_payment">Delivery Payment</option>
-                            <option value="remaining_payment">Remaining Payment</option>
+                        <option value="delivery_payment">Delivery Payment</option>
+                        <option value="remaining_payment">Remaining Payment</option>
                     </select>
                 </div>
             </div>
@@ -36,7 +36,7 @@
                     <select name="shop_name" id="shop_name" class="form-control">
                         <option value="" selected disabled>Select</option>
                         @foreach($shops as $shop)
-                            <option value="{{$shop->id}}">{{$shop->name}}</option>
+                        <option value="{{$shop->id}}">{{$shop->name}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -46,7 +46,7 @@
                     <strong>Amount</strong>
                 </label>
                 <div class="col-10">
-                    <input type="text" id="amount" name="amount" class="form-control"/>
+                    <input type="text" id="amount" name="amount" class="form-control" />
                 </div>
             </div>
         </div>
@@ -78,7 +78,7 @@
             </thead>
 
             <tbody>
-               
+
             </tbody>
         </table>
     </div>
@@ -87,51 +87,71 @@
 @endsection
 @section('javascript')
 <script type="text/javascript">
-  $(document).ready(function() {
-    $('#item_type').select2();
-    $('#shop_name').select2();
-    get_ajax_dynamic_data(item_type='',shop_name='',amount='');
-    function get_ajax_dynamic_data(item_type,shop_name,amount) {
-        var table = $('.datatable').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: {
-                "url": '/ajax-get-shop-payment-data',
-                "type": "GET",
-                "data" : function( r ) {
-                    r.item_type = item_type;
-                    r.shop_name = shop_name;
-                    r.amount    = amount;
-                }
-            },
-            columns: [
-                {data: 'DT_RowIndex', name: 'id'},
-                {data: 'shop_name', name: 'shop_name'},
-                {data: 'amount', name: 'amount'},
-                {data: 'type', name: 'type'},
-                {data: 'description', name: 'description'},
-                {data: 'action', name: 'action', orderable: false, searchable: false},
-            ]
-        });
-        
-        $('.search_filter').click(function(){
-            var item_type = $('#item_type').val();
-            var shop_name = $('#shop_name').val();
-            var amount    = $('#amount').val();
-            table.destroy();
-            get_ajax_dynamic_data(item_type,shop_name,amount);
-        })
-        $("#reset").click(function(){
-            $("#item_type").val("").trigger("change");
-            $("#shop_name").val("").trigger("change");
-            $("#amount").val("").trigger("change");
-            var item_type = $('#item_type').val();
-            var shop_name = $('#shop_name').val();
-            var amount    = $('#amount').val();
-            table.destroy();
-            get_ajax_dynamic_data(item_type,shop_name,amount);
-        });
-    };
-});
+    $(document).ready(function() {
+        $('#item_type').select2();
+        $('#shop_name').select2();
+        get_ajax_dynamic_data(item_type = '', shop_name = '', amount = '');
+
+        function get_ajax_dynamic_data(item_type, shop_name, amount) {
+            var table = $('.datatable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    "url": '/ajax-get-shop-payment-data',
+                    "type": "GET",
+                    "data": function(r) {
+                        r.item_type = item_type;
+                        r.shop_name = shop_name;
+                        r.amount = amount;
+                    }
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'id'
+                    },
+                    {
+                        data: 'shop_name',
+                        name: 'shop_name'
+                    },
+                    {
+                        data: 'amount',
+                        name: 'amount'
+                    },
+                    {
+                        data: 'type',
+                        name: 'type'
+                    },
+                    {
+                        data: 'description',
+                        name: 'description'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
+                ]
+            });
+
+            $('.search_filter').click(function() {
+                var item_type = $('#item_type').val();
+                var shop_name = $('#shop_name').val();
+                var amount = $('#amount').val();
+                table.destroy();
+                get_ajax_dynamic_data(item_type, shop_name, amount);
+            })
+            $("#reset").click(function() {
+                $("#item_type").val("").trigger("change");
+                $("#shop_name").val("").trigger("change");
+                $("#amount").val("").trigger("change");
+                var item_type = $('#item_type').val();
+                var shop_name = $('#shop_name').val();
+                var amount = $('#amount').val();
+                table.destroy();
+                get_ajax_dynamic_data(item_type, shop_name, amount);
+            });
+        };
+    });
 </script>
 @endsection

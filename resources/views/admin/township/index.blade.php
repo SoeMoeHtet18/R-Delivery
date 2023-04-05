@@ -9,42 +9,42 @@
 </div>
 
 <div class="card m-3">
-<div class="row tdFilter">
-    <div class="col-md-12 col-sm-12 m-3"> 
-        <h2>Filter</h2>
-    </div>
+    <div class="row tdFilter">
+        <div class="col-md-12 col-sm-12 m-3">
+            <h2>Filter</h2>
+        </div>
     </div>
     <div class="row">
-    <div class="filter-box">
-        <div class="mb-3 p-3 col-4">
-            <label for="search">
-                <strong>Search</strong>
-            </label>
-            <div class="col-10">
-                <input type="text" id="search" name="search" class="form-control"/>
+        <div class="filter-box">
+            <div class="mb-3 p-3 col-4">
+                <label for="search">
+                    <strong>Search</strong>
+                </label>
+                <div class="col-10">
+                    <input type="text" id="search" name="search" class="form-control" />
+                </div>
             </div>
-        </div>
-        <div class="mb-3 p-3 col-4">
-            <label for="city">
-                <strong>City</strong>
-            </label>
-            <div class="col-10">
-                <select name="city" id="city" class="form-control">
-                    <option value="" selected disabled>Select</option>
-                    @foreach($cities as $city)
+            <div class="mb-3 p-3 col-4">
+                <label for="city">
+                    <strong>City</strong>
+                </label>
+                <div class="col-10">
+                    <select name="city" id="city" class="form-control">
+                        <option value="" selected disabled>Select</option>
+                        @foreach($cities as $city)
                         <option value="{{$city->id}}">{{$city->name}}</option>
-                    @endforeach
-                </select>
+                        @endforeach
+                    </select>
+                </div>
             </div>
         </div>
-    </div>
-        
-        </div>
-    <div class="d-flex flex-row-reverse pb-3">
-    <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 btncenter margin-btn">
-        <button class="btn btn-primary search_filter">Filter</button>
 
-        <button class="btn btn-secondary" id="reset">Reset</button>
+    </div>
+    <div class="d-flex flex-row-reverse pb-3">
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 btncenter margin-btn">
+            <button class="btn btn-primary search_filter">Filter</button>
+
+            <button class="btn btn-secondary" id="reset">Reset</button>
         </div>
     </div>
 </div>
@@ -73,52 +73,64 @@
 @section('javascript')
 
 <script type="text/javascript">
-  $(document).ready(function() {
-    $('#city').select2();
+    $(document).ready(function() {
+        $('#city').select2();
 
-    get_ajax_dynamic_data(search='',city='');
-    function get_ajax_dynamic_data(search,city) {
-        var table = $('.datatable').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: {
-            "url": '/ajax-get-townships-data',
-            "type": "GET",
-            "data" : function( r ) {
-                r.search = search;
-                r.city = city;
-            }
-        },
-        columns: [
-            {data: 'DT_RowIndex', name: 'id'},
-            {data: 'name', name: 'name'},
-            {data: 'city_name', name: 'city'},
-            {data: 'action', name: 'action', orderable: false, searchable: false},
-        ],
-        columnDefs: [
-            { 
-                "render": function ( data, type, row ) {
-                    return '<a href="/townships/' + row.id + '">' + row.name + '</a>';
+        get_ajax_dynamic_data(search = '', city = '');
+
+        function get_ajax_dynamic_data(search, city) {
+            var table = $('.datatable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    "url": '/ajax-get-townships-data',
+                    "type": "GET",
+                    "data": function(r) {
+                        r.search = search;
+                        r.city = city;
+                    }
                 },
-                "targets": 1
-            }, 
-        ]
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'id'
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'city_name',
+                        name: 'city'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
+                ],
+                columnDefs: [{
+                    "render": function(data, type, row) {
+                        return '<a href="/townships/' + row.id + '">' + row.name + '</a>';
+                    },
+                    "targets": 1
+                }, ]
+            });
+            $('.search_filter').click(function() {
+                var search = $('#search').val();
+                var city = $('#city').val();
+                table.destroy();
+                get_ajax_dynamic_data(search, city);
+            });
+            $("#reset").click(function() {
+                $("#search").val("").trigger("change");
+                $("#city").val("").trigger("change");
+                var search = $('#search').val();
+                var city = $('#city').val();
+                table.destroy();
+                get_ajax_dynamic_data(search, city);
+            })
+        };
     });
-    $('.search_filter').click(function(){
-        var search = $('#search').val();
-        var city = $('#city').val();
-        table.destroy();
-        get_ajax_dynamic_data(search,city);
-    });
-    $("#reset").click(function(){
-        $("#search").val("").trigger("change");
-        $("#city").val("").trigger("change");
-        var search = $('#search').val();
-        var city = $('#city').val();
-        table.destroy();
-        get_ajax_dynamic_data(search,city);
-    })
-    };
-  });
 </script>
 @endsection

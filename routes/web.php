@@ -31,7 +31,7 @@ Route::get('/', function () {
 });
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/dashboard', [DashboardController::class, 'count']);
+    Route::get('/dashboard', [DashboardController::class, 'count'])->name('dashboard');
     Route::resource('/users', AdminController::class);
     Route::resource('/riders', RiderController::class);
     Route::get('/riders/get-pending-orders-by-rider-id/{id}', [OrderController::class, 'getPendingOrdersTableByRiderID']);

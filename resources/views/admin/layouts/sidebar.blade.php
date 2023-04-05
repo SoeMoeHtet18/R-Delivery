@@ -4,6 +4,12 @@
             data-keep-expanded="false"
             data-auto-scroll="true"
             data-slide-speed="200">
+            <li class="@if(request()->is('dashboard*')) active @endif">
+                <a href="{{route('dashboard')}}">
+                    <!-- <i class="fa fa-users"></i> -->
+                    <span class="title">Dashboard</span>
+                </a>
+            </li>
             <li class="@if(request()->is('shops*')) {{'active'}} @endif">
                 <a href="{{route('shops.index')}}">
                     <!-- <i class="fa fa-users"></i> -->

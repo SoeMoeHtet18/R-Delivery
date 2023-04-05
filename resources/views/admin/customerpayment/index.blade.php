@@ -10,7 +10,7 @@
 
 <div class="card m-3">
     <div class="row tdFilter">
-        <div class="col-md-12 col-sm-12 m-3"> 
+        <div class="col-md-12 col-sm-12 m-3">
             <h2>Filter</h2>
         </div>
     </div>
@@ -37,7 +37,7 @@
                     <select name="order_code" id="order_code" class="form-control">
                         <option value="" selected disabled>Select</option>
                         @foreach($orders as $order)
-                            <option value="{{$order->id}}">{{$order->order_code}}</option>
+                        <option value="{{$order->id}}">{{$order->order_code}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -47,7 +47,7 @@
                     <strong>Amount</strong>
                 </label>
                 <div class="col-10">
-                    <input type="text" id="amount" name="amount" class="form-control"/>
+                    <input type="text" id="amount" name="amount" class="form-control" />
                 </div>
             </div>
         </div>
@@ -80,7 +80,7 @@
             </thead>
 
             <tbody>
-               
+
             </tbody>
         </table>
     </div>
@@ -89,52 +89,75 @@
 @endsection
 @section('javascript')
 <script type="text/javascript">
-  $(document).ready(function() {
-    $('#item_type').select2();
-    $('#order_code').select2();
-    get_ajax_dynamic_data(item_type='',order_code='',amount='');
-    function get_ajax_dynamic_data(item_type,order_code,amount) {
-        var table = $('.datatable').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: {
-                "url": '/ajax-get-customer-payment-data',
-                "type": "GET",
-                "data" : function( r ) {
-                    r.item_type = item_type;
-                    r.order_code = order_code;
-                    r.amount    = amount;
-                }
-            },
-            columns: [
-                {data: 'DT_RowIndex', name: 'id'},
-                {data: 'order_code', name: 'order_code'},
-                {data: 'amount', name: 'amount'},
-                {data: 'type', name: 'type'},
-                {data: 'paid_at', name: 'paid_at'},
-                {data: 'description', name: 'description'},
-                {data: 'action', name: 'action', orderable: false, searchable: false},
-            ]
-        });
-        
-        $('.search_filter').click(function(){
-            var item_type = $('#item_type').val();
-            var order_code = $('#order_code').val();
-            var amount    = $('#amount').val();
-            table.destroy();
-            get_ajax_dynamic_data(item_type,order_code,amount);
-        })
-        $("#reset").click(function(){
-            $("#item_type").val("").trigger("change");
-            $("#order_code").val("").trigger("change");
-            $("#amount").val("").trigger("change");
-            var item_type = $('#item_type').val();
-            var order_code = $('#order_code').val();
-            var amount    = $('#amount').val();
-            table.destroy();
-            get_ajax_dynamic_data(item_type,order_code,amount);
-        });
-    };
-});
+    $(document).ready(function() {
+        $('#item_type').select2();
+        $('#order_code').select2();
+        get_ajax_dynamic_data(item_type = '', order_code = '', amount = '');
+
+        function get_ajax_dynamic_data(item_type, order_code, amount) {
+            var table = $('.datatable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    "url": '/ajax-get-customer-payment-data',
+                    "type": "GET",
+                    "data": function(r) {
+                        r.item_type = item_type;
+                        r.order_code = order_code;
+                        r.amount = amount;
+                    }
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'id'
+                    },
+                    {
+                        data: 'order_code',
+                        name: 'order_code'
+                    },
+                    {
+                        data: 'amount',
+                        name: 'amount'
+                    },
+                    {
+                        data: 'type',
+                        name: 'type'
+                    },
+                    {
+                        data: 'paid_at',
+                        name: 'paid_at'
+                    },
+                    {
+                        data: 'description',
+                        name: 'description'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
+                ]
+            });
+
+            $('.search_filter').click(function() {
+                var item_type = $('#item_type').val();
+                var order_code = $('#order_code').val();
+                var amount = $('#amount').val();
+                table.destroy();
+                get_ajax_dynamic_data(item_type, order_code, amount);
+            })
+            $("#reset").click(function() {
+                $("#item_type").val("").trigger("change");
+                $("#order_code").val("").trigger("change");
+                $("#amount").val("").trigger("change");
+                var item_type = $('#item_type').val();
+                var order_code = $('#order_code').val();
+                var amount = $('#amount').val();
+                table.destroy();
+                get_ajax_dynamic_data(item_type, order_code, amount);
+            });
+        };
+    });
 </script>
 @endsection
