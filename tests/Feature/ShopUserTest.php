@@ -87,7 +87,8 @@ class ShopUserTest extends TestCase
             'password_confirmation' =>$password,
             'shop_id' => $shop_id
         ]);
-        $response->assertStatus(302);
+        $response->assertStatus(302)
+        ->assertRedirect('/shopusers');
     }
 
     public function test_shop_user_detail_web(): void 
@@ -119,7 +120,8 @@ class ShopUserTest extends TestCase
             'shop_id' => $shop_id,
             'id' => $shopuser_id
         ]);
-        $response->assertStatus(302);
+        $response->assertStatus(302)
+        ->assertRedirect('/shopusers/' . $shopuser_id);
     }
 
     public function test_delete_shop_user(): void 
@@ -131,6 +133,7 @@ class ShopUserTest extends TestCase
         $shopuser_id = ShopUser::all()->random()->id;
         
         $response = $this->delete('/shopusers/' . $shopuser_id);
-        $response->assertStatus(302);
+        $response->assertStatus(302)
+        ->assertRedirect('/shopusers');
     }
 }

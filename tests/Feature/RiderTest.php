@@ -88,7 +88,8 @@ class RiderTest extends TestCase
                 $township_id
             ]
         ]);
-        $response->assertStatus(302);
+        $response->assertStatus(302)
+            ->assertRedirect('/riders');
     }
 
     public function test_rider_detail_web(): void 
@@ -204,7 +205,9 @@ class RiderTest extends TestCase
             ],
             'id' => $rider_id
         ]);
-        $response->assertStatus(302);
+        $response->assertStatus(302)
+        ->assertRedirect('/riders/' . $rider_id);
+
     }
 
     public function test_delete_rider(): void 
@@ -216,6 +219,8 @@ class RiderTest extends TestCase
         $rider_id = Rider::all()->random()->id;
         
         $response = $this->delete('/riders/' . $rider_id);
-        $response->assertStatus(302);
+        $response->assertStatus(302)
+        ->assertRedirect('/riders');
+
     }
 }

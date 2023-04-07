@@ -80,7 +80,8 @@ class UserTest extends TestCase
             'password' => $rand_password,
             'password_confirmation' => $rand_password
         ]);
-        $response->assertStatus(302);
+        $response->assertStatus(302)
+        ->assertRedirect('/users');
     }
 
     public function test_user_detail_web(): void 
@@ -110,7 +111,8 @@ class UserTest extends TestCase
             'password_confirmation' => $rand_password,
             'id' =>  $rand_user_id
         ]);
-        $response->assertStatus(302);
+        $response->assertStatus(302)
+        ->assertRedirect('/users');
     }
 
     public function test_delete_user(): void 
@@ -122,7 +124,8 @@ class UserTest extends TestCase
         $user_id = User::all()->random()->id;
         
         $response = $this->delete('/users/' . $user_id);
-        $response->assertStatus(302);
+        $response->assertStatus(302)
+        ->assertRedirect('/users');
     }
 
 }

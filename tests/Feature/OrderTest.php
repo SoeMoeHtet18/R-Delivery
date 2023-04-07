@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 
 class OrderTest extends TestCase
@@ -122,7 +123,8 @@ class OrderTest extends TestCase
             "type" => $rand_type,
             "collection_method" => $rand_method
         ]);
-        $response->assertStatus(302);
+        $response->assertStatus(302)
+            ->assertRedirect('/orders');
     }
 
     public function test_get_customer_by_phone_number(): void
@@ -231,6 +233,8 @@ class OrderTest extends TestCase
         $status = ['success','pending','delay','cancel'];
         $rand_status = $status[array_rand($status)];
 
+        $file = UploadedFile::fake()->create('test-image.jpg', 200, 'image/jpeg');
+
         $response = $this->put('/orders/' . $order->id , [
             "order_code" => $order->order_code,
             "shop_id" => Shop::all()->random()->id,
@@ -250,9 +254,10 @@ class OrderTest extends TestCase
             "schedule_date" => Carbon::now(),
             "type" => $rand_type,
             "collection_method" => $rand_method,
-            'proof_of_payment' => $this->faker->image
+            'proof_of_payment' => $file
         ]);
-        $response->assertStatus(302);
+        $response->assertStatus(302)
+            ->assertRedirect('/orders');
     }
 
     public function test_get_riders_by_township(): void
@@ -300,7 +305,8 @@ class OrderTest extends TestCase
         $order_id = Order::all()->random()->id;
 
         $response = $this->delete('/orders/' . $order_id);
-        $response->assertStatus(302);
+        $response->assertStatus(302)
+            ->assertRedirect('/orders');
     }
 
     public function test_assign_rider_web(): void 
@@ -328,6 +334,7 @@ class OrderTest extends TestCase
         $response = $this->post('/orders/' . $order->id . '/assign-rider', [
             'rider_id' => $rider->id
         ]);
-        $response->assertStatus(302);
+        $response->assertStatus(302)
+            ->assertRedirect('/orders');
     }
 }

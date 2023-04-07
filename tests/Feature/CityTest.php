@@ -71,7 +71,8 @@ class CityTest extends TestCase
         $response = $this->post('/cities', [
             'name' => $this->faker->name,
         ]);
-        $response->assertStatus(302);
+        $response->assertStatus(302)
+            ->assertRedirect('/cities');
     }
 
     public function test_city_detail_web(): void 
@@ -95,7 +96,8 @@ class CityTest extends TestCase
         $response = $this->put('/cities/' . $rand_city_id, [
             'name' => $this->faker->name,
         ]);
-        $response->assertStatus(302);
+        $response->assertStatus(302)
+            ->assertRedirect('/cities/' . $rand_city_id);
     }
 
     public function test_delete_city(): void 
@@ -107,6 +109,7 @@ class CityTest extends TestCase
         $city_id = City::all()->random()->id;
         
         $response = $this->delete('/cities/' . $city_id);
-        $response->assertStatus(302);
+        $response->assertStatus(302)
+            ->assertRedirect('/cities');
     }
 }

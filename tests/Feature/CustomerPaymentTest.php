@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 
 class CustomerPaymentTest extends TestCase
@@ -78,16 +79,19 @@ class CustomerPaymentTest extends TestCase
 
         $type = ['fully_paid', 'remaining_amount', 'delivery_fees_only'];
         $rand_type = $type[array_rand($type)];
-
+        
+        $file = UploadedFile::fake()->create('test-image.jpg', 200, 'image/jpeg');
+        
         $response = $this->post('/customer-payments', [
             'order_id' => Order::all()->random()->id,
             'amount' => $this->faker->randomDigit,
             'type' => $rand_type,
             'paid_at' => Carbon::now(),
-            'proof_of_payment' => $this->faker->image,
+            'proof_of_payment' => $file,
             'description' => $this->faker->text
         ]);
-        $response->assertStatus(302);
+        $response->assertStatus(302)
+            ->assertRedirect('/customer-payments');
     }
 
     public function  test_customer_payment_detail_web(): void 
@@ -111,16 +115,19 @@ class CustomerPaymentTest extends TestCase
         $rand_type = $type[array_rand($type)];
 
         $customer_payment_id = CustomerPayment::all()->random()->id;
-        
+
+        $file = UploadedFile::fake()->create('test-image.jpg', 200, 'image/jpeg');
+
         $response = $this->put('/customer-payments/' . $customer_payment_id, [
             'order_id' => Order::all()->random()->id,
             'amount' => $this->faker->randomDigit,
             'type' => $rand_type,
             'paid_at' => Carbon::now(),
-            'proof_of_payment' => $this->faker->image,
+            'proof_of_payment' => $file,
             'description' => $this->faker->text
         ]);
-        $response->assertStatus(302);
+        $response->assertStatus(302)
+            ->assertRedirect('/customer-payments');
     }
 
     public function  test_delete_customer_payment(): void 
@@ -131,6 +138,7 @@ class CustomerPaymentTest extends TestCase
 
         $customer_payment_id = CustomerPayment::all()->random()->id;
         $response = $this->delete('/customer-payments/' . $customer_payment_id);
-        $response->assertStatus(302);
+        $response->assertStatus(302)
+            ->assertRedirect('/customer-payments');
     }
 }

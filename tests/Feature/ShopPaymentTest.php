@@ -18,7 +18,7 @@ class ShopPaymentTest extends TestCase
     public function get_authenticated_user()
     {
         $admin_phone_number = config('app.admin_phone_number');
-        $admin = User::select('users.*')->where('phone_number',$admin_phone_number)->first();
+        $admin = User::select('users.*')->where('phone_number', $admin_phone_number)->first();
         $this->actingAs($admin);
         return $admin;
     }
@@ -63,30 +63,35 @@ class ShopPaymentTest extends TestCase
         $out = " test_get_create_shop_payment_web";
         var_dump($out);
         $admin = $this->get_authenticated_user();
-        
+
         $response = $this->get('/shoppayments/create');
         $response->assertStatus(200);
     }
 
-    public function  test_store_shop_payment(): void
+    public function test_store_shop_payment(): void
     {
-        $out = " test_store_shop_payment";
+        $out = "test_store_shop_payment";
         var_dump($out);
+
         $admin = $this->get_authenticated_user();
 
         $type = ['delivery_payment', 'remaining_payment'];
         $rand_type = $type[array_rand($type)];
 
+        $file = UploadedFile::fake()->create('test-image.jpeg', 200, 'images/jpg');
+
         $response = $this->post('/shoppayments', [
-            'shop_id' => Shop::all()->random()->id,
+            'shop_id' => strval(Shop::all()->random()->id),
             'amount' => $this->faker->randomDigit,
-            'image' => $this->faker->image,
+            'image' => $file,
             'type' => $rand_type
         ]);
-        $response->assertStatus(302);
+
+        $response->assertStatus(302)
+            ->assertRedirect('/shoppayments');
     }
 
-    public function  test_shop_payment_detail_web(): void 
+    public function  test_shop_payment_detail_web(): void
     {
         $out = " test_shop_payment_detail_web";
         var_dump($out);
@@ -106,23 +111,20 @@ class ShopPaymentTest extends TestCase
         $type = ['delivery_payment', 'remaining_payment'];
         $rand_type = $type[array_rand($type)];
 
-        $file = UploadedFile::fake()->image('test.jpg');
-        $file_size = $file->size(235.354);
+        $file = UploadedFile::fake()->create('test-image.jpeg', 200, 'images/jpg');
 
         $shop_payment_id = ShopPayment::all()->random()->id;
-        $response = $this->put('/shoppayments/' . $shop_payment_id , [
+        $response = $this->put('/shoppayments/' . $shop_payment_id, [
             'shop_id' => Shop::all()->random()->id,
             'amount' => $this->faker->randomDigit,
-            'image' => [
-                'name' => $file,
-                'size' => $file_size
-            ],
+            'image' =>  $file,
             'type' => $rand_type
         ]);
-        $response->assertStatus(302);
+        $response->assertStatus(302)
+            ->assertRedirect('/shoppayments/' . $shop_payment_id);
     }
 
-    public function  test_delete_shop_payment(): void 
+    public function  test_delete_shop_payment(): void
     {
         $out = " test_delete_shop_payment";
         var_dump($out);
@@ -130,6 +132,7 @@ class ShopPaymentTest extends TestCase
 
         $shop_payment_id = ShopPayment::all()->random()->id;
         $response = $this->delete('/shoppayments/' . $shop_payment_id);
-        $response->assertStatus(302);
+        $response->assertStatus(302)
+            ->assertRedirect('/shoppayments');
     }
 }

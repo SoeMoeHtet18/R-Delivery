@@ -74,7 +74,8 @@ class ShopTest extends TestCase
             'address' => $this->faker->address,
             'phone_number' => $this->faker->phoneNumber,
         ]);
-        $response->assertStatus(302);
+        $response->assertStatus(302)
+            ->assertRedirect('/shops');
     }
 
     public function test_shop_detail_web(): void 
@@ -169,7 +170,9 @@ class ShopTest extends TestCase
             'phone_number' => $this->faker->phoneNumber,
             'id' => $rand_shop_id
         ]);
-        $response->assertStatus(302);
+        $response->assertStatus(302)
+            ->assertRedirect('/shops/' . $rand_shop_id);
+
     }
 
     public function test_delete_shop(): void 
@@ -181,6 +184,9 @@ class ShopTest extends TestCase
         $shop_id = Shop::all()->random()->id;
         
         $response = $this->delete('/shops/' . $shop_id);
-        $response->assertStatus(302);
+        $response->assertStatus(302)
+        ->assertRedirect('/shops');
+
+
     }
 }

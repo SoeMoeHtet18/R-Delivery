@@ -71,7 +71,8 @@ class ItemTypeTest extends TestCase
         $response = $this->post('/itemtypes', [
             'name' => $this->faker->name,
         ]);
-        $response->assertStatus(302);
+        $response->assertStatus(302)
+            ->assertRedirect('/itemtypes');
     }
 
     public function test_item_type_detail_web(): void 
@@ -95,7 +96,8 @@ class ItemTypeTest extends TestCase
         $response = $this->put('/itemtypes/' . $rand_item_type_id, [
             'name' => $this->faker->name,
         ]);
-        $response->assertStatus(302);
+        $response->assertStatus(302)
+            ->assertRedirect('/itemtypes/' . $rand_item_type_id);
     }
 
     public function test_delete_item_type(): void 
@@ -107,6 +109,7 @@ class ItemTypeTest extends TestCase
         $item_type_id = ItemType::all()->random()->id;
         
         $response = $this->delete('/itemtypes/' . $item_type_id);
-        $response->assertStatus(302);
+        $response->assertStatus(302)
+            ->assertRedirect('/itemtypes');
     }
 }

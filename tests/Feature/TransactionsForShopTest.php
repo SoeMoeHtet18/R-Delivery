@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 
 class TransactionsForShopTest extends TestCase
@@ -77,14 +78,17 @@ class TransactionsForShopTest extends TestCase
         $type = ['fully_payment', 'loan_payment'];
         $rand_type = $type[array_rand($type)];
 
+        $file = UploadedFile::fake()->create('test-image.jpeg', 200, 'images/jpg');
+
         $response = $this->post('/transactions-for-shop', [
             'shop_id' => Shop::all()->random()->id,
             'amount' => $this->faker->randomDigit,
             'type' => $rand_type,
             'paid_by' => User::all()->random()->id,
-            'image' => $this->faker->image,
+            'image' => $file,
         ]);
-        $response->assertStatus(302);
+        $response->assertStatus(302)
+            ->assertRedirect('/transactions-for-shop');
     }
 
     public function  test_transactions_for_shop_detail_web(): void 
@@ -107,15 +111,18 @@ class TransactionsForShopTest extends TestCase
         $type = ['fully_payment', 'loan_payment'];
         $rand_type = $type[array_rand($type)];
 
+        $file = UploadedFile::fake()->create('test-image.jpeg', 200, 'images/jpg');
+
         $transactions_for_shop_id = TransactionsForShop::all()->random()->id;
         $response = $this->put('/transactions-for-shop/' . $transactions_for_shop_id , [
             'shop_id' => Shop::all()->random()->id,
             'amount' => $this->faker->randomDigit,
             'type' => $rand_type,
             'paid_by' => User::all()->random()->id,
-            'image' => $this->faker->image,
+            'image' => $file,
         ]);
-        $response->assertStatus(302);
+        $response->assertStatus(302)
+        ->assertRedirect('/transactions-for-shop/' . $transactions_for_shop_id);
     }
 
     public function  test_delete_transactions_for_shop(): void 
@@ -126,6 +133,7 @@ class TransactionsForShopTest extends TestCase
 
         $transactions_for_shop_id = TransactionsForShop::all()->random()->id;
         $response = $this->delete('/transactions-for-shop/' . $transactions_for_shop_id);
-        $response->assertStatus(302);
+        $response->assertStatus(302)
+        ->assertRedirect('/transactions-for-shop');
     }
 }

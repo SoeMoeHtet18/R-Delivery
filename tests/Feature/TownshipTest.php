@@ -76,7 +76,8 @@ class TownshipTest extends TestCase
             'name' => $this->faker->name,
             'city' => City::all()->random()->id,
         ]);
-        $response->assertStatus(302);
+        $response->assertStatus(302)
+        ->assertRedirect('/townships');
     }
 
     public function test_township_detail_web(): void 
@@ -101,7 +102,8 @@ class TownshipTest extends TestCase
             'name' => $this->faker->name,
             'city' => City::all()->random()->id,
         ]);
-        $response->assertStatus(302);
+        $response->assertStatus(302)
+        ->assertRedirect('/townships/' . $rand_township_id);
     }
 
     public function test_delete_township(): void 
@@ -113,6 +115,7 @@ class TownshipTest extends TestCase
         $rand_township_id = Township::all()->random()->id;
         
         $response = $this->delete('/townships/' . $rand_township_id);
-        $response->assertStatus(302);
+        $response->assertStatus(302)
+        ->assertRedirect('/townships');
     }
 }
