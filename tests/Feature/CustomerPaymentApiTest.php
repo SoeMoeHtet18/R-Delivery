@@ -39,7 +39,7 @@ class CustomerPaymentApiTest extends TestCase
             'order_id' => Order::all()->random()->id,
             'amount' => $this->faker->randomDigit,
             'type' => $rand_type,
-            'paid_at' => Carbon::now()->format('Y-m-d'),
+            'paid_at' => Carbon::now()->format('Y/m/d'),
             'proof_of_payment' => $this->faker->image,
             'description' => $this->faker->text
         ]);

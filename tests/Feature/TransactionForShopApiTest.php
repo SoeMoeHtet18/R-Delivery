@@ -24,13 +24,13 @@ class TransactionForShopApiTest extends TestCase
      */
     public function test_get_transaction_for_shop(): void
     {
+        $this->withoutExceptionHandling();
         $out = 'test_get_transaction_for_shop';
         var_dump($out);
 
         $shop_user = $this->get_authenticated_shop_user();
 
         $response = $this->get('/api/transactions-for-shop/'. $shop_user->id .'/get-transactions-for-shop-list');
-
         $response->assertStatus(200);
     }
 

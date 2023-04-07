@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Contracts\Validation\Validator;
 
-
-class ShopPaymentApiRequest extends FormRequest
+class ShopUpdateApiRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,16 +21,16 @@ class ShopPaymentApiRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\Rule|array|string>
      */
-    public function rules(): array
+    public function rules($id): array
     {
         return [
-            'amount'    => 'required',
-            'type'      => 'required',
-            'image'     => 'mimes:jpeg,jpg,webp,png,bmp'
+            'name' => 'required|string',
+            'address' => 'required|string',
+            'phone_number' => 'required|string|unique:shops,phone_number,' .$id
         ];
     }
 
-    public function failedValidation(Validator $validator)
+    protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([
             'success'   => false,

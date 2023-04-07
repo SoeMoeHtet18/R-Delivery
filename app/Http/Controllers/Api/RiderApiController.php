@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RiderCreateApiRequest;
+use App\Http\Requests\RiderLoginApiRequest;
+use App\Http\Requests\RiderUpdateApiRequest;
 use App\Models\Rider;
 use App\Repositories\OrderRepository;
 use App\Repositories\RiderRepository;
@@ -21,7 +24,7 @@ class RiderApiController extends Controller
     protected $orderService;
     protected $townshipRepository;
 
-    public function __construct(RiderRepository $riderRepository,RiderService $riderService, OrderRepository $orderRepository, OrderService $orderService, TownshipRepository $townshipRepository)
+    public function __construct(RiderRepository $riderRepository, RiderService $riderService, OrderRepository $orderRepository, OrderService $orderService, TownshipRepository $townshipRepository)
     {
         $this->riderRepository = $riderRepository;
         $this->riderService = $riderService;
@@ -30,85 +33,58 @@ class RiderApiController extends Controller
         $this->townshipRepository = $townshipRepository;
     }
 
-    public function riderLoginApi(Request $request)
+    public function riderLoginApi(RiderLoginApiRequest $request)
     {
-        $validator = Validator::make($request->all(),[
-            'phone_number' => 'required',
-            'password' => 'required',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json(['data' => [], 'message' => $validator->messages()->first(), 'status' => 'fail'], 401);
-        }
-
-        
-        if(Auth::guard('rider')->attempt(['phone_number' => request('phone_number'), 'password' => request('password')])){ 
+        if (Auth::guard('rider')->attempt(['phone_number' => request('phone_number'), 'password' => request('password')])) {
             $rider = Rider::where('id', Auth::guard('rider')->user()->id)->first();
             $rider->token =  $rider->createToken('rider')->accessToken;
             $rider->refresh_token =  $rider->createToken('rider')->accessToken;
-            Rider::where('phone_number',request('phone_number'))->update(['token' => $rider->token,'refresh_token' => $rider->refresh_token]);       
-            return response()->json( ['data' => $rider, 'message' => 'Successfully Logged In', 'status' => 'success'], 200); 
-        }else{
-            return response()->json(['data' => [], 'message' => 'Invalid credentials.', 'status' => 'fail'], 401); 
+            Rider::where('phone_number', request('phone_number'))->update(['token' => $rider->token, 'refresh_token' => $rider->refresh_token]);
+            return response()->json(['data' => $rider, 'message' => 'Successfully Logged In', 'status' => 'success'], 200);
+        } else {
+            return response()->json(['data' => [], 'message' => 'Invalid credentials.', 'status' => 'fail'], 401);
         }
     }
 
-    public function show($id)
+    public function show()
     {
-        $rider = $this->riderRepository->getRiderByID($id);
-        return response()->json(['data'=> $rider, 'message'=> 'Successfully Get Rider Detail', 'status' => 'success'], 200);
+        $rider = auth()->guard('rider-api')->user();
+        return response()->json(['data' => $rider, 'message' => 'Successfully Get Rider Detail', 'status' => 'success'], 200);
     }
 
     public function getOrderList(Request $request)
     {
+        $rider = auth()->guard('rider-api')->user();
         $data = $request->all();
-        $orders = $this->riderRepository->getOrderListForAuthenticatedRider($data);
+        $orders = $this->riderRepository->getOrderList($data, $rider->id);
         return response()->json(['data' => $orders, 'message' => 'Successfully Get Order List By Rider ID', 'status' => 'success'], 200);
     }
 
-    public function getShopListByRiderID($id)
+    public function getShopListByRiderID()
     {
-        $shops = $this->riderRepository->getShopListByRiderID($id);
+        $rider = auth()->guard('rider-api')->user();
+        $shops = $this->riderRepository->getShopListByRiderID($rider->id);
         return response()->json(['data' => $shops, 'message' => 'Successfully Get Shop List By Rider ID', 'status' => 'success'], 200);
     }
 
-    public function create(Request $request)
+    public function create(RiderCreateApiRequest $request)
     {
-        $validator = Validator::make($request->all(),[
-            'name'                  => 'required|string',
-            'phone_number'          => 'required|string|unique:riders',
-            'password'              => 'required|min:8',
-        ]);
+        $data = $request->all();
+        $rider = $this->riderService->saveRiderData($data);
+        $rider->token =  $rider->createToken('rider')->accessToken;
+        $rider->refresh_token =  $rider->createToken('rider')->accessToken;
+        Rider::where('id', $rider->id)->update(['token' => $rider->token, 'refresh_token' => $rider->refresh_token]);
 
-        if ($validator->fails()) {
-            return response()->json(['data' => [], 'message' => $validator->messages()->first(), 'status' => 'fail'], 401);
-        } else {
-            $data = $request->all();
-            $rider = $this->riderService->saveRiderData($data);
-            $rider->token =  $rider->createToken('rider')->accessToken;
-            $rider->refresh_token =  $rider->createToken('rider')->accessToken;
-            Rider::where('id',$rider->id)->update(['token' => $rider->token,'refresh_token' => $rider->refresh_token]);       
-
-            return response()->json( ['data' => $rider, 'message' => 'Successfully Create Rider', 'status' => 'success'], 200); 
-        }
+        return response()->json(['data' => $rider, 'message' => 'Successfully Create Rider', 'status' => 'success'], 200);
     }
-    public function update(Request $request,string $id)
+
+    public function update(RiderUpdateApiRequest $request)
     {
-        $validator = Validator::make($request->all(),[
-            'name'                  => 'required|string',
-            'phone_number'          => 'required|string|unique:riders,phone_number,' . $id,
-            'email'                 => 'unique:riders,email,' . $id,
-        ]);
+        $data = $request->all();
+        $rider = auth()->guard('rider-api')->user();
+        $data = $this->riderService->updateRiderByID($data, $rider);
 
-        if ($validator->fails()) {
-            return response()->json(['data' => [], 'message' => $validator->messages()->first(), 'status' => 'fail'], 401);
-        } else {
-            $data = $request->all();
-            $rider = $this->riderRepository->getRiderByID($id);  
-            $data = $this->riderService->updateRiderByID($data, $rider);  
-
-            return response()->json( ['data' => $data, 'message' => 'Successfully Update Rider', 'status' => 'success'], 200); 
-        }
+        return response()->json(['data' => $data, 'message' => 'Successfully Update Rider', 'status' => 'success'], 200);
     }
 
     public function changeOrderStatus(Request $request)
@@ -116,8 +92,8 @@ class RiderApiController extends Controller
         $order_id = $request->order_id;
         $status = $request->status;
         $order = $this->orderRepository->getOrderByID($order_id);
-        $data = $this->orderService->changeStatus($order,$status);
-        return response()->json(['data' => $data, 'message' => 'Successfull Change Order Status', 'status' => 'success'],200);
+        $data = $this->orderService->changeStatus($order, $status);
+        return response()->json(['data' => $data, 'message' => 'Successfull Change Order Status', 'status' => 'success'], 200);
     }
 
     public function getAllRidersByTownshipID(Request $request)
@@ -125,6 +101,6 @@ class RiderApiController extends Controller
         $township_id = $request->township_id;
         $township = $this->townshipRepository->getTownshipById($township_id);
         $riders = $township->riders;
-        return response()->json(['data' => $riders, 'message' => 'Successfull Get Riders By Township', 'status' => 'success'],200); 
+        return response()->json(['data' => $riders, 'message' => 'Successfull Get Riders By Township', 'status' => 'success'], 200);
     }
 }

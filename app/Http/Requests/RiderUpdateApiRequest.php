@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Contracts\Validation\Validator;
 
-
-class ShopPaymentApiRequest extends FormRequest
+class RiderUpdateApiRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,14 +23,15 @@ class ShopPaymentApiRequest extends FormRequest
      */
     public function rules(): array
     {
+        $id = $this->input('id');
         return [
-            'amount'    => 'required',
-            'type'      => 'required',
-            'image'     => 'mimes:jpeg,jpg,webp,png,bmp'
+            'name'                  => 'required|string',
+            'phone_number'          => 'required|string|unique:riders,phone_number,'.$id,
+            'password'              => 'required|min:8',
         ];
     }
 
-    public function failedValidation(Validator $validator)
+    protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([
             'success'   => false,

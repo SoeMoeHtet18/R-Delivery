@@ -39,13 +39,6 @@ class ShopRepository
         return $query;
     }
 
-    public function getShopIDByShopUserID($id)
-    {
-        $shop_user = ShopUser::where('id',$id)->first();
-        $shop_id = $shop_user->shop_id;
-        return $shop_id;
-    }
-
     public function getAllShopCount()
     {
         $shopcount = Shop::count();

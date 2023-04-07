@@ -2,12 +2,11 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Contracts\Validation\Validator;
 
-
-class ShopPaymentApiRequest extends FormRequest
+class RiderLoginApiRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,9 +24,8 @@ class ShopPaymentApiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'amount'    => 'required',
-            'type'      => 'required',
-            'image'     => 'mimes:jpeg,jpg,webp,png,bmp'
+            'phone_number' => 'required',
+            'password' => 'required',
         ];
     }
 

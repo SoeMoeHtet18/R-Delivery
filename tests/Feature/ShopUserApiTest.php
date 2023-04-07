@@ -47,7 +47,7 @@ class ShopUserApiTest extends TestCase
         $out = 'test_create_shop_user';
         var_dump($out);
 
-        $response = $this->postJson('/api/create-shop-user', [
+        $response = $this->postJson('/api/shop-user/create', [
             'name' => $this->faker->name,
             'phone_number' => $this->faker->phoneNumber,
             'email' => $this->faker->email,
@@ -63,7 +63,7 @@ class ShopUserApiTest extends TestCase
 
         $shop_user = $this->get_authenticated_shop_user();
 
-        $response = $this->postJson('/api/update-shop-user/'. $shop_user->id, [
+        $response = $this->postJson('/api/shop-user/update', [
             'name' => $this->faker->name,
             'phone_number' => $this->faker->phoneNumber,
             'email' => $this->faker->email,
@@ -80,7 +80,7 @@ class ShopUserApiTest extends TestCase
         $shop_user = $this->get_authenticated_shop_user();
         $shop_user_id = ShopUser::all()->random()->id;
 
-        $response = $this->getJson('/api/shopuser/' . $shop_user_id);
+        $response = $this->getJson('/api/shop-user');
         $response->assertStatus(200);
     }
 
@@ -91,7 +91,7 @@ class ShopUserApiTest extends TestCase
 
         $shop_user = $this->get_authenticated_shop_user();
 
-        $response = $this->getJson('/api/shopowner-order-list/' . $shop_user->id);
+        $response = $this->getJson('/api/shop-user/get-order-list');
         $response->assertStatus(200);
     }
 
@@ -108,7 +108,7 @@ class ShopUserApiTest extends TestCase
         $methods = ['drop-off','pick-up'];
         $rand_method = $methods[array_rand($methods)];
 
-        $response = $this->postJson('/api/shopowner-create-order-list/'. $shop_user->id, [
+        $response = $this->postJson('/api/shop-user/create-order-list', [
             "order_code" => MyHelper::nomenclature(['table_name'=>'orders','prefix'=>'OD','column_name'=>'order_code']),
             "customer_phone_number" => $this->faker->phoneNumber,
             "customer_name" => $this->faker->name,
@@ -135,7 +135,7 @@ class ShopUserApiTest extends TestCase
 
         $shop_user = $this->get_authenticated_shop_user();
 
-        $response = $this->postJson('/api/delete-shop-user', [
+        $response = $this->postJson('/api/shop-user/delete', [
             'shop_user_id' => $shop_user->id
         ]);
         $response->assertStatus(200);
@@ -150,7 +150,7 @@ class ShopUserApiTest extends TestCase
         $shop_user = $this->get_authenticated_shop_user();
         $shop_id = $shop_user->shop_id;
 
-        $response = $this->postJson('/api/shop_users/'. $shop_user->id .'/change-order-status', [
+        $response = $this->postJson('/api/shop_user/change-order-status', [
             'status' => 'cancel',
             'order_id' => Order::where('shop_id', $shop_id)->first()->id,
         ]);

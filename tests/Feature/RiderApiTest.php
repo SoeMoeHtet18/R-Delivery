@@ -26,7 +26,7 @@ class RiderApiTest extends TestCase
         $out = 'test_create_rider';
         var_dump($out);
 
-        $response = $this->postJson('/api/riders', [
+        $response = $this->postJson('/api/rider/create', [
             'name' => $this->faker->name,
             'phone_number' => $this->faker->phoneNumber,
             'email' => $this->faker->email,
@@ -54,6 +54,7 @@ class RiderApiTest extends TestCase
      */
     public function test_rider_login(): void
     {
+        $this->withoutExceptionHandling();
         $out = 'test_rider_login';
         var_dump($out);
         
@@ -89,8 +90,7 @@ class RiderApiTest extends TestCase
 
         $rider = $this->get_authenticated_rider();
 
-        $rider_id = Rider::all()->random()->id;
-        $response = $this->getJson('/api/riders/' . $rider_id);
+        $response = $this->getJson('/api/rider');
         $response->assertStatus(200)->assertJsonStructure([
             'data' => [
                 "id",
@@ -120,7 +120,7 @@ class RiderApiTest extends TestCase
 
         $rider = $this->get_authenticated_rider();
 
-        $response = $this->postJson('/api/riders/'. $rider->id .'/get-order-list', [
+        $response = $this->postJson('/api/rider/get-order-list', [
             'status' => 'pending'
         ]);
         $response->assertStatus(200)->assertJsonStructure([
@@ -167,7 +167,7 @@ class RiderApiTest extends TestCase
         var_dump($out);
         $rider = $this->get_authenticated_rider();
 
-        $response = $this->getJson('/api/riders/' . $rider->id .'/get-shop-list');
+        $response = $this->getJson('/api/rider/get-shop-list');
         $response->assertStatus(200)->assertJsonStructure([
             'data' => [
                 '*' => [
@@ -191,9 +191,7 @@ class RiderApiTest extends TestCase
         var_dump($out);
         $rider = $this->get_authenticated_rider();
 
-        $rider_id = Rider::all()->random()->id;
-
-        $response = $this->postJson('/api/riders/' . $rider_id, [
+        $response = $this->postJson('/api/rider', [
             'name' => $this->faker->name,
             'phone_number' => $this->faker->phoneNumber,
             'email' => $this->faker->email,
@@ -229,7 +227,7 @@ class RiderApiTest extends TestCase
         $status = [ 'success', 'delay', 'cancel'];
         $rand_status = $status[array_rand($status)];
 
-        $response = $this->postJson('/api/riders/' . $rider->id . '/change-order-status', [
+        $response = $this->postJson('/api/rider/change-order-status', [
             'order_id' => Order::all()->random()->id,
             'status' => $rand_status
         ]);

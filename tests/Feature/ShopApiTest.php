@@ -42,9 +42,8 @@ class ShopApiTest extends TestCase
         var_dump($out);
 
         $shop_user = $this->get_authenticated_shop_user();
-        $shop_id = $shop_user->shop_id;
 
-        $response = $this->postJson('/api/update-shop/' . $shop_id, [
+        $response = $this->postJson('/api/update-shop', [
             'name' => $this->faker->name,
             'phone_number' => $this->faker->phoneNumber,
             'address' => $this->faker->address
@@ -60,7 +59,7 @@ class ShopApiTest extends TestCase
         $shop_user = $this->get_authenticated_shop_user();
         $shop_id = $shop_user->shop_id;
 
-        $response = $this->getJson('/api/get-shop-info/' . $shop_id);
+        $response = $this->getJson('/api/get-shop-info');
         $response->assertStatus(200);
     }
 

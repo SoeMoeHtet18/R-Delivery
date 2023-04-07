@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CustomerPaymentApiRequest;
 use App\Http\Requests\CustomerPaymentRequest;
 use App\Repositories\CustomerPaymentRepository;
 use App\Services\CustomerPaymentService;
+use Illuminate\Http\Request;
 
 class CustomerPaymentApiController extends Controller
 {
@@ -17,7 +19,7 @@ class CustomerPaymentApiController extends Controller
         $this->customerPaymentRepository = $customerPaymentRepository;
     }
 
-    public function insertCustomerPayment(CustomerPaymentRequest $request)
+    public function insertCustomerPayment(CustomerPaymentApiRequest $request)
     {  
         $data = $request->all();
         $file = $request->file('proof_of_payment');

@@ -19,10 +19,10 @@ class TransactionForShopApiController extends Controller
         $this->shopRepository = $shopRepository;
     }
 
-    public function getTransactionForShopListByShopID($id)
+    public function getTransactionForShopListByShopID()
     {
-        $shop_id = $this->shopRepository->getShopIDByShopUserID($id);
-        $transactions_for_shop = $this->transactionsForShopRepository->getTransactionsForShopListByShopID($shop_id);
+        $shop_user = auth()->guard('shop-user-api')->user();
+        $transactions_for_shop = $this->transactionsForShopRepository->getTransactionsForShopListByShopID($shop_user->shop_id);
         return response()->json(['data' => $transactions_for_shop, 'message' => 'Successfully Get Transactions For Shop By Shop ID','status'=> 'success'], 200);
     }
 
