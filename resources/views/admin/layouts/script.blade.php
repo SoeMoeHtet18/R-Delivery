@@ -35,7 +35,7 @@
             $("#paymentBox.customize-collapse").toggleClass('show');
         }
         //fpr admin tools
-        if (['users', 'cities', 'townships', 'itemtypes'].includes(endPart)) {
+        if (['users', 'cities', 'townships', 'itemtypes', 'payment-types'].includes(endPart)) {
             $("#adminToolsCollapse").attr('aria-expanded', 'true');
             $("#adminTools.customize-collapse").toggleClass('show');
         }

@@ -89,7 +89,7 @@ class ItemTypeController extends Controller
         $search = $request->search;
         $data = $this->itemTypeRepository->getAllItemTypesQuery();
         if($search) {
-            $data = $data->where('item_types.name','like', '%' . $search . '%');
+            $data = $data->where('name','like', '%' . $search . '%');
         }
         return DataTables::of($data)
             

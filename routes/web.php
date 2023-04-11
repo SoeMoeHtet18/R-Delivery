@@ -6,6 +6,7 @@ use App\Http\Controllers\CustomerPaymentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ItemTypeController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentTypeController;
 use App\Http\Controllers\RiderController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\ShopPaymentController;
@@ -68,7 +69,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/ajax-get-customer-payment-data', [CustomerPaymentController::class, 'getAjaxCustomerPaymentData']);
     Route::get('/ajax-get-townships-data', [TownshipController::class, 'getAjaxTownshipData']);
     Route::get('/ajax-get-transactions-data', [TransactionsForShopController::class, 'getAjaxTransactionForShopData']);
-    
+    Route::get('/ajax-get-payment-type-data', [PaymentTypeController::class, 'getAjaxPaymentTypeData']);
+    Route::resource('/payment-types', PaymentTypeController::class);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
