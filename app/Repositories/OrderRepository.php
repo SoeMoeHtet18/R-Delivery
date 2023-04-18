@@ -88,4 +88,10 @@ class OrderRepository
         $count['total_order'] = array_sum($count);
         return $count;
     }
+
+    public function getOrdersTotalAmountByRiderID($rider_id)
+    {
+        $total_amount = Order::where('rider_id', $rider_id)->sum('total_amount');
+        return $total_amount;
+    }
 }

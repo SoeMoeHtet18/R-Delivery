@@ -50,7 +50,6 @@ Route::middleware('auth:shop-user-api')->group( function () {
     Route::get('get-transactions-for-shop-detail/{id}', [TransactionForShopApiController::class, 'getTransactionForShopDetailByID']);
     Route::get('order-count-by-shop-id', [OrderApiController::class, 'getOrderCountByShopID']);
     Route::get('order-total-amount-by-shop-id', [OrderApiController::class, 'getOrderTotalAmountByShopID']);
-    Route::get('order-count-by-rider-id', [OrderApiController::class, 'getOrderCountByRiderID']);
 });
 Route::post('rider-login', [RiderApiController::class, 'riderLoginApi']);
 Route::post('rider/create', [RiderApiController::class, 'create']);
@@ -63,6 +62,8 @@ Route::middleware('auth:rider-api')->group(function() {
     Route::post('rider/change-order-status',[RiderApiController::class, 'changeOrderStatus']);
     Route::get('customer-payment/{id}', [CustomerPaymentApiController::class, 'customerPaymentDetail']);
     Route::get('get-customer-payment-list', [CustomerPaymentApiController::class, 'getCustomerPaymentList']);
+    Route::get('order-count-by-rider-id', [OrderApiController::class, 'getOrderCountByRiderID']);
+    Route::get('order-total-amount-by-rider-id', [OrderApiController::class, 'getOrderTotalAmountByRiderID']);
 });
 
 Route::get('get-shop-list', [ShopApiController::class, 'getAllShopList']);

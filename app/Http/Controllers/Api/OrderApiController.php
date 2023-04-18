@@ -50,4 +50,11 @@ class OrderApiController extends Controller
         $count = $this->orderRepository->getOrdersStatusCountByRiderID($rider_id);
         return response()->json(['data'=> $count, 'message' => 'Successfully Get Orders Count By Rider ID', 'status' => 'success'],200);
     }
+
+    public function getOrderTotalAmountByRiderID()
+    {
+        $rider_id = auth()->guard('rider-api')->user()->id;
+        $total_amount = $this->orderRepository->getOrdersTotalAmountByRiderID($rider_id);
+        return response()->json(['data'=> $total_amount, 'message' => 'Successfully Get Orders Total Amount By Rider ID', 'status' => 'success'],200);
+    }
 }
