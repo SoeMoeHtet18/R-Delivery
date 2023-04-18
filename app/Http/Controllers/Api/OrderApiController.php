@@ -33,6 +33,14 @@ class OrderApiController extends Controller
         $shop_user = auth()->guard('shop-user-api')->user();
         $shop_id   = $shop_user->shop_id;
         $count = $this->orderRepository->getOrdersStatusCountByShopID($shop_id);
-        return response()->json(['data'=> $count, 'message' => 'Successfully Get Order Count By Shop ID', 'status' => 'success'],200);
+        return response()->json(['data'=> $count, 'message' => 'Successfully Get Orders Count By Shop ID', 'status' => 'success'],200);
+    }
+    
+    public function getOrderTotalAmountByShopID()
+    {
+        $shop_user = auth()->guard('shop-user-api')->user();
+        $shop_id   = $shop_user->shop_id;
+        $total_amount = $this->orderRepository->getOrdersTotalAmountByShopID($shop_id);
+        return response()->json(['data'=> $total_amount, 'message' => 'Successfully Get Orders Total Amount By Shop ID', 'status' => 'success'],200);
     }
 }

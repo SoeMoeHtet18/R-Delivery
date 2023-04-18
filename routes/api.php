@@ -48,7 +48,8 @@ Route::middleware('auth:shop-user-api')->group( function () {
     Route::get('get-shop_payment-detail/{id}', [ShopPaymentApiController::class, 'getShopPaymentDetailByID']);
     Route::get('transactions-for-shop/{id}/get-transactions-for-shop-list', [TransactionForShopApiController::class, 'getTransactionForShopListByShopID']);
     Route::get('get-transactions-for-shop-detail/{id}', [TransactionForShopApiController::class, 'getTransactionForShopDetailByID']);
-    Route::get('shop-user/get-order-count', [OrderApiController::class, 'getOrderCountByShopID']);
+    Route::get('order-count-by-shop-id', [OrderApiController::class, 'getOrderCountByShopID']);
+    Route::get('order-total-amount-by-shop-id', [OrderApiController::class, 'getOrderTotalAmountByShopID']);
 });
 Route::post('rider-login', [RiderApiController::class, 'riderLoginApi']);
 Route::post('rider/create', [RiderApiController::class, 'create']);

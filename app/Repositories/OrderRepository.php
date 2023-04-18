@@ -61,4 +61,10 @@ class OrderRepository
         $count['total_order'] = array_sum($count);
         return $count;
     }
+    
+    public function getOrdersTotalAmountByShopID($shop_id)
+    {
+        $total_amount = Order::where('shop_id', $shop_id)->sum('total_amount');
+        return $total_amount;
+    }
 }
