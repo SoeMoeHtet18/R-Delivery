@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\CityApiController;
 use App\Http\Controllers\Api\CustomerPaymentApiController;
 use App\Http\Controllers\Api\OrderApiController;
+use App\Http\Controllers\Api\PaymentTypeApiController;
 use App\Http\Controllers\Api\RiderApiController;
 use App\Http\Controllers\Api\ShopApiController;
 use App\Http\Controllers\Api\ShopPaymentApiController;
@@ -66,3 +67,4 @@ Route::get('townships', [TownshipApiController::class, 'getAllTownshipList']);
 Route::post('townships-get-by-city', [TownshipApiController::class, 'getAllTownshipListByCityID']);
 Route::post('riders-get-by-township', [RiderApiController::class, 'getAllRidersByTownshipID']);
 Route::post('/get-data-by-customer-phone', [OrderApiController::class, 'getDataByCustomerPhoneNumber']);
+Route::get('get-payment-type-list', [PaymentTypeApiController::class, 'getAllPaymentType']);

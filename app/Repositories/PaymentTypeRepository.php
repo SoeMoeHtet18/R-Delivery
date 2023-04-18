@@ -17,4 +17,10 @@ class PaymentTypeRepository
         $payment_type = PaymentType::findOrFail($id);
         return $payment_type;
     }
+
+    public function getPaymentTypeList()
+    {
+        $payment_type = PaymentType::get();
+        return $payment_type;
+    }
 }
