@@ -27,4 +27,12 @@ class OrderApiController extends Controller
             return response()->json(['data'=>null, 'status'=>'fail', 'message'=>'Fail to get order'],200);
         }
     }
+
+    public function getOrderCountByShopID()
+    {
+        $shop_user = auth()->guard('shop-user-api')->user();
+        $shop_id   = $shop_user->shop_id;
+        $count = $this->orderRepository->getOrdersStatusCountByShopID($shop_id);
+        return response()->json(['data'=> $count, 'message' => 'Successfully Get Order Count By Shop ID', 'status' => 'success'],200);
+    }
 }

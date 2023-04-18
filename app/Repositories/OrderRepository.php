@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Order;
+use Illuminate\Support\Facades\DB;
 
 class OrderRepository
 {
@@ -37,6 +38,27 @@ class OrderRepository
     public function getAllOrdersCount()
     {
         $count = Order::count();
+        return $count;
+    }
+
+    public function getOrdersStatusCountByShopID($shop_id)
+    {
+        $status = ['pending','success','delay','cancel'];
+        $orders = Order::where('shop_id', $shop_id)
+            ->select('status', DB::raw('count(*) as count'))
+            ->whereIn('status', $status)
+            ->groupBy('status')
+            ->get();
+        $count = [];
+        foreach ($status as $s) {
+            $count[$s] = 0;
+        }
+
+        foreach ($orders as $order) {
+            $count[$order->status] = $order->count;
+        }
+
+        $count['total_order'] = array_sum($count);
         return $count;
     }
 }
