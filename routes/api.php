@@ -50,6 +50,7 @@ Route::middleware('auth:shop-user-api')->group( function () {
     Route::get('get-transactions-for-shop-detail/{id}', [TransactionForShopApiController::class, 'getTransactionForShopDetailByID']);
     Route::get('order-count-by-shop-id', [OrderApiController::class, 'getOrderCountByShopID']);
     Route::get('order-total-amount-by-shop-id', [OrderApiController::class, 'getOrderTotalAmountByShopID']);
+    Route::get('order-count-by-rider-id', [OrderApiController::class, 'getOrderCountByRiderID']);
 });
 Route::post('rider-login', [RiderApiController::class, 'riderLoginApi']);
 Route::post('rider/create', [RiderApiController::class, 'create']);

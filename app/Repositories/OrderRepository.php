@@ -67,4 +67,25 @@ class OrderRepository
         $total_amount = Order::where('shop_id', $shop_id)->sum('total_amount');
         return $total_amount;
     }
+
+    public function getOrdersStatusCountByRiderID($rider_id)
+    {
+        $status = ['pending','success','delay','cancel'];
+        $orders = Order::where('rider_id', $rider_id)
+            ->select('status', DB::raw('count(*) as count'))
+            ->whereIn('status', $status)
+            ->groupBy('status')
+            ->get();
+        $count = [];
+        foreach ($status as $s) {
+            $count[$s] = 0;
+        }
+
+        foreach ($orders as $order) {
+            $count[$order->status] = $order->count;
+        }
+
+        $count['total_order'] = array_sum($count);
+        return $count;
+    }
 }
