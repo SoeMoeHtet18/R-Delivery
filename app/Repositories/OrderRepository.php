@@ -31,7 +31,7 @@ class OrderRepository
     
     public function getOrdersByShopID($id)
     {
-        $order = Order::where('shop_id',$id)->first();
+        $order = Order::where('shop_id',$id)->get();
         return $order;
     }
 

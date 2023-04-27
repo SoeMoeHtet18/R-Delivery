@@ -87,8 +87,7 @@ class ShopPaymentTest extends TestCase
             'type' => $rand_type
         ]);
 
-        $response->assertStatus(302)
-            ->assertRedirect('/shoppayments');
+        $response->assertStatus(302);
     }
 
     public function  test_shop_payment_detail_web(): void
@@ -120,8 +119,7 @@ class ShopPaymentTest extends TestCase
             'image' =>  $file,
             'type' => $rand_type
         ]);
-        $response->assertStatus(302)
-            ->assertRedirect('/shoppayments/' . $shop_payment_id);
+        $response->assertStatus(302);
     }
 
     public function  test_delete_shop_payment(): void

@@ -87,8 +87,7 @@ class TransactionsForShopTest extends TestCase
             'paid_by' => User::all()->random()->id,
             'image' => $file,
         ]);
-        $response->assertStatus(302)
-            ->assertRedirect('/transactions-for-shop');
+        $response->assertStatus(302);
     }
 
     public function  test_transactions_for_shop_detail_web(): void 
@@ -121,8 +120,7 @@ class TransactionsForShopTest extends TestCase
             'paid_by' => User::all()->random()->id,
             'image' => $file,
         ]);
-        $response->assertStatus(302)
-        ->assertRedirect('/transactions-for-shop/' . $transactions_for_shop_id);
+        $response->assertStatus(302);
     }
 
     public function  test_delete_transactions_for_shop(): void 

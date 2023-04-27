@@ -9,14 +9,17 @@ use App\Models\Order;
 use App\Models\ShopUser;
 use App\Models\Township;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\DB;
+use Laravel\Passport\Passport;
 use Tests\TestCase;
 
 class ShopUserApiTest extends TestCase
 {
-    use DatabaseTransactions, WithFaker;
+    use WithFaker, HasFactory;
 
     public function get_authenticated_shop_user()
     {
@@ -29,32 +32,44 @@ class ShopUserApiTest extends TestCase
      * A basic feature test example.
      */
 
-     public function test_shop_user_login(): void
-    {
-        $out = 'test_shop_user_login';
-        var_dump($out);
-
-        $response = $this->postJson('/api/shop_user_login', [
-            'phone_number' => '09123456789',
-            'password' => 'shopuser123'
-        ]);
-        $response->assertStatus(200);
-    }
-
     public function test_create_shop_user(): void
     {
-        $this->withoutExceptionHandling();
-        $out = 'test_create_shop_user';
-        var_dump($out);
+        // Start a new database transaction
+        DB::beginTransaction();
+        
+        try {
+            $this->withoutExceptionHandling();
+            $out = 'test_create_shop_user';
+            var_dump($out);
 
-        $response = $this->postJson('/api/shop-user/create', [
-            'name' => $this->faker->name,
-            'phone_number' => $this->faker->phoneNumber,
-            'email' => $this->faker->email,
-            'password' => $this->faker->password
-        ]);
-        $response->assertStatus(200);
+            $phone_number = $this->faker->phoneNumber;
+            $password = $this->faker->password;
+
+            $response = $this->postJson('/api/shop-user/create', [
+                'name' => $this->faker->name,
+                'phone_number' => $phone_number,
+                'email' => $this->faker->email,
+                'password' => $password
+            ]);
+            $response->assertStatus(200);
+
+            $response = $this->postJson('/api/shop_user_login', [
+                'phone_number' => $phone_number,
+                'password' => $password
+            ]);
+            $response->assertStatus(200);
+
+            // Commit the transaction
+            DB::commit();
+
+        } catch (\Exception $e) {
+            // Rollback the transaction if an exception occurred
+            DB::rollback();
+
+            throw $e;
+        }
     }
+
 
     public function test_update_shop_user(): void
     {
@@ -62,7 +77,7 @@ class ShopUserApiTest extends TestCase
         var_dump($out);
 
         $shop_user = $this->get_authenticated_shop_user();
-
+        DB::beginTransaction();
         $response = $this->postJson('/api/shop-user/update', [
             'name' => $this->faker->name,
             'phone_number' => $this->faker->phoneNumber,
@@ -107,7 +122,7 @@ class ShopUserApiTest extends TestCase
 
         $methods = ['drop-off','pick-up'];
         $rand_method = $methods[array_rand($methods)];
-
+        DB::beginTransaction();
         $response = $this->postJson('/api/shop-user/create-order-list', [
             "order_code" => MyHelper::nomenclature(['table_name'=>'orders','prefix'=>'OD','column_name'=>'order_code']),
             "customer_phone_number" => $this->faker->phoneNumber,
@@ -130,14 +145,13 @@ class ShopUserApiTest extends TestCase
 
     public function test_delete_shop_user(): void
     {
+        $this->withoutExceptionHandling();
         $out = 'test_delete_shop_user';
         var_dump($out);
 
         $shop_user = $this->get_authenticated_shop_user();
-
-        $response = $this->postJson('/api/shop-user/delete', [
-            'shop_user_id' => $shop_user->id
-        ]);
+        DB::beginTransaction();
+        $response = $this->postJson('/api/shop-user/delete');
         $response->assertStatus(200);
     }
 
@@ -149,7 +163,7 @@ class ShopUserApiTest extends TestCase
 
         $shop_user = $this->get_authenticated_shop_user();
         $shop_id = $shop_user->shop_id;
-
+        DB::beginTransaction();
         $response = $this->postJson('/api/shop_user/change-order-status', [
             'status' => 'cancel',
             'order_id' => Order::where('shop_id', $shop_id)->first()->id,

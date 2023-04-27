@@ -49,14 +49,19 @@ class RiderApiController extends Controller
     public function show()
     {
         $rider = auth()->guard('rider-api')->user();
+        $townships = $rider->townships;
+        $township_name = [];
+        foreach($townships as $township){
+            $township_name[] = $township->name; 
+        }
+        $rider['township_name'] = implode(',',$township_name);
         return response()->json(['data' => $rider, 'message' => 'Successfully Get Rider Detail', 'status' => 'success'], 200);
     }
 
-    public function getOrderList(Request $request)
+    public function getOrderList()
     {
         $rider = auth()->guard('rider-api')->user();
-        $data = $request->all();
-        $orders = $this->riderRepository->getOrderList($data, $rider->id);
+        $orders = $this->riderRepository->getOrderList($rider->id);
         return response()->json(['data' => $orders, 'message' => 'Successfully Get Order List By Rider ID', 'status' => 'success'], 200);
     }
 

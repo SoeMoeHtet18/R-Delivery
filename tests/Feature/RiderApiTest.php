@@ -7,11 +7,12 @@ use App\Models\Rider;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class RiderApiTest extends TestCase
 {
-    use DatabaseTransactions, WithFaker;
+    use WithFaker;
 
     public function get_authenticated_rider()
     {
@@ -26,11 +27,16 @@ class RiderApiTest extends TestCase
         $out = 'test_create_rider';
         var_dump($out);
 
+        DB::beginTransaction();
+
+        $phone_number = $this->faker->phoneNumber;
+        $password = $this->faker->password;
+
         $response = $this->postJson('/api/rider/create', [
             'name' => $this->faker->name,
-            'phone_number' => $this->faker->phoneNumber,
+            'phone_number' => $phone_number,
             'email' => $this->faker->email,
-            'password' => $this->faker->password
+            'password' => $password
         ]);
         $response->assertStatus(200)->assertJsonStructure([
             'data' => [
@@ -48,19 +54,10 @@ class RiderApiTest extends TestCase
             'message',
             'status'
         ]);
-    }
-    /**
-     * A basic feature test example.
-     */
-    public function test_rider_login(): void
-    {
-        $this->withoutExceptionHandling();
-        $out = 'test_rider_login';
-        var_dump($out);
-        
+
         $response = $this->postJson('/api/rider-login', [
-            'phone_number' => '09123456789',
-            'password' => 'rider123'
+            'phone_number' => $phone_number,
+            'password' => $password
         ]);
         $response->assertStatus(200)->assertJsonStructure([
             'data' => [
@@ -191,6 +188,8 @@ class RiderApiTest extends TestCase
         var_dump($out);
         $rider = $this->get_authenticated_rider();
 
+        DB::beginTransaction();
+
         $response = $this->postJson('/api/rider', [
             'name' => $this->faker->name,
             'phone_number' => $this->faker->phoneNumber,
@@ -226,6 +225,8 @@ class RiderApiTest extends TestCase
 
         $status = [ 'success', 'delay', 'cancel'];
         $rand_status = $status[array_rand($status)];
+
+        DB::beginTransaction();
 
         $response = $this->postJson('/api/rider/change-order-status', [
             'order_id' => Order::all()->random()->id,
