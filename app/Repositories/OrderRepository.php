@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Order;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class OrderRepository
@@ -93,5 +94,17 @@ class OrderRepository
     {
         $total_amount = Order::where('rider_id', $rider_id)->sum('total_amount');
         return $total_amount;
+    }
+
+    public function getOneDayOrderList($rider_id)
+    {
+        $yesterday = Carbon::yesterday();
+        $today = Carbon::today();
+        $orders = Order::where('orders.rider_id',$rider_id)
+            ->orwhereDate('orders.created_at', $yesterday)
+            ->orWhereDate('orders.schedule_date',$today)
+            ->leftJoin('shops','shops.id','orders.shop_id')
+            ->select('orders.*','shops.name as shop_name')->get();
+        return $orders;
     }
 }

@@ -64,6 +64,7 @@ Route::middleware('auth:rider-api')->group(function() {
     Route::get('get-customer-payment-list', [CustomerPaymentApiController::class, 'getCustomerPaymentList']);
     Route::get('order-count-by-rider-id', [OrderApiController::class, 'getOrderCountByRiderID']);
     Route::get('order-total-amount-by-rider-id', [OrderApiController::class, 'getOrderTotalAmountByRiderID']);
+    Route::get('get-one-day-order-list-by-rider', [OrderApiController::class, 'getOneDayOrderListByRider']);
 });
 
 Route::get('get-shop-list', [ShopApiController::class, 'getAllShopList']);

@@ -27,7 +27,6 @@ class RiderUpdateApiRequest extends FormRequest
         return [
             'name'                  => 'required|string',
             'phone_number'          => 'required|string|unique:riders,phone_number,'.$id,
-            'password'              => 'required|min:8',
         ];
     }
 

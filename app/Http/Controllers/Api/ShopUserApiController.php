@@ -49,6 +49,9 @@ class ShopUserApiController extends Controller
     public function show()
     {
         $shop_user = auth()->guard('shop-user-api')->user();
+        $shop = $shop_user->shop;
+        $shop_user['shop_name'] = $shop->name;
+        $shop_user['shop_address'] = $shop->address;
         return response()->json(['data' => $shop_user, 'message' => 'Successfully Get Shop User Detail', 'status' => 'success'], 200);
     }
 

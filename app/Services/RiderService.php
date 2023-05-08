@@ -27,7 +27,7 @@ class RiderService
         $rider->name = $data['name'];
         $rider->phone_number = $data['phone_number'];
         $rider->email = $data['email'] ?? $rider->email;
-        if($data['password']) {
+        if(isset($data['password'])) {
             $rider->password =  bcrypt($data['password']);
         }
         $rider->device_id = $data['device_id'] ?? $rider->device_id;
