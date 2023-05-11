@@ -98,13 +98,82 @@ class OrderRepository
 
     public function getOneDayOrderList($rider_id)
     {
-        $yesterday = Carbon::yesterday();
         $today = Carbon::today();
         $orders = Order::where('orders.rider_id',$rider_id)
-            ->orwhereDate('orders.created_at', $yesterday)
-            ->orWhereDate('orders.schedule_date',$today)
+            ->whereIn('orders.status', ['pending', 'delay'])
+            ->whereDate('orders.schedule_date', $today)
             ->leftJoin('shops','shops.id','orders.shop_id')
-            ->select('orders.*','shops.name as shop_name')->get();
+            ->select('orders.*','shops.name as shop_name')
+            // ->orderBy('updated_at', 'asc')
+            ->get();
         return $orders;
+    }
+
+    public function getUpcomingOrderList($rider_id)
+    {
+        $today = Carbon::today();
+        $orders = Order::where('orders.rider_id',$rider_id)
+            ->whereIn('orders.status', ['pending', 'delay'])
+            ->whereDate('orders.schedule_date', '>', $today)
+            ->leftJoin('shops','shops.id','orders.shop_id')
+            ->select('orders.*','shops.name as shop_name')
+            // ->orderBy('updated_at', 'asc')
+            ->get();
+        return $orders;
+    }
+    
+    public function getOrderHistoryList($rider_id)
+    {
+        $orders = Order::where('orders.rider_id', $rider_id)
+            ->where('status', 'success')
+            ->leftJoin('shops', 'shops.id', 'orders.shop_id')
+            ->select('orders.*', 'shops.name as shop_name')
+            // ->orderBy('updated_at', 'desc')
+            ->get();
+            
+        return $orders;
+    }
+
+
+    public function getOrderListCount($rider_id)
+    {
+        $status = ['one day', 'upcoming', 'history'];
+        $today = Carbon::today();
+        
+        $one_day = Order::where('rider_id', $rider_id)
+            ->whereDate('schedule_date', $today)
+            ->whereIn('orders.status', ['pending', 'delay'])
+            ->select('status')
+            ->count();
+        
+        $upcoming = Order::where('rider_id', $rider_id)
+            ->whereDate('schedule_date', '>', $today)
+            ->whereIn('orders.status', ['pending', 'delay'])
+            ->select('status')
+            ->count();
+        
+        $history = Order::where('rider_id', $rider_id)
+            ->where('status', 'success')
+            ->select('status')
+            ->count();
+        
+        $count = [];
+        foreach ($status as $s) {
+            $count[$s] = 0;
+        }
+        
+        if ($one_day) {
+            $count['one day'] = $one_day;
+        }
+        
+        if ($upcoming) {
+            $count['upcoming'] = $upcoming;
+        }
+        
+        if ($history) {
+            $count['history'] = $history;
+        }
+
+        return $count;
     }
 }

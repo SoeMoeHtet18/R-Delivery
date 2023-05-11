@@ -4,15 +4,18 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\OrderRepository;
+use App\Services\OrderService;
 use Illuminate\Http\Request;
 
 class OrderApiController extends Controller
 {
     protected $orderRepository;
+    protected $orderService;
 
-    public function __construct(OrderRepository $orderRepository)
+    public function __construct(OrderRepository $orderRepository, OrderService $orderService)
     {
         $this->orderRepository = $orderRepository;
+        $this->orderService = $orderService;
     }
 
     public function getDataByCustomerPhoneNumber(Request $request)
@@ -63,5 +66,26 @@ class OrderApiController extends Controller
         $rider_id = auth()->guard('rider-api')->user()->id;
         $orders = $this->orderRepository->getOneDayOrderList($rider_id);
         return response()->json(['data' => $orders, 'message' => 'Successfully Get One Day Order List By Rider', 'status' => 'success'],200);
+    }
+
+    public function getUpcomingOrderListByRider()
+    {
+        $rider_id = auth()->guard('rider-api')->user()->id;
+        $orders = $this->orderRepository->getUpcomingOrderList($rider_id);
+        return response()->json(['data' => $orders, 'message' => 'Successfully Get Upcoming Order List By Rider', 'status' => 'success'],200);
+    }
+    
+    public function getOrderHistoryListByRider()
+    {
+        $rider_id = auth()->guard('rider-api')->user()->id;
+        $orders = $this->orderRepository->getOrderHistoryList($rider_id);
+        return response()->json(['data' => $orders, 'message' => 'Successfully Get Upcoming Order List By Rider', 'status' => 'success'],200);
+    }
+
+    public function getOrderListCountByRiderID()
+    {
+        $rider_id = auth()->guard('rider-api')->user()->id;
+        $orders_counts = $this->orderRepository->getOrderListCount($rider_id);
+        return response()->json(['data'=>$orders_counts, 'message'=>'Successfully Get Order List Count By Rider', 'status' => 'success'], 200);
     }
 }

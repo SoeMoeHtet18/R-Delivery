@@ -65,6 +65,9 @@ Route::middleware('auth:rider-api')->group(function() {
     Route::get('order-count-by-rider-id', [OrderApiController::class, 'getOrderCountByRiderID']);
     Route::get('order-total-amount-by-rider-id', [OrderApiController::class, 'getOrderTotalAmountByRiderID']);
     Route::get('get-one-day-order-list-by-rider', [OrderApiController::class, 'getOneDayOrderListByRider']);
+    Route::get('get-upcoming-order-list-by-rider', [OrderApiController::class, 'getUpcomingOrderListByRider']);
+    Route::get('get-order-history-list-by-rider', [OrderApiController::class, 'getOrderHistoryListByRider']);
+    Route::get('get-order-list-count-by-rider', [OrderApiController::class, 'getOrderListCountByRiderID']);
 });
 
 Route::get('get-shop-list', [ShopApiController::class, 'getAllShopList']);
