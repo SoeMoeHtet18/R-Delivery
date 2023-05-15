@@ -20,4 +20,9 @@ class ShopUser extends Authenticatable
     {
         return $this->belongsTo(Shop::class);
     }
+
+    public function notifications()
+    {
+        return $this->morphToMany(Notification::class, 'notifiable');
+    }
 }

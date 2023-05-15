@@ -8,6 +8,13 @@ use App\Models\Order;
 class OrderService
 {   
     use FileUploadTrait;
+
+    protected $notificationService;
+
+    public function __construct(NotificationService $notificationService)
+    {
+        $this->notificationService = $notificationService;
+    }
     public function saveOrderData($data)
     {
         $order = new Order();
@@ -74,6 +81,9 @@ class OrderService
         $order->markup_delivery_fees =  $data['markup_delivery_fees'] ?? null;
         $order->remark =  $data['remark'] ?? null;
         $order->status =  $data['status'];
+        if($data['status'] = 'cancel') {
+            $this->notificationService->orderCancelNotificationForRider($order->rider_id,$order->order_code);
+        }
         $order->item_type =  $data['item_type'];
         $order->full_address =  $data['full_address'] ?? null;
         $order->schedule_date =  $data['schedule_date'] ?? null ;
@@ -105,6 +115,8 @@ class OrderService
     {
         $order->rider_id = $data['rider_id'];
         $order->save();
+        $notification = $this->notificationService->orderCreateNotificationForRider($order->rider_id);
+        return $order;
     }
 
     public function uploadProofOfPayment($order, $image) 

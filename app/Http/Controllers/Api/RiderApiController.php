@@ -7,13 +7,16 @@ use App\Http\Requests\RiderCreateApiRequest;
 use App\Http\Requests\RiderLoginApiRequest;
 use App\Http\Requests\RiderUpdateApiRequest;
 use App\Models\Rider;
+use App\Repositories\NotificationRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\RiderRepository;
 use App\Repositories\TownshipRepository;
+use App\Services\NotificationService;
 use App\Services\OrderService;
 use App\Services\RiderService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class RiderApiController extends Controller
@@ -23,14 +26,18 @@ class RiderApiController extends Controller
     protected $orderRepository;
     protected $orderService;
     protected $townshipRepository;
+    protected $notificationRepository;
+    protected $notificationservice;
 
-    public function __construct(RiderRepository $riderRepository, RiderService $riderService, OrderRepository $orderRepository, OrderService $orderService, TownshipRepository $townshipRepository)
+    public function __construct(RiderRepository $riderRepository, RiderService $riderService, OrderRepository $orderRepository, OrderService $orderService, TownshipRepository $townshipRepository, NotificationRepository $notificationRepository, NotificationService $notificationservice,)
     {
         $this->riderRepository = $riderRepository;
         $this->riderService = $riderService;
         $this->orderRepository = $orderRepository;
         $this->orderService = $orderService;
         $this->townshipRepository = $townshipRepository;
+        $this->notificationRepository = $notificationRepository;
+        $this->notificationservice = $notificationservice;
     }
 
     public function riderLoginApi(RiderLoginApiRequest $request)
@@ -107,5 +114,28 @@ class RiderApiController extends Controller
         $township = $this->townshipRepository->getTownshipById($township_id);
         $riders = $township->riders;
         return response()->json(['data' => $riders, 'message' => 'Successfully Get Riders By Township', 'status' => 'success'], 200);
+    }
+
+    public function getNotifications()
+    {
+        $rider = auth()->guard('rider-api')->user();
+        $notifications = $this->notificationRepository->getNotificationsForRider($rider->id);
+        return response()->json(['data' => $notifications, 'message' => 'Successfully Get Notifications', 'status' => 'success'], 200);
+    }
+
+    public function removeNotification(Request $request)
+    {
+        $rider = auth()->guard('rider-api')->user();
+        $notification_id = $request->notification_id;
+        $notifications = $this->notificationservice->removeNotificationByRider($notification_id, $rider->id);
+        return response()->json(['data' => $notifications, 'message' => 'Successfully Remove Notification', 'status' => 'success'], 200);
+
+    }
+
+    public function makeNoticationRead(Request $request){
+        $rider = auth()->guard('rider-api')->user();
+        $notification_id = $request->notification_id;
+        $notifications = $this->notificationservice->makeNoticationReadByRider($notification_id, $rider->id);
+        return response()->json(['data' => $notifications, 'message' => 'Successfully make notification read', 'status' => 'success'], 200);
     }
 }

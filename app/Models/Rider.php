@@ -18,4 +18,9 @@ class Rider extends Authenticatable
     {
         return $this->belongsToMany(Township::class, 'rider_township','rider_id','township_id');
     }
+
+    public function notifications()
+    {
+        return $this->morphToMany(Notification::class, 'notifiable');
+    }
 }
