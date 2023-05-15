@@ -88,4 +88,21 @@ class OrderApiController extends Controller
         $orders_counts = $this->orderRepository->getOrderListCount($rider_id);
         return response()->json(['data'=>$orders_counts, 'message'=>'Successfully Get Order List Count By Rider', 'status' => 'success'], 200);
     }
+
+    public function uploadProofOfPaymentByRider(Request $request)
+    {
+        $image = $request->file('image');
+        $id = $request->order_id;
+        $order = $this->orderRepository->getOrderByID($id);
+        $uploadedImage = $this->orderService->uploadProofOfPayment($order, $image);
+        $imageUrl = asset('/storage/order payment/' . $uploadedImage);
+        return response()->json(['data'=>$order->id, 'message'=>'Successfully Upload Proof Of Payment By Rider', 'status' => 'success'], 200);
+    }
+
+    public function getOrderDetail(Request $request)
+    {
+        $order_id = $request->order_id;
+        $order = $this->orderRepository->getOrderDetailWithRelatedData($order_id);
+        return response()->json(['data'=>$order, 'message'=>'Successfully Get Order Detail', 'status' => 'success'], 200);
+    }
 }

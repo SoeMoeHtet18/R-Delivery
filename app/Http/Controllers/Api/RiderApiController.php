@@ -98,7 +98,7 @@ class RiderApiController extends Controller
         $status = $request->status;
         $order = $this->orderRepository->getOrderByID($order_id);
         $data = $this->orderService->changeStatus($order, $status);
-        return response()->json(['data' => $data, 'message' => 'Successfull Change Order Status', 'status' => 'success'], 200);
+        return response()->json(['data' => $data, 'message' => 'Successfully Change Order Status', 'status' => 'success'], 200);
     }
 
     public function getAllRidersByTownshipID(Request $request)
@@ -106,6 +106,6 @@ class RiderApiController extends Controller
         $township_id = $request->township_id;
         $township = $this->townshipRepository->getTownshipById($township_id);
         $riders = $township->riders;
-        return response()->json(['data' => $riders, 'message' => 'Successfull Get Riders By Township', 'status' => 'success'], 200);
+        return response()->json(['data' => $riders, 'message' => 'Successfully Get Riders By Township', 'status' => 'success'], 200);
     }
 }

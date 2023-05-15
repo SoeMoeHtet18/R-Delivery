@@ -68,6 +68,8 @@ Route::middleware('auth:rider-api')->group(function() {
     Route::get('get-upcoming-order-list-by-rider', [OrderApiController::class, 'getUpcomingOrderListByRider']);
     Route::get('get-order-history-list-by-rider', [OrderApiController::class, 'getOrderHistoryListByRider']);
     Route::get('get-order-list-count-by-rider', [OrderApiController::class, 'getOrderListCountByRiderID']);
+    Route::post('upload-proof-of-payment-by-rider',[OrderApiController::class, 'uploadProofOfPaymentByRider']);
+    Route::get('get-order-detail', [OrderApiController::class, 'getOrderDetail']);
 });
 
 Route::get('get-shop-list', [ShopApiController::class, 'getAllShopList']);

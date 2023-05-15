@@ -176,4 +176,14 @@ class OrderRepository
 
         return $count;
     }
+
+    public function getOrderDetailWithRelatedData($id)
+    {
+        $order = Order::where('orders.id', $id)
+            ->leftJoin('shops', 'shops.id', 'orders.shop_id')
+            ->select('orders.*', 'shops.name as shop_name')
+            ->first();
+            
+        return $order;
+    }
 }

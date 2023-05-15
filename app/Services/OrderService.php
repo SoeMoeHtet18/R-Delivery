@@ -80,7 +80,7 @@ class OrderService
         $order->type =  $data['type'];
         $order->collection_method =  $data['collection_method'];
         if($file) {
-            $file_name = $this->uploadFile($file, 'public', 'customer payment');
+            $file_name = $this->uploadFile($file, 'public', 'order payment');
             $order->proof_of_payment = $file_name;
         } else {
             $order->proof_of_payment =  $order->proof_of_payment;
@@ -105,5 +105,17 @@ class OrderService
     {
         $order->rider_id = $data['rider_id'];
         $order->save();
+    }
+
+    public function uploadProofOfPayment($order, $image) 
+    {
+        if($image) {
+            $file_name = $this->uploadFile($image, 'public', 'order payment');
+            $order->proof_of_payment =  $file_name;
+        } else {
+            $order->proof_of_payment =  $order->proof_of_payment;
+        }
+        $order->save();
+        return $file_name;
     }
 }
