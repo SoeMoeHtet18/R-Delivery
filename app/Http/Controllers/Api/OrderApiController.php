@@ -97,6 +97,7 @@ class OrderApiController extends Controller
         $id = $request->order_id;
         $order = $this->orderRepository->getOrderByID($id);
         $uploadedImage = $this->orderService->uploadProofOfPayment($order, $image);
+        $status = $this->orderService->changeStatus($order, 'success');
         $imageUrl = asset('/storage/order payment/' . $uploadedImage);
         return response()->json(['data'=>$order->id, 'message'=>'Successfully Upload Proof Of Payment By Rider', 'status' => 'success'], 200);
     }
