@@ -98,21 +98,21 @@ class OrderRepository
             $total_amount = Order::where('rider_id', $rider_id)
                 ->whereDate('schedule_date', $today)
                 ->whereIn('orders.status', ['pending', 'delay'])
-                ->selectRaw('SUM(total_amount + delivery_fees + markup_delivery_fees) AS total_amount')
+                ->selectRaw('SUM(total_amount + IF(markup_delivery_fees = 0, delivery_fees, markup_delivery_fees)) AS total_amount')
                 ->first();
-        }
+        }        
         if ($list_status == 'history') {
             $total_amount = Order::where('rider_id', $rider_id)
                 ->whereDate('schedule_date', '>', $today)
                 ->whereIn('orders.status', ['pending', 'delay'])
-                ->selectRaw('SUM(total_amount + delivery_fees + markup_delivery_fees) AS total_amount')
+                ->selectRaw('SUM(total_amount + IF(markup_delivery_fees = 0, delivery_fees, markup_delivery_fees)) AS total_amount')
                 ->first();
         }
 
         if ($list_status == 'upcoming') {
             $total_amount = Order::where('rider_id', $rider_id)
                 ->where('status', 'success')
-                ->selectRaw('SUM(total_amount + delivery_fees + markup_delivery_fees) AS total_amount')
+                ->selectRaw('SUM(total_amount + IF(markup_delivery_fees = 0, delivery_fees, markup_delivery_fees)) AS total_amount')
                 ->first();
         }
         
