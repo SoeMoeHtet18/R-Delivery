@@ -73,6 +73,7 @@ Route::middleware('auth:rider-api')->group(function() {
     Route::get('get-notifications-by-rider', [RiderApiController::class, 'getNotifications']);
     Route::post('remove-notification-by-rider', [RiderApiController::class, 'removeNotification']);
     Route::post('make-notification-read-by-rider', [RiderApiController::class, 'makeNoticationRead']);
+    Route::get('get-notification-count-by-rider', [RiderApiController::class, 'getNotificationCount']);
 });
 
 Route::get('get-shop-list', [ShopApiController::class, 'getAllShopList']);

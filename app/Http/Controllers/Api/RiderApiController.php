@@ -138,4 +138,11 @@ class RiderApiController extends Controller
         $notifications = $this->notificationservice->makeNoticationReadByRider($notification_id, $rider->id);
         return response()->json(['data' => $notifications, 'message' => 'Successfully make notification read', 'status' => 'success'], 200);
     }
+
+    public function getNotificationCount()
+    {
+        $rider = auth()->guard('rider-api')->user();
+        $notifications = $this->notificationRepository->getNotificationCountForRider($rider->id);
+        return response()->json(['data' => $notifications, 'message' => 'Successfully get notification count', 'status' => 'success'], 200);
+    }
 }
