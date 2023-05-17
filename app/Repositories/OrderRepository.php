@@ -127,7 +127,7 @@ class OrderRepository
             ->whereDate('orders.schedule_date', $today)
             ->leftJoin('shops', 'shops.id', 'orders.shop_id')
             ->select('orders.*', 'shops.name as shop_name')
-            // ->orderBy('updated_at', 'asc')
+            ->orderBy('updated_at', 'asc')
             ->get();
         return $orders;
     }
@@ -140,7 +140,7 @@ class OrderRepository
             ->whereDate('orders.schedule_date', '>', $today)
             ->leftJoin('shops', 'shops.id', 'orders.shop_id')
             ->select('orders.*', 'shops.name as shop_name')
-            // ->orderBy('updated_at', 'asc')
+            ->orderBy('updated_at', 'asc')
             ->get();
         return $orders;
     }
@@ -151,7 +151,7 @@ class OrderRepository
             ->where('status', 'success')
             ->leftJoin('shops', 'shops.id', 'orders.shop_id')
             ->select('orders.*', 'shops.name as shop_name')
-            // ->orderBy('updated_at', 'desc')
+            ->orderBy('updated_at', 'desc')
             ->get();
 
         return $orders;
