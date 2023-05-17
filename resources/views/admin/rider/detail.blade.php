@@ -26,6 +26,7 @@
             </form>
         </div>
         <div class="detail-infos">
+        <div id="rider-id" data-rider-id="{{ $rider->id }}"></div>
             <div class="row m-0 mb-3">
                 <div class="col-2">
                     <h4>Name <b>:</b></h4>
@@ -171,9 +172,8 @@
 @section('javascript')
 <script type="text/javascript">
     $(function() {
-        var rider_id = {
-            !!json_encode($rider['id']) !!
-        };
+        var rider_id = document.getElementById('rider-id').getAttribute('data-rider-id');
+
         $('#pending-order-datatable').DataTable({
             processing: true,
             serverSide: true,

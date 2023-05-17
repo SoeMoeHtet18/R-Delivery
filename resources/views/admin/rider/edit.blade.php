@@ -51,9 +51,8 @@
                     @endif
                 </div>
             </div>
-
             <div class="row m-0 mb-3">
-                <label for="password-confirm" class="col-2">
+                <label for="password-confirm" class="col-2 text-nowrap">
                     <h4>Confirm Password <b>:</b></h4>
                 </label>
                 <div class="col-10">
