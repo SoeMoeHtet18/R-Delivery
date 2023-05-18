@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Helper;
 use App\Http\Requests\OrderCreateRequest;
 use App\Http\Requests\OrderUpdateRequest;
-use App\Helpers\MyHelper;
 use App\Http\Requests\RiderAssignRequest;
-use App\Models\Order;
 use App\Repositories\CityRepository;
 use App\Repositories\ItemTypeRepository;
 use App\Repositories\OrderRepository;
@@ -16,7 +15,6 @@ use App\Repositories\TownshipRepository;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Laravel\Ui\Presets\React;
 use Yajra\DataTables\Facades\DataTables;
 
 class OrderController extends Controller
@@ -29,15 +27,15 @@ class OrderController extends Controller
     protected $townshipRepository;
     protected $orderService;
 
-    public function __construct(ShopRepository $shopRepository, 
-        RiderRepository $riderRepository, 
-        CityRepository $cityRepository, 
-        ItemTypeRepository $itemTypeRepository, 
+    public function __construct(
+        ShopRepository $shopRepository,
+        RiderRepository $riderRepository,
+        CityRepository $cityRepository,
+        ItemTypeRepository $itemTypeRepository,
         TownshipRepository $townshipRepository,
         OrderRepository $orderRepository,
         OrderService $orderService
-        )
-    {
+    ) {
         $this->shopRepository = $shopRepository;
         $this->riderRepository = $riderRepository;
         $this->cityRepository = $cityRepository;
@@ -56,14 +54,14 @@ class OrderController extends Controller
         $riders = $this->riderRepository->getAllRiders();
         $shops  = $this->shopRepository->getAllShops();
 
-        return view('admin.order.index',compact('cities','townships','riders','shops'));
+        return view('admin.order.index', compact('cities', 'townships', 'riders', 'shops'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
-    {   
+    {
         $shops = $this->shopRepository->getAllShops();
         $shops = $shops->sortByDesc('id');
         $riders = $this->riderRepository->getAllRiders();
@@ -74,16 +72,15 @@ class OrderController extends Controller
         $townships = $townships->sortByDesc('id');
         $item_types = $this->itemTypeRepository->getAllItemTypes();
         $item_types = $item_types->sortByDesc('id');
-        $order_code = MyHelper::nomenclature(['table_name'=>'orders','prefix'=>'OD','column_name'=>'order_code']);
-        
-        return view('admin.order.create',compact('shops', 'riders', 'cities', 'item_types', 'order_code', 'townships'));
+
+        return view('admin.order.create', compact('shops', 'riders', 'cities', 'item_types', 'townships'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(OrderCreateRequest $request)
-    {   
+    {
         $data = $request->all();
         $this->orderService->saveOrderData($data);
         return redirect()->route('orders.index');
@@ -95,7 +92,7 @@ class OrderController extends Controller
     public function show(string $id)
     {
         $order = $this->orderRepository->getOrderByID($id);
-        return view('admin.order.detail',compact('order'));
+        return view('admin.order.detail', compact('order'));
     }
 
     /**
@@ -110,7 +107,7 @@ class OrderController extends Controller
         $cities = $cities->sortByDesc('id');
         $item_types = $this->itemTypeRepository->getAllItemTypes();
         $item_types = $item_types->sortByDesc('id');
-        
+
         $city_id = $order->city_id;
         $townships = $this->townshipRepository->getAllTownshipsByCityID($city_id);
         $townships = $townships->sortByDesc('id');
@@ -118,7 +115,7 @@ class OrderController extends Controller
         $township = $this->townshipRepository->getTownshipById($order->township_id);
         $riders = $township->riders;
         $riders = $riders->sortByDesc('id');
-        
+
         $date = new Carbon($order->schedule_date);
         $scheduledate = $date->format('Y-m-d');
 
@@ -129,14 +126,13 @@ class OrderController extends Controller
      * Update the specified resource in storage.
      */
     public function update(OrderUpdateRequest $request, string $id)
-    {   
+    {
         $order = $this->orderRepository->getOrderByID($id);
         $data = $request->all();
         $file = $request->file('proof_of_payment');
-        $this->orderService->updateOrderByID($data,$order, $file);
+        $this->orderService->updateOrderByID($data, $order, $file);
 
         return redirect()->route('orders.index');
-
     }
 
     /**
@@ -152,21 +148,21 @@ class OrderController extends Controller
     {
         $data = $this->riderRepository->getPendingOrderListByRiderID($id);
         return DataTables::of($data)
-            ->addColumn('order_code', function($data) {
-                return '<a href="' . route("orders.show", $data->id ) . '">' . $data->order_code . '</a>';
+            ->addColumn('order_code', function ($data) {
+                return '<a href="' . route("orders.show", $data->id) . '">' . $data->order_code . '</a>';
             })
             ->addIndexColumn()
             ->rawColumns(['order_code'])
             ->orderColumn('orders.id', '-id $1')
             ->make(true);
     }
-    
+
     public function getOrderHistoryTableByRiderID(Request $request, $id)
     {
         $data = $this->riderRepository->getOrderHistoryListByRiderID($id);
         return DataTables::of($data)
-            ->addColumn('order_code', function($data) {
-                return '<a href="' . route("orders.show", $data->id ) . '">' . $data->order_code . '</a>';
+            ->addColumn('order_code', function ($data) {
+                return '<a href="' . route("orders.show", $data->id) . '">' . $data->order_code . '</a>';
             })
             ->addIndexColumn()
             ->rawColumns(['order_code'])
@@ -178,8 +174,8 @@ class OrderController extends Controller
     {
         $data = $this->shopRepository->getShopOrdersByShopID($id);
         return DataTables::of($data)
-            ->addColumn('order_code', function($data) {
-                return '<a href="' . route("orders.show", $data->id ) . '">' . $data->order_code . '</a>';
+            ->addColumn('order_code', function ($data) {
+                return '<a href="' . route("orders.show", $data->id) . '">' . $data->order_code . '</a>';
             })
             ->addIndexColumn()
             ->rawColumns(['order_code'])
@@ -212,36 +208,36 @@ class OrderController extends Controller
         $rider = $request->rider;
         $shop  = $request->shop;
         $data = $this->orderRepository->getAllOrdersQuery();
-        if($status != null) {
-            $data = $data->where('orders.status',$status);
+        if ($status != null) {
+            $data = $data->where('orders.status', $status);
         }
-        if($township != null) {
-            $data = $data->where('orders.township_id',$township);
+        if ($township != null) {
+            $data = $data->where('orders.township_id', $township);
         }
-        if($search) {
-            $data = $data->where('orders.order_code','like', '%' . $search . '%')->orWhere('orders.customer_name','like','%' . $search . '%')->orWhere('orders.customer_phone_number','like', '%' . $search . '%')->orWhere('orders.item_type','like', '%' . $search . '%')->orWhere('orders.full_address','like', '%' . $search . '%');
+        if ($search) {
+            $data = $data->where('orders.order_code', 'like', '%' . $search . '%')->orWhere('orders.customer_name', 'like', '%' . $search . '%')->orWhere('orders.customer_phone_number', 'like', '%' . $search . '%')->orWhere('orders.item_type', 'like', '%' . $search . '%')->orWhere('orders.full_address', 'like', '%' . $search . '%');
         }
-        if($city != null) {
-            $data = $data->where('orders.city_id',$city);
+        if ($city != null) {
+            $data = $data->where('orders.city_id', $city);
         }
-        if($rider != null) {
-            $data = $data->where('orders.rider_id',$rider);
+        if ($rider != null) {
+            $data = $data->where('orders.rider_id', $rider);
         }
-        if($shop != null) {
-            $data = $data->where('orders.shop_id',$shop);
+        if ($shop != null) {
+            $data = $data->where('orders.shop_id', $shop);
         }
 
         return DataTables::of($data)
             ->addIndexColumn()
-            ->addColumn('order_code', function($data) {
-                return '<a href="' . route("orders.show", $data->id ) . '">' . $data->order_code . '</a>';
+            ->addColumn('order_code', function ($data) {
+                return '<a href="' . route("orders.show", $data->id) . '">' . $data->order_code . '</a>';
             })
-            ->addColumn('action', function($row){
+            ->addColumn('action', function ($row) {
                 $actionBtn = '
-                    <a href="'. route("orders.show", $row->id) .'" class="btn btn-info btn-sm">View</a> 
-                    <a href="'. route("orders.edit", $row->id) .'" class="btn btn-light btn-sm">Edit</a> 
-                    <form action="'.route("orders.destroy", $row->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this order?`);">
-                        <input type="hidden" name="_token" value="'. csrf_token() .'">
+                    <a href="' . route("orders.show", $row->id) . '" class="btn btn-info btn-sm">View</a> 
+                    <a href="' . route("orders.edit", $row->id) . '" class="btn btn-light btn-sm">Edit</a> 
+                    <form action="' . route("orders.destroy", $row->id) . '" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this order?`);">
+                        <input type="hidden" name="_token" value="' . csrf_token() . '">
                         <input type="hidden" name="_method" value="DELETE">
                         <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
                     </form>';
@@ -254,55 +250,72 @@ class OrderController extends Controller
 
     public function getPendingOrderTableByTownshipID(Request $request, $id)
     {
-        if($request->ajax()) {
+        if ($request->ajax()) {
             $orderQuery = $this->orderRepository->getAllOrdersQuery();
-           
-            $orders = $orderQuery->where('township_id', $id)->where('status','pending')->orWhere('status','delay');
-           
+
+            $orders = $orderQuery->where('township_id', $id)->where('status', 'pending')->orWhere('status', 'delay');
+
             return DataTables::of($orders)
-                    ->addColumn('order_code', function($data) {
-                        return '<a href="' . route("orders.show", $data->id ) . '">' . $data->order_code . '</a>';
-                    })
-                    ->addIndexColumn()
-                    ->rawColumns(['order_code'])
-                    ->orderColumn('orders.id', '-id $1')
-                    ->make(true);
-            }
+                ->addColumn('order_code', function ($data) {
+                    return '<a href="' . route("orders.show", $data->id) . '">' . $data->order_code . '</a>';
+                })
+                ->addIndexColumn()
+                ->rawColumns(['order_code'])
+                ->orderColumn('orders.id', '-id $1')
+                ->make(true);
+        }
     }
 
     public function getCompletedOrderTableByTownshipID(Request $request, $id)
     {
-        if($request->ajax()) {
+        if ($request->ajax()) {
             $orderQuery = $this->orderRepository->getAllOrdersQuery();
-           
-            $orders = $orderQuery->where('township_id', $id)->where('status','success');
-           
+
+            $orders = $orderQuery->where('township_id', $id)->where('status', 'success');
+
             return DataTables::of($orders)
-                    ->addColumn('order_code', function($data) {
-                        return '<a href="' . route("orders.show", $data->id ) . '">' . $data->order_code . '</a>';
-                    })
-                    ->addIndexColumn()
-                    ->rawColumns(['order_code'])
-                    ->orderColumn('orders.id', '-id $1')
-                    ->make(true);
-            }
+                ->addColumn('order_code', function ($data) {
+                    return '<a href="' . route("orders.show", $data->id) . '">' . $data->order_code . '</a>';
+                })
+                ->addIndexColumn()
+                ->rawColumns(['order_code'])
+                ->orderColumn('orders.id', '-id $1')
+                ->make(true);
+        }
     }
 
     public function getCanceledOrderTableByTownshipID(Request $request, $id)
     {
-        if($request->ajax()) {
+        if ($request->ajax()) {
             $orderQuery = $this->orderRepository->getAllOrdersQuery();
-            
-            $orders = $orderQuery->where('township_id', $id)->where('status','cancel');
-            
+
+            $orders = $orderQuery->where('township_id', $id)->where('status', 'cancel');
+
             return DataTables::of($orders)
-                    ->addColumn('order_code', function($data) {
-                        return '<a href="' . route("orders.show", $data->id ) . '">' . $data->order_code . '</a>';
-                    })
-                    ->addIndexColumn()
-                    ->rawColumns(['order_code'])
-                    ->orderColumn('orders.id', '-id $1')
-                    ->make(true);
-            }
+                ->addColumn('order_code', function ($data) {
+                    return '<a href="' . route("orders.show", $data->id) . '">' . $data->order_code . '</a>';
+                })
+                ->addIndexColumn()
+                ->rawColumns(['order_code'])
+                ->orderColumn('orders.id', '-id $1')
+                ->make(true);
+        }
+    }
+
+    public function createByShopID(Request $request)
+    {
+        $shop_id = $request->input('shop_id'); // Retrieve shop_id from the request
+        $shops = $this->shopRepository->getAllShops();
+        $shops = $shops->sortByDesc('id');
+        $riders = $this->riderRepository->getAllRiders();
+        $riders = $riders->sortByDesc('id');
+        $cities = $this->cityRepository->getAllCities();
+        $cities = $cities->sortByDesc('id');
+        $townships = $this->townshipRepository->getAllTownships();
+        $townships = $townships->sortByDesc('id');
+        $item_types = $this->itemTypeRepository->getAllItemTypes();
+        $item_types = $item_types->sortByDesc('id');
+
+        return view('admin.order.create', compact('shop_id', 'shops', 'riders', 'cities', 'item_types', 'townships'));
     }
 }

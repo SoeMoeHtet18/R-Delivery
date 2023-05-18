@@ -93,12 +93,13 @@ class OrderRepository
     public function getOrdersTotalAmountByRiderID($rider_id, $list_status)
     {
         $total_amount = Order::where('rider_id', $rider_id)
-                ->where('status', 'success')
-                ->selectRaw('SUM(total_amount + delivery_fees + markup_delivery_fees)) AS total_amount')
-                ->first();
-                
+            ->where('status', 'success')
+            ->selectRaw('SUM(total_amount + delivery_fees + markup_delivery_fees) AS total_amount')
+            ->first();
+
+
         return $total_amount;
-        
+
         // $today = Carbon::today();
 
         // if ($list_status == 'one day') {
@@ -122,7 +123,7 @@ class OrderRepository
         //         ->selectRaw('SUM(total_amount + IF(markup_delivery_fees = 0, delivery_fees, markup_delivery_fees)) AS total_amount')
         //         ->first();
         // }
-        
+
         // return $total_amount;
     }
 

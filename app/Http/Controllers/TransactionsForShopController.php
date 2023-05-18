@@ -164,4 +164,14 @@ class TransactionsForShopController extends Controller
             ->orderColumn('id','-transactions_for_shops.id')
             ->make(true);
     }
+
+    public function createTransactionForShopByShopID(Request $request)
+    {
+        $shop_id = $request->shop_id;
+        $shops = $this->shopRepository->getAllShops();
+        $shops = $shops->sortByDesc('id');
+        $users = $this->adminRepository->getAllUsers();
+        $users = $users->sortByDESC('id');
+        return view('admin.transactionsforshop.create', compact('shop_id', 'shops', 'users'));
+    }
 }

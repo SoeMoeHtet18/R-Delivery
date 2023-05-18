@@ -30,4 +30,11 @@ class TownshipApiController extends Controller
         // $townships = $townships->sortByDesc('id');
         return response()->json(['data' => $townships, 'message' => 'Successfully Get Townships List', 'status' => 'success'], 200);
     }
+
+    public function getDeliveryFees(Request $request)
+    {
+        $township_id = $request->township_id;
+        $delivery_fees = $this->townshipRepository->getDeliveryFees($township_id);
+        return response()->json(['data' => $delivery_fees, 'message' => 'Successfully Get Delivery Fees', 'status' => 'success'], 200);
+    }
 }

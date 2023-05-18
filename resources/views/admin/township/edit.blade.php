@@ -34,6 +34,17 @@
                     </select>
                 </div>
             </div>
+            <div class="row m-0 mb-3">
+                <label for="delivery_fees" class="col-2">
+                    <h4>Delivery Fees <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <input type="text" id="delivery_fees" name="delivery_fees" value="{{$township->delivery_fees}}" class="form-control" />
+                    @if ($errors->has('delivery_fees'))
+                    <span class="text-danger"><strong>{{ $errors->first('delivery_fees') }}</strong></span>
+                    @endif
+                </div>
+            </div>
             <div class="footer-button float-end">
                 <a href="{{url()->previous() }}" class="btn btn-light">Cancel</a>
                 <input type="submit" class="btn btn-success ">

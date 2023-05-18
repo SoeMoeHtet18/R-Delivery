@@ -121,6 +121,8 @@
                 <tr>
                     <th>#</th>
                     <th>Total Amount</th>
+                    <th>Delivery Fees</th>
+                    <th>Markup Delivery Fees</th>
                     <th>Order Code</th>
                     <th>Shop</th>
                     <th>Rider</th>
@@ -129,8 +131,6 @@
                     <th>City</th>
                     <th>Township</th>
                     <th>Quantity</th>
-                    <th>Delivery Fees</th>
-                    <th>Markup Delivery Fees</th>
                     <th>Remark</th>
                     <th>Status</th>
                     <th>Item Type</th>
@@ -187,6 +187,14 @@
                         name: 'total_amount'
                     },
                     {
+                        data: 'delivery_fees',
+                        name: 'delivery_fees'
+                    },
+                    {
+                        data: 'markup_delivery_fees',
+                        name: 'markup_delivery_fees'
+                    },
+                    {
                         data: 'order_code',
                         name: 'order_code'
                     },
@@ -217,14 +225,6 @@
                     {
                         data: 'quantity',
                         name: 'quantity'
-                    },
-                    {
-                        data: 'delivery_fees',
-                        name: 'delivery_fees'
-                    },
-                    {
-                        data: 'markup_delivery_fees',
-                        name: 'markup_delivery_fees'
                     },
                     {
                         data: 'remark',

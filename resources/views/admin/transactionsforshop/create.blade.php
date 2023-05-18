@@ -17,7 +17,12 @@
                     <select name="shop_id" id="shop_name" class="form-control">
                         <option value="" selected disabled>Select the Shop of this Payment</option>
                         @foreach($shops as $shop)
-                        <option value="{{$shop->id}}" @if($shop->id == old('shop_id')) selected @endif>{{$shop->name}}</option>
+                        <option value="{{$shop->id}}"  @isset($shop_id) @if($shop->id == $shop_id) selected
+                            @endif
+                            @else
+                            @if($shop->id == old('shop_id')) selected
+                            @endif
+                            @endisset>{{$shop->name}}</option>
                         @endforeach
                     </select>
                     @if($errors->has('shop_id'))

@@ -84,3 +84,5 @@ Route::post('riders-get-by-township', [RiderApiController::class, 'getAllRidersB
 Route::post('/get-data-by-customer-phone', [OrderApiController::class, 'getDataByCustomerPhoneNumber']);
 Route::get('get-payment-type-list', [PaymentTypeApiController::class, 'getAllPaymentType']);
 Route::get('get-item-type-list', [ItemTypeApiController::class, 'getAllItemType']);
+Route::post('get-order-code',[OrderApiController::class, 'getOrderCode']);
+Route::post('get-delivery-fees-by-township', [TownshipApiController::class, 'getDeliveryFees']);

@@ -17,6 +17,7 @@
                 <input type="submit" value="Delete" class="btn btn-danger float-end">
             </form>
         </div>
+        <div id="township_id" data-township-id="{{$township->id}}">
         <div class="detail-infos">
             <div class="row m-0 mb-3">
                 <div class="col-2">
@@ -32,6 +33,14 @@
                 </div>
                 <div class="col-10">
                     {{ $township->city->name }}
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <div class="col-2">
+                    <h4>Delivery Fees <b>:</b></h4>
+                </div>
+                <div class="col-10">
+                    {{ $township->delivery_fees }}
                 </div>
             </div>
         </div>
@@ -158,9 +167,7 @@
 @section('javascript')
 <script type="text/javascript">
     $(function() {
-        var township_id = {
-            !!json_encode($township['id']) !!
-        };
+        var township_id = $("#township_id").attr('data-township-id');
         $('#current-order-datatable').DataTable({
             processing: true,
             serverSide: true,
