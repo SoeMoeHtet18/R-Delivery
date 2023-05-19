@@ -94,6 +94,7 @@ class OrderRepository
     {
         $total_amount = Order::where('rider_id', $rider_id)
             ->where('status', 'success')
+            ->where('payment_flag', 0)
             ->selectRaw('SUM(total_amount + delivery_fees + markup_delivery_fees) AS total_amount')
             ->first();
 

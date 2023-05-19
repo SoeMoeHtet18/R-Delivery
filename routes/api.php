@@ -74,6 +74,7 @@ Route::middleware('auth:rider-api')->group(function() {
     Route::post('remove-notification-by-rider', [RiderApiController::class, 'removeNotification']);
     Route::post('make-notification-read-by-rider', [RiderApiController::class, 'makeNoticationRead']);
     Route::get('get-notification-count-by-rider', [RiderApiController::class, 'getNotificationCount']);
+    Route::post('change-password-by-rider',[RiderApiController::class, 'changePassword']);
 });
 
 Route::get('get-shop-list', [ShopApiController::class, 'getAllShopList']);

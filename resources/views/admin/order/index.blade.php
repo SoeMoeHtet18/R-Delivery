@@ -111,6 +111,10 @@
     </div>
 </div>
 
+<div class="create-button mb-3">
+    <a class="btn create-btn" id="create-transaction">Add Transaction</a>
+</div>
+
 <div class="portlet box green">
     <div class="portlet-title">
         <div class="caption">Order Lists</div>
@@ -120,6 +124,8 @@
             <thead>
                 <tr>
                     <th>#</th>
+                    <th id="first_column"><input type="checkbox" name="check_all" id="checkAll"></th>
+                    <th>Paid</th>
                     <th>Total Amount</th>
                     <th>Delivery Fees</th>
                     <th>Markup Delivery Fees</th>
@@ -154,6 +160,96 @@
 @section('javascript')
 <script type="text/javascript">
     $(document).ready(function() {
+        $("#create-transaction").click(function() {
+            processPayment();
+        });
+
+        function processPayment() {
+            var orderPaymentSelected = 0;
+            var process_data = [];
+            var hasError = false;
+
+            $('.order-payment:checked').each(function() {
+                if (this.checked) {
+                    var push_data = {};
+                    orderPaymentSelected = 1;
+                    push_data.id = $(this).data('id');
+                    push_data.shop_id = $(this).data('shop_id');
+                    push_data.payment_flag = $(this).data('payment_flag');
+                    process_data.push(push_data);
+                }
+            });
+
+            if (orderPaymentSelected) {
+                continueProcessPayment();
+            } else {
+                Toastify({
+                    text: "Please select at least one order.",
+                    gravity: "top",
+                    position: "center",
+                    style: {
+                        background: "red",
+                    },
+                    duration: 3000,
+                }).showToast();
+
+            };
+
+            function continueProcessPayment() {
+                var referenceShopId = process_data[0].shop_id;
+
+                for (var i = 0; i < process_data.length; i++) {
+                    if (process_data[i].shop_id !== referenceShopId) {
+                        Toastify({
+                            text: "Please select only orders of the same shop.",
+                            gravity: "top",
+                            position: "center",
+                            style: {
+                                background: "red",
+                            },
+                            duration: 3000,
+                        }).showToast();
+                        hasError = true;
+                        break;
+                    } else if (process_data[i].payment_flag == 1) {
+                        Toastify({
+                            text: "Please select only orders that are unpaid.",
+                            gravity: "top",
+                            position: "center",
+                            style: {
+                                background: "red",
+                            },
+                            duration: 3000,
+                        }).showToast();
+                        hasError = true;
+                        break;
+                    }
+                }
+                if (!hasError) {
+                    var encodedData = encodeURIComponent(JSON.stringify(process_data));
+                    var redirectUrl = '/create-transaction-for-shop-for-selected-orders?process_data=' + encodedData;
+                    window.location = redirectUrl;
+                }
+            }
+        }
+
+        $('#checkAll').click(function() {
+            if ($(this).prop("checked") == true) {
+                $('td input').prop('checked', true);
+            } else {
+                $('td input').prop('checked', false);
+            }
+        });
+
+        $('.order-payment').click(function() {
+            var allChecked = true;
+            $('.order-payment').each(function() {
+                if (!this.checked) allChecked = false;
+            });
+            $('#checkAll').prop('checked', allChecked);
+        })
+
+
         $('#city').select2([]);
         $('#status').select2();
         $('#township').select2();
@@ -181,6 +277,16 @@
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'id'
+                    },
+                    {
+                        data: 'first_column',
+                        name: 'first_column',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'payment_flag',
+                        name: 'paid'
                     },
                     {
                         data: 'total_amount',

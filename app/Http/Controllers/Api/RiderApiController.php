@@ -145,4 +145,17 @@ class RiderApiController extends Controller
         $notifications = $this->notificationRepository->getNotificationCountForRider($rider->id);
         return response()->json(['data' => $notifications, 'message' => 'Successfully get notification count', 'status' => 'success'], 200);
     }
+
+    public function changePassword(Request $request)
+    {
+        $old_password = $request->oldPassword;
+        $new_password = $request->newPassword;
+        $rider = auth()->guard('rider-api')->user();
+        $password = $this->riderService->changePassword($rider, $old_password, $new_password);
+        if($password) {
+            return response()->json(['data' => $rider, 'message' => 'Successfully changed password', 'status' => 'success'], 200);
+        } else {
+            return response()->json(['data' => $rider, 'message' => 'Password wronged', 'status' => 'failed'], 200);
+        }
+    }
 }

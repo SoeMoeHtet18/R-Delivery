@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TransactionForShopRequest;
+use App\Models\Order;
+use App\Models\TransactionsForShop;
 use App\Repositories\AdminRepository;
 use App\Repositories\ShopRepository;
 use App\Repositories\TransactionsForShopRepository;
@@ -57,6 +59,9 @@ class TransactionsForShopController extends Controller
         $data = $request->all();
         $file = $request->file('image');
         $this->transactionsForShopService->saveTransactionForShopData($data, $file);
+        if($request->order_ids){
+            $this->transactionsForShopService->updateDataIfOrderIdsExist($data);
+        }
         return redirect(route('transactions-for-shop.index'));
     }
 
@@ -173,5 +178,22 @@ class TransactionsForShopController extends Controller
         $users = $this->adminRepository->getAllUsers();
         $users = $users->sortByDESC('id');
         return view('admin.transactionsforshop.create', compact('shop_id', 'shops', 'users'));
+    }
+
+    public function createTransactionForOrdersByShop(Request $request)
+    {
+        $processData = $request->input('process_data');
+        $decodedProcessData = json_decode(urldecode($processData), true);
+        $order_ids = array_column($decodedProcessData, 'id');
+        $shopIds = array_unique(array_column($decodedProcessData, 'shop_id'));
+        $shop_id = reset($shopIds);
+    
+        $actual_amount = $this->transactionsForShopService->getActualAmount($order_ids,$shop_id);
+        
+        $shops = $this->shopRepository->getAllShops();
+        $shops = $shops->sortByDesc('id');
+        $users = $this->adminRepository->getAllUsers();
+        $users = $users->sortByDESC('id');
+        return view('admin.transactionsforshop.create', compact('shop_id','order_ids', 'shops', 'users','actual_amount'));
     }
 }
