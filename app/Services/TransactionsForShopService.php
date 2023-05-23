@@ -64,21 +64,17 @@ class TransactionsForShopService
 
     public function updateDataIfOrderIdsExist($data)
     {
-        $order_ids = $data['order_ids'];
-        if ($data['type'] = 'fully_payment') {
-            $shop_id = $data['shop_id'];
-            $transactions = TransactionsForShop::where('shop_id', $shop_id)->where('type', 'loan_payment')->get();
-            if ($transactions) {
-                foreach ($transactions as $t) {
-                    $t->type = 'fully_payment';
-                    $t->save();
-                }
-            }
-            $orders = Order::whereIn('id',$order_ids)->get();
-            foreach($orders as $order) {
-                $order->payment_flag = 1;
-                $order->save();
-            }
+        $orderIds = $data['order_ids'];
+
+        if ($data['type'] === 'fully_payment') {
+            $shopId = $data['shop_id'];
+
+            TransactionsForShop::where('shop_id', $shopId)
+                ->where('type', 'loan_payment')
+                ->update(['type' => 'fully_payment']);
+
+            Order::whereIn('id', $orderIds)
+                ->update(['payment_flag' => 1]);
         }
     }
 }

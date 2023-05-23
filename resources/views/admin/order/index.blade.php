@@ -165,89 +165,57 @@
         });
 
         function processPayment() {
-            var orderPaymentSelected = 0;
             var process_data = [];
-            var hasError = false;
+            var shop_ids = [];
+            var order_ids = [];
 
             $('.order-payment:checked').each(function() {
-                if (this.checked) {
-                    var push_data = {};
-                    orderPaymentSelected = 1;
-                    push_data.id = $(this).data('id');
-                    push_data.shop_id = $(this).data('shop_id');
-                    push_data.payment_flag = $(this).data('payment_flag');
-                    process_data.push(push_data);
-                }
+                var push_data = {
+                    id: $(this).data('id'),
+                    shop_id: $(this).data('shop_id'),
+                    payment_flag: $(this).data('payment_flag')
+                };
+                process_data.push(push_data);
+                shop_ids.push(push_data.shop_id);
+                order_ids.push(push_data.id);
             });
 
-            if (orderPaymentSelected) {
-                continueProcessPayment();
+            shop_ids = [...new Set(shop_ids)];
+            order_ids = [...new Set(order_ids)];
+
+            if (process_data.length === 0) {
+                showErrorToast("Please select at least one order.");
+            } else if (shop_ids.length > 1) {
+                showErrorToast("Please select only orders of the same shop.");
+            } else if (process_data.some(order => order.payment_flag === 1)) {
+                showErrorToast("Please select only orders that are unpaid.");
             } else {
-                Toastify({
-                    text: "Please select at least one order.",
-                    gravity: "top",
-                    position: "center",
-                    style: {
-                        background: "red",
-                    },
-                    duration: 3000,
-                }).showToast();
-
-            };
-
-            function continueProcessPayment() {
-                var referenceShopId = process_data[0].shop_id;
-
-                for (var i = 0; i < process_data.length; i++) {
-                    if (process_data[i].shop_id !== referenceShopId) {
-                        Toastify({
-                            text: "Please select only orders of the same shop.",
-                            gravity: "top",
-                            position: "center",
-                            style: {
-                                background: "red",
-                            },
-                            duration: 3000,
-                        }).showToast();
-                        hasError = true;
-                        break;
-                    } else if (process_data[i].payment_flag == 1) {
-                        Toastify({
-                            text: "Please select only orders that are unpaid.",
-                            gravity: "top",
-                            position: "center",
-                            style: {
-                                background: "red",
-                            },
-                            duration: 3000,
-                        }).showToast();
-                        hasError = true;
-                        break;
-                    }
-                }
-                if (!hasError) {
-                    var encodedData = encodeURIComponent(JSON.stringify(process_data));
-                    var redirectUrl = '/create-transaction-for-shop-for-selected-orders?process_data=' + encodedData;
-                    window.location = redirectUrl;
-                }
+                var redirectUrl = '/create-transaction-for-shop-for-selected-orders?order_ids=' + order_ids + '&shop_id=' + shop_ids;
+                window.location = redirectUrl;
             }
         }
 
         $('#checkAll').click(function() {
-            if ($(this).prop("checked") == true) {
-                $('td input').prop('checked', true);
-            } else {
-                $('td input').prop('checked', false);
-            }
+            var isChecked = $(this).prop("checked");
+            $('td input').prop('checked', isChecked);
         });
 
         $('.order-payment').click(function() {
-            var allChecked = true;
-            $('.order-payment').each(function() {
-                if (!this.checked) allChecked = false;
-            });
+            var allChecked = $('.order-payment:checked').length === $('.order-payment').length;
             $('#checkAll').prop('checked', allChecked);
-        })
+        });
+
+        function showErrorToast(message) {
+            Toastify({
+                text: message,
+                gravity: "top",
+                position: "center",
+                style: {
+                    background: "red",
+                },
+                duration: 3000,
+            }).showToast();
+        }
 
 
         $('#city').select2([]);
