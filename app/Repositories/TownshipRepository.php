@@ -26,7 +26,7 @@ class TownshipRepository
 
     public function getAllTownshipsByCityID($id)
     {
-        $townships = Township::where('city_id', $id)->get();
+        $townships = Township::where('city_id', $id)->orderBy('name','asc')->get();
         return $townships;
     }
 

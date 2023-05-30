@@ -44,7 +44,8 @@ class OrderApiController extends Controller
         $shop_user = auth()->guard('shop-user-api')->user();
         $shop_id   = $shop_user->shop_id;
         $total_amount = $this->orderRepository->getOrdersTotalAmountByShopID($shop_id);
-        return response()->json(['data'=> $total_amount, 'message' => 'Successfully Get Orders Total Amount By Shop ID', 'status' => 'success'],200);
+        $total_amount['total_amount'] = $total_amount['total_amount'] ?? 0.00;
+        return response()->json(['data'=> $total_amount['total_amount'], 'message' => 'Successfully Get Orders Total Amount By Shop ID', 'status' => 'success'], 200);        
     }
 
     public function getOrderCountByRiderID()

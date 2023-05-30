@@ -55,10 +55,11 @@ class ShopUserApiController extends Controller
         return response()->json(['data' => $shop_user, 'message' => 'Successfully Get Shop User Detail', 'status' => 'success'], 200);
     }
 
-    public function orderListByShopOwnerID()
+    public function orderListByShopOwnerID(Request $request)
     {
+        $status = $request->status;
         $shop_user = auth()->guard('shop-user-api')->user();
-        $order_list = $this->orderRepository->getOrdersByShopID($shop_user->shop_id);
+        $order_list = $this->orderRepository->getOrdersByShopID($shop_user->shop_id, $status);
         return response()->json(['data' => $order_list, 'message' => 'Successfully Get Order List', 'status' => 'success'], 200);
     }
 

@@ -30,9 +30,15 @@ class OrderRepository
         return $data;
     }
 
-    public function getOrdersByShopID($id)
+    public function getOrdersByShopID($id, $status)
     {
-        $order = Order::where('shop_id', $id)->get();
+        if($status == 'current') {
+            $order = Order::where('shop_id', $id)->get();
+        } else if($status == 'canceled') {
+            $order = Order::where('shop_id', $id)->where('status','cancel')->get();
+        } else {
+            $order = Order::where('shop_id', $id)->where('status','pending')->orWhere('status','delay')->get();
+        }
         return $order;
     }
 
@@ -65,7 +71,11 @@ class OrderRepository
 
     public function getOrdersTotalAmountByShopID($shop_id)
     {
-        $total_amount = Order::where('shop_id', $shop_id)->sum('total_amount');
+        $total_amount = Order::where('shop_id', $shop_id)
+            ->where('status', 'success')
+            ->selectRaw('SUM(total_amount + markup_delivery_fees) AS total_amount')
+            ->first();
+
         return $total_amount;
     }
 

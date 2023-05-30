@@ -11,7 +11,6 @@ use App\Http\Controllers\Api\ShopPaymentApiController;
 use App\Http\Controllers\Api\ShopUserApiController;
 use App\Http\Controllers\Api\TownshipApiController;
 use App\Http\Controllers\Api\TransactionForShopApiController;
-use App\Models\TransactionsForShop;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -36,7 +35,7 @@ Route::post('shop-user/create', [ShopUserApiController::class, 'create']);
 Route::middleware('auth:shop-user-api')->group( function () {
     Route::get('shop-user', [ShopUserApiController::class, 'show']);
     Route::get('shop-user/get-order-list', [ShopUserApiController::class, 'orderListByShopOwnerID']);
-    Route::post('shop-user/create-order-list', [ShopUserApiController::class, 'orderCreateByShopOwner']);
+    Route::post('shop-user/create-order', [ShopUserApiController::class, 'orderCreateByShopOwner']);
     Route::post('shop-user/update', [ShopUserApiController::class, 'update']);
     Route::post('shop-user/create-shop-payment', [ShopPaymentApiController::class, 'insertShopPayment']);
     Route::post('update-shop', [ShopApiController::class, 'update']);

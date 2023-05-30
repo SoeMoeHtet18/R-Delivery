@@ -14,8 +14,8 @@ class CityRepository
 
     public function getAllCities()
     {
-        $shops = City::all();
-        return $shops;
+        $cities = City::orderBy('name','asc')->get();
+        return $cities;
     }
     public function getByCityID($id)
     {

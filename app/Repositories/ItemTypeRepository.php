@@ -14,7 +14,7 @@ class ItemTypeRepository
 
     public function getAllItemTypes()
     {
-        $item_types = ItemType::all();
+        $item_types = ItemType::orderBy('name','asc')->get();
         return $item_types;
     }
 

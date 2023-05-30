@@ -2,8 +2,10 @@
 
 namespace App\Services;
 
+use App\Helpers\MyHelper;
 use App\Http\Traits\FileUploadTrait;
 use App\Models\Order;
+use App\Models\Township;
 
 class OrderService
 {   
@@ -43,16 +45,17 @@ class OrderService
 
     public function saveOrderByShopID($data, $shop_id)
     {
+        $delivery_fees = Township::where('id',$data['township_id'])->first()->delivery_fees;
         $order = new Order();
-        $order->order_code =  $data['order_code'];
+        $orderCode = MyHelper::nomenclature(['table_name'=>'orders','prefix'=>'OD','column_name'=>'order_code']);
+        $order->order_code =  $orderCode;
         $order->shop_id =  $shop_id;
         $order->customer_name =  $data['customer_name'];
         $order->customer_phone_number =  $data['customer_phone_number'];
         $order->city_id =  $data['city_id'];
         $order->township_id =  $data['township_id'];
-        $order->rider_id =  $data['rider_id'] ?? null;
         $order->quantity =  $data['quantity'];
-        $order->delivery_fees =  $data['delivery_fees'];
+        $order->delivery_fees =  $delivery_fees;
         $order->total_amount = $data['total_amount'];
         $order->markup_delivery_fees =  $data['markup_delivery_fees'] ?? null;
         $order->remark =  $data['remark'] ?? null;
