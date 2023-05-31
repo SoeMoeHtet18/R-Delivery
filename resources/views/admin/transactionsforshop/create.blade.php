@@ -17,7 +17,12 @@
                     <select name="shop_id" id="shop_name" class="form-control">
                         <option value="" selected disabled>Select the Shop of this Payment</option>
                         @foreach($shops as $shop)
-                        <option value="{{$shop->id}}" @if($shop->id == old('shop_id')) selected @endif>{{$shop->name}}</option>
+                        <option value="{{$shop->id}}" @isset($shop_id) @if($shop->id == $shop_id) selected
+                            @endif
+                            @else
+                            @if($shop->id == old('shop_id')) selected
+                            @endif
+                            @endisset>{{$shop->name}}</option>
                         @endforeach
                     </select>
                     @if($errors->has('shop_id'))
@@ -25,12 +30,17 @@
                     @endif
                 </div>
             </div>
+            @isset($order_ids)
+            @foreach($order_ids as $orderId)
+                <input type="hidden" name="order_ids[]" value="{{ $orderId }}">
+            @endforeach
+            @endisset
             <div class="row m-0 mb-3">
                 <label for="amount" class="col-2">
                     <h4>Amount <b>:</b></h4>
                 </label>
                 <div class="col-10">
-                    <input type="text" id="amount" name="amount" value="{{old('amount')}}" class="form-control" />
+                    <input type="text" id="amount" name="amount" value="@isset($actual_amount){{ $actual_amount }}@else{{ old('amount') }}@endisset" class="form-control" />
                     @if($errors->has('amount'))
                     <span class="text-danger"><strong>{{ $errors->first('amount') }}</strong></span>
                     @endif

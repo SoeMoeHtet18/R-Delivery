@@ -149,4 +149,12 @@ class ShopPaymentController extends Controller
             ->orderColumn('id', '-shop_payments.id')
             ->make(true);
     }
+
+    public function createShopPaymentByShopID(Request $request)
+    {
+        $shop_id = $request->shop_id;
+        $shops = $this->shopRepository->getAllShops();
+        $shops = $shops->sortByDesc('id');
+        return view('admin.shoppayment.create', compact('shop_id','shops'));
+    }
 }

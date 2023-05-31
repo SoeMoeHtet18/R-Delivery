@@ -128,7 +128,7 @@ class OrderService
             $file_name = $this->uploadFile($image, 'public', 'customer payment');
             $order->proof_of_payment =  $file_name;
         } else {
-            $order->proof_of_payment =  $order->proof_of_payment;
+            $order->proof_of_payment =  null;
         }
         $order->save();
         return $file_name;

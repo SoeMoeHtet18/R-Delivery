@@ -8,12 +8,6 @@
         flex-direction: row;
         justify-content: flex-end;
     }
-
-    .create-button {
-        width: 70px;
-        height: 30px;
-        margin-bottom: 10px;
-    }
 </style>
 <div class="card card-container detail-card">
     <div class="card-body">
@@ -100,6 +94,11 @@
                     <div class="caption">ShopOrder Lists</div>
                 </div>
                 <div class="portlet-body">
+                    <div class="create-button pb-5">
+                        <a class="btn create-btn" href="{{ url('/order-create-by-shop-id') }}?shop_id={{ $shop->id }}">Add Order</a>
+                    </div>
+
+
                     <table id="shop-order-datatable" class="table table-striped table-hover table-responsive datatable">
                         <thead>
                             <tr>
@@ -132,9 +131,13 @@
             </div>
             <div id="shop-payment-display" class="portlet box green tab-pane">
                 <div class="portlet-title">
-                    <div class="caption">Transactions For Shop Lists</div>
+                    <div class="caption">Shop Payment Lists</div>
                 </div>
                 <div class="portlet-body">
+                    <div class="create-button pb-5">
+                        <a href="{{url('/shoppayment-create-by-shop-id')}}?shop_id={{$shop->id}}" class="btn create-btn">Add Shop Payment</a>
+                    </div>
+
                     <table id="shop-payment-datatable" class="table table-striped table-hover table-responsive datatable">
                         <thead>
                             <tr>
@@ -155,6 +158,9 @@
                     <div class="caption">Transactions For Shop Lists</div>
                 </div>
                 <div class="portlet-body">
+                    <div class="create-button pb-5">
+                        <a href="{{url('/transactions-for-shop-create-by-shop-id')}}?shop_id={{$shop->id}}" class="btn create-btn">Add New Transaction</a>
+                    </div>
                     <table id="transaction-for-shop-datatable" class="table table-striped table-hover table-responsive datatable">
                         <thead>
                             <tr>
@@ -186,11 +192,22 @@
             processing: true,
             serverSide: true,
             ajax: '/shops/get-shop-users-by-shop-id/' + shop_id,
-            columns: [
-                { data: 'DT_RowIndex', name: 'id' },
-                { data: 'name', name: 'name' },
-                { data: 'phone_number', name: 'phone_number' },
-                { data: 'email', name: 'email' },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    name: 'id'
+                },
+                {
+                    data: 'name',
+                    name: 'name'
+                },
+                {
+                    data: 'phone_number',
+                    name: 'phone_number'
+                },
+                {
+                    data: 'email',
+                    name: 'email'
+                },
             ],
         });
 
@@ -199,25 +216,78 @@
             processing: true,
             serverSide: true,
             ajax: "/shops/get-shop-orders-by-shop-id/" + shop_id,
-            columns: [
-                { data: 'DT_RowIndex', name: 'id' },
-                { data: 'order_code', name: 'order_code' },
-                { data: 'customer_name', name: 'customer_name' },
-                { data: 'customer_phone_number', name: 'customer_phone_number' },
-                { data: 'township_name', name: 'township' },
-                { data: 'rider_name', name: 'rider' },
-                { data: 'quantity', name: 'quantity' },
-                { data: 'total_amount', name: 'total_amount' },
-                { data: 'delivery_fees', name: 'delivery_fees' },
-                { data: 'markup_delivery_fees', name: 'markup_delivery_fees' },
-                { data: 'remark', name: 'remark' },
-                { data: 'status', name: 'status' },
-                { data: 'item_type', name: 'item_type' },
-                { data: 'full_address', name: 'full_address' },
-                { data: 'schedule_date', name: 'schedule_date' },
-                { data: 'type', name: 'type' },
-                { data: 'collection_method', name: 'collection_method' },
-                { data: 'last_updated_by_name', name: 'last_updated_by' },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    name: 'id'
+                },
+                {
+                    data: 'order_code',
+                    name: 'order_code'
+                },
+                {
+                    data: 'customer_name',
+                    name: 'customer_name'
+                },
+                {
+                    data: 'customer_phone_number',
+                    name: 'customer_phone_number'
+                },
+                {
+                    data: 'township_name',
+                    name: 'township'
+                },
+                {
+                    data: 'rider_name',
+                    name: 'rider'
+                },
+                {
+                    data: 'quantity',
+                    name: 'quantity'
+                },
+                {
+                    data: 'total_amount',
+                    name: 'total_amount'
+                },
+                {
+                    data: 'delivery_fees',
+                    name: 'delivery_fees'
+                },
+                {
+                    data: 'markup_delivery_fees',
+                    name: 'markup_delivery_fees'
+                },
+                {
+                    data: 'remark',
+                    name: 'remark'
+                },
+                {
+                    data: 'status',
+                    name: 'status'
+                },
+                {
+                    data: 'item_type',
+                    name: 'item_type'
+                },
+                {
+                    data: 'full_address',
+                    name: 'full_address'
+                },
+                {
+                    data: 'schedule_date',
+                    name: 'schedule_date'
+                },
+                {
+                    data: 'type',
+                    name: 'type'
+                },
+                {
+                    data: 'collection_method',
+                    name: 'collection_method'
+                },
+                {
+                    data: 'last_updated_by_name',
+                    name: 'last_updated_by'
+                },
             ],
         });
 
@@ -226,26 +296,61 @@
             processing: true,
             serverSide: true,
             ajax: "/shops/" + shop_id + "/get-shop-payment-by-shop-id",
-            columns: [
-                { data: 'DT_RowIndex', name: 'id' },
-                { data: 'amount', name: 'amount' },
-                { data: 'type', name: 'type' },
-                { data: 'description', name: 'description' },
-                { data: 'action', name: 'action', orderable: false, searchable: false },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    name: 'id'
+                },
+                {
+                    data: 'amount',
+                    name: 'amount'
+                },
+                {
+                    data: 'type',
+                    name: 'type'
+                },
+                {
+                    data: 'description',
+                    name: 'description'
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false
+                },
             ],
         });
-            // Initialize transaction-for-shop-datatable
+        // Initialize transaction-for-shop-datatable
         $("#transaction-for-shop-datatable").DataTable({
             processing: true,
             serverSide: true,
             ajax: "/shops/" + shop_id + "/get-transactions-for-shop-by-shop-id",
-            columns: [
-                { data: 'DT_RowIndex', name: 'id' },
-                { data: 'amount', name: 'amount' },
-                { data: 'type', name: 'type' },
-                { data: 'paid_by', name: 'paid_by' },
-                { data: 'description', name: 'description' },
-                { data: 'action', name: 'action', orderable: false, searchable: false },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    name: 'id'
+                },
+                {
+                    data: 'amount',
+                    name: 'amount'
+                },
+                {
+                    data: 'type',
+                    name: 'type'
+                },
+                {
+                    data: 'paid_by',
+                    name: 'paid_by'
+                },
+                {
+                    data: 'description',
+                    name: 'description'
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false
+                },
             ],
         });
     });

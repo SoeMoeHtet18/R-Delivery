@@ -98,7 +98,7 @@
                         </a>
                     </li>
                 </ul>
-            <li class="mt-5">
+            <li>
                 <a class="dropdown-item" href="{{ route('logout') }}"
                     onclick="event.preventDefault();
                                     document.getElementById('logout-form').submit();">

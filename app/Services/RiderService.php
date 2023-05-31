@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Rider;
+use Illuminate\Support\Facades\Hash;
 
 class RiderService
 {
@@ -48,5 +49,16 @@ class RiderService
     {
         $townships = $data['township_id'];
         $rider->townships()->sync($townships);
+    }
+
+    public function changePassword($rider, $old_password, $new_password) {
+        $password = $rider->password;
+        if (Hash::check($old_password, $password)) {
+            $rider->password = bcrypt($new_password);
+            $rider->save();
+            return true;
+        } else {
+           return false;
+        }
     }
 }

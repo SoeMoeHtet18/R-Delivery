@@ -11,6 +11,7 @@ class TownshipService
         $township = new Township();
         $township->name = $data['name'];
         $township->city_id = $data['city'];
+        $township->delivery_fees = $data['delivery_fees'];
         $township->save();
     }
 
@@ -18,6 +19,7 @@ class TownshipService
     {
         $township->name = $data['name'];
         $township->city_id = $data['city'];
+        $township->delivery_fees = $data['delivery_fees'];
         $township->save();
     }
 

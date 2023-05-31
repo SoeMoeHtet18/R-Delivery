@@ -50,14 +50,17 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/shops/{id}/get-shop-payment-by-shop-id', [ShopPaymentController::class, 'getShopPaymentTableByShopID']);
     Route::get('/shops/{id}/get-transactions-for-shop-by-shop-id', [TransactionsForShopController::class, 'getTransactionsTableByShopID']);
     Route::resource('/orders', OrderController::class);
+    Route::get('/order-create-by-shop-id', [OrderController::class, 'createByShopID']);
     Route::get('/orders/{id}/assign-rider', [OrderController::class, 'assignRider']);
     Route::post('/orders/{id}/assign-rider', [OrderController::class, 'assignRiderToOrder']);
     Route::resource('/cities', CityController::class);
     Route::get('/cities/{id}/townships', [TownshipController::class, 'getTownshipsTableByCityID']);
     Route::resource('/itemtypes', ItemTypeController::class);
     Route::resource('/shoppayments', ShopPaymentController::class);
+    Route::get('/shoppayment-create-by-shop-id', [ShopPaymentController::class, 'createShopPaymentByShopID']);
     Route::resource('/customer-payments', CustomerPaymentController::class);
     Route::resource('/transactions-for-shop', TransactionsForShopController::class);
+    Route::get('/transactions-for-shop-create-by-shop-id', [TransactionsForShopController::class, 'createTransactionForShopByShopID']);
     Route::get('/ajax-get-orders-data', [OrderController::class, 'getAjaxOrderData']);
     Route::get('/ajax-get-users-data', [AdminController::class, 'getAjaxUserData']);
     Route::get('/ajax-get-shops-data', [ShopController::class, 'getAjaxShopData']);
@@ -70,6 +73,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/ajax-get-townships-data', [TownshipController::class, 'getAjaxTownshipData']);
     Route::get('/ajax-get-transactions-data', [TransactionsForShopController::class, 'getAjaxTransactionForShopData']);
     Route::get('/ajax-get-payment-type-data', [PaymentTypeController::class, 'getAjaxPaymentTypeData']);
+    Route::get('/create-transaction-for-shop-for-selected-orders', [TransactionsForShopController::class, "createTransactionForOrdersByShop"]);
     Route::resource('/payment-types', PaymentTypeController::class);
 });
 Auth::routes();

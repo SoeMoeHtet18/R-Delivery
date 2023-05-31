@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TransactionForShopRequest;
+use App\Models\Order;
+use App\Models\TransactionsForShop;
 use App\Repositories\AdminRepository;
 use App\Repositories\ShopRepository;
 use App\Repositories\TransactionsForShopRepository;
@@ -13,13 +15,13 @@ use Laravel\Ui\Presets\React;
 use Yajra\DataTables\Facades\DataTables;
 
 class TransactionsForShopController extends Controller
-{   
+{
     protected $transactionsForShopRepository;
     protected $transactionsForShopService;
     protected $shopRepository;
     protected $adminRepository;
 
-    public function __construct(TransactionsForShopRepository $transactionsForShopRepository ,TransactionsForShopService $transactionsForShopService,ShopRepository $shopRepository,AdminRepository $adminRepository)
+    public function __construct(TransactionsForShopRepository $transactionsForShopRepository, TransactionsForShopService $transactionsForShopService, ShopRepository $shopRepository, AdminRepository $adminRepository)
     {
         $this->transactionsForShopRepository = $transactionsForShopRepository;
         $this->transactionsForShopService = $transactionsForShopService;
@@ -34,7 +36,7 @@ class TransactionsForShopController extends Controller
         $shops  = $this->shopRepository->getAllShops();
         $paid_users  = $this->adminRepository->getAllUsers();
 
-        return view('admin.transactionsforshop.index',compact('shops', 'paid_users'));
+        return view('admin.transactionsforshop.index', compact('shops', 'paid_users'));
     }
 
     /**
@@ -53,10 +55,13 @@ class TransactionsForShopController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(TransactionForShopRequest $request)
-    {   
+    {
         $data = $request->all();
         $file = $request->file('image');
         $this->transactionsForShopService->saveTransactionForShopData($data, $file);
+        if ($request->order_ids) {
+            $this->transactionsForShopService->updateDataIfOrderIdsExist($data);
+        }
         return redirect(route('transactions-for-shop.index'));
     }
 
@@ -80,8 +85,8 @@ class TransactionsForShopController extends Controller
         $shops = $shops->sortByDesc('id');
         $users = $this->adminRepository->getAllUsers();
         $users = $users->sortByDESC('id');
-        
-        return view('admin.transactionsforshop.edit',compact('transaction_for_shop','shops','users'));
+
+        return view('admin.transactionsforshop.edit', compact('transaction_for_shop', 'shops', 'users'));
     }
 
     /**
@@ -93,7 +98,7 @@ class TransactionsForShopController extends Controller
         $data = $request->all();
         $file = $request->file('image');
         $this->transactionsForShopService->updateTransactionForShopByID($data, $transaction_for_shop, $file);
-        
+
         return redirect()->route('transactions-for-shop.show', $id);
     }
 
@@ -107,40 +112,40 @@ class TransactionsForShopController extends Controller
     }
 
     public function getAjaxTransactionForShopData(Request $request)
-    {   
+    {
         $shop_name = $request->shop_name;
         $amount = $request->amount;
         $type = $request->type;
         $paid_by = $request->paid_by;
         $data = $this->transactionsForShopRepository->getAllTransactionsForShopQuery();
 
-        if($shop_name != null) {
-            $data = $data->where('transactions_for_shops.shop_id',$shop_name);
+        if ($shop_name != null) {
+            $data = $data->where('transactions_for_shops.shop_id', $shop_name);
         }
-        if($amount != null) {
-            $data = $data->where('transactions_for_shops.amount',$amount);
+        if ($amount != null) {
+            $data = $data->where('transactions_for_shops.amount', $amount);
         }
-        if($type != null) {
-            $data = $data->where('transactions_for_shops.type',$type);
+        if ($type != null) {
+            $data = $data->where('transactions_for_shops.type', $type);
         }
-        if($paid_by != null) {
-            $data = $data->where('transactions_for_shops.paid_by',$paid_by);
+        if ($paid_by != null) {
+            $data = $data->where('transactions_for_shops.paid_by', $paid_by);
         }
         return DataTables::of($data)
             ->addIndexColumn()
-            ->addColumn('action', function($transaction_for_shops){
+            ->addColumn('action', function ($transaction_for_shops) {
                 $actionBtn = '
-                        <a href="'. route("transactions-for-shop.show", $transaction_for_shops->id) .'" class="edit btn btn-info btn-sm">View</a> 
-                        <a href="'. route("transactions-for-shop.edit", $transaction_for_shops->id) .'" class="edit btn btn-light btn-sm">Edit</a> 
-                        <form action="'.route("transactions-for-shop.destroy", $transaction_for_shops->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this shop user?`);">
-                            <input type="hidden" name="_token" value="'. csrf_token() .'">
+                        <a href="' . route("transactions-for-shop.show", $transaction_for_shops->id) . '" class="edit btn btn-info btn-sm">View</a> 
+                        <a href="' . route("transactions-for-shop.edit", $transaction_for_shops->id) . '" class="edit btn btn-light btn-sm">Edit</a> 
+                        <form action="' . route("transactions-for-shop.destroy", $transaction_for_shops->id) . '" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this shop user?`);">
+                            <input type="hidden" name="_token" value="' . csrf_token() . '">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
                         </form>';
                 return $actionBtn;
             })
             ->rawColumns(['action'])
-            ->orderColumn('id','-transactions_for_shops.id')
+            ->orderColumn('id', '-transactions_for_shops.id')
             ->make(true);
     }
 
@@ -149,19 +154,45 @@ class TransactionsForShopController extends Controller
         $data = $this->transactionsForShopRepository->getTransactionsQueryByShopID($id);
         return DataTables::of($data)
             ->addIndexColumn()
-            ->addColumn('action', function($transaction_for_shops){
+            ->addColumn('action', function ($transaction_for_shops) {
                 $actionBtn = '
-                        <a href="'. route("transactions-for-shop.show", $transaction_for_shops->id) .'" class="edit btn btn-info btn-sm">View</a> 
-                        <a href="'. route("transactions-for-shop.edit", $transaction_for_shops->id) .'" class="edit btn btn-light btn-sm">Edit</a> 
-                        <form action="'.route("transactions-for-shop.destroy", $transaction_for_shops->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this shop user?`);">
-                            <input type="hidden" name="_token" value="'. csrf_token() .'">
+                        <a href="' . route("transactions-for-shop.show", $transaction_for_shops->id) . '" class="edit btn btn-info btn-sm">View</a> 
+                        <a href="' . route("transactions-for-shop.edit", $transaction_for_shops->id) . '" class="edit btn btn-light btn-sm">Edit</a> 
+                        <form action="' . route("transactions-for-shop.destroy", $transaction_for_shops->id) . '" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this shop user?`);">
+                            <input type="hidden" name="_token" value="' . csrf_token() . '">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
                         </form>';
                 return $actionBtn;
             })
             ->rawColumns(['action'])
-            ->orderColumn('id','-transactions_for_shops.id')
+            ->orderColumn('id', '-transactions_for_shops.id')
             ->make(true);
+    }
+
+    public function createTransactionForShopByShopID(Request $request)
+    {
+        $shop_id = $request->shop_id;
+        $shops = $this->shopRepository->getAllShops();
+        $shops = $shops->sortByDesc('id');
+        $users = $this->adminRepository->getAllUsers();
+        $users = $users->sortByDESC('id');
+        return view('admin.transactionsforshop.create', compact('shop_id', 'shops', 'users'));
+    }
+
+    public function createTransactionForOrdersByShop(Request $request)
+    {
+        $order_ids = $request->order_ids;
+        $order_ids = explode(',', $order_ids);
+
+        $shop_id = $request->shop_id;
+
+        $actual_amount = $this->transactionsForShopService->getActualAmount($order_ids, $shop_id);
+
+        $shops = $this->shopRepository->getAllShops();
+        $shops = $shops->sortByDesc('id');
+        $users = $this->adminRepository->getAllUsers();
+        $users = $users->sortByDESC('id');
+        return view('admin.transactionsforshop.create', compact('shop_id', 'order_ids', 'shops', 'users', 'actual_amount'));
     }
 }

@@ -10,14 +10,6 @@
         <form action="{{route('orders.store')}}" method="POST" class="action-form">
             @csrf
             <div class="row m-0 mb-3">
-                <label for="order_code" class="col-2">
-                    <h4>Order Code <b>:</b></h4>
-                </label>
-                <div class="col-10">
-                    <input type="text" id="order_code" name="order_code" class="form-control" value="{{$order_code}}" readonly />
-                </div>
-            </div>
-            <div class="row m-0 mb-3">
                 <label for="shop_id" class="col-2">
                     <h4>Shop Name <b>:</b></h4>
                 </label>
@@ -25,12 +17,27 @@
                     <select name="shop_id" id="shop_id" class="form-control">
                         <option value="" selected disabled>Select the Shop for This Order</option>
                         @foreach ( $shops as $shop)
-                        <option value="{{$shop->id}}" @if($shop->id == old('shop_id')) selected @endif>{{$shop->name}}</option>
+                        <option value="{{$shop->id}}" @isset($shop_id) @if($shop->id == $shop_id) selected
+                            @endif
+                            @else
+                            @if($shop->id == old('shop_id')) selected
+                            @endif
+                            @endisset
+
+                            >{{$shop->name}}</option>
                         @endforeach
                     </select>
                     @if ($errors->has('shop_id'))
                     <span class="text-danger"><strong>{{ $errors->first('shop_id') }}</strong></span>
                     @endif
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <label for="order_code" class="col-2">
+                    <h4>Order Code <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <input type="text" id="order_code" name="order_code" class="form-control" readonly />
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -121,7 +128,7 @@
                 </div>
             </div>
             <div class="row m-0 mb-3">
-                <label for="markup_delivery_fees" class="col-2">
+                <label for="markup_delivery_fees" class="col-2 text-nowrap">
                     <h4>Markup Delivery Fees <b>:</b></h4>
                 </label>
                 <div class="col-10">
@@ -226,6 +233,25 @@
         $('#type_id').select2();
         $('#collection_method_id').select2();
 
+        function updateDeliveryFees(township_id) {
+            $.ajax({
+                url: '/api/get-delivery-fees-by-township',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    township_id: township_id
+                },
+                success: function(response) {
+                    $("#delivery_fees").val(response.data);
+                }
+            });
+        }
+
+        // Call the function on page load with the initial value of township_id
+        var initialTownshipId = $('#township_id').val();
+        updateDeliveryFees(initialTownshipId);
+
+        // Attach event handlers
         $('#city_id').change(function() {
             console.log('success');
             var city_id = $('#city_id').val();
@@ -240,7 +266,7 @@
                     var township_id = $('#township_id').val();
                     var townships = '<option value="" disabled>Select the Township for This Order</option>';
                     if (response.data) {
-                        for (var i = 0; i < (response.data.length); i++) {
+                        for (var i = 0; i < response.data.length; i++) {
                             if (township_id == response.data[i].id) {
                                 townships += '<option value="' + response.data[i].id + '" selected>' + response.data[i].name + '</option>';
                             } else {
@@ -250,9 +276,22 @@
                     }
                     console.log(townships);
                     $('#township_id').html(townships);
+
+                    // Update the delivery fees after selecting the township
+                    var selectedTownshipId = $('#township_id').val();
+                    updateDeliveryFees(selectedTownshipId);
                 },
-            })
-        })
+            });
+        });
+
+        $("#township_id").change(function() {
+            var township_id = $('#township_id').val();
+            // Update the delivery fees after selecting the township
+            updateDeliveryFees(township_id);
+        });
+ 
+
+
         $('#customer_phone_number').on('keyup', debounce(function() {
             var phone = $(this).val();
 
@@ -284,6 +323,38 @@
                 }, delay);
             }
         }
+
+        function setOrderCode(code) {
+            $('#order_code').val(code);
+            console.log($('#order_code').val());
+        }
+
+        function getOrderCode() {
+            var shop_id = $('#shop_id').val();
+            if (shop_id) {
+                $.ajax({
+                    url: '/api/get-order-code',
+                    method: 'POST',
+                    data: {
+                        shop_id: shop_id
+                    },
+                    success: function(response) {
+                        console.log(response)
+                        if (response.status == 'success') {
+                            var data = response.data;
+                            setOrderCode(data);
+                        }
+                    }
+                });
+            }
+        }
+
+        getOrderCode();
+
+        $('#shop_id').change(function() {
+            getOrderCode();
+        });
+
     });
 </script>
 @endsection

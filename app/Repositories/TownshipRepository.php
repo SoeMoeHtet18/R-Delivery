@@ -42,4 +42,10 @@ class TownshipRepository
         return $townshipcount;
     }
 
+    public function getDeliveryFees($township_id)
+    {
+        $township = Township::where('id',$township_id)->first();
+        $delivery_fees = $township->delivery_fees;
+        return $delivery_fees;
+    }
 }

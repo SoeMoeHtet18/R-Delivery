@@ -111,6 +111,10 @@
     </div>
 </div>
 
+<div class="create-button mb-3">
+    <a class="btn create-btn" id="create-transaction">Add Transaction</a>
+</div>
+
 <div class="portlet box green">
     <div class="portlet-title">
         <div class="caption">Order Lists</div>
@@ -120,7 +124,11 @@
             <thead>
                 <tr>
                     <th>#</th>
+                    <th id="first_column"><input type="checkbox" name="check_all" id="checkAll"></th>
+                    <th>Paid</th>
                     <th>Total Amount</th>
+                    <th>Delivery Fees</th>
+                    <th>Markup Delivery Fees</th>
                     <th>Order Code</th>
                     <th>Shop</th>
                     <th>Rider</th>
@@ -129,8 +137,6 @@
                     <th>City</th>
                     <th>Township</th>
                     <th>Quantity</th>
-                    <th>Delivery Fees</th>
-                    <th>Markup Delivery Fees</th>
                     <th>Remark</th>
                     <th>Status</th>
                     <th>Item Type</th>
@@ -154,6 +160,64 @@
 @section('javascript')
 <script type="text/javascript">
     $(document).ready(function() {
+        $("#create-transaction").click(function() {
+            processPayment();
+        });
+
+        function processPayment() {
+            var process_data = [];
+            var shop_ids = [];
+            var order_ids = [];
+
+            $('.order-payment:checked').each(function() {
+                var push_data = {
+                    id: $(this).data('id'),
+                    shop_id: $(this).data('shop_id'),
+                    payment_flag: $(this).data('payment_flag')
+                };
+                process_data.push(push_data);
+                shop_ids.push(push_data.shop_id);
+                order_ids.push(push_data.id);
+            });
+
+            shop_ids = [...new Set(shop_ids)];
+            order_ids = [...new Set(order_ids)];
+
+            if (process_data.length === 0) {
+                showErrorToast("Please select at least one order.");
+            } else if (shop_ids.length > 1) {
+                showErrorToast("Please select only orders of the same shop.");
+            } else if (process_data.some(order => order.payment_flag === 1)) {
+                showErrorToast("Please select only orders that are unpaid.");
+            } else {
+                var redirectUrl = '/create-transaction-for-shop-for-selected-orders?order_ids=' + order_ids + '&shop_id=' + shop_ids;
+                window.location = redirectUrl;
+            }
+        }
+
+        $('#checkAll').click(function() {
+            var isChecked = $(this).prop("checked");
+            $('td input').prop('checked', isChecked);
+        });
+
+        $('.order-payment').click(function() {
+            var allChecked = $('.order-payment:checked').length === $('.order-payment').length;
+            $('#checkAll').prop('checked', allChecked);
+        });
+
+        function showErrorToast(message) {
+            Toastify({
+                text: message,
+                gravity: "top",
+                position: "center",
+                style: {
+                    background: "red",
+                },
+                duration: 3000,
+            }).showToast();
+        }
+
+
         $('#city').select2([]);
         $('#status').select2();
         $('#township').select2();
@@ -183,8 +247,26 @@
                         name: 'id'
                     },
                     {
+                        data: 'first_column',
+                        name: 'first_column',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'payment_flag',
+                        name: 'paid'
+                    },
+                    {
                         data: 'total_amount',
                         name: 'total_amount'
+                    },
+                    {
+                        data: 'delivery_fees',
+                        name: 'delivery_fees'
+                    },
+                    {
+                        data: 'markup_delivery_fees',
+                        name: 'markup_delivery_fees'
                     },
                     {
                         data: 'order_code',
@@ -217,14 +299,6 @@
                     {
                         data: 'quantity',
                         name: 'quantity'
-                    },
-                    {
-                        data: 'delivery_fees',
-                        name: 'delivery_fees'
-                    },
-                    {
-                        data: 'markup_delivery_fees',
-                        name: 'markup_delivery_fees'
                     },
                     {
                         data: 'remark',

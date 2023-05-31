@@ -60,6 +60,7 @@
                     <th>#</th>
                     <th>Name</th>
                     <th>City</th>
+                    <th>Delivery Fees</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -101,6 +102,10 @@
                     {
                         data: 'city_name',
                         name: 'city'
+                    },
+                    {
+                        data: 'delivery_fees',
+                        name: 'delivery_fees'
                     },
                     {
                         data: 'action',

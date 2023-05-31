@@ -25,6 +25,7 @@ class TownshipRequest extends FormRequest
         return [
             'name'           => 'required|string',
             'city'           => 'required',
+            'delivery_fees'  => 'required'
         ];
     }
 
@@ -38,6 +39,7 @@ class TownshipRequest extends FormRequest
         return [
             'name.required'     => 'Name field is required',
             'city.required'     => 'City field is required',
+            'delivery_fees.required'  => 'Delivery field is required'
         ];
     }
 
