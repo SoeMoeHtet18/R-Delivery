@@ -2,21 +2,21 @@
 
 namespace App\Repositories;
 
-use App\Models\Rider;
-
-class NotificationRepository {
-    public function getNotificationsForRider($id)
+class NotificationRepository
+{
+    public function getNotifications($model, $id)
     {
-        $rider = Rider::find($id);
-        $notifications = $rider->notifications()
+        $user = $model::find($id);
+        $notifications = $user->notifications()
             ->orderBy('created_at', 'desc')
             ->get();
         return $notifications;
     }
-    public function getNotificationCountForRider($id)
+
+    public function getNotificationCount($model, $id)
     {
-        $rider = Rider::find($id);
-        $notifications = $rider->notifications()->where('is_read', 0)->count();
-        return $notifications;
+        $user = $model::find($id);
+        $count = $user->notifications()->where('is_read', 0)->count();
+        return $count;
     }
 }

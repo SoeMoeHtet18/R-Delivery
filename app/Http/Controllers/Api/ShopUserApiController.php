@@ -8,9 +8,11 @@ use App\Http\Requests\ShopUserCreateRequest;
 use App\Http\Requests\ShopUserLoginRequest;
 use App\Http\Requests\ShopUserUpdateApiRequest;
 use App\Models\ShopUser;
+use App\Repositories\NotificationRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\ShopRepository;
 use App\Repositories\ShopUserRepository;
+use App\Services\NotificationService;
 use App\Services\OrderService;
 use App\Services\ShopUserService;
 use Illuminate\Http\Request;
@@ -23,14 +25,18 @@ class ShopUserApiController extends Controller
     protected $orderRepository;
     protected $orderService;
     protected $shopUserService;
+    protected $notificationRepository;
+    protected $notificationService;
 
-    public function __construct(ShopUserRepository $shopUserRepository, ShopRepository $shopRepository, OrderService $orderService, ShopUserService $shopUserService, OrderRepository $orderRepository)
+    public function __construct(ShopUserRepository $shopUserRepository, ShopRepository $shopRepository, OrderService $orderService, ShopUserService $shopUserService, OrderRepository $orderRepository, NotificationRepository $notificationRepository, NotificationService $notificationService)
     {
         $this->shopUserRepository = $shopUserRepository;
         $this->shopRepository = $shopRepository;
         $this->orderRepository = $orderRepository;
         $this->orderService = $orderService;
         $this->shopUserService = $shopUserService;
+        $this->notificationRepository = $notificationRepository;
+        $this->notificationService = $notificationService;
     }
 
     public function shopUsersLoginApi(ShopUserLoginRequest $request)
@@ -105,5 +111,35 @@ class ShopUserApiController extends Controller
         $order = $this->orderRepository->getOrderByID($order_id);
         $data  = $this->orderService->changeStatus($order, $status);
         return response()->json(['data' => $data, 'message' => 'Successfull Change Order Status', 'status' => 'success'], 200);
+    }
+
+    public function getNotifications()
+    {
+        $shop_user = auth()->guard('shop-user-api')->user();
+        $notifications = $this->notificationRepository->getNotifications(ShopUser::class, $shop_user->id);
+        return response()->json(['data' => $notifications, 'message' => 'Successfully Get Notifications', 'status' => 'success'], 200);
+    }
+
+    public function removeNotification(Request $request)
+    {
+        $shop_user = auth()->guard('shop-user-api')->user();
+        $notification_id = $request->notification_id;
+        $notifications = $this->notificationService->removeNotificationByUser($notification_id, $shop_user->id,ShopUser::class);
+        return response()->json(['data' => $notifications, 'message' => 'Successfully Remove Notification', 'status' => 'success'], 200);
+
+    }
+
+    public function makeNoticationRead(Request $request){
+        $shop_user = auth()->guard('shop-user-api')->user();
+        $notification_id = $request->notification_id;
+        $notifications = $this->notificationService->makeNotificationReadByUser($notification_id, $shop_user->id, ShopUser::class);
+        return response()->json(['data' => $notifications, 'message' => 'Successfully make notification read', 'status' => 'success'], 200);
+    }
+
+    public function getNotificationCount()
+    {
+        $shop_user = auth()->guard('shop-user-api')->user();
+        $notifications = $this->notificationRepository->getNotificationCount(ShopUser::class, $shop_user->id);
+        return response()->json(['data' => $notifications, 'message' => 'Successfully get notification count', 'status' => 'success'], 200);
     }
 }

@@ -49,6 +49,10 @@ Route::middleware('auth:shop-user-api')->group( function () {
     Route::get('get-transactions-for-shop-detail/{id}', [TransactionForShopApiController::class, 'getTransactionForShopDetailByID']);
     Route::get('order-count-by-shop-id', [OrderApiController::class, 'getOrderCountByShopID']);
     Route::get('order-total-amount-by-shop-id', [OrderApiController::class, 'getOrderTotalAmountByShopID']);
+    Route::get('get-notifications-by-shop-user', [ShopUserApiController::class, 'getNotifications']);
+    Route::post('remove-notification-by-shop-user', [ShopUserApiController::class, 'removeNotification']);
+    Route::post('make-notification-read-by-shop-user', [ShopUserApiController::class, 'makeNoticationRead']);
+    Route::get('get-notification-count-by-shop-user', [ShopUserApiController::class, 'getNotificationCount']);
 });
 Route::post('rider-login', [RiderApiController::class, 'riderLoginApi']);
 Route::post('rider/create', [RiderApiController::class, 'create']);

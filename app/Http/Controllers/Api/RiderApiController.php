@@ -119,7 +119,7 @@ class RiderApiController extends Controller
     public function getNotifications()
     {
         $rider = auth()->guard('rider-api')->user();
-        $notifications = $this->notificationRepository->getNotificationsForRider($rider->id);
+        $notifications = $this->notificationRepository->getNotifications(Rider::class, $rider->id);
         return response()->json(['data' => $notifications, 'message' => 'Successfully Get Notifications', 'status' => 'success'], 200);
     }
 
@@ -127,7 +127,7 @@ class RiderApiController extends Controller
     {
         $rider = auth()->guard('rider-api')->user();
         $notification_id = $request->notification_id;
-        $notifications = $this->notificationservice->removeNotificationByRider($notification_id, $rider->id);
+        $notifications = $this->notificationservice->removeNotificationByUser($notification_id, $rider->id, Rider::class);
         return response()->json(['data' => $notifications, 'message' => 'Successfully Remove Notification', 'status' => 'success'], 200);
 
     }
@@ -135,14 +135,14 @@ class RiderApiController extends Controller
     public function makeNoticationRead(Request $request){
         $rider = auth()->guard('rider-api')->user();
         $notification_id = $request->notification_id;
-        $notifications = $this->notificationservice->makeNoticationReadByRider($notification_id, $rider->id);
+        $notifications = $this->notificationservice->makeNotificationReadByUser($notification_id, $rider->id, Rider::class);
         return response()->json(['data' => $notifications, 'message' => 'Successfully make notification read', 'status' => 'success'], 200);
     }
 
     public function getNotificationCount()
     {
         $rider = auth()->guard('rider-api')->user();
-        $notifications = $this->notificationRepository->getNotificationCountForRider($rider->id);
+        $notifications = $this->notificationRepository->getNotificationCount(Rider::class,$rider->id);
         return response()->json(['data' => $notifications, 'message' => 'Successfully get notification count', 'status' => 'success'], 200);
     }
 
