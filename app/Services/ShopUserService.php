@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\ShopUser;
+use Illuminate\Support\Facades\Hash;
 
 class ShopUserService
 {
@@ -36,5 +37,16 @@ class ShopUserService
     public function deleteShopUserByID($id)
     {
         ShopUser::destroy($id);
+    }
+
+    public function changePassword($shopUser, $old_password, $new_password) {
+        $password = $shopUser->password;
+        if (Hash::check($old_password, $password)) {
+            $shopUser->password = bcrypt($new_password);
+            $shopUser->save();
+            return true;
+        } else {
+           return false;
+        }
     }
 }

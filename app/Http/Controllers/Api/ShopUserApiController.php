@@ -142,4 +142,17 @@ class ShopUserApiController extends Controller
         $notifications = $this->notificationRepository->getNotificationCount(ShopUser::class, $shop_user->id);
         return response()->json(['data' => $notifications, 'message' => 'Successfully get notification count', 'status' => 'success'], 200);
     }
+
+    public function changePassword(Request $request)
+    {
+        $old_password = $request->oldPassword;
+        $new_password = $request->newPassword;
+        $shopUser = auth()->guard('shop-user-api')->user();
+        $password = $this->shopUserService->changePassword($shopUser, $old_password, $new_password);
+        if($password) {
+            return response()->json(['data' => $shopUser, 'message' => 'Successfully changed password', 'status' => 'success'], 200);
+        } else {
+            return response()->json(['data' => $shopUser, 'message' => 'Password wronged', 'status' => 'failed'], 200);
+        }
+    }
 }

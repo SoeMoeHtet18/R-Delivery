@@ -53,6 +53,7 @@ Route::middleware('auth:shop-user-api')->group( function () {
     Route::post('remove-notification-by-shop-user', [ShopUserApiController::class, 'removeNotification']);
     Route::post('make-notification-read-by-shop-user', [ShopUserApiController::class, 'makeNoticationRead']);
     Route::get('get-notification-count-by-shop-user', [ShopUserApiController::class, 'getNotificationCount']);
+    Route::post('change-password-by-shop-user',[ShopUserApiController::class, 'changePassword']);
 });
 Route::post('rider-login', [RiderApiController::class, 'riderLoginApi']);
 Route::post('rider/create', [RiderApiController::class, 'create']);

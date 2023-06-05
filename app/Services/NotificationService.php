@@ -24,15 +24,15 @@ class NotificationService
         $user->notifications()->attach($notification->id);
     }
 
-    public function removeNotification($id)
+    public function removeNotification($id, $user_id, $userType)
     {
-        $notification = Notification::findOrFail($id);
+        $notification = Notifiable::where('notification_id', $id)->where('notifiable_id', $user_id)->where('notifiable_type', $userType)->first();
         $notification->delete();
     }
 
-    public function markNotificationAsRead($id)
+    public function markNotificationAsRead($id, $user_id, $userType)
     {
-        $notification = Notification::findOrFail($id);
+        $notification = Notifiable::where('notification_id', $id)->where('notifiable_id', $user_id)->where('notifiable_type', $userType)->first();
         $notification->is_read = 1;
         $notification->save();
     }
@@ -41,7 +41,9 @@ class NotificationService
     {
         $user = $model::find($id);
         $notifications = $user->notifications()
+            ->where('notifiables.deleted_at', null)
             ->orderBy('created_at', 'desc')
+            ->withPivot('is_read')
             ->get();
         return $notifications;
     }
@@ -58,7 +60,7 @@ class NotificationService
         $message = 'Your order ' . $order_code . ' is canceled.';
         $notification = $this->createNotification('cancel', $message);
         $rider = Rider::find($id);
-        if($rider) {
+        if ($rider) {
             $this->attachNotification($rider, $notification);
         }
     }
@@ -95,14 +97,14 @@ class NotificationService
 
     public function removeNotificationByUser($id, $user_id, $userType)
     {
-        $this->removeNotification($id);
+        $this->removeNotification($id, $user_id, $userType);
         $notifications = $this->getNotificationsForUser($userType, $user_id);
         return $notifications;
     }
 
     public function makeNotificationReadByUser($id, $user_id, $userType)
     {
-        $this->markNotificationAsRead($id);
+        $this->markNotificationAsRead($id, $user_id, $userType);
         $notifications = $this->getNotificationsForUser($userType, $user_id);
         return $notifications;
     }

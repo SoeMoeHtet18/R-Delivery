@@ -8,7 +8,9 @@ class NotificationRepository
     {
         $user = $model::find($id);
         $notifications = $user->notifications()
+            ->where('notifiables.deleted_at', null)
             ->orderBy('created_at', 'desc')
+            ->withPivot('is_read')
             ->get();
         return $notifications;
     }
@@ -16,7 +18,10 @@ class NotificationRepository
     public function getNotificationCount($model, $id)
     {
         $user = $model::find($id);
-        $count = $user->notifications()->where('is_read', 0)->count();
+        if (!$user) {
+            return 0;
+        }
+        $count = $user->notifications()->wherePivot('is_read', 0)->count();
         return $count;
     }
 }
