@@ -23,7 +23,7 @@ class OrderApiController extends Controller
     {
         $shop_id = $request->shop_id;
         $order_code = Helper::nomenclature('orders', 'OD', 'order_code', $shop_id);
-        return response()->json(['data' => $order_code,  'status' => 'success', 'message' => 'Successfully get order code'],200);
+        return response()->json(['data' => $order_code,  'status' => 'success', 'message' => 'Successfully get order code'], 200);
     }
 
     public function getDataByCustomerPhoneNumber(Request $request)
@@ -111,7 +111,9 @@ class OrderApiController extends Controller
             $uploadedImage = $this->orderService->uploadProofOfPayment($order, $image);
             $imageUrl = asset('/storage/order payment/' . $uploadedImage);
         }
-        $status = $this->orderService->changeStatus($order, 'success');
+        if($order->status != 'success') {
+            $status = $this->orderService->changeStatus($order, 'success');
+        }
         return response()->json(['data' => $order->id, 'message' => 'Successfully Upload Proof Of Payment By Rider', 'status' => 'success'], 200);
     }
 

@@ -33,11 +33,17 @@ class OrderRepository
     public function getOrdersByShopID($id, $status)
     {
         if($status == 'current') {
-            $order = Order::where('shop_id', $id)->get();
+            $order = Order::where('shop_id', $id)
+            ->orderBy('id', 'desc')
+            ->get();
         } else if($status == 'canceled') {
-            $order = Order::where('shop_id', $id)->where('status','cancel')->get();
+            $order = Order::where('shop_id', $id)->where('status','cancel')
+            ->orderBy('updated_at', 'desc')
+            ->get();
         } else {
-            $order = Order::where('shop_id', $id)->where('status','pending')->orWhere('status','delay')->get();
+            $order = Order::where('shop_id', $id)->where('status','pending')->orWhere('status','delay')
+            ->orderBy('id', 'desc')
+            ->get();
         }
         return $order;
     }

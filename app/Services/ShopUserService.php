@@ -25,8 +25,8 @@ class ShopUserService
         $shop_user->name = $data['name'];
         $shop_user->phone_number = $data['phone_number'];
         $shop_user->email = $data['email'] ?? $shop_user->email;
-        if($data['password']) {
-            $shop_user->password = bcrypt($data['password']);
+        if(isset($data['password'])) {
+            $shop_user->password =  bcrypt($data['password']);
         }
         $shop_user->device_id = $data['device_id'] ?? $shop_user->device_id;
         $shop_user->shop_id = $data['shop_id'] ?? $shop_user->shop_id;

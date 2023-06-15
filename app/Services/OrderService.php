@@ -31,7 +31,7 @@ class OrderService
         $order->quantity =  $data['quantity'] ?? '';
         $order->delivery_fees =  $data['delivery_fees'];
         $order->total_amount = $data['total_amount'];
-        $order->markup_delivery_fees =  $data['markup_delivery_fees'] ?? null;
+        $order->markup_delivery_fees =  $data['markup_delivery_fees'] ?? 0;
         $order->remark =  $data['remark'] ?? null;
         $order->status = "pending";
         $order->item_type =  $data['item_type'];
