@@ -7,9 +7,10 @@ use App\Http\Traits\FileUploadTrait;
 use App\Models\ItemType;
 use App\Models\Order;
 use App\Models\Township;
+use Illuminate\Support\Facades\Storage;
 
 class OrderService
-{   
+{
     use FileUploadTrait;
 
     protected $notificationService;
@@ -36,7 +37,7 @@ class OrderService
         $order->status = "pending";
         $order->item_type =  $data['item_type'];
         $order->full_address =  $data['full_address'] ?? null;
-        $order->schedule_date =  $data['schedule_date'] ?? null ;
+        $order->schedule_date =  $data['schedule_date'] ?? null;
         $order->type =  $data['type'];
         $order->collection_method =  $data['collection_method'];
         $order->proof_of_payment =  $data['proof_of_payment'] ?? null;
@@ -46,7 +47,7 @@ class OrderService
 
     public function saveOrderByShopID($data, $shop_id)
     {
-        $delivery_fees = Township::where('id',$data['township_id'])->first()->delivery_fees;
+        $delivery_fees = Township::where('id', $data['township_id'])->first()->delivery_fees;
         $itemType = ItemType::find($data['item_type']);
         $order = new Order();
         $orderCode = Helper::nomenclature('orders', 'OD', 'order_code', $shop_id);
@@ -65,7 +66,7 @@ class OrderService
         $order->status = "pending";
         $order->item_type =  $itemType->name;
         $order->full_address =  $data['full_address'] ?? null;
-        $order->schedule_date =  $data['schedule_date'] ?? null ;
+        $order->schedule_date =  $data['schedule_date'] ?? null;
         $order->type =  $data["type"];
         $order->collection_method =  $data['collection_method'];
         $order->proof_of_payment =  $data['proof_of_payment'] ?? null;
@@ -86,23 +87,23 @@ class OrderService
         $order->total_amount = $data['total_amount'];
         $order->markup_delivery_fees =  $data['markup_delivery_fees'] ?? null;
         $order->remark =  $data['remark'] ?? null;
-        $order->status =  $data['status'];
-        if($data['status'] == 'cancel') {
-            $this->notificationService->orderCancelNotificationForRider($order->rider_id,$order->order_code);
-            $this->notificationService->orderCancelNotificationForShopUsers($order->shop_id,$order->order_code);
+        $this->changeStatus($order, $data['status']);
+        if ($data['status'] == 'cancel') {
+            $this->notificationService->orderCancelNotificationForRider($order->rider_id, $order->order_code);
+            $this->notificationService->orderCancelNotificationForShopUsers($order->shop_id, $order->order_code);
         }
-        if($data['status'] == 'delay') {
-            $this->notificationService->orderIssueNotificationForShopUsers($order->shop_id,$order->order_code);
+        if ($data['status'] == 'delay') {
+            $this->notificationService->orderIssueNotificationForShopUsers($order->shop_id, $order->order_code);
         }
-        if($data['status'] == 'success') {
-            $this->notificationService->orderArrivalNotificationForShopUsers($order->shop_id,$order->order_code);
+        if ($data['status'] == 'success') {
+            $this->notificationService->orderArrivalNotificationForShopUsers($order->shop_id, $order->order_code);
         }
         $order->item_type =  $data['item_type'];
         $order->full_address =  $data['full_address'] ?? null;
-        $order->schedule_date =  $data['schedule_date'] ?? null ;
+        $order->schedule_date =  $data['schedule_date'] ?? null;
         $order->type =  $data['type'];
         $order->collection_method =  $data['collection_method'];
-        if($file) {
+        if ($file) {
             $file_name = $this->uploadFile($file, 'public', 'customer payment');
             $order->proof_of_payment = $file_name;
         } else {
@@ -119,32 +120,69 @@ class OrderService
 
     public function changeStatus($order, $status)
     {
-        $order->status = $status;
-        $order->save();
-        if($order->status == 'cancel') {
-            $this->notificationService->orderCancelNotificationForRider($order->rider_id,$order->order_code);
-            $this->notificationService->orderCancelNotificationForShopUsers($order->shop_id,$order->order_code);
+        if ($order->status != $status) {
+            $order->status = $status;
+            $order->save();
+
+            $notificationMethod = '';
+            $updateField = '';
+
+            if ($order->status == 'cancel') {
+                $notificationMethod = 'orderCancelNotificationFor';
+                $updateField = 'canceled_at';
+                $this->notificationService->{$notificationMethod . 'Rider'}($order->rider_id, $order->order_code);
+                $this->notificationService->{$notificationMethod . 'ShopUsers'}($order->shop_id, $order->order_code);
+            } elseif ($order->status == 'delay') {
+                $notificationMethod = 'orderIssueNotificationFor';
+                $updateField = 'delayed_at';
+            } elseif ($order->status == 'success') {
+                $notificationMethod = 'orderArrivalNotificationFor';
+                $updateField = 'delivered_at';
+            }
+
+            if ($notificationMethod != 'orderCancelNotificationFor' && !empty($updateField)) {
+                $this->notificationService->{$notificationMethod . 'ShopUsers'}($order->shop_id, $order->order_code);
+            }
+
+            $orders = [];
+            if (Storage::exists('order_data.txt')) {
+                $orderDataJson = Storage::get('order_data.txt');
+                $orders = json_decode($orderDataJson, true);
+            }
+
+            $orderId = $order->order_code;
+            $orders[$orderId][$updateField] = $order->updated_at;
+
+            $orderDataJson = json_encode($orders);
+            Storage::put('order_data.txt', $orderDataJson);
+
+            return $order;
         }
-        if($order->status == 'delay') {
-            $this->notificationService->orderIssueNotificationForShopUsers($order->shop_id,$order->order_code);
-        }
-        if($order->status == 'success') {
-            $this->notificationService->orderArrivalNotificationForShopUsers($order->shop_id,$order->order_code);
-        }
-        return $order;
     }
+
 
     public function assignRider($order, $data)
     {
         $order->rider_id = $data['rider_id'];
         $order->save();
         $notification = $this->notificationService->orderCreateNotificationForRider($order->rider_id);
+        $orders = [];
+        if (Storage::exists('order_data.txt')) {
+            $orderDataJson = Storage::get('order_data.txt');
+            $orders = json_decode($orderDataJson, true);
+        }
+
+        $orderId = $order->order_code;
+        $orders[$orderId]['picked_at'] = $order->updated_at;
+
+        $orderDataJson = json_encode($orders);
+        Storage::put('order_data.txt', $orderDataJson);
         return $order;
     }
 
-    public function uploadProofOfPayment($order, $image) 
+    public function uploadProofOfPayment($order, $image)
     {
-        if($image) {
+        if ($image) {
             $file_name = $this->uploadFile($image, 'public', 'customer payment');
             $order->proof_of_payment =  $file_name;
         } else {

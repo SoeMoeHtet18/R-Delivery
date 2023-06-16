@@ -91,3 +91,4 @@ Route::get('get-payment-type-list', [PaymentTypeApiController::class, 'getAllPay
 Route::get('get-item-type-list', [ItemTypeApiController::class, 'getAllItemType']);
 Route::post('get-order-code',[OrderApiController::class, 'getOrderCode']);
 Route::post('get-delivery-fees-by-township', [TownshipApiController::class, 'getDeliveryFees']);
+Route::post('/tracking', [OrderApiController::class, 'trackOrder']);

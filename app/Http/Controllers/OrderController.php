@@ -15,6 +15,7 @@ use App\Repositories\TownshipRepository;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 
 class OrderController extends Controller
@@ -195,7 +196,8 @@ class OrderController extends Controller
     {
         $order = $this->orderRepository->getOrderByID($id);
         $data = $request->all();
-        $this->orderService->assignRider($order, $data);
+        $order = $this->orderService->assignRider($order, $data);
+
         return redirect()->route('orders.index');
     }
 
@@ -245,7 +247,7 @@ class OrderController extends Controller
             })
             ->addColumn('first_column', function ($row) {
                 $checkbox = '<input class="order-payment" type="checkbox" 
-                data-id="' . $row->id . '" data-shop_id="' . $row->shop_id .'"
+                data-id="' . $row->id . '" data-shop_id="' . $row->shop_id . '"
                 data-total_amount="' . $row->total_amount . '" 
                 data-markup_delivery_fees="' . $row->markup_delivery_fees . '" 
                 data-payment_flag="' . $row->payment_flag . '">';
@@ -325,5 +327,25 @@ class OrderController extends Controller
         $item_types = $item_types->sortByDesc('id');
 
         return view('admin.order.create', compact('shop_id', 'shops', 'riders', 'cities', 'item_types', 'townships'));
+    }
+
+    public function showTracking(Request $request)
+    {
+        $order_id = $request->order_id;
+        if (strpos($order_id, '#') !== false) {
+            $order_id = str_replace('#', '', $order_id);
+        }
+        $order = $this->orderRepository->trackOrderByOrderID($order_id);
+        $orderId = $order_id;
+        $orders = [];
+        if (Storage::exists('order_data.txt')) {
+            $orderDataJson = Storage::get('order_data.txt');
+            $orders = json_decode($orderDataJson, true);
+        }
+        if (isset($orders[$orderId])) {
+            $orderData = $orders[$orderId];
+            $order->order_data = $orderData;
+        }
+        return view('tracking',compact('order'));
     }
 }

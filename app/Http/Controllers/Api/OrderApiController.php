@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Repositories\OrderRepository;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class OrderApiController extends Controller
 {
@@ -52,7 +53,7 @@ class OrderApiController extends Controller
         $shop_id   = $shop_user->shop_id;
         $total_amount = $this->orderRepository->getOrdersTotalAmountByShopID($shop_id);
         $total_amount['total_amount'] = $total_amount['total_amount'] ?? 0.00;
-        return response()->json(['data'=> $total_amount['total_amount'], 'message' => 'Successfully Get Orders Total Amount By Shop ID', 'status' => 'success'], 200);        
+        return response()->json(['data' => $total_amount['total_amount'], 'message' => 'Successfully Get Orders Total Amount By Shop ID', 'status' => 'success'], 200);
     }
 
     public function getOrderCountByRiderID()
@@ -101,8 +102,8 @@ class OrderApiController extends Controller
 
     public function uploadProofOfPaymentByRider(Request $request)
     {
-      
-        if($request->file('image')){
+
+        if ($request->file('image')) {
             $image = $request->file('image');
         }
         $id = $request->order_id;
@@ -111,7 +112,7 @@ class OrderApiController extends Controller
             $uploadedImage = $this->orderService->uploadProofOfPayment($order, $image);
             $imageUrl = asset('/storage/order payment/' . $uploadedImage);
         }
-        if($order->status != 'success') {
+        if ($order->status != 'success') {
             $status = $this->orderService->changeStatus($order, 'success');
         }
         return response()->json(['data' => $order->id, 'message' => 'Successfully Upload Proof Of Payment By Rider', 'status' => 'success'], 200);

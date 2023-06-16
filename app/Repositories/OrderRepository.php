@@ -234,4 +234,14 @@ class OrderRepository
 
         return $order;
     }
+
+    public function trackOrderByOrderID($id)
+    {
+        $order = Order::where('orders.order_code',$id)
+        ->leftJoin('shops', 'shops.id', 'orders.shop_id')
+        ->leftJoin('riders', 'riders.id', 'orders.rider_id')
+        ->select('orders.*', 'shops.name as shop_name', 'riders.name as rider_name','riders.phone_number as rider_phone_number')
+        ->first();
+        return $order;
+    }
 }
