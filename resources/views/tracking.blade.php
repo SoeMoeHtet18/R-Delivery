@@ -274,6 +274,7 @@
             width: 90px;
             height: 2px;
         }
+
         .timeline-box {
             width: 15px;
             height: 15px;
@@ -370,22 +371,22 @@
                         <div class="row w-100">
                             <div class="col-2 g-0" style="width: fit-content;">
                                 @if($order->status == 'success')
-                                <span id="delivered-timeline-date-time" class="timeline-date-time d-block">{{$order->order_data['delivered_at']}}</span>
+                                <span class="delivered-timeline-date-time timeline-date-time d-block">{{$order->order_data['delivered_at']}}</span>
                                 @endif
                                 @if($order->status == 'cancel')
-                                <span id="canceled-timeline-date-time" class="timeline-date-time d-block">{{$order->order_data['canceled_at']}}</span>
+                                <span class="canceled-timeline-date-time timeline-date-time d-block">{{$order->order_data['canceled_at']}}</span>
                                 @endif
                                 @if(isset($order->order_data['delayed_at']))
-                                <span id="delayed-timeline-date-time" class="timeline-date-time d-block">{{$order->order_data['delayed_at']}}</span>
+                                <span class="delayed-timeline-date-time timeline-date-time d-block">{{$order->order_data['delayed_at']}}</span>
                                 @endif
                                 @if($order->rider_id != null)
-                                <span id="shipping-timeline-date-time" class="timeline-date-time d-block">{{$order->order_data['picked_at']}}</span>
+                                <span class="shipping-timeline-date-time timeline-date-time d-block">{{$order->order_data['picked_at']}}</span>
                                 @endif
                                 @if($order->rider_id != null)
-                                <span id="picked-timeline-date-time" class="timeline-date-time d-block">{{$order->order_data['picked_at']}}</span>
+                                <span class="picked-timeline-date-time timeline-date-time d-block">{{$order->order_data['picked_at']}}</span>
                                 @endif
                                 @if(isset($order->created_at))
-                                <span id="created-timeline-date-time" class="timeline-date-time d-block">{{$order->created_at}}</span>
+                                <span class="created-timeline-date-time timeline-date-time d-block">{{$order->created_at}}</span>
                                 @endif
                             </div>
                             <div id="timeline-box-container" class="col-1 g-0">
@@ -536,7 +537,7 @@
                         <div class="timeline-status-box">
                             <span class="timeline-status">Delivered</span>
 
-                            <span id="delivered-timeline-date-time" class="timeline-date-time">{{$order->order_data['delivered_at']}}</span>
+                            <span class="delivered-timeline-date-time timeline-date-time">{{$order->order_data['delivered_at']}}</span>
 
                             <span class="delivered-timeline-status sub-status d-block">Your order has been delivered. </span>
                         </div>
@@ -545,7 +546,7 @@
                         <div class="timeline-status-box">
                             <span class="timeline-status">Canceled</span>
 
-                            <span id="canceled-timeline-date-time" class="timeline-date-time">{{$order->order_data['canceled_at']}}</span>
+                            <span class="canceled-timeline-date-time timeline-date-time">{{$order->order_data['canceled_at']}}</span>
 
                             <span class="canceled-timeline-status sub-status d-block">Your order has been canceled. </span>
                         </div>
@@ -554,7 +555,7 @@
                         <div class="timeline-status-box">
                             <span class="timeline-status">Delay</span>
 
-                            <span id="delayed-timeline-date-time" class="timeline-date-time">{{$order->order_data['delayed_at']}}</span>
+                            <span class="delayed-timeline-date-time timeline-date-time">{{$order->order_data['delayed_at']}}</span>
 
                             <span class="delay-timeline-status sub-status d-block">Your order has been delayed due to traffic. We will try to deliver again to you tomorrow. </span>
                         </div>
@@ -563,21 +564,21 @@
                         <div class="timeline-status-box">
                             <span class="timeline-status">Out For Delivery</span>
 
-                            <span id="shipping-timeline-date-time" class="timeline-date-time">{{$order->order_data['picked_at']}}</span>
+                            <span class="shipping-timeline-date-time timeline-date-time">{{$order->order_data['picked_at']}}</span>
 
                             <span class="shipping-timeline-status sub-status d-block">R-Delivery will attempt to deliver your order today. </span>
 
                         </div>
                         <div class="timeline-status-box">
                             <span class="timeline-status">Order Successfully Picked Up</span>
-                            <span id="picked-timeline-date-time" class="timeline-date-time ">{{$order->order_data['picked_at']}}</span>
+                            <span class="picked-timeline-date-time timeline-date-time ">{{$order->order_data['picked_at']}}</span>
                             <span class="picked-timeline-status sub-status d-block">Your order has been picked up by R-Delivery. </span>
                         </div>
                         @endif
                         @if(isset($order->created_at))
                         <div class="timeline-status-box">
                             <span class="timeline-status">Packed by Online Shop</span>
-                            <span id="created-timeline-date-time" class="timeline-date-time">{{$order->created_at}}</span>
+                            <span class="created-timeline-date-time timeline-date-time">{{$order->created_at}}</span>
                             <span class="picked-timeline-status sub-status d-block">Your order is packed and will be handed over to our delivery partner. </span>
                         </div>
                         @endif
@@ -591,58 +592,52 @@
 @section('javascript')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const deliveredElement = document.getElementById('delivered-timeline-date-time');
-        const canceledElement = document.getElementById('canceled-timeline-date-time');
-        const delayedElement = document.getElementById('delayed-timeline-date-time');
-        const shippingElement = document.getElementById('shipping-timeline-date-time');
-        const pickedElement = document.getElementById('picked-timeline-date-time');
-        const createdElement = document.getElementById('created-timeline-date-time');
+        const deliveredElements = document.getElementsByClassName('delivered-timeline-date-time');
+        const canceledElements = document.getElementsByClassName('canceled-timeline-date-time');
+        const delayedElements = document.getElementsByClassName('delayed-timeline-date-time');
+        const shippingElements = document.getElementsByClassName('shipping-timeline-date-time');
+        const pickedElements = document.getElementsByClassName('picked-timeline-date-time');
+        const createdElements = document.getElementsByClassName('created-timeline-date-time');
 
-        const formatAndSetTimestamp = (element) => {
-            const timestamp = element.textContent;
+        const formatAndSetTimestamp = (elements) => {
+            for (let i = 0; i < elements.length; i++) {
+                const element = elements[i];
+                const timestamp = element.textContent;
 
-            if (timestamp) {
-                const dateObj = new Date(timestamp);
+                if (timestamp) {
+                    const dateObj = new Date(timestamp);
 
-                const dateFormatter = new Intl.DateTimeFormat('my-MM', {
-                    day: 'numeric',
-                    month: 'long',
-                    year: 'numeric'
-                });
-                var formattedDate = dateFormatter.format(dateObj);
-                console.log(formattedDate);
+                    const dateFormatter = new Intl.DateTimeFormat('my-MM', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric'
+                    });
+                    var formattedDate = dateFormatter.format(dateObj);
+                    console.log(formattedDate);
 
-                const [month, day, year] = formattedDate.split(' ');
-                const formattedDay = day.replace(',', '');
-                formattedDate = `${formattedDay} ${month} ${year}`;
+                    const [month, day, year] = formattedDate.split(' ');
+                    const formattedDay = day.replace(',', '');
+                    formattedDate = `${formattedDay} ${month} ${year}`;
 
-                const timeFormatter = new Intl.DateTimeFormat('my-MM', {
-                    hour: 'numeric',
-                    minute: 'numeric',
-                    hour12: true
-                });
-                const formattedTime = timeFormatter.format(dateObj);
-                const formattedDateTime = `${formattedDate} at ${formattedTime}`;
+                    const timeFormatter = new Intl.DateTimeFormat('my-MM', {
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        hour12: true
+                    });
+                    const formattedTime = timeFormatter.format(dateObj);
+                    const formattedDateTime = `${formattedDate} at ${formattedTime}`;
 
-                element.textContent = formattedDateTime;
+                    element.textContent = formattedDateTime;
+                }
             }
         };
-        if (deliveredElement) {
-            formatAndSetTimestamp(deliveredElement);
-        }
-        if (canceledElement) {
-            formatAndSetTimestamp(canceledElement);
-        }
-        if (delayedElement) {
-            formatAndSetTimestamp(delayedElement);
-        }
-        if (shippingElement) {
-            formatAndSetTimestamp(shippingElement);
-        }
-        if (pickedElement) {
-            formatAndSetTimestamp(pickedElement);
-        }
-        formatAndSetTimestamp(createdElement);
-    });
+
+        formatAndSetTimestamp(deliveredElements);
+        formatAndSetTimestamp(canceledElements);
+        formatAndSetTimestamp(delayedElements);
+        formatAndSetTimestamp(shippingElements);
+        formatAndSetTimestamp(pickedElements);
+        formatAndSetTimestamp(createdElements);
+    })
 </script>
 @endSection
