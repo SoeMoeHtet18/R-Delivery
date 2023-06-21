@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Helpers\Helper;
 use App\Helpers\MyHelper;
 use App\Models\City;
 use App\Models\ItemType;
@@ -105,9 +106,11 @@ class OrderTest extends TestCase
         $methods = ['drop-off','pick-up'];
         $rand_method = $methods[array_rand($methods)];
 
+        $shop_id = Shop::all()->random()->id;
+
         $response = $this->post('/orders', [
-            "order_code" => MyHelper::nomenclature(['table_name'=>'orders','prefix'=>'OD','column_name'=>'order_code']),
-            "shop_id" => Shop::all()->random()->id,
+            "order_code" => Helper::nomenclature('orders', 'OD', 'order_code', $shop_id),
+            "shop_id" => $shop_id,
             "customer_phone_number" => $this->faker->phoneNumber,
             "customer_name" => $this->faker->name,
             "city_id" => City::all()->random()->id,

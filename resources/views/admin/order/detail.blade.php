@@ -122,8 +122,17 @@
                     <h4>Status <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    {{ $order->status }}
+                    @if($order->status == 'pending')
+                    Pending
+                    @elseif($order->status == 'success')
+                    Success
+                    @elseif($order->status == 'delay')
+                    Delay
+                    @else
+                    Cancel
+                    @endif
                 </div>
+
             </div>
             <div class="row m-0 mb-3">
                 <div class="col-2">
@@ -146,15 +155,22 @@
                     <h4>Schedule Date <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    {{ $order->schedule_date }}
+                    {{ \Carbon\Carbon::parse($order->schedule_date)->format('d-m-Y') }}
                 </div>
+
             </div>
             <div class="row m-0 mb-3">
                 <div class="col-2">
                     <h4>Type <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    {{ $order->type }}
+                    @if($order->type == 'standard')
+                    Standard
+                    @elseif($order->type == 'express')
+                    Express
+                    @else
+                    Door To Door
+                    @endif
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -162,7 +178,11 @@
                     <h4>Collection Method <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    {{ $order->collection_method }}
+                    @if($order->collection_method == 'dropoff')
+                    Drop Off
+                    @else
+                    Pick Up
+                    @endif
                 </div>
             </div>
             <div class="row m-0 mb-3">

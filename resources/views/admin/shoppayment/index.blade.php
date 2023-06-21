@@ -131,7 +131,18 @@
                         orderable: false,
                         searchable: false
                     },
-                ]
+                ],
+                columnDefs: [{
+                    "render": function(data, type, row) {
+                        if (row.type == 'delivery_payment') {
+                            return "Delivery Payment";
+                        }
+                        if (row.type == 'remaining_payment') {
+                            return "Remaining Payment";
+                        }
+                    },
+                    "targets": 3
+                },]
             });
 
             $('.search_filter').click(function() {

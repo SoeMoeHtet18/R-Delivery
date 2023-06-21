@@ -39,7 +39,11 @@
                     <h4>Type <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    {{ $transaction_for_shops->type }}
+                    @if($transaction_for_shops->type == 'loan_payment')
+                    Loan Payment
+                    @else 
+                    Fully Payment
+                    @endif
                 </div>
             </div>
             <div class="row m-0 mb-3">

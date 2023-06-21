@@ -39,8 +39,8 @@ class OrderService
         $order->full_address =  $data['full_address'] ?? null;
         $order->schedule_date =  $data['schedule_date'] ?? null;
         $order->type =  $data['type'];
-        $order->collection_method =  $data['collection_method'];
-        $order->proof_of_payment =  $data['proof_of_payment'] ?? null;
+        $order->collection_method = $data['collection_method'];
+        $order->proof_of_payment = $data['proof_of_payment'] ?? null;
         $order->save();
         return $order;
     }
@@ -109,6 +109,7 @@ class OrderService
         } else {
             $order->proof_of_payment =  $order->proof_of_payment;
         }
+        $order->last_updated_by = auth()->user()->id;
         $order->save();
         return $order;
     }
@@ -184,11 +185,8 @@ class OrderService
     {
         if ($image) {
             $file_name = $this->uploadFile($image, 'public', 'customer payment');
-            $order->proof_of_payment =  $file_name;
-        } else {
-            $order->proof_of_payment =  $order->proof_of_payment;
+            $order->update(['proof_of_payment' => $file_name]);
+            return $file_name;
         }
-        $order->save();
-        return $file_name;
     }
 }

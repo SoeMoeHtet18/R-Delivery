@@ -39,7 +39,13 @@
                     <h4>Type<b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    {{ $customer_payment->type }}
+                    @if($customer_payment->type == 'remaining_amount')
+                    Remaining Amount
+                    @elseif($customer_payment->type == 'fully_paid')
+                    Fully Paid
+                    @else
+                    Delivery Fees Only
+                    @endif
                 </div>
             </div>
             <div class="row m-0 mb-3">

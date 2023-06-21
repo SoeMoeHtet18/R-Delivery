@@ -154,7 +154,18 @@
                         orderable: false,
                         searchable: false
                     },
-                ]
+                ],
+                columnDefs: [{
+                    "render": function(data, type, row) {
+                        if (row.type == 'loan_payment') {
+                            return "Loan Payment";
+                        }
+                        if (row.type == 'fully_payment') {
+                            return "Fully Payment";
+                        }
+                    },
+                    "targets": 4
+                },]
             });
             $('.search_filter').click(function() {
                 var shop_name = $('#shop_name').val();

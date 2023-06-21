@@ -136,7 +136,6 @@
                     <th>Customer Phone Number</th>
                     <th>City</th>
                     <th>Township</th>
-                    <th>Quantity</th>
                     <th>Remark</th>
                     <th>Status</th>
                     <th>Item Type</th>
@@ -160,6 +159,12 @@
 @section('javascript')
 <script type="text/javascript">
     $(document).ready(function() {
+        $('#city').select2([]);
+        $('#status').select2();
+        $('#township').select2();
+        $('#rider').select2();
+        $('#shop').select2();
+        
         $("#create-transaction").click(function() {
             processPayment();
         });
@@ -216,13 +221,6 @@
                 duration: 3000,
             }).showToast();
         }
-
-
-        $('#city').select2([]);
-        $('#status').select2();
-        $('#township').select2();
-        $('#rider').select2();
-        $('#shop').select2();
 
         get_ajax_dynamic_data(search = '', city = '', rider = '', shop = '', status = '', township = '');
 
@@ -297,10 +295,6 @@
                         name: 'township'
                     },
                     {
-                        data: 'quantity',
-                        name: 'quantity'
-                    },
-                    {
                         data: 'remark',
                         name: 'remark'
                     },
@@ -337,6 +331,72 @@
                         name: 'action',
                         orderable: false,
                         searchable: false
+                    },
+                ],
+                columnDefs: [{
+                        "render": function(data, type, row) {
+                            if (row.payment_flag == 0) {
+                                return "Unpaid";
+                            }
+                            if (row.payment_flag == 1) {
+                                return "Paid";
+                            }
+                        },
+                        "targets": 2
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            if (row.status == 'pending') {
+                                return "Pending";
+                            }
+                            if (row.status == 'success') {
+                                return "Success";
+                            }
+                            if (row.status == 'delay') {
+                                return "Delay";
+                            }
+                            if (row.status == 'cancel') {
+                                return "Cancel";
+                            }
+                        },
+                        "targets": 14
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            var date = new Date(row.schedule_date);
+                            var formattedDate = date.toLocaleDateString('my-MM', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            });
+                            return formattedDate;
+                        },
+                        "targets": 17
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            if (row.type == 'standard') {
+                                return "Standard";
+                            }
+                            if (row.type == 'express') {
+                                return "Express";
+                            }
+                            if (row.type == 'doortodoor') {
+                                return "Door To Door";
+                            }
+                        },
+                        "targets": 18
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            if (row.collection_method == 'dropoff') {
+                                return "Drop Off";
+                            }
+                            if (row.collection_method == 'pickup') {
+                                return "Pick Up";
+                            }
+                        },
+                        "targets": 19
                     },
                 ]
             });

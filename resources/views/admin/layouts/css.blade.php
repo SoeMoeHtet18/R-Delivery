@@ -251,4 +251,8 @@
         flex-direction: row;
         justify-content: flex-end;
     }
+
+    .datatable {
+        width: 100% !important;
+    }
 </style>

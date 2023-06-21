@@ -101,22 +101,29 @@ class OrderApiController extends Controller
     }
 
     public function uploadProofOfPaymentByRider(Request $request)
-    {
+{
+    $id = $request->order_id;
+    $order = $this->orderRepository->getOrderByID($id);
 
-        if ($request->file('image')) {
-            $image = $request->file('image');
-        }
-        $id = $request->order_id;
-        $order = $this->orderRepository->getOrderByID($id);
-        if (isset($image)) {
-            $uploadedImage = $this->orderService->uploadProofOfPayment($order, $image);
-            $imageUrl = asset('/storage/order payment/' . $uploadedImage);
-        }
+    if ($request->hasFile('image')) {
+        $image = $request->file('image');
+       
+        $uploadedImage = $this->orderService->uploadProofOfPayment($order, $image);
+        $imageUrl = asset('/storage/order payment/' . $uploadedImage);
+
         if ($order->status != 'success') {
             $status = $this->orderService->changeStatus($order, 'success');
         }
-        return response()->json(['data' => $order->id, 'message' => 'Successfully Upload Proof Of Payment By Rider', 'status' => 'success'], 200);
+    } else {
+        $order->update(['proof_of_payment' => null]);
     }
+    
+    return response()->json([
+        'data' => $order,
+        'message' => 'Successfully Upload Proof Of Payment By Rider',
+        'status' => 'success'
+    ], 200);
+}
 
     public function getOrderDetail(Request $request)
     {

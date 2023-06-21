@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ShopCreateRequest;
 use App\Http\Requests\ShopUpdateRequest;
+use App\Repositories\OrderRepository;
 use App\Repositories\ShopRepository;
 use App\Services\ShopService;
+use App\Services\TransactionsForShopService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
@@ -14,11 +16,15 @@ class ShopController extends Controller
 {
     protected $shopRepository;
     protected $shopService;
+    protected $orderRepository;
+    protected $transactionsForShopService;
 
-    public function __construct(ShopRepository $shopRepository, ShopService $shopService)
+    public function __construct(ShopRepository $shopRepository, ShopService $shopService, OrderRepository $orderRepository, TransactionsForShopService $transactionsForShopService)
     {
         $this->shopRepository = $shopRepository;
         $this->shopService = $shopService;
+        $this->orderRepository = $orderRepository;
+        $this->transactionsForShopService = $transactionsForShopService;
     }
 
     /**
@@ -54,7 +60,9 @@ class ShopController extends Controller
     public function show(string $id)
     {
         $shop = $this->shopRepository->getShopByID($id);
-
+        $order_ids = $this->orderRepository->getAllOrderIdsByShopID($id);
+        $payable_amount = $this->transactionsForShopService->getActualAmount($order_ids,$shop->id);
+        $shop->payable_amount = $payable_amount;
         return view('admin.shop.detail', compact('shop'));
     }
 

@@ -178,8 +178,16 @@ class OrderController extends Controller
             ->addColumn('order_code', function ($data) {
                 return '<a href="' . route("orders.show", $data->id) . '">' . $data->order_code . '</a>';
             })
+            ->addColumn('first_column', function ($row) {
+                $checkbox = '<input class="order-payment" type="checkbox" 
+                data-id="' . $row->id . '" data-shop_id="' . $row->shop_id . '"
+                data-total_amount="' . $row->total_amount . '" 
+                data-markup_delivery_fees="' . $row->markup_delivery_fees . '" 
+                data-payment_flag="' . $row->payment_flag . '">';
+                return $checkbox;
+            })
             ->addIndexColumn()
-            ->rawColumns(['order_code'])
+            ->rawColumns(['order_code','first_column'])
             ->orderColumn('orders.id', '-id $1')
             ->make(true);
     }

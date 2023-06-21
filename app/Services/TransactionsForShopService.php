@@ -15,7 +15,7 @@ class TransactionsForShopService
         $transactions_for_shops->shop_id = $data['shop_id'];
         $transactions_for_shops->amount =  $data['amount'];
         if ($file) {
-            $file_name = $this->uploadFile($file, 'public', 'transactions_for_shop');
+            $file_name = $this->uploadFile($file, 'public', 'transactions for shop');
             $transactions_for_shops->image = $file_name;
         } else {
             $transactions_for_shops->image = null;

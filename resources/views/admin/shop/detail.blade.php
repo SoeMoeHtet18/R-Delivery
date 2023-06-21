@@ -50,6 +50,14 @@
                     {{ $shop->phone_number }}
                 </div>
             </div>
+            <div class="row m-0 mb-3">
+                <div class="col-2">
+                    <h4>Payable Amuount <b>:</b></h4>
+                </div>
+                <div class="col-10">
+                    {{ $shop->payable_amount }}
+                </div>
+            </div>
         </div>
 
         <hr>
@@ -94,21 +102,24 @@
                     <div class="caption">ShopOrder Lists</div>
                 </div>
                 <div class="portlet-body">
-                    <div class="create-button pb-5">
+                    <div class="create-button pb-5 d-inline-block">
                         <a class="btn create-btn" href="{{ url('/order-create-by-shop-id') }}?shop_id={{ $shop->id }}">Add Order</a>
                     </div>
-
+                    <div class="create-button mb-3 d-inline-block">
+                        <a class="btn create-btn" id="create-transaction">Add Transaction</a>
+                    </div>
 
                     <table id="shop-order-datatable" class="table table-striped table-hover table-responsive datatable">
                         <thead>
                             <tr>
                                 <th>#</th>
+                                <th id="first_column"><input type="checkbox" name="check_all" id="checkAll"></th>
+                                <th>Paid</th>
                                 <th>Order Code</th>
                                 <th>Customer Name</th>
                                 <th>Customer Phone Number</th>
                                 <th>Township</th>
                                 <th>Rider</th>
-                                <th>Quantity</th>
                                 <th>Total Amount</th>
                                 <th>Delivery Fees</th>
                                 <th>Markup Delivery Fees</th>
@@ -187,6 +198,63 @@
     $(function() {
         var shop_id = document.getElementById('shop-id').getAttribute('data-shop-id');
 
+        $("#create-transaction").click(function() {
+            processPayment();
+        });
+
+        function processPayment() {
+            var process_data = [];
+            var shop_ids = [];
+            var order_ids = [];
+
+            $('.order-payment:checked').each(function() {
+                var push_data = {
+                    id: $(this).data('id'),
+                    shop_id: $(this).data('shop_id'),
+                    payment_flag: $(this).data('payment_flag')
+                };
+                process_data.push(push_data);
+                shop_ids.push(push_data.shop_id);
+                order_ids.push(push_data.id);
+            });
+
+            shop_ids = [...new Set(shop_ids)];
+            order_ids = [...new Set(order_ids)];
+
+            if (process_data.length === 0) {
+                showErrorToast("Please select at least one order.");
+            } else if (shop_ids.length > 1) {
+                showErrorToast("Please select only orders of the same shop.");
+            } else if (process_data.some(order => order.payment_flag === 1)) {
+                showErrorToast("Please select only orders that are unpaid.");
+            } else {
+                var redirectUrl = '/create-transaction-for-shop-for-selected-orders?order_ids=' + order_ids + '&shop_id=' + shop_ids;
+                window.location = redirectUrl;
+            }
+        }
+
+        $('#checkAll').click(function() {
+            var isChecked = $(this).prop("checked");
+            $('td input').prop('checked', isChecked);
+        });
+
+        $('.order-payment').click(function() {
+            var allChecked = $('.order-payment:checked').length === $('.order-payment').length;
+            $('#checkAll').prop('checked', allChecked);
+        });
+
+        function showErrorToast(message) {
+            Toastify({
+                text: message,
+                gravity: "top",
+                position: "center",
+                style: {
+                    background: "red",
+                },
+                duration: 3000,
+            }).showToast();
+        }
+
         // Initialize shop-user-datatable
         $('#shop-user-datatable').DataTable({
             processing: true,
@@ -221,6 +289,16 @@
                     name: 'id'
                 },
                 {
+                    data: 'first_column',
+                    name: 'first_column',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'payment_flag',
+                    name: 'paid'
+                },
+                {
                     data: 'order_code',
                     name: 'order_code'
                 },
@@ -239,10 +317,6 @@
                 {
                     data: 'rider_name',
                     name: 'rider'
-                },
-                {
-                    data: 'quantity',
-                    name: 'quantity'
                 },
                 {
                     data: 'total_amount',
@@ -289,6 +363,72 @@
                     name: 'last_updated_by'
                 },
             ],
+            columnDefs: [{
+                    "render": function(data, type, row) {
+                        if (row.payment_flag == 0) {
+                            return "Unpaid";
+                        }
+                        if (row.payment_flag == 1) {
+                            return "Paid";
+                        }
+                    },
+                    "targets": 2
+                },
+                {
+                    "render": function(data, type, row) {
+                        if (row.status == 'pending') {
+                            return "Pending";
+                        }
+                        if (row.status == 'success') {
+                            return "Success";
+                        }
+                        if (row.status == 'delay') {
+                            return "Delay";
+                        }
+                        if (row.status == 'cancel') {
+                            return "Cancel";
+                        }
+                    },
+                    "targets": 11
+                },
+                {
+                    "render": function(data, type, row) {
+                        var date = new Date(row.schedule_date);
+                        var formattedDate = date.toLocaleDateString('my-MM', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        });
+                        return formattedDate;
+                    },
+                    "targets": 14
+                },
+                {
+                    "render": function(data, type, row) {
+                        if (row.type == 'standard') {
+                            return "Standard";
+                        }
+                        if (row.type == 'express') {
+                            return "Express";
+                        }
+                        if (row.type == 'doortodoor') {
+                            return "Door To Door";
+                        }
+                    },
+                    "targets": 15
+                },
+                {
+                    "render": function(data, type, row) {
+                        if (row.collection_method == 'dropoff') {
+                            return "Drop Off";
+                        }
+                        if (row.collection_method == 'pickup') {
+                            return "Pick Up";
+                        }
+                    },
+                    "targets": 16
+                },
+            ]
         });
 
         // Initialize shop-payment-datatable
@@ -319,6 +459,17 @@
                     searchable: false
                 },
             ],
+            columnDefs: [{
+                "render": function(data, type, row) {
+                    if (row.type == 'delivery_payment') {
+                        return "Delivery Payment";
+                    }
+                    if (row.type == 'remaining_payment') {
+                        return "Remaining Payment";
+                    }
+                },
+                "targets": 2
+            }, ]
         });
         // Initialize transaction-for-shop-datatable
         $("#transaction-for-shop-datatable").DataTable({
@@ -352,6 +503,17 @@
                     searchable: false
                 },
             ],
+            columnDefs: [{
+                "render": function(data, type, row) {
+                    if (row.type == 'loan_payment') {
+                        return "Loan Payment";
+                    }
+                    if (row.type == 'fully_payment') {
+                        return "Fully Payment";
+                    }
+                },
+                "targets": 2
+            }, ]
         });
     });
 </script>

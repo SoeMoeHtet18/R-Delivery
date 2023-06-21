@@ -47,7 +47,11 @@
                     <h4>Type <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    {{ $shop_payment->type }}
+                    @if($shop_payment->type == 'delivery_payment')
+                    Delivery Payment
+                    @else
+                    Remaining Payment
+                    @endif
                 </div>
             </div>
             <div class="row m-0 mb-3">

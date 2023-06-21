@@ -93,17 +93,6 @@
                 </div>
             </div>
             <div class="row m-0 mb-3">
-                <label for="quantity" class="col-2">
-                    <h4>Quantity <b>:</b></h4>
-                </label>
-                <div class="col-10">
-                    <input type="text" id="quantity" name="quantity" value="{{$order->quantity}}" class="form-control" />
-                    @if ($errors->has('quantity'))
-                    <span class="text-danger"><strong>{{ $errors->first('quantity') }}</strong></span>
-                    @endif
-                </div>
-            </div>
-            <div class="row m-0 mb-3">
                 <label for="delivery_fees" class="col-2">
                     <h4>Delivery Fees <b>:</b></h4>
                 </label>
