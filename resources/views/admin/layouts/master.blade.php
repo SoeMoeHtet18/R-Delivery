@@ -23,8 +23,8 @@
                 </div>
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="card content-card">
-                            <div class="card-body">
+                        <div id="content-card" class="card content-card">
+                            <div id="content-body" class="card-body">
                                 @yield('content')
                             </div>
                         </div>

@@ -109,7 +109,7 @@ class OrderTest extends TestCase
         $shop_id = Shop::all()->random()->id;
 
         $response = $this->post('/orders', [
-            "order_code" => Helper::nomenclature('orders', 'OD', 'order_code', $shop_id),
+            "order_code" => Helper::nomenclature('orders', 'OD', 'id', $shop_id),
             "shop_id" => $shop_id,
             "customer_phone_number" => $this->faker->phoneNumber,
             "customer_name" => $this->faker->name,

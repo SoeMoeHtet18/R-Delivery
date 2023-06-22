@@ -111,8 +111,13 @@
     </div>
 </div>
 
-<div class="create-button mb-3">
-    <a class="btn create-btn" id="create-transaction">Add Transaction</a>
+<div class="d-flex justify-content-between mb-3">
+    <div class="create-button">
+        <a class="btn create-btn" id="create-transaction">Add Transaction</a>
+    </div>
+    <div class="create-button">
+        <a href="{{url('/import-orders')}}" class="btn btn-dark">Import CSV</a>
+    </div>
 </div>
 
 <div class="portlet box green">
@@ -164,7 +169,7 @@
         $('#township').select2();
         $('#rider').select2();
         $('#shop').select2();
-        
+
         $("#create-transaction").click(function() {
             processPayment();
         });

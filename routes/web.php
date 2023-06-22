@@ -6,6 +6,7 @@ use App\Http\Controllers\CustomerPaymentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ItemTypeController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderImportController;
 use App\Http\Controllers\PaymentTypeController;
 use App\Http\Controllers\RiderController;
 use App\Http\Controllers\ShopController;
@@ -75,6 +76,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/ajax-get-payment-type-data', [PaymentTypeController::class, 'getAjaxPaymentTypeData']);
     Route::get('/create-transaction-for-shop-for-selected-orders', [TransactionsForShopController::class, "createTransactionForOrdersByShop"]);
     Route::resource('/payment-types', PaymentTypeController::class);
+    Route::get('/import-orders', [OrderImportController::class, 'index']);
+    Route::post('/import-orders', [OrderImportController::class, 'upload']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

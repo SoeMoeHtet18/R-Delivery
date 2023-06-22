@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Helpers\Helper;
 use App\Helpers\MyHelper;
 use App\Models\City;
 use App\Models\ItemType;
@@ -116,6 +117,7 @@ class ShopUserApiTest extends TestCase
         var_dump($out);
 
         $shop_user = $this->get_authenticated_shop_user();
+        $shop_id = $shop_user->shop->id;
 
         $types = ['express','standard','door-to-door'];
         $rand_type = $types[array_rand($types)];
@@ -124,7 +126,7 @@ class ShopUserApiTest extends TestCase
         $rand_method = $methods[array_rand($methods)];
         DB::beginTransaction();
         $response = $this->postJson('/api/shop-user/create-order-list', [
-            "order_code" => MyHelper::nomenclature(['table_name'=>'orders','prefix'=>'OD','column_name'=>'order_code']),
+            "order_code" => Helper::nomenclature('orders', 'OD', 'id', $shop_id),
             "customer_phone_number" => $this->faker->phoneNumber,
             "customer_name" => $this->faker->name,
             "city_id" => City::all()->random()->id,
