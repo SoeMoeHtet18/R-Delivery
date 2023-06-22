@@ -115,7 +115,7 @@
             <div class="error-message">
                 <p> <span>* </span>Please do not close this tab while uploading files</p>
             </div>
-            <button class="btn btn-dark" id="backToJobDetail">Reset</button>
+            <button class="btn btn-dark" id="resetScreen">Reset</button>
         </div>
     </div>
 </div>
@@ -130,7 +130,7 @@
     $(".m-login__head p").html('Import by uploading the prepared EXCEL');
     $("#resumable-browse").html('Upload Excel');
 
-    $("#backToJobDetail").on('click', function() {
+    $("#resetScreen").on('click', function() {
         location.reload();
     });
 

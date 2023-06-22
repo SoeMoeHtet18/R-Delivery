@@ -29,7 +29,8 @@ class OrderService
         $order->city_id =  $data['city_id'];
         $order->township_id =  $data['township_id'];
         $order->rider_id =  $data['rider_id'] ?? null;
-        $order->quantity =  $data['quantity'] ?? '';
+        $order->items =  $data['items'] ?? null;
+        $order->quantity =  $data['quantity'] ?? null;
         $order->delivery_fees =  $data['delivery_fees'];
         $order->total_amount = $data['total_amount'];
         $order->markup_delivery_fees =  $data['markup_delivery_fees'] ?? 0;
@@ -57,8 +58,8 @@ class OrderService
         $order->customer_phone_number =  $data['customer_phone_number'];
         $order->city_id =  $data['city_id'];
         $order->township_id =  $data['township_id'];
-        $order->items =  $data['items'] ?? '';
-        $order->quantity =  $data['quantity'] ?? '';
+        $order->items =  $data['items'] ?? null;
+        $order->quantity =  $data['quantity'] ?? null;
         $order->delivery_fees =  $delivery_fees;
         $order->total_amount = $data['total_amount'];
         $order->markup_delivery_fees =  $data['markup_delivery_fees'] ?? 0;
@@ -82,6 +83,7 @@ class OrderService
         $order->city_id =  $data['city_id'];
         $order->township_id =  $data['township_id'];
         $order->rider_id =  $data['rider_id'] ?? null;
+        $order->items =  $data['items'];
         $order->quantity =  $data['quantity'];
         $order->delivery_fees =  $data['delivery_fees'];
         $order->total_amount = $data['total_amount'];

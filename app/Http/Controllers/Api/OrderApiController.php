@@ -119,7 +119,7 @@ class OrderApiController extends Controller
     }
     
     return response()->json([
-        'data' => $order,
+        'data' => $order->id,
         'message' => 'Successfully Upload Proof Of Payment By Rider',
         'status' => 'success'
     ], 200);
