@@ -119,51 +119,92 @@
         <a href="{{url('/import-orders')}}" class="btn btn-dark">Import CSV</a>
     </div>
 </div>
+<ul class="nav nav-tabs mb-4">
+    <li class="nav-item">
+        <a href="#all-orders-display" id="all-orders-tab" class="nav-link active" data-toggle="tab">All Orders</a>
+    </li>
+    <li class="nav-item">
+        <a href="#cancel-request-orders-display" id="cancel-request-orders-tab" class="nav-link" data-toggle="tab">Cancel Request Orders</a>
+    </li>
+</ul>
+<input type="hidden" id="current_screen" value="all-orders-display">
+<div class="tab-content">
+    <div id="all-orders-display" class="portlet box green tab-pane active">
+        <div class="portlet-title">
+            <div class="caption">Order Lists</div>
+        </div>
+        <div class="portlet-body">
+            <table id="all-orders-datatable" class="table table-striped table-hover table-responsive datatable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th id="first_column"><input type="checkbox" name="check_all" id="checkAll"></th>
+                        <th>Paid</th>
+                        <th>Total Amount</th>
+                        <th>Delivery Fees</th>
+                        <th>Markup Delivery Fees</th>
+                        <th>Order Code</th>
+                        <th>Shop</th>
+                        <th>Rider</th>
+                        <th>Customer Name</th>
+                        <th>Customer Phone Number</th>
+                        <th>City</th>
+                        <th>Township</th>
+                        <th>Remark</th>
+                        <th>Status</th>
+                        <th>Item Type</th>
+                        <th>Full Address</th>
+                        <th>Schedule Date</th>
+                        <th>Type</th>
+                        <th>Collection Method</th>
+                        <th>Last Updated By</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
 
-<div class="portlet box green">
-    <div class="portlet-title">
-        <div class="caption">Order Lists</div>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
     </div>
-    <div class="portlet-body">
-        <table id="datatable" class="table table-striped table-hover table-responsive datatable">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th id="first_column"><input type="checkbox" name="check_all" id="checkAll"></th>
-                    <th>Paid</th>
-                    <th>Total Amount</th>
-                    <th>Delivery Fees</th>
-                    <th>Markup Delivery Fees</th>
-                    <th>Order Code</th>
-                    <th>Shop</th>
-                    <th>Rider</th>
-                    <th>Customer Name</th>
-                    <th>Customer Phone Number</th>
-                    <th>City</th>
-                    <th>Township</th>
-                    <th>Remark</th>
-                    <th>Status</th>
-                    <th>Item Type</th>
-                    <th>Full Address</th>
-                    <th>Schedule Date</th>
-                    <th>Type</th>
-                    <th>Collection Method</th>
-                    <th>Last Updated By</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
+    <div id="cancel-request-orders-display" class="portlet box green tab-pane">
+        <div class="portlet-title">
+            <div class="caption">Cancel Request Orders Lists</div>
+        </div>
+        <div class="portlet-body">
+            <table id="cancel-request-orders-datatable" class="table table-striped table-hover table-responsive datatable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Action</th>
+                        <th>Total Amount</th>
+                        <th>Delivery Fees</th>
+                        <th>Markup Delivery Fees</th>
+                        <th>Order Code</th>
+                        <th>Shop</th>
+                        <th>Rider</th>
+                        <th>Customer Name</th>
+                        <th>Customer Phone Number</th>
+                        <th>Paid</th>
+                    </tr>
+                </thead>
 
-            <tbody>
+                <tbody>
 
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
 @endsection
 @section('javascript')
+
 <script type="text/javascript">
     $(document).ready(function() {
+        
+
         $('#city').select2([]);
         $('#status').select2();
         $('#township').select2();
@@ -173,7 +214,7 @@
         $("#create-transaction").click(function() {
             processPayment();
         });
-
+        
         function processPayment() {
             var process_data = [];
             var shop_ids = [];
@@ -227,10 +268,14 @@
             }).showToast();
         }
 
+        $('.nav-tabs a').click(function() {
+            $(this).tab('show');
+        });
+
         get_ajax_dynamic_data(search = '', city = '', rider = '', shop = '', status = '', township = '');
 
         function get_ajax_dynamic_data(search, city, rider, shop, status, township) {
-            var table = $('.datatable').DataTable({
+            var table = $('#all-orders-datatable').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
@@ -360,6 +405,9 @@
                             if (row.status == 'delay') {
                                 return "Delay";
                             }
+                            if (row.status == 'cancel_request') {
+                                return "Cancel Request";
+                            }
                             if (row.status == 'cancel') {
                                 return "Cancel";
                             }
@@ -405,6 +453,7 @@
                     },
                 ]
             });
+
             $('.search_filter').click(function() {
                 var status = $('#status').val();
                 var township = $('#township').val();
@@ -432,6 +481,93 @@
                 get_ajax_dynamic_data(search, city, rider, shop, status, township);
             });
         };
+
+        get_ajax_dynamic_data_for_cancel_request_table(search = '', city = '', rider = '', shop = '', status = '', township = '');
+
+        function get_ajax_dynamic_data_for_cancel_request_table() {
+            var table = $('#cancel-request-orders-datatable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    "url": '/ajax-get-cancel-request-orders-data',
+                    "type": "GET",
+                    "data": function(r) {
+                        r.search = search;
+                        r.city = city;
+                        r.rider = rider;
+                        r.shop = shop;
+                        r.status = 'cancel_request';
+                        r.township = township;
+                    }
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'id'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'payment_flag',
+                        name: 'paid'
+                    },
+                    {
+                        data: 'total_amount',
+                        name: 'total_amount'
+                    },
+                    {
+                        data: 'delivery_fees',
+                        name: 'delivery_fees'
+                    },
+                    {
+                        data: 'markup_delivery_fees',
+                        name: 'markup_delivery_fees'
+                    },
+                    {
+                        data: 'order_code',
+                        name: 'order_code'
+                    },
+                    {
+                        data: 'shop_name',
+                        name: 'shop'
+                    },
+                    {
+                        data: 'rider_name',
+                        name: 'rider'
+                    },
+                    {
+                        data: 'customer_name',
+                        name: 'customer_name'
+                    },
+                    {
+                        data: 'customer_phone_number',
+                        name: 'customer_phone_number'
+                    },
+                ],
+                columnDefs: [{
+                        "render": function(data, type, row) {
+                            if (row.payment_flag == 0) {
+                                return "Unpaid";
+                            }
+                            if (row.payment_flag == 1) {
+                                return "Paid";
+                            }
+                        },
+                        "targets": 10
+                    },
+
+                ]
+            });
+        }
+        const current_url = window.location.href;
+        var urlArr = current_url.split('#');
+        var current_tab = urlArr[1];
+        console.log(current_tab);
+        console.log('a[href="#' + current_tab + '"]');
+        $('a[href="#' + current_tab + '"]').click();
 
     });
 </script>

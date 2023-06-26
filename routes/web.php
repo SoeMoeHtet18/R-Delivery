@@ -78,6 +78,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/payment-types', PaymentTypeController::class);
     Route::get('/import-orders', [OrderImportController::class, 'index']);
     Route::post('/import-orders', [OrderImportController::class, 'upload']);
+    Route::get('/ajax-get-cancel-request-orders-data', [OrderController::class, 'getAjaxCancelRequestOrderData']);
+    Route::post('/orders/{id}/change-status', [OrderController::class, 'changeStatus']);
+    
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

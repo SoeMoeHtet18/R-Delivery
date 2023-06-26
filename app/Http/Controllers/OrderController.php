@@ -187,7 +187,7 @@ class OrderController extends Controller
                 return $checkbox;
             })
             ->addIndexColumn()
-            ->rawColumns(['order_code','first_column'])
+            ->rawColumns(['order_code', 'first_column'])
             ->orderColumn('orders.id', '-id $1')
             ->make(true);
     }
@@ -354,6 +354,55 @@ class OrderController extends Controller
             $orderData = $orders[$orderId];
             $order->order_data = $orderData;
         }
-        return view('tracking',compact('order'));
+        return view('tracking', compact('order'));
+    }
+
+    public function getAjaxCancelRequestOrderData(Request $request)
+    { {
+            $search = $request->search;
+            $rider = $request->rider;
+            $shop  = $request->shop;
+            $data = $this->orderRepository->getCancelRequestOrdersQuery();
+            if ($search) {
+                $data = $data->where('orders.order_code', 'like', '%' . $search . '%')->orWhere('orders.customer_name', 'like', '%' . $search . '%')->orWhere('orders.customer_phone_number', 'like', '%' . $search . '%')->orWhere('orders.item_type', 'like', '%' . $search . '%')->orWhere('orders.full_address', 'like', '%' . $search . '%');
+            }
+            if ($rider != null) {
+                $data = $data->where('orders.rider_id', $rider);
+            }
+            if ($shop != null) {
+                $data = $data->where('orders.shop_id', $shop);
+            }
+
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('order_code', function ($data) {
+                    return '<a href="' . route("orders.show", $data->id) . '">' . $data->order_code . '</a>';
+                })
+                ->addColumn('action', function ($row) {
+                    $actionBtn = '
+                    <form action="' . url("/orders/" . $row->id . "/change-status?status=cancel") . '" method="post" class="d-inline"">
+                            <input type="hidden" name="_token" value="' . csrf_token() . '">
+                            <input type="hidden" name="_method" value="POST">
+                            <input type="submit" value="Confirm" class="btn btn-sm btn-dark"/>
+                        </form>
+                    <form action="' . url("/orders/" . $row->id . "/change-status?status=pending") . '" method="post" class="d-inline"">
+                            <input type="hidden" name="_token" value="' . csrf_token() . '">
+                            <input type="hidden" name="_method" value="POST">
+                            <input type="submit" value="Cancel" class="btn btn-sm btn-secondary"/>
+                        </form>';
+                    return $actionBtn;
+                })
+                ->rawColumns(['action', 'order_code'])
+                ->orderColumn('id', '-orders.id')
+                ->make(true);
+        }
+    }
+
+    public function changeStatus(Request $request, string $id)
+    {
+        $status = $request->status;
+        $order = $this->orderRepository->getOrderByID($id);
+        $this->orderService->changeStatus($order, $status);
+        return redirect(url('/orders#cancel-request-orders-display'));
     }
 }

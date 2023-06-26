@@ -32,18 +32,18 @@ class OrderRepository
 
     public function getOrdersByShopID($id, $status)
     {
-        if($status == 'current') {
+        if ($status == 'current') {
             $order = Order::where('shop_id', $id)
-            ->orderBy('id', 'desc')
-            ->get();
-        } else if($status == 'canceled') {
-            $order = Order::where('shop_id', $id)->where('status','cancel')
-            ->orderBy('updated_at', 'desc')
-            ->get();
+                ->orderBy('id', 'desc')
+                ->get();
+        } else if ($status == 'canceled') {
+            $order = Order::where('shop_id', $id)->where('status', 'cancel')
+                ->orderBy('updated_at', 'desc')
+                ->get();
         } else {
-            $order = Order::where('shop_id', $id)->where('status','pending')->orWhere('status','delay')
-            ->orderBy('id', 'desc')
-            ->get();
+            $order = Order::where('shop_id', $id)->where('status', 'pending')->orWhere('status', 'delay')
+                ->orderBy('id', 'desc')
+                ->get();
         }
         return $order;
     }
@@ -237,16 +237,23 @@ class OrderRepository
 
     public function trackOrderByOrderID($id)
     {
-        $order = Order::where('orders.order_code',$id)
-        ->leftJoin('shops', 'shops.id', 'orders.shop_id')
-        ->leftJoin('riders', 'riders.id', 'orders.rider_id')
-        ->select('orders.*', 'shops.name as shop_name', 'riders.name as rider_name','riders.phone_number as rider_phone_number')
-        ->first();
+        $order = Order::where('orders.order_code', $id)
+            ->leftJoin('shops', 'shops.id', 'orders.shop_id')
+            ->leftJoin('riders', 'riders.id', 'orders.rider_id')
+            ->select('orders.*', 'shops.name as shop_name', 'riders.name as rider_name', 'riders.phone_number as rider_phone_number')
+            ->first();
         return $order;
     }
 
-    public function getAllOrderIdsByShopID($id) {
+    public function getAllOrderIdsByShopID($id)
+    {
         $orders = Order::where('shop_id', $id)->pluck('id')->toArray();
-        return $orders;        
+        return $orders;
+    }
+
+    public function getCancelRequestOrdersQuery()
+    {
+        $query = Order::where('orders.status', 'cancel_request')->leftJoin('riders', 'riders.id', 'orders.rider_id')->leftJoin('shops', 'shops.id', 'orders.shop_id')->select('orders.*',  'shops.name as shop_name', 'riders.name as rider_name');
+        return $query;
     }
 }
