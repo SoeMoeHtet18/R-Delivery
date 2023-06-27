@@ -53,9 +53,12 @@
             </tr>
         </thead>
         <tbody>
+            @php
+            $id = 1;
+            @endphp
             @foreach ($orders as $order)
             <tr>
-                <td>{{ $order->id }}</td>
+                <td>{{ $id++ }}</td>
                 <td>{{ $order->order_code }}</td>
                 <td>{{ $order->customer_name }}</td>
                 <td>{{ $order->customer_phone_number }}</td>
