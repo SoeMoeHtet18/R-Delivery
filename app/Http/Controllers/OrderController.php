@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+require_once base_path('vendor/autoload.php');
+
 use App\Helpers\Helper;
 use App\Http\Requests\OrderCreateRequest;
 use App\Http\Requests\OrderUpdateRequest;
@@ -17,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
+use Mpdf\Mpdf;
 
 class OrderController extends Controller
 {
@@ -404,5 +407,23 @@ class OrderController extends Controller
         $order = $this->orderRepository->getOrderByID($id);
         $this->orderService->changeStatus($order, $status);
         return redirect(url('/orders#cancel-request-orders-display'));
+    }
+
+    public function generatePDF()
+    {
+        $mpdf = new Mpdf();
+
+        // Enable Myanmar language support
+        $mpdf->autoScriptToLang = true;
+        $mpdf->autoLangToFont = true;
+
+        // Set the font for Myanmar language
+        $mpdf->SetFont('myanmar3');
+        $orders = $this->orderRepository->getAllOrdersQuery()->get();
+        // Add HTML content with Myanmar text
+        $mpdf->WriteHTML(view('admin.order.pdf_export', compact('orders')));
+
+        // Output the PDF for download
+        $mpdf->Output('filename.pdf', 'D');
     }
 }

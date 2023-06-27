@@ -2,7 +2,35 @@
 @section('title','Dashboard')
 @section('sub-title','Order Listing')
 @section('content')
+<style>
+    .pdf-ul {
+        padding-left: 0;
+        padding-right: 0;
+        border-radius: 3px;
+        display: flex;
+        list-style-type: none;
+        padding-left: 0;
+        margin-left: auto;
+        margin-bottom: 0;
+    }
 
+    .pdf-ul li {
+        background: #f4f5f8;
+        margin: 0;
+    }
+
+    .pdf-ul li a {
+        padding: 0;
+        padding-right: 6px;
+        padding-left: 2px;
+        font-size: 13px;
+        text-decoration: none;
+    }
+
+    .pdf-ul li a:first-child {
+        border-right: 1px solid #dfe2ea;
+    }
+</style>
 
 <div class="create-button">
     <a class="btn create-btn" href="{{route('orders.create')}}">Add Order</a>
@@ -115,8 +143,23 @@
     <div class="create-button">
         <a class="btn create-btn" id="create-transaction">Add Transaction</a>
     </div>
-    <div class="create-button">
-        <a href="{{url('/import-orders')}}" class="btn btn-dark">Import CSV</a>
+    <div>
+        <div class="create-button d-inline-block">
+            <a href="{{url('/import-orders')}}" class="btn btn-dark">Import CSV</a>
+        </div>
+        <div class="d-inline-block">
+            <ul class="pdf-ul">
+                <li>
+                    <form id="pdf_form" action="{{ url('/generate-pdf') }}" method="GET" style="display: inline;">
+                        <button type="submit" id="pdf_button" class="btn border">
+                            <i class="fa-regular fa-file-pdf"></i>&nbsp;<span>PDF</span>
+                        </button>
+                    </form>
+
+
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
 <ul class="nav nav-tabs mb-4">
@@ -203,7 +246,7 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-        
+
 
         $('#city').select2([]);
         $('#status').select2();
@@ -214,7 +257,7 @@
         $("#create-transaction").click(function() {
             processPayment();
         });
-        
+
         function processPayment() {
             var process_data = [];
             var shop_ids = [];
@@ -275,9 +318,27 @@
         get_ajax_dynamic_data(search = '', city = '', rider = '', shop = '', status = '', township = '');
 
         function get_ajax_dynamic_data(search, city, rider, shop, status, township) {
+            var visible_column = [];
             var table = $('#all-orders-datatable').DataTable({
                 processing: true,
                 serverSide: true,
+                buttons: [{
+                        extend: 'csv',
+                        title: 'Orders',
+                        filename: 'orders',
+                        pageSize: 'LEGAL',
+                        charset: 'UTF-8',
+                        orientation: 'landscape',
+                    },
+                    {
+                        extend: 'pdf',
+                        title: 'Orders',
+                        filename: 'orders',
+                        pageSize: 'LEGAL',
+                        charset: 'UTF-8',
+                        orientation: 'landscape',
+                    },
+                ],
                 ajax: {
                     "url": '/ajax-get-orders-data',
                     "type": "GET",
@@ -454,6 +515,14 @@
                 ]
             });
 
+            // $("#csv_button").on("click", function() {
+            //     table.button('.buttons-csv').trigger();
+            // });
+
+            // $("#pdf_button").on("click", function() {
+            //     table.button('.buttons-pdf').trigger();
+            // });
+
             $('.search_filter').click(function() {
                 var status = $('#status').val();
                 var township = $('#township').val();
@@ -568,7 +637,6 @@
         console.log(current_tab);
         console.log('a[href="#' + current_tab + '"]');
         $('a[href="#' + current_tab + '"]').click();
-
     });
 </script>
 @endsection
