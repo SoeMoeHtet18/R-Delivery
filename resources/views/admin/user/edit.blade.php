@@ -39,7 +39,11 @@
                 </label>
                 <div class="col-10">
                     <input type="email" id="email" name="email" value="{{$user->email}}" class="form-control" />
+                    @if ($errors->has('email'))
+                    <span class="text-danger"><strong>{{ $errors->first('email') }}</strong></span>
+                    @endif
                 </div>
+
             </div>
             <div class="row m-0 mb-3">
                 <label for="password" class="col-2">

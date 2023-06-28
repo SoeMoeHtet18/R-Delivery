@@ -13,12 +13,12 @@ class TransactionsForShop extends Model
 
     public function shop()
     {
-        return $this->belongsTo(Shop::class, 'shop_id', 'id');
+        return $this->belongsTo(Shop::class, 'shop_id', 'id')->withTrashed();
     }
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'paid_by', 'id');
+        return $this->belongsTo(User::class, 'paid_by', 'id')->withTrashed();
     }
     
 }

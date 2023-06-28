@@ -29,7 +29,6 @@ class OrderCreateRequest extends FormRequest
             'city_id'               => 'required',
             'township_id'           => 'required',
             'shop_id'               => 'required',
-            'quantity'              => 'required',
             'total_amount'          => 'required',
             'delivery_fees'         => 'required',
             'item_type'             => 'required',

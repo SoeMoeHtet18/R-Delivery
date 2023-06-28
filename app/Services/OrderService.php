@@ -7,6 +7,7 @@ use App\Http\Traits\FileUploadTrait;
 use App\Models\ItemType;
 use App\Models\Order;
 use App\Models\Township;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 
 class OrderService
@@ -38,7 +39,7 @@ class OrderService
         $order->status = "pending";
         $order->item_type =  $data['item_type'];
         $order->full_address =  $data['full_address'] ?? null;
-        $order->schedule_date =  $data['schedule_date'] ?? null;
+        $order->schedule_date =  $data['schedule_date'] ?? Carbon::tomorrow();;
         $order->type =  $data['type'];
         $order->collection_method = $data['collection_method'];
         $order->proof_of_payment = $data['proof_of_payment'] ?? null;
@@ -67,7 +68,7 @@ class OrderService
         $order->status = "pending";
         $order->item_type =  $itemType->name;
         $order->full_address =  $data['full_address'] ?? null;
-        $order->schedule_date =  $data['schedule_date'] ?? null;
+        $order->schedule_date =  $data['schedule_date'] ?? Carbon::tomorrow();;
         $order->type =  $data["type"];
         $order->collection_method =  $data['collection_method'];
         $order->proof_of_payment =  $data['proof_of_payment'] ?? null;
@@ -83,8 +84,8 @@ class OrderService
         $order->city_id =  $data['city_id'];
         $order->township_id =  $data['township_id'];
         $order->rider_id =  $data['rider_id'] ?? null;
-        $order->items =  $data['items'];
-        $order->quantity =  $data['quantity'];
+        $order->items =  $data['items'] ?? null;
+        $order->quantity =  $data['quantity'] ?? null;
         $order->delivery_fees =  $data['delivery_fees'];
         $order->total_amount = $data['total_amount'];
         $order->markup_delivery_fees =  $data['markup_delivery_fees'] ?? null;
@@ -102,7 +103,7 @@ class OrderService
         }
         $order->item_type =  $data['item_type'];
         $order->full_address =  $data['full_address'] ?? null;
-        $order->schedule_date =  $data['schedule_date'] ?? null;
+        $order->schedule_date =  $data['schedule_date'] ?? Carbon::tomorrow();;
         $order->type =  $data['type'];
         $order->collection_method =  $data['collection_method'];
         if ($file) {

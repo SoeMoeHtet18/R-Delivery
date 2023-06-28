@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,7 +13,7 @@ class Shop extends Model
     protected $fillable = [
         'name', 'address', 'phone_number'
     ];
-
+    
     public function shop_users()
     {
         return $this->hasMany(ShopUser::class);

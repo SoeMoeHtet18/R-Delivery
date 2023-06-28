@@ -91,12 +91,11 @@
                             <span class="title">Item Type</span>
                         </a>
                     </li>
-                    <li class="@if(request()->is('payment-types*')) {{'active'}} @endif">
+                    <!-- <li class="@if(request()->is('payment-types*')) {{'active'}} @endif">
                         <a href="{{route('payment-types.index')}}">
-                            <!-- <i class="fa fa-users"></i> -->
                             <span class="title">Payment Type</span>
                         </a>
-                    </li>
+                    </li> -->
                 </ul>
             <li>
                 <a class="dropdown-item" href="{{ route('logout') }}"

@@ -54,7 +54,7 @@
             </div>
 
             <div class="row m-0 mb-3">
-                <label for="password-confirm" class="col-2 text-nowrap">
+                <label for="password-confirm" class="col-2">
                     <h4>Confirm Password <b>:</b></h4>
                 </label>
                 <div class="col-10">

@@ -14,6 +14,6 @@ class ShopPayment extends Model
     ];
 
     public function shop() {
-        return $this->belongsTo(Shop::class, 'shop_id', 'id');
+        return $this->belongsTo(Shop::class, 'shop_id', 'id')->withTrashed();
     }
 }

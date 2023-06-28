@@ -169,17 +169,6 @@
                 </div>
             </div>
             <div class="row m-0 mb-3">
-                <label for="schedule_date" class="col-2">
-                    <h4>Schedule Date <b>:</b></h4>
-                </label>
-                <div class="col-10">
-                    <input type="date" id="schedule_date" name="schedule_date" value="{{$scheduledate}}" class="form-control" />
-                    @if ($errors->has('schedule_date'))
-                    <span class="text-danger"><strong>{{ $errors->first('schedule_date') }}</strong></span>
-                    @endif
-                </div>
-            </div>
-            <div class="row m-0 mb-3">
                 <label for="type" class="col-2">
                     <h4>Type <b>:</b></h4>
                 </label>
@@ -190,6 +179,17 @@
                         <option value="express" @if($order->type == "express") {{'selected'}} @endif>Express</option>
                         <option value="doortodoor" @if($order->type == "doortodoor") {{'selected'}} @endif>Door To Door</option>
                     </select>
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <label for="schedule_date" class="col-2">
+                    <h4>Schedule Date <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <input type="date" id="schedule_date" name="schedule_date" value="{{$scheduledate}}" class="form-control" />
+                    @if ($errors->has('schedule_date'))
+                    <span class="text-danger"><strong>{{ $errors->first('schedule_date') }}</strong></span>
+                    @endif
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -235,6 +235,19 @@
         $('#item_type_id').select2();
         $('#type_id').select2();
         $('#collection_method_id').select2();
+
+        $('#type_id').change(function() {
+            console.log($('#type_id').val());
+            if($('#type_id').val() == 'doortodoor') {
+            var today = new Date();
+            var futureDate = new Date(today.getTime() + (5 * 24 * 60 * 60 * 1000));
+
+            var formattedDate = futureDate.toISOString().split('T')[0];
+
+            $('#schedule_date').val(formattedDate);
+
+            }
+        });
 
         $('#city_id').change(function() {
             console.log('success');

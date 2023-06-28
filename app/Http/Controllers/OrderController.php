@@ -424,6 +424,6 @@ class OrderController extends Controller
         $mpdf->WriteHTML(view('admin.order.pdf_export', compact('orders')));
 
         // Output the PDF for download
-        $mpdf->Output('filename.pdf', 'D');
+        $mpdf->Output('order.pdf', 'D');
     }
 }

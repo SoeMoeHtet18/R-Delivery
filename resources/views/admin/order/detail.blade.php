@@ -79,14 +79,6 @@
             </div>
             <div class="row m-0 mb-3">
                 <div class="col-2">
-                    <h4>Quantity <b>:</b></h4>
-                </div>
-                <div class="col-10">
-                    {{ $order->quantity }}
-                </div>
-            </div>
-            <div class="row m-0 mb-3">
-                <div class="col-2">
                     <h4>Total Amount <b>:</b></h4>
                 </div>
                 <div class="col-10">

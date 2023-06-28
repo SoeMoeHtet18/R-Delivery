@@ -15,23 +15,23 @@ class Order extends Model
     ];
 
     public function rider() {
-        return $this->belongsTo(Rider::class, 'rider_id', 'id');
+        return $this->belongsTo(Rider::class, 'rider_id', 'id')->withTrashed();
     }
 
     public function shop() {
-        return $this->belongsTo(Shop::class, 'shop_id', 'id');
+        return $this->belongsTo(Shop::class, 'shop_id', 'id')->withTrashed();
     }
 
     public function township() {
-        return $this->belongsTo(Township::class, 'township_id', 'id');
+        return $this->belongsTo(Township::class, 'township_id', 'id')->withTrashed();
     }
 
     public function user() {
-        return $this->belongsTo(User::class, 'last_updated_by', 'id');
+        return $this->belongsTo(User::class, 'last_updated_by', 'id')->withTrashed();
     }
 
     public function city()
     {
-        return $this->belongsTo(City::class, 'city_id', 'id');
+        return $this->belongsTo(City::class, 'city_id', 'id')->withTrashed();
     }
 }

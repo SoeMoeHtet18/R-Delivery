@@ -170,21 +170,9 @@
                     <textarea id="full_address" name="full_address" class="form-control" style="height: 100px">{{old('full_address')}}</textarea>
                 </div>
                 @if ($errors->has('full_address'))
-                    <span class="text-danger"><strong>{{ $errors->first('full_address') }}</strong></span>
-                    @endif
+                <span class="text-danger"><strong>{{ $errors->first('full_address') }}</strong></span>
+                @endif
             </div>
-            <div class="row m-0 mb-3">
-                <label for="schedule_date" class="col-2">
-                    <h4>Schedule Date <b>:</b></h4>
-                </label>
-                <div class="ps-4 col-10">
-                    <input type="date" id="schedule_date" name="schedule_date" value="<?php echo old('schedule_date') ?? date('Y-m-d'); ?>" class="form-control" />
-                    @if ($errors->has('schedule_date'))
-                    <span class="text-danger"><strong>{{ $errors->first('schedule_date') }}</strong></span>
-                    @endif
-                </div>
-            </div>
-
             <div class="row m-0 mb-3">
                 <label for="type" class="col-2">
                     <h4>Type <b>:</b></h4>
@@ -198,6 +186,17 @@
                     </select>
                     @if ($errors->has('type'))
                     <span class="text-danger"><strong>{{ $errors->first('type') }}</strong></span>
+                    @endif
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <label for="schedule_date" class="col-2">
+                    <h4>Schedule Date <b>:</b></h4>
+                </label>
+                <div class="ps-4 col-10">
+                    <input type="date" id="schedule_date" name="schedule_date" value="<?php echo old('schedule_date') ?? date('Y-m-d'); ?>" class="form-control" />
+                    @if ($errors->has('schedule_date'))
+                    <span class="text-danger"><strong>{{ $errors->first('schedule_date') }}</strong></span>
                     @endif
                 </div>
             </div>
@@ -236,6 +235,19 @@
         $('#item_type_id').select2();
         $('#type_id').select2();
         $('#collection_method_id').select2();
+
+        $('#type_id').change(function() {
+            console.log($('#type_id').val());
+            if($('#type_id').val() == 'doortodoor') {
+            var today = new Date();
+            var futureDate = new Date(today.getTime() + (5 * 24 * 60 * 60 * 1000));
+
+            var formattedDate = futureDate.toISOString().split('T')[0];
+
+            $('#schedule_date').val(formattedDate);
+
+            }
+        });
 
         function updateDeliveryFees(township_id) {
             $.ajax({

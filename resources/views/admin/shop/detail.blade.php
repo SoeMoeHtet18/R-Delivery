@@ -118,6 +118,7 @@
                                 <th>Order Code</th>
                                 <th>Customer Name</th>
                                 <th>Customer Phone Number</th>
+                                <th>City</th>
                                 <th>Township</th>
                                 <th>Rider</th>
                                 <th>Total Amount</th>
@@ -311,6 +312,10 @@
                     name: 'customer_phone_number'
                 },
                 {
+                    data: 'city_name',
+                    name: 'city'
+                },
+                {
                     data: 'township_name',
                     name: 'township'
                 },
@@ -388,8 +393,11 @@
                         if (row.status == 'cancel') {
                             return "Cancel";
                         }
+                        if (row.status == 'cancel_request') {
+                            return 'Cancel Request';
+                        }
                     },
-                    "targets": 11
+                    "targets": 13
                 },
                 {
                     "render": function(data, type, row) {

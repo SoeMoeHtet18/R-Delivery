@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Imports\OrderImport;
 use App\Jobs\OrderImportJob;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
@@ -19,7 +20,8 @@ class OrderImportController extends Controller
 
     public function upload(Request $request)
     {
-        $receiver = new FileReceiver("file", $request, HandlerFactory::classFromRequest($request));
+        try {
+            $receiver = new FileReceiver("file", $request, HandlerFactory::classFromRequest($request));
         
         if (!$receiver->isUploaded()) {
             throw new UploadMissingFileException();
@@ -56,6 +58,10 @@ class OrderImportController extends Controller
                 'status' => true
             ]);
         }
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'Please check your file again.');
+        }
+        
     }
 
     protected function saveFile($file)

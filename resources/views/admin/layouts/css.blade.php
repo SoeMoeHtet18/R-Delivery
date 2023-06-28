@@ -42,7 +42,7 @@
         font-size: 26px;
     }
     .action-form-card .action-form h4{
-        font-size: 1rem;
+        font-size: 14px;
         margin-top: 0.6em;
     }
     .detail-card .card-header-title {

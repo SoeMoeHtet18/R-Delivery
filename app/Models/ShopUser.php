@@ -17,7 +17,7 @@ class ShopUser extends Authenticatable
 
     public function shop()
     {
-        return $this->belongsTo(Shop::class);
+        return $this->belongsTo(Shop::class)->withTrashed();
     }
 
     public function notifications()

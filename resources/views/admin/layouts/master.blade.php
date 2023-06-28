@@ -41,8 +41,18 @@
     <i class="fa fa-arrow-up"></i>
 </div>
 @include('admin.layouts.loading')
-
 @include('admin.layouts.script')
+@if (session('error'))
+    <script>
+         Toastify({
+            text: "{!! session('error') !!}",
+            gravity: "top",
+            position: "center",
+            backgroundColor: "red",
+            duration: 3000,
+        }).showToast();
+    </script>
+@endif
 @yield('javascript')
 
 </body>

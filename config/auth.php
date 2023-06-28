@@ -39,22 +39,27 @@ return [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
+            'expire_in' => 365,
         ],
         'shopuser' => [
             'driver' => 'session',
             'provider' => 'shop_users',
+            'expire_in' => 365,
         ],
         'shop-user-api' => [
             'driver' => 'passport',
             'provider' => 'shop_users',
+            'expire_in' => 365,
         ],
         'rider' => [
             'driver' => 'session',
-            'provider' => 'riders'
+            'provider' => 'riders',
+            'expire_in' => 365,
         ],
         'rider-api' => [
             'driver' => 'passport',
-            'provider' => 'riders'
+            'provider' => 'riders',
+            'expire_in' => 365,
         ]
     ],
 

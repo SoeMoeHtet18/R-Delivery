@@ -14,6 +14,6 @@ class City extends Model
     ];
 
     public function townships() {
-        return $this->hasMany(Township::class);
+        return $this->hasMany(Township::class)->withTrashed();
     }
 }
