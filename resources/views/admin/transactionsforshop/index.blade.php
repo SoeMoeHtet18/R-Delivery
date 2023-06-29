@@ -164,7 +164,7 @@
                             return "Fully Payment";
                         }
                     },
-                    "targets": 4
+                    "targets": 3
                 },]
             });
             $('.search_filter').click(function() {

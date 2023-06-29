@@ -139,19 +139,37 @@
                     },
                 ],
                 columnDefs: [{
-                    "render": function(data, type, row) {
-                        if (row.type == 'fully_paid') {
-                            return "Fully Paid";
-                        }
-                        if (row.type == 'delivery_fees_only') {
-                            return "Delivery Fees Only";
-                        }
-                        if (row.type == 'remaining_amount') {
-                            return "Remaining Amount";
-                        }
+                        "render": function(data, type, row) {
+                            if (row.type == 'fully_paid') {
+                                return "Fully Paid";
+                            }
+                            if (row.type == 'delivery_fees_only') {
+                                return "Delivery Fees Only";
+                            }
+                            if (row.type == 'remaining_amount') {
+                                return "Remaining Amount";
+                            }
+                        },
+                        "targets": 3
                     },
-                    "targets": 3
-                },]
+                    {
+                        "render": function(data, type, row) {
+                            if (row.paid_at === null) {
+                                return '';
+                            } else {
+                                var date = new Date(row.paid_at);
+                                var formattedDate = date.toLocaleDateString('my-MM', {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric'
+                                });
+                                return formattedDate;
+                            }
+
+                        },
+                        "targets": 4
+                    },
+                ]
             });
 
             $('.search_filter').click(function() {

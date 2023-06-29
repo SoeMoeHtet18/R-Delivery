@@ -4,9 +4,11 @@
 @section('content')
 <div class="card card-container detail-card">
     <div class="card-body">
+        <div id="city-id" data-city-id="{{ $city->id }}"></div>
         <h2 class="ps-1 card-header-title">
             <strong>City Detail</strong>
         </h2>
+
         <div class="card-toolbar">
             <div class="create-button">
                 <a href="{{route('cities.edit' , $city->id)}}" class="btn btn-light">Edit</a>
@@ -52,9 +54,7 @@
 @section('javascript')
 <script type="text/javascript">
     $(function() {
-        var city_id = {
-            !!json_encode($city['id']) !!
-        };
+        var city_id = document.getElementById('city-id').getAttribute('data-city-id');
         var table = $('.datatable').DataTable({
             processing: true,
             serverSide: true,

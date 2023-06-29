@@ -26,7 +26,7 @@
             </form>
         </div>
         <div class="detail-infos">
-        <div id="rider-id" data-rider-id="{{ $rider->id }}"></div>
+            <div id="rider-id" data-rider-id="{{ $rider->id }}"></div>
             <div class="row m-0 mb-3">
                 <div class="col-2">
                     <h4>Name <b>:</b></h4>
@@ -108,9 +108,9 @@
                                 <th>Order Code</th>
                                 <th>Customer Name</th>
                                 <th>Customer Phone Number</th>
+                                <th>City</th>
                                 <th>Township</th>
                                 <th>Shop</th>
-                                <th>Quantity</th>
                                 <th>Total Amount</th>
                                 <th>Delivery Fees</th>
                                 <th>Markup Delivery Fees</th>
@@ -142,9 +142,9 @@
                                 <th>Order Code</th>
                                 <th>Customer Name</th>
                                 <th>Customer Phone Number</th>
+                                <th>City</th>
                                 <th>Township</th>
                                 <th>Shop</th>
-                                <th>Quantity</th>
                                 <th>Total Amount</th>
                                 <th>Delivery Fees</th>
                                 <th>Markup Delivery Fees</th>
@@ -195,16 +195,16 @@
                     name: 'customer_phone_number'
                 },
                 {
+                    data: 'city_name',
+                    name: 'city'
+                },
+                {
                     data: 'township_name',
                     name: 'township'
                 },
                 {
                     data: 'shop_name',
                     name: 'shop'
-                },
-                {
-                    data: 'quantity',
-                    name: 'quantity'
                 },
                 {
                     data: 'total_amount',
@@ -245,6 +245,47 @@
                 {
                     data: 'last_updated_by_name',
                     name: 'last_updated_by'
+                },
+            ],
+            columnDefs: [{
+                    "render": function(data, type, row) {
+                        if (row.schedule_date === null) {
+                            return '';
+                        }
+                        var date = new Date(row.schedule_date);
+                        var formattedDate = date.toLocaleDateString('my-MM', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        });
+                        return formattedDate;
+                    },
+                    "targets": 13
+                },
+                {
+                    "render": function(data, type, row) {
+                        if (row.type == 'standard') {
+                            return "Standard";
+                        }
+                        if (row.type == 'express') {
+                            return "Express";
+                        }
+                        if (row.type == 'doortodoor') {
+                            return "Door To Door";
+                        }
+                    },
+                    "targets": 14
+                },
+                {
+                    "render": function(data, type, row) {
+                        if (row.collection_method == 'dropoff') {
+                            return "Drop Off";
+                        }
+                        if (row.collection_method == 'pickup') {
+                            return "Pick Up";
+                        }
+                    },
+                    "targets": 15
                 },
             ]
         });
@@ -270,16 +311,16 @@
                     name: 'customer_phone_number'
                 },
                 {
+                    data: 'city_name',
+                    name: 'city'
+                },
+                {
                     data: 'township_name',
                     name: 'township'
                 },
                 {
                     data: 'shop_name',
                     name: 'shop'
-                },
-                {
-                    data: 'quantity',
-                    name: 'quantity'
                 },
                 {
                     data: 'total_amount',
@@ -320,6 +361,47 @@
                 {
                     data: 'last_updated_by_name',
                     name: 'last_updated_by'
+                },
+            ],
+            columnDefs: [{
+                    "render": function(data, type, row) {
+                        if (row.schedule_date === null) {
+                            return '';
+                        }
+                        var date = new Date(row.schedule_date);
+                        var formattedDate = date.toLocaleDateString('my-MM', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                        });
+                        return formattedDate;
+                    },
+                    "targets": 13
+                },
+                {
+                    "render": function(data, type, row) {
+                        if (row.type == 'standard') {
+                            return "Standard";
+                        }
+                        if (row.type == 'express') {
+                            return "Express";
+                        }
+                        if (row.type == 'doortodoor') {
+                            return "Door To Door";
+                        }
+                    },
+                    "targets": 14
+                },
+                {
+                    "render": function(data, type, row) {
+                        if (row.collection_method == 'dropoff') {
+                            return "Drop Off";
+                        }
+                        if (row.collection_method == 'pickup') {
+                            return "Pick Up";
+                        }
+                    },
+                    "targets": 15
                 },
             ]
         });

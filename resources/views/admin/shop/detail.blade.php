@@ -401,6 +401,9 @@
                 },
                 {
                     "render": function(data, type, row) {
+                        if (row.schedule_date === null) {
+                            return '';
+                        }
                         var date = new Date(row.schedule_date);
                         var formattedDate = date.toLocaleDateString('my-MM', {
                             year: 'numeric',
@@ -409,7 +412,7 @@
                         });
                         return formattedDate;
                     },
-                    "targets": 14
+                    "targets": 16
                 },
                 {
                     "render": function(data, type, row) {
@@ -423,7 +426,7 @@
                             return "Door To Door";
                         }
                     },
-                    "targets": 15
+                    "targets": 17
                 },
                 {
                     "render": function(data, type, row) {
@@ -434,7 +437,7 @@
                             return "Pick Up";
                         }
                     },
-                    "targets": 16
+                    "targets": 18
                 },
             ]
         });

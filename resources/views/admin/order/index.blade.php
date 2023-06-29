@@ -477,6 +477,9 @@
                     },
                     {
                         "render": function(data, type, row) {
+                            if (row.schedule_date === null) {
+                                return '';
+                            }
                             var date = new Date(row.schedule_date);
                             var formattedDate = date.toLocaleDateString('my-MM', {
                                 year: 'numeric',

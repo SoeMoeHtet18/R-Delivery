@@ -73,7 +73,7 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
         if ($row['schedule_date']) {
             $date = Carbon::parse($row['schedule_date']);
         } else {
-            $date = Carbon::now();
+            $date = Carbon::tomorrow();
         }
 
         $formattedDate = $date->format('Y-m-d H:i:s');
