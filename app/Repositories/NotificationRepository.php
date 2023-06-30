@@ -19,7 +19,7 @@ class NotificationRepository
     {
         $user = $model::find($id);
         if (!$user) {
-            return 0;
+            return '0';
         }
         $count = $user->notifications()->wherePivot('is_read', 0)->count();
         return $count;

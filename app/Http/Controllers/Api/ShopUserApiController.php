@@ -56,8 +56,10 @@ class ShopUserApiController extends Controller
     {
         $shop_user = auth()->guard('shop-user-api')->user();
         $shop = $shop_user->shop;
-        $shop_user['shop_name'] = $shop->name;
-        $shop_user['shop_address'] = $shop->address;
+        if ($shop) {
+            $shop_user['shop_name'] = $shop->name;
+            $shop_user['shop_address'] = $shop->address;
+        }
         return response()->json(['data' => $shop_user, 'message' => 'Successfully Get Shop User Detail', 'status' => 'success'], 200);
     }
 
@@ -124,12 +126,12 @@ class ShopUserApiController extends Controller
     {
         $shop_user = auth()->guard('shop-user-api')->user();
         $notification_id = $request->notification_id;
-        $notifications = $this->notificationService->removeNotificationByUser($notification_id, $shop_user->id,ShopUser::class);
+        $notifications = $this->notificationService->removeNotificationByUser($notification_id, $shop_user->id, ShopUser::class);
         return response()->json(['data' => $notifications, 'message' => 'Successfully Remove Notification', 'status' => 'success'], 200);
-
     }
 
-    public function makeNoticationRead(Request $request){
+    public function makeNoticationRead(Request $request)
+    {
         $shop_user = auth()->guard('shop-user-api')->user();
         $notification_id = $request->notification_id;
         $notifications = $this->notificationService->makeNotificationReadByUser($notification_id, $shop_user->id, ShopUser::class);
@@ -149,7 +151,7 @@ class ShopUserApiController extends Controller
         $new_password = $request->newPassword;
         $shopUser = auth()->guard('shop-user-api')->user();
         $password = $this->shopUserService->changePassword($shopUser, $old_password, $new_password);
-        if($password) {
+        if ($password) {
             return response()->json(['data' => $shopUser, 'message' => 'Successfully changed password', 'status' => 'success'], 200);
         } else {
             return response()->json(['data' => $shopUser, 'message' => 'Password wronged', 'status' => 'failed'], 200);

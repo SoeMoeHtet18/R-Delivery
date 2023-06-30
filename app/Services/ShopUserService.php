@@ -13,7 +13,7 @@ class ShopUserService
         $shop_user->name = $data['name'];
         $shop_user->phone_number = $data['phone_number'];
         $shop_user->email = $data['email'] ?? null;
-        $shop_user->password = $data['password'];
+        $shop_user->password = bcrypt($data['password']);
         $shop_user->device_id = $data['device_id'] ?? null;
         $shop_user->shop_id = $data['shop_id'] ?? null;
         $shop_user->save();
