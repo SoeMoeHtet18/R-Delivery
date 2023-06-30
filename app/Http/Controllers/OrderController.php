@@ -15,6 +15,7 @@ use App\Repositories\RiderRepository;
 use App\Repositories\ShopRepository;
 use App\Repositories\TownshipRepository;
 use App\Services\OrderService;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
@@ -411,7 +412,8 @@ class OrderController extends Controller
 
     public function generatePDF()
     {
-        $mpdf = new Mpdf();
+        try{
+            $mpdf = new Mpdf();
 
         // Enable Myanmar language support
         $mpdf->autoScriptToLang = true;
@@ -425,5 +427,8 @@ class OrderController extends Controller
 
         // Output the PDF for download
         $mpdf->Output('order.pdf', 'D');
+        } catch(Exception $e) {
+            return redirect()->back()->with('error',"Can't generate pdf");
+        }
     }
 }
