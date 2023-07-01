@@ -5,10 +5,8 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShopCreateApiRequest;
-use App\Http\Requests\ShopUpdateApiRequest;
 use App\Repositories\ShopRepository;
 use App\Services\ShopService;
-use Illuminate\Support\Facades\Validator;
 
 class ShopApiController extends Controller
 {

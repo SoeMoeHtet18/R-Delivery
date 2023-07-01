@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Repositories\OrderRepository;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class OrderApiController extends Controller
 {

@@ -32,8 +32,8 @@ class OrderRepository
 
     public function getOrdersByShopID($id, $status)
     {
-        if ($status == 'current') {
-            $order = Order::where('shop_id', $id)
+        if ($status == 'success') {
+            $order = Order::where('shop_id', $id)->where('status', 'success')
                 ->orderBy('id', 'desc')
                 ->get();
         } else if ($status == 'canceled') {
@@ -41,7 +41,7 @@ class OrderRepository
                 ->orderBy('updated_at', 'desc')
                 ->get();
         } else {
-            $order = Order::where('shop_id', $id)->where('status', 'pending')->orWhere('status', 'delay')
+            $order = Order::where('shop_id', $id)->where('status', 'pending')->orWhere('status', 'delay')->orWhere('status', 'cancel_request')
                 ->orderBy('id', 'desc')
                 ->get();
         }
@@ -56,7 +56,7 @@ class OrderRepository
 
     public function getOrdersStatusCountByShopID($shop_id)
     {
-        $status = ['pending', 'success', 'delay', 'cancel'];
+        $status = ['pending', 'success', 'delay', 'cancel', 'cancel_request'];
         $orders = Order::where('shop_id', $shop_id)
             ->select('status', DB::raw('count(*) as count'))
             ->whereIn('status', $status)
