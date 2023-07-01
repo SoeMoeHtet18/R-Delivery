@@ -151,12 +151,11 @@
             <ul class="pdf-ul">
                 <li>
                     <form id="pdf_form" action="{{ url('/generate-pdf') }}" method="GET" style="display: inline;">
+                        <meta name="csrf-token" content="{{ csrf_token() }}">
                         <button type="submit" id="pdf_button" class="btn border">
                             <i class="fa-regular fa-file-pdf"></i>&nbsp;<span>PDF</span>
                         </button>
                     </form>
-
-
                 </li>
             </ul>
         </div>
@@ -518,14 +517,6 @@
                 ]
             });
 
-            // $("#csv_button").on("click", function() {
-            //     table.button('.buttons-csv').trigger();
-            // });
-
-            // $("#pdf_button").on("click", function() {
-            //     table.button('.buttons-pdf').trigger();
-            // });
-
             $('.search_filter').click(function() {
                 var status = $('#status').val();
                 var township = $('#township').val();
@@ -640,6 +631,34 @@
         console.log(current_tab);
         console.log('a[href="#' + current_tab + '"]');
         $('a[href="#' + current_tab + '"]').click();
+
+
+
+        // Get the form element
+        const form = $('#pdf_form');
+
+        // Add event listener to the form submit event
+        form.submit(function(event) {
+            // Prevent the default form submission behavior
+            event.preventDefault();
+
+            var status = $('#status').val();
+            var township = $('#township').val();
+            var search = $('#search').val();
+            var rider = $('#rider').val();
+            var city = $('#city').val();
+            var shop = $('#shop').val();
+
+            generatePDF(search, city, rider, shop, status, township);
+        });
+
+        function generatePDF(search, city, rider, shop, status, township) {
+            // Create the download URL with query parameters
+            const downloadUrl = `/generate-pdf?search=${encodeURIComponent(search)}&city=${encodeURIComponent(city)}&rider=${encodeURIComponent(rider)}&shop=${encodeURIComponent(shop)}&status=${encodeURIComponent(status)}&township=${encodeURIComponent(township)}`;
+            // Navigate to the download URL
+            window.location.href = downloadUrl;
+        }
+
     });
 </script>
 @endsection

@@ -80,9 +80,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/import-orders', [OrderImportController::class, 'upload']);
     Route::get('/ajax-get-cancel-request-orders-data', [OrderController::class, 'getAjaxCancelRequestOrderData']);
     Route::post('/orders/{id}/change-status', [OrderController::class, 'changeStatus']);
-    
+    Route::get('/generate-pdf', [OrderController::class, 'generatePDF']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/tracking', [OrderController::class, 'showTracking']);
-Route::get('/generate-pdf', [OrderController::class, 'generatePDF']);
