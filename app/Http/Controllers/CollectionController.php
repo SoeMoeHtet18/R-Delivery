@@ -3,10 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\Collection;
+use App\Repositories\CollectionRepository;
+use App\Services\CollectionService;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class CollectionController extends Controller
 {
+    protected $collectionRepository;
+    protected $collectionService;
+
+    public function __construct(CollectionRepository $collectionRepository, CollectionService $collectionService)
+    {
+        $this->collectionRepository = $collectionRepository;
+        $this->collectionService    = $collectionService;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -61,5 +72,13 @@ class CollectionController extends Controller
     public function destroy(Collection $collection)
     {
         //
+    }
+
+    public function getCollectionListByRiderId($rider_id)
+    {
+        $data = $this->collectionRepository->getCollectionsByRiderId($rider_id);
+        return DataTables::of($data)
+            ->addIndexColumn()
+            ->make(true);
     }
 }
