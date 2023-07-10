@@ -74,6 +74,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/ajax-get-townships-data', [TownshipController::class, 'getAjaxTownshipData']);
     Route::get('/ajax-get-transactions-data', [TransactionsForShopController::class, 'getAjaxTransactionForShopData']);
     Route::get('/ajax-get-payment-type-data', [PaymentTypeController::class, 'getAjaxPaymentTypeData']);
+    Route::get('/ajax-warehouse-data', [OrderController::class, 'getWarehouseData']);
     Route::get('/create-transaction-for-shop-for-selected-orders', [TransactionsForShopController::class, "createTransactionForOrdersByShop"]);
     Route::resource('/payment-types', PaymentTypeController::class);
     Route::get('/import-orders', [OrderImportController::class, 'index']);

@@ -101,6 +101,9 @@ class OrderService
         if ($data['status'] == 'success') {
             $this->notificationService->orderArrivalNotificationForShopUsers($order->shop_id, $order->order_code);
         }
+        if ($data['status'] == 'warehouse') {
+            $this->notificationService->orderInWarehouseNotificationForShopUsers($order->shop_id, $order->order_code);
+        }
         $order->item_type =  $data['item_type'];
         $order->full_address =  $data['full_address'] ?? null;
         $order->schedule_date =  $data['schedule_date'] ?? Carbon::tomorrow();;
@@ -142,6 +145,9 @@ class OrderService
             } elseif ($order->status == 'success') {
                 $notificationMethod = 'orderArrivalNotificationFor';
                 $updateField = 'delivered_at';
+            } elseif ($order->status == 'warehouse') {
+                $notificationMethod = 'orderInWarehouseNotificationFor';
+                $updateField = 'in_warehouse';
             }
 
             if ($notificationMethod != 'orderCancelNotificationFor' && !empty($updateField)) {

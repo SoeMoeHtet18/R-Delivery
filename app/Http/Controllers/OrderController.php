@@ -458,4 +458,39 @@ class OrderController extends Controller
             return redirect()->back()->with('error', "Can't generate pdf");
         }
     }
+
+    public function getWarehouseData(Request $request)
+    {
+        $township = $request->township;
+        $search = $request->search;
+        $city = $request->city;
+        $rider = $request->rider;
+        $shop  = $request->shop;
+        $data = $this->orderRepository->getAllOrdersQuery();
+       
+        if ($township != null) {
+            $data = $data->where('orders.township_id', $township);
+        }
+        if ($search) {
+            $data = $data->where('orders.order_code', 'like', '%' . $search . '%')->orWhere('orders.customer_name', 'like', '%' . $search . '%')->orWhere('orders.customer_phone_number', 'like', '%' . $search . '%')->orWhere('orders.item_type', 'like', '%' . $search . '%')->orWhere('orders.full_address', 'like', '%' . $search . '%');
+        }
+        if ($city != null) {
+            $data = $data->where('orders.city_id', $city);
+        }
+        if ($rider != null) {
+            $data = $data->where('orders.rider_id', $rider);
+        }
+        if ($shop != null) {
+            $data = $data->where('orders.shop_id', $shop);
+        }
+
+        return DataTables::of($data)
+            ->addIndexColumn()
+            ->addColumn('order_code', function ($data) {
+                return '<a href="' . route("orders.show", $data->id) . '">' . $data->order_code . '</a>';
+            })
+            ->rawColumns(['order_code'])
+            ->orderColumn('id', '-orders.id')
+            ->make(true);
+    }
 }
