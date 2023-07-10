@@ -132,4 +132,12 @@ class OrderApiController extends Controller
         $order = $this->orderRepository->getOrderDetailWithRelatedData($order_id);
         return response()->json(['data' => $order, 'message' => 'Successfully Get Order Detail', 'status' => 'success'], 200);
     }
+
+    public function updateScheduleDateByRider(Request $request)
+    {
+        $order_id = $request->order_id;
+        $data = $request->all();
+        $order    = $this->orderService->updateOrderScheduleDateByRider($data, $order_id);
+        return response()->json(['data' => $order, 'message' => 'Successfully Update Order Schedule Date By Rider', 'status' => 'success'], 200);
+    }
 }

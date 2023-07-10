@@ -198,4 +198,12 @@ class OrderService
             return $file_name;
         }
     }
+
+    public function updateOrderScheduleDateByRider($data, $order_id)
+    {
+        $order = Order::where('id', $order_id)->first();
+        $order->schedule_date = $data['schedule_date'];
+        $order->save();
+        return $order;
+    }
 }
