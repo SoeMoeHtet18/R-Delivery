@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\RiderCreateApiRequest;
 use App\Http\Requests\RiderLoginApiRequest;
 use App\Http\Requests\RiderUpdateApiRequest;
+use App\Models\Collection;
+use App\Models\Order;
 use App\Models\Rider;
 use App\Repositories\NotificationRepository;
 use App\Repositories\OrderRepository;
@@ -14,6 +16,7 @@ use App\Repositories\TownshipRepository;
 use App\Services\NotificationService;
 use App\Services\OrderService;
 use App\Services\RiderService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -156,6 +159,42 @@ class RiderApiController extends Controller
             return response()->json(['data' => $rider, 'message' => 'Successfully changed password', 'status' => 'success'], 200);
         } else {
             return response()->json(['data' => $rider, 'message' => 'Password wronged', 'status' => 'failed'], 200);
+        }
+    }
+
+    public function getTotalCollectionFees()
+    {
+        $rider = auth()->guard('rider-api')->user();
+        $rider_fees = $rider->townships->first()->pivot->rider_fees;
+        if($rider->salary_type == 'daily') {
+            $currentDate = Carbon::now()->format('Y-m-d');
+            $collection_count = Collection::where('rider_id',$rider->id)->whereDate('collected_at', $currentDate)->count();
+            $total_collection_fees = $rider_fees * $collection_count;
+            return response()->json(['data' => $total_collection_fees, 'message' => 'Successfully Get Total Collectoin Fees of Rider', 'status' => 'success'], 200);
+        } else {
+            $startDate = Carbon::now()->startOfMonth()->format('Y-m-d');
+            $endDate = Carbon::now()->endOfMonth()->format('Y-m-d');
+            $collection_count = Collection::where('rider_id', $rider->id)->whereBetween('collected_at', [$startDate, $endDate])->count();
+            $total_collection_fees = $rider_fees * $collection_count;
+            return response()->json(['data' => $total_collection_fees, 'message' => 'Successfully Get Total Collectoin Fees of Rider', 'status' => 'success'], 200);
+        }
+    }
+
+    public function getTotalDeliveryFees()
+    {
+        $rider = auth()->guard('rider-api')->user();
+        $rider_fees = $rider->townships->first()->pivot->rider_fees;
+        if($rider->salary_type == 'daily') {
+            $currentDate = Carbon::now()->format('Y-m-d');
+            $order_count = Order::where('rider_id',$rider->id)->where('status','delivered')->whereDate('schedule_date', $currentDate)->count();
+            $total_deli_fees = $rider_fees * $order_count;
+            return response()->json(['data' => $total_deli_fees, 'message' => 'Successfully Get Total Delivery Fees of Rider', 'status' => 'success'], 200);
+        } else {
+            $startDate = Carbon::now()->startOfMonth()->format('Y-m-d');
+            $endDate = Carbon::now()->endOfMonth()->format('Y-m-d');
+            $order_count = Order::where('rider_id', $rider->id)->where('status','delivered')->whereBetween('schedule_date', [$startDate, $endDate])->count();
+            $total_deli_fees = $rider_fees * $order_count;
+            return response()->json(['data' => $total_deli_fees, 'message' => 'Successfully Get Total Delivery Fees of Rider', 'status' => 'success'], 200);
         }
     }
 }
