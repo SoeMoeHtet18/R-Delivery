@@ -200,4 +200,12 @@ class OrderService
         $order->save();
         return $order;
     }
+    
+    public function updatePaymentChannel($data, $order_id)
+    {
+        $order = Order::where('id', $order_id)->first();
+        $order->payment_channel = $data['payment_channel'];
+        $order->save();
+        return $order;
+    }
 }
