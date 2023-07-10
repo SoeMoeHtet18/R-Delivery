@@ -87,6 +87,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/collection-groups', CollectionGroupController::class);
     Route::get('/ajax-get-collection-groups-data', [CollectionGroupController::class, 'getAjaxCollectionGroups']);
     Route::get('/ajax-get-collections-data-for-shops', [CollectionController::class, 'getAjaxCollectionsForShops']);
+    Route::get('/get-collection-list-by-rider-id', [CollectionController::class, 'getCollectionListByRiderId']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

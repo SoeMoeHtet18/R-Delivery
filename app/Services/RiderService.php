@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Rider;
+use App\Models\Township;
 use Illuminate\Support\Facades\Hash;
 
 class RiderService
@@ -14,10 +15,18 @@ class RiderService
         $rider->phone_number = $data['phone_number'];
         $rider->email = $data['email'] ?? null;
         $rider->password = bcrypt($data['password']);
+        $rider->salary_type = $data['salary_type'];
         $rider->device_id = $data['device_id'] ?? null;
         $rider->save();
         if(isset($data['township_id'])) {
-            $townships = $data['township_id'];
+            $townships = [];
+            $township_ids = $data['township_id'];
+            foreach($township_ids as $township_id) {
+                $township = Township::find($township_id);
+                $townships[$township_id] = [
+                    'rider_fees' => $township->delivery_fees,
+                ];
+            }        
             $rider->townships()->sync($townships);
         }
         return $rider;
@@ -32,8 +41,17 @@ class RiderService
             $rider->password =  bcrypt($data['password']);
         }
         $rider->device_id = $data['device_id'] ?? $rider->device_id;
+        $rider->salary_type = $data['salary_type'];
+        
         if(isset($data['township_id'])) {
-            $townships = $data['township_id'];
+            $townships = [];
+            $township_ids = $data['township_id'];
+            foreach($township_ids as $township_id) {
+                $township = Township::find($township_id);
+                $townships[$township_id] = [
+                    'rider_fees' => $township->delivery_fees,
+                ];
+            }          
             $rider->townships()->sync($townships);
         }
         $rider->save();

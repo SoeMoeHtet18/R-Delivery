@@ -25,7 +25,8 @@ class RiderUpdateRequest extends FormRequest
         return [
             'name'          => 'required|string',
             'phone_number'  => 'required|string|unique:riders,phone_number,'.$id,
-            'password'      => 'confirmed'
+            'password'      => 'confirmed',
+            'salary_type'   => 'required'
 
         ];
     }

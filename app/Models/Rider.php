@@ -16,7 +16,7 @@ class Rider extends Authenticatable
 
     public function townships()
     {
-        return $this->belongsToMany(Township::class, 'rider_township','rider_id','township_id')->withTrashed();
+        return $this->belongsToMany(Township::class, 'rider_township','rider_id','township_id')->withPivot('rider_fees')->withTrashed();
     }
 
     public function notifications()
