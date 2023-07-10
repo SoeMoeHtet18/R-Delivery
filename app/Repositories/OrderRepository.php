@@ -25,7 +25,8 @@ class OrderRepository
             ->leftJoin('shops', 'shops.id', 'orders.shop_id')
             ->leftJoin('users', 'users.id', 'orders.last_updated_by')
             ->leftJoin('cities', 'cities.id', 'orders.city_id')
-            ->select('orders.*', 'townships.name as township_name', 'shops.name as shop_name', 'riders.name as rider_name', 'users.name as last_updated_by_name', 'cities.name as city_name');
+            ->leftJoin('item_types', 'item_types.id', 'orders.item_type_id')
+            ->select('orders.*', 'townships.name as township_name', 'shops.name as shop_name', 'riders.name as rider_name', 'users.name as last_updated_by_name', 'cities.name as city_name', 'item_types.name as item_type_name');
         return $query;
     }
 
@@ -258,7 +259,10 @@ class OrderRepository
 
     public function getCancelRequestOrdersQuery()
     {
-        $query = Order::where('orders.status', 'cancel_request')->leftJoin('riders', 'riders.id', 'orders.rider_id')->leftJoin('shops', 'shops.id', 'orders.shop_id')->select('orders.*',  'shops.name as shop_name', 'riders.name as rider_name');
+        $query = Order::where('orders.status', 'cancel_request')
+            ->leftJoin('riders', 'riders.id', 'orders.rider_id')
+            ->leftJoin('shops', 'shops.id', 'orders.shop_id')
+            ->select('orders.*',  'shops.name as shop_name', 'riders.name as rider_name');
         return $query;
     }
 

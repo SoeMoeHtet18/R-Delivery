@@ -147,19 +147,16 @@
                 </div>
             </div>
             <div class="row m-0 mb-3">
-                <label for="item_type" class="col-2">
+                <label for="item_type_id" class="col-2">
                     <h4>Item Type <b>:</b></h4>
                 </label>
                 <div class="ps-4 col-10">
-                    <select name="item_type" id="item_type_id" class="form-control">
+                    <select name="item_type_id" id="item_type_id" class="form-control">
                         <option value="" selected disabled>Select Item Type for This Order</option>
                         @foreach($item_types as $item_type)
-                        <option value="{{$item_type->name}}" @if($item_type->name == old('item_type')) selected @endif>{{$item_type->name}}</option>
+                        <option value="{{$item_type->id}}" @if($item_type->name == old('item_type')) selected @endif>{{$item_type->name}}</option>
                         @endforeach
                     </select>
-                    @if ($errors->has('item_type'))
-                    <span class="text-danger"><strong>{{ $errors->first('item_type') }}</strong></span>
-                    @endif
                 </div>
             </div>
             <div class="row m-0 mb-3">

@@ -234,7 +234,7 @@
                     name: 'remark'
                 },
                 {
-                    data: 'item_type',
+                    data: 'item_type_name',
                     name: 'item_type'
                 },
                 {
@@ -350,7 +350,7 @@
                     name: 'remark'
                 },
                 {
-                    data: 'item_type',
+                    data: 'item_type_name',
                     name: 'item_type'
                 },
                 {

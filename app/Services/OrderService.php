@@ -37,7 +37,7 @@ class OrderService
         $order->markup_delivery_fees =  $data['markup_delivery_fees'] ?? 0;
         $order->remark =  $data['remark'] ?? null;
         $order->status = "pending";
-        $order->item_type =  $data['item_type'];
+        $order->item_type =  $data['item_type_id'] ?? null;
         $order->full_address =  $data['full_address'] ?? null;
         $order->schedule_date =  $data['schedule_date'] ?? Carbon::tomorrow();;
         $order->type =  $data['type'];
@@ -66,7 +66,7 @@ class OrderService
         $order->markup_delivery_fees =  $data['markup_delivery_fees'] ?? 0;
         $order->remark =  $data['remark'] ?? null;
         $order->status = "pending";
-        $order->item_type =  $itemType->name;
+        $order->item_type =  $data['item_type_id'] ?? null;
         $order->full_address =  $data['full_address'] ?? null;
         $order->schedule_date =  $data['schedule_date'] ?? Carbon::tomorrow();;
         $order->type =  $data["type"];
@@ -104,7 +104,7 @@ class OrderService
         // if ($data['status'] == 'warehouse') {
         //     $this->notificationService->orderInWarehouseNotificationForShopUsers($order->shop_id, $order->order_code);
         // }
-        $order->item_type =  $data['item_type'];
+        $order->item_type =  $data['item_type_id'] ?? null;
         $order->full_address =  $data['full_address'] ?? null;
         $order->schedule_date =  $data['schedule_date'] ?? Carbon::tomorrow();;
         $order->type =  $data['type'];
@@ -203,14 +203,6 @@ class OrderService
     {
         $order = Order::where('id', $order_id)->first();
         $order->schedule_date = $data['schedule_date'];
-        $order->save();
-        return $order;
-    }
-    
-    public function updatePaymentChannel($data, $order_id)
-    {
-        $order = Order::where('id', $order_id)->first();
-        $order->payment_channel = $data['payment_channel'];
         $order->save();
         return $order;
     }
