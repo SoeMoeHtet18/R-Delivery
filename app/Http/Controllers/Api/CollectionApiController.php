@@ -28,4 +28,21 @@ class CollectionApiController extends Controller
         $collection = $this->collectionRepository->getCollectionById($collection_id);
         return response()->json(['data' => $collection, 'message' => 'Successfully get Collection By ID', 'status' => 'success'], 200);
     }
+
+    public function createCollectionByShopUser(Request $request, $id)
+    {
+        $data = $request->all();
+        $shop_user = auth()->guard('shop-user-api')->user();
+        $shop_id = $shop_user->shop_id;
+        $collection = $this->collectionService->createCollectionByShopUser($data, $shop_id);
+        return response()->json(['data' => $collection, 'message' => 'Successfully created collection by shop user']);
+    }
+
+    public function getAllCollectionsByShopUser()
+    {
+        $shop_user = auth()->guard('shop-user-api')->user();
+        $shop_id = $shop_user->shop_id;
+        $collections = $this->collectionRepository->getAllCollectionsByShopUser($shop_id);
+        return response()->json(['data' => $collections, 'message' => 'Successfully get collections by shop user']);
+    }
 }

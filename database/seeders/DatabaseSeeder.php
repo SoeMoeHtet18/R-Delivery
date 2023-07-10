@@ -27,15 +27,15 @@ class DatabaseSeeder extends Seeder
             'phone_number' => '09123456789',
             'password' => bcrypt('admin123')
         ]);
-        Rider::create([
-            'name' => 'Rider',
-            'phone_number' => '09123456789',
-            'password' => bcrypt('rider123')
-        ]);
-        ShopUser::create([
-            'name' => 'Shop User',
-            'phone_number' => '09123456789',
-            'password' => bcrypt('shopuser123')
-        ]);
+        // Rider::create([
+        //     'name' => 'Rider',
+        //     'phone_number' => '09123456789',
+        //     'password' => bcrypt('rider123')
+        // ]);
+        // ShopUser::create([
+        //     'name' => 'Shop User',
+        //     'phone_number' => '09123456789',
+        //     'password' => bcrypt('shopuser123')
+        // ]);
     }
 }

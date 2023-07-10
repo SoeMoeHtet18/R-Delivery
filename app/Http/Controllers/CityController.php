@@ -12,7 +12,6 @@ use Yajra\DataTables\Facades\DataTables;
 
 class CityController extends Controller
 {
-
     protected $cityRepository;
     protected $cityService;
     protected $townshipRepository;
