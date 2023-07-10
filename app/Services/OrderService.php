@@ -91,19 +91,19 @@ class OrderService
         $order->markup_delivery_fees =  $data['markup_delivery_fees'] ?? null;
         $order->remark =  $data['remark'] ?? null;
         $this->changeStatus($order, $data['status']);
-        if ($data['status'] == 'cancel') {
-            $this->notificationService->orderCancelNotificationForRider($order->rider_id, $order->order_code);
-            $this->notificationService->orderCancelNotificationForShopUsers($order->shop_id, $order->order_code);
-        }
-        if ($data['status'] == 'delay') {
-            $this->notificationService->orderIssueNotificationForShopUsers($order->shop_id, $order->order_code);
-        }
-        if ($data['status'] == 'success') {
-            $this->notificationService->orderArrivalNotificationForShopUsers($order->shop_id, $order->order_code);
-        }
-        if ($data['status'] == 'warehouse') {
-            $this->notificationService->orderInWarehouseNotificationForShopUsers($order->shop_id, $order->order_code);
-        }
+        // if ($data['status'] == 'cancel') {
+        //     $this->notificationService->orderCancelNotificationForRider($order->rider_id, $order->order_code);
+        //     $this->notificationService->orderCancelNotificationForShopUsers($order->shop_id, $order->order_code);
+        // }
+        // if ($data['status'] == 'delay') {
+        //     $this->notificationService->orderIssueNotificationForShopUsers($order->shop_id, $order->order_code);
+        // }
+        // if ($data['status'] == 'success') {
+        //     $this->notificationService->orderArrivalNotificationForShopUsers($order->shop_id, $order->order_code);
+        // }
+        // if ($data['status'] == 'warehouse') {
+        //     $this->notificationService->orderInWarehouseNotificationForShopUsers($order->shop_id, $order->order_code);
+        // }
         $order->item_type =  $data['item_type'];
         $order->full_address =  $data['full_address'] ?? null;
         $order->schedule_date =  $data['schedule_date'] ?? Carbon::tomorrow();;

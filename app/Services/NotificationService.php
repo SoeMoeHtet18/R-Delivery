@@ -111,11 +111,11 @@ class NotificationService
 
     public function orderInWarehouseNotificationForShopUsers($shop_id, $order_code)
     {
-        $message = 'Your order ' . $order_code . ' is in warehouse now.';
-        $notification = $this->createNotification('warehouse', $message);
-        $shop_users = ShopUser::where('shop_id', $shop_id)->get();
-        foreach ($shop_users as $shop_user) {
-            $this->attachNotification($shop_user, $notification);
-        }
+        // $message = 'Your order ' . $order_code . ' is in warehouse now.';
+        // $notification = $this->createNotification('warehouse', $message);
+        // $shop_users = ShopUser::where('shop_id', $shop_id)->get();
+        // foreach ($shop_users as $shop_user) {
+        //     $this->attachNotification($shop_user, $notification);
+        // }
     }
 }
