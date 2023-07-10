@@ -23,9 +23,11 @@ class CollectionService
         $collection = new Collection();
         $collection->total_quantity     = $data['total_quantity'];
         $collection->total_amount       = $data['total_amount'];
+        $collection->assigned_at        = $data['assigned_at'];
         $collection->shop_id            = $shop_id;
         $collection->status             = $data['status'];
         $collection->note               = $data['note'];
+        $collection->is_payable         = 0;
         $collection->save();
         return $collection;
     }
