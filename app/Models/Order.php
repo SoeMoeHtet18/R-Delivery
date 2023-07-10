@@ -34,4 +34,9 @@ class Order extends Model
     {
         return $this->belongsTo(City::class, 'city_id', 'id')->withTrashed();
     }
+
+    public function item_type()
+    {
+        return $this->belongsTo(ItemType::class, 'item_type_id', 'id')->withTrashed();
+    }
 }

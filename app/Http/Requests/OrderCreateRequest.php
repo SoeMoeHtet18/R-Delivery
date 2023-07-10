@@ -31,7 +31,6 @@ class OrderCreateRequest extends FormRequest
             'shop_id'               => 'required',
             'total_amount'          => 'required',
             'delivery_fees'         => 'required',
-            'item_type'             => 'required',
             'type'                  => 'required',
             'collection_method'     => 'required',
             'proof_of_payment'    => 'mimes:jpg,jpeg,webp,png,bmp'
@@ -56,7 +55,6 @@ class OrderCreateRequest extends FormRequest
             'quantity.required'                 => 'Quantity field is required',
             'total_amount'                      => 'Total Amount field is required',
             'delivery_fees.required'            => 'Delivery Fees is required',
-            'item_type.required'                => 'Item Type field is required',
             'type.required'                     => 'Type field is required',
             'collection_method.required'        => 'Collection Method field is required',
             'proof_of_payment.mimes'     => 'The proof of payment must be in JPG, JPEG, WEBP, PNG or BMP format'

@@ -29,7 +29,6 @@ class OrderUpdateRequest extends FormRequest
             'shop_id'               => 'required',
             'total_amount'          => 'required',
             'delivery_fees'         => 'required',
-            'item_type'             => 'required',
             'type'                  => 'required',
             'collection_method'     => 'required',
             'proof_of_payment'    => 'mimes:jpg,jpeg,webp,png,bmp'

@@ -131,7 +131,7 @@
                     <h4>Item Type <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    {{ $order->item_type }}
+                    {{ $order->item_type->name }}
                 </div>
             </div>
             <div class="row m-0 mb-3">
