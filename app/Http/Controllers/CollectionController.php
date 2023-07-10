@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Collection;
-use Illuminate\Http\Request;
 use App\Repositories\CollectionRepository;
 use App\Services\CollectionService;
+use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
 class CollectionController extends Controller
@@ -81,6 +81,14 @@ class CollectionController extends Controller
         return DataTables::of($data)
             ->addIndexColumn()
             ->orderColumn('id', '-collections.id')
+            ->make(true);
+    }
+    
+    public function getCollectionListByRiderId($rider_id)
+    {
+        $data = $this->collectionRepository->getCollectionsByRiderId($rider_id);
+        return DataTables::of($data)
+            ->addIndexColumn()
             ->make(true);
     }
 }

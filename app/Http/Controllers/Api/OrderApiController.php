@@ -140,4 +140,12 @@ class OrderApiController extends Controller
         $order    = $this->orderService->updateOrderScheduleDateByRider($data, $order_id);
         return response()->json(['data' => $order, 'message' => 'Successfully Update Order Schedule Date By Rider', 'status' => 'success'], 200);
     }
+
+    public function updatePaymentChannel(Request $request)
+    {
+        $order_id = $request->order_id;
+        $data = $request->all();
+        $order    = $this->orderService->updatePaymentChannel($data, $order_id);
+        return response()->json(['data' => $order, 'message' => 'Successfully Update Payment Channel', 'status' => 'success'], 200);
+    }
 }

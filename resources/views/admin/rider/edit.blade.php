@@ -41,6 +41,21 @@
                 </div>
             </div>
             <div class="row m-0 mb-3">
+                <label for="email" class="col-2">
+                    <h4>Salary Type <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <select name="salary_type" id="salary_type" class="form-control">
+                        <option value="" selected disabled>Select the Salary Type for This Rider</option>
+                        <option value="daily" @if($rider->salary_type == 'daily' ) selected @endif>Daily</option>
+                        <option value="monthly" @if($rider->salary_type == 'monthly' ) selected @endif>Monthly</option>
+                    </select>
+                    @if ($errors->has('salary_type'))
+                    <span class="text-danger"><strong>{{ $errors->first('salary_type') }}</strong></span>
+                    @endif
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
                 <label for="password" class="col-2">
                     <h4>Password <b>:</b></h4>
                 </label>
