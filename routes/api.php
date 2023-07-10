@@ -55,6 +55,8 @@ Route::middleware('auth:shop-user-api')->group( function () {
     Route::post('make-notification-read-by-shop-user', [ShopUserApiController::class, 'makeNoticationRead']);
     Route::get('get-notification-count-by-shop-user', [ShopUserApiController::class, 'getNotificationCount']);
     Route::post('change-password-by-shop-user',[ShopUserApiController::class, 'changePassword']);
+    Route::post('create-collection-by-shop-user',[CollectionApiController::class, 'createCollectionByShopUser']);
+    Route::get('get-collections-by-shop-user', [CollectionApiController::class, 'getAllCollectionsByShopUser']);
 });
 Route::post('rider-login', [RiderApiController::class, 'riderLoginApi']);
 Route::post('rider/create', [RiderApiController::class, 'create']);

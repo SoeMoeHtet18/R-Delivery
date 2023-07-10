@@ -2,11 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CollectionGroup;
+use App\Repositories\CollectionGroupRepository;
+use App\Services\CollectionGroupService;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class CollectionGroupController extends Controller
 {
+    protected $collectionGroupRepository;
+    protected $collectionGroupService;
+
+    public function __construct(CollectionGroupRepository $collectionGroupRepository, CollectionGroupService $collectionGroupService)
+    {
+        $this->collectionGroupRepository = $collectionGroupRepository;
+        $this->collectionGroupService = $collectionGroupService;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -28,13 +38,15 @@ class CollectionGroupController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        $this->collectionGroupService->saveCollectionGroupByAdmin($data);
+        return redirect()->route('collection_groups.index');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(CollectionGroup $collectionGroup)
+    public function show($id)
     {
         //
     }
@@ -42,7 +54,7 @@ class CollectionGroupController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(CollectionGroup $collectionGroup)
+    public function edit($id)
     {
         //
     }
@@ -50,16 +62,31 @@ class CollectionGroupController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, CollectionGroup $collectionGroup)
+    public function update(Request $request, $id)
     {
-        //
+        $data = $request->all();
+        $collectionGroup = $this->collectionGroupRepository->getCollectionGroupByID($id);
+        $this->collectionGroupService->updateCollectionGroupByAdmin($collectionGroup, $data);
+
+        return redirect()->route('collection_groups.show', $id);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(CollectionGroup $collectionGroup)
+    public function destroy($id)
     {
-        //
+        $this->collectionGroupService->deleteCollectionGroupByID($id);
+        return redirect()->route('collection_groups.index');
+    }
+
+    public function getAjaxCollectionGroups()
+    {
+        $data = $this->collectionGroupRepository->getAllCollectionGroupsQuery();
+        
+        return DataTables::of($data)
+            ->addIndexColumn()
+            ->orderColumn('id', '-collection_groups.id')
+            ->make(true);
     }
 }

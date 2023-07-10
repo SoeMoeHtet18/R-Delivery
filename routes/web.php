@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\CollectionGroupController;
 use App\Http\Controllers\CustomerPaymentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ItemTypeController;
@@ -82,6 +84,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/ajax-get-cancel-request-orders-data', [OrderController::class, 'getAjaxCancelRequestOrderData']);
     Route::post('/orders/{id}/change-status', [OrderController::class, 'changeStatus']);
     Route::get('/generate-pdf', [OrderController::class, 'generatePDF']);
+    Route::resource('/collection-groups', CollectionGroupController::class);
+    Route::get('/ajax-get-collection-groups-data', [CollectionGroupController::class, 'getAjaxCollectionGroups']);
+    Route::get('/ajax-get-collections-data-for-shops', [CollectionController::class, 'getAjaxCollectionsForShops']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

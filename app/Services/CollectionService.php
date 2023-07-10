@@ -6,9 +6,9 @@ use App\Models\Collection;
 
 class CollectionService
 {
-    public function updateCollectionByRider($data,$collection_id)
+    public function updateCollectionByRider($data, $collection_id)
     {
-        $collection                     = Collection::where('id',$collection_id)->first();
+        $collection                     = Collection::where('id', $collection_id)->first();
         $collection->total_quantity     = $data['total_quantity'];
         $collection->total_amount       = $data['total_amount'];
         $collection->paid_amount        = $data['paid_amount'];
@@ -18,4 +18,15 @@ class CollectionService
         return $collection;
     }
 
+    public function createCollectionByShopUser($data, $shop_id)
+    {
+        $collection = new Collection();
+        $collection->total_quantity     = $data['total_quantity'];
+        $collection->total_amount       = $data['total_amount'];
+        $collection->shop_id            = $shop_id;
+        $collection->status             = $data['status'];
+        $collection->note               = $data['note'];
+        $collection->save();
+        return $collection;
+    }
 }
