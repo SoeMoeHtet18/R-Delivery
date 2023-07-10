@@ -87,6 +87,8 @@ Route::middleware('auth:rider-api')->group(function() {
     Route::post('update-schedule-date-by-rider', [OrderApiController::class, 'updateScheduleDateByRider']);
     Route::get('get-collection-list-by-rider-id', [CollectionApiController::class, 'getCollectionsByRiderId']);
     Route::post('update-payment-channel', [OrderApiController::class, 'updatePaymentChannel']);
+    Route::get('get-total-collection-fees', [RiderApiController::class, 'getTotalCollectionFees']);
+    Route::get('get-total-delivery-fees', [RiderApiController::class, 'getTotalDeliveryFees']);
 });
 
 Route::get('get-shop-list', [ShopApiController::class, 'getAllShopList']);
