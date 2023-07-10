@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\CityApiController;
+use App\Http\Controllers\Api\CollectionApiController;
 use App\Http\Controllers\Api\CustomerPaymentApiController;
 use App\Http\Controllers\Api\ItemTypeApiController;
 use App\Http\Controllers\Api\OrderApiController;
@@ -79,6 +80,9 @@ Route::middleware('auth:rider-api')->group(function() {
     Route::post('make-notification-read-by-rider', [RiderApiController::class, 'makeNoticationRead']);
     Route::get('get-notification-count-by-rider', [RiderApiController::class, 'getNotificationCount']);
     Route::post('change-password-by-rider',[RiderApiController::class, 'changePassword']);
+    Route::post('update-collection-by-rider/{collection_id}', [CollectionApiController::class, 'updateCollectionByRider']);
+    Route::post('get-collection-by-id/{collection_id}', [CollectionApiController::class, 'getCollectionById']);
+    Route::post('update-schedule-date-by-rider', [OrderApiController::class, 'updateScheduleDateByRider']);
 });
 
 Route::get('get-shop-list', [ShopApiController::class, 'getAllShopList']);
