@@ -41,7 +41,7 @@ class CollectionApiController extends Controller
         $shop_user = auth()->guard('shop-user-api')->user();
         $shop_id = $shop_user->shop_id;
         $collection = $this->collectionService->createCollectionByShopUser($data, $shop_id);
-        return response()->json(['data' => $collection, 'message' => 'Successfully created collection by shop user']);
+        return response()->json(['data' => $collection, 'message' => 'Successfully created collection by shop user', 'status' => 'success'], 200);
     }
 
     public function getAllCollectionsByShopUser()
@@ -49,6 +49,6 @@ class CollectionApiController extends Controller
         $shop_user = auth()->guard('shop-user-api')->user();
         $shop_id = $shop_user->shop_id;
         $collections = $this->collectionRepository->getAllCollectionsByShopUser($shop_id);
-        return response()->json(['data' => $collections, 'message' => 'Successfully get collections by shop user']);
+        return response()->json(['data' => $collections, 'message' => 'Successfully get collections by shop user', 'status' => 'success'], 200);
     }
 }
