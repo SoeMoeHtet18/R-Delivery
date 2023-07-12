@@ -203,6 +203,8 @@ class OrderService
     {
         $order = Order::where('id', $order_id)->first();
         $order->schedule_date = $data['schedule_date'];
+        $order->note = $data['remark'];
+        $order->status = 'delay';
         $order->save();
         return $order;
     }
