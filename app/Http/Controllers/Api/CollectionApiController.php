@@ -35,7 +35,7 @@ class CollectionApiController extends Controller
         return response()->json(['data' => $collections, 'message' => 'Successfully Get Collection list By Rider ID', 'status' => 'success'], 200);
     }
     
-    public function createCollectionByShopUser(Request $request, $id)
+    public function createCollectionByShopUser(Request $request)
     {
         $data = $request->all();
         $shop_user = auth()->guard('shop-user-api')->user();
