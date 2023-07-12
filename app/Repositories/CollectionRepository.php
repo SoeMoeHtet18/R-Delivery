@@ -14,8 +14,12 @@ class CollectionRepository
     
     public function getCollectionsByRiderId($rider_id) 
     {
-        $collections = Collection::where('rider_id',$rider_id)->get();
-
+        $collections = Collection::with('shop')->where('rider_id',$rider_id)->get();
+        foreach($collections as $collection) {
+            $collection['shop_name'] = $collection->shop->name;
+            $collection['shop_phone_number'] = $collection->shop->phone_number;
+        }
+        return $collections;
     }
 
     public function getAllCollectionsByShopUser($shop_id)
