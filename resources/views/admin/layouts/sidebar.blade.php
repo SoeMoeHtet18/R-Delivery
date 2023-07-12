@@ -35,6 +35,12 @@
                     <span class="title">Order</span>
                 </a>
             </li>
+            <li class="@if(request()->is('delivery-types*')) {{'active'}} @endif">
+                <a href="{{route('delivery-types.index')}}">
+                    <!-- <i class="fa fa-users"></i> -->
+                    <span class="title">Delivery Type</span>
+                </a>
+            </li>
             <li>
                 <a id="paymentBoxCollapse" data-bs-toggle="collapse" href="#paymentBox" role="button" aria-expanded="false" aria-controls="collapseExample">
                     <span class="title">Payments<span class="arrow"></span></span>

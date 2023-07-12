@@ -6,6 +6,7 @@ use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\CollectionGroupController;
 use App\Http\Controllers\CustomerPaymentController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DeliveryTypeController;
 use App\Http\Controllers\ItemTypeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderImportController;
@@ -88,6 +89,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/ajax-get-collection-groups-data', [CollectionGroupController::class, 'getAjaxCollectionGroups']);
     Route::get('/ajax-get-collections-data-for-shops', [CollectionController::class, 'getAjaxCollectionsForShops']);
     Route::get('/get-collection-list-by-rider-id', [CollectionController::class, 'getCollectionListByRiderId']);
+    Route::resource('/delivery-types', DeliveryTypeController::class);
+    Route::get('/ajax-get-delivery-types', [DeliveryTypeController::class, 'getDeliveryTypes']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
