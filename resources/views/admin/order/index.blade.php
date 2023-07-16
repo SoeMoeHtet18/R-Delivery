@@ -168,6 +168,12 @@
     <li class="nav-item">
         <a href="#cancel-request-orders-display" id="cancel-request-orders-tab" class="nav-link" data-toggle="tab">Cancel Request Orders</a>
     </li>
+    <li class="nav-item">
+        <a href="#rejected-order-display" id="rejected-order-tab" class="nav-link" data-toggle="tab">Rejected Orders</a>
+    </li>
+    <li class="nav-item">
+        <a href="#warehouse-order-display" id="warehouse-order-tab" class="nav-link" data-toggle="tab">Warehouse Orders</a>
+    </li>
 </ul>
 <input type="hidden" id="current_screen" value="all-orders-display">
 <div class="tab-content">
@@ -216,6 +222,62 @@
         </div>
         <div class="portlet-body">
             <table id="cancel-request-orders-datatable" class="table table-striped table-hover table-responsive datatable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Action</th>
+                        <th>Total Amount</th>
+                        <th>Delivery Fees</th>
+                        <th>Markup Delivery Fees</th>
+                        <th>Order Code</th>
+                        <th>Shop</th>
+                        <th>Rider</th>
+                        <th>Customer Name</th>
+                        <th>Customer Phone Number</th>
+                        <th>Paid</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id="rejected-order-display" class="portlet box green tab-pane">
+        <div class="portlet-title">
+            <div class="caption">Cancel Request Orders Lists</div>
+        </div>
+        <div class="portlet-body">
+            <table id="cancel-orders-datatable" class="table table-striped table-hover table-responsive datatable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Action</th>
+                        <th>Total Amount</th>
+                        <th>Delivery Fees</th>
+                        <th>Markup Delivery Fees</th>
+                        <th>Order Code</th>
+                        <th>Shop</th>
+                        <th>Rider</th>
+                        <th>Customer Name</th>
+                        <th>Customer Phone Number</th>
+                        <th>Paid</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id="warehouse-order-display" class="portlet box green tab-pane">
+        <div class="portlet-title">
+            <div class="caption">In Warehouse Orders Lists</div>
+        </div>
+        <div class="portlet-body">
+            <table id="warehouse-orders-datatable" class="table table-striped table-hover table-responsive datatable">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -471,6 +533,9 @@
                             if (row.status == 'cancel') {
                                 return "Cancel";
                             }
+                            if (row.status == 'in-warehouse') {
+                                return "In Warehouse";
+                            }
                         },
                         "targets": 14
                     },
@@ -620,6 +685,263 @@
                             }
                         },
                         "targets": 10
+                    },
+
+                ]
+            });
+        }
+
+        get_ajax_dynamic_data_for_cancel_table(search = '', city = '', rider = '', shop = '', status = '', township = '');
+
+        function get_ajax_dynamic_data_for_cancel_table() {
+            var table = $('#cancel-orders-datatable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    "url": '/ajax-get-cancel-orders-data',
+                    "type": "GET",
+                    "data": function(r) {
+                        r.search = search;
+                        r.city = city;
+                        r.rider = rider;
+                        r.shop = shop;
+                        r.status = 'cancel';
+                        r.township = township;
+                    }
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'id'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'payment_flag',
+                        name: 'paid'
+                    },
+                    {
+                        data: 'total_amount',
+                        name: 'total_amount'
+                    },
+                    {
+                        data: 'delivery_fees',
+                        name: 'delivery_fees'
+                    },
+                    {
+                        data: 'markup_delivery_fees',
+                        name: 'markup_delivery_fees'
+                    },
+                    {
+                        data: 'order_code',
+                        name: 'order_code'
+                    },
+                    {
+                        data: 'shop_name',
+                        name: 'shop'
+                    },
+                    {
+                        data: 'rider_name',
+                        name: 'rider'
+                    },
+                    {
+                        data: 'customer_name',
+                        name: 'customer_name'
+                    },
+                    {
+                        data: 'customer_phone_number',
+                        name: 'customer_phone_number'
+                    },
+                ],
+                columnDefs: [{
+                        "render": function(data, type, row) {
+                            if (row.payment_flag == 0) {
+                                return "Unpaid";
+                            }
+                            if (row.payment_flag == 1) {
+                                return "Paid";
+                            }
+                        },
+                        "targets": 10
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            return row.total_amount;
+                        },
+                        "targets": 2
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            return row.delivery_fees;
+                        },
+                        "targets": 3
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            return row.markup_delivery_fees;
+                        },
+                        "targets": 4
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            return row.order_code;
+                        },
+                        "targets": 5
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            return row.shop_name;
+                        },
+                        "targets": 6
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            return row.rider_name;
+                        },
+                        "targets": 7
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            return row.customer_name;
+                        },
+                        "targets": 8
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            return row.customer_phone_number;
+                        },
+                        "targets": 9
+                    },
+                ]
+            });
+        }
+
+        get_ajax_dynamic_data_for_warehouse_table(search = '', city = '', rider = '', shop = '', status = '', township = '');
+
+        function get_ajax_dynamic_data_for_warehouse_table() {
+            var table = $('#warehouse-orders-datatable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    "url": '/ajax-get-warehouse-orders-data',
+                    "type": "GET",
+                    "data": function(r) {
+                        r.search = search;
+                        r.city = city;
+                        r.rider = rider;
+                        r.shop = shop;
+                        r.status = 'in-warehouse';
+                        r.township = township;
+                    }
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'id'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'payment_flag',
+                        name: 'paid'
+                    },
+                    {
+                        data: 'total_amount',
+                        name: 'total_amount'
+                    },
+                    {
+                        data: 'delivery_fees',
+                        name: 'delivery_fees'
+                    },
+                    {
+                        data: 'markup_delivery_fees',
+                        name: 'markup_delivery_fees'
+                    },
+                    {
+                        data: 'order_code',
+                        name: 'order_code'
+                    },
+                    {
+                        data: 'shop_name',
+                        name: 'shop'
+                    },
+                    {
+                        data: 'rider_name',
+                        name: 'rider'
+                    },
+                    {
+                        data: 'customer_name',
+                        name: 'customer_name'
+                    },
+                    {
+                        data: 'customer_phone_number',
+                        name: 'customer_phone_number'
+                    },
+                ],
+                columnDefs: [{
+                        "render": function(data, type, row) {
+                            if (row.payment_flag == 0) {
+                                return "Unpaid";
+                            }
+                            if (row.payment_flag == 1) {
+                                return "Paid";
+                            }
+                        },
+                        "targets": 10
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            return row.total_amount;
+                        },
+                        "targets": 2
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            return row.delivery_fees;
+                        },
+                        "targets": 3
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            return row.markup_delivery_fees;
+                        },
+                        "targets": 4
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            return row.order_code;
+                        },
+                        "targets": 5
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            return row.shop_name;
+                        },
+                        "targets": 6
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            return row.rider_name;
+                        },
+                        "targets": 7
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            return row.customer_name;
+                        },
+                        "targets": 8
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            return row.customer_phone_number;
+                        },
+                        "targets": 9
                     },
 
                 ]

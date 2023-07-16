@@ -212,6 +212,30 @@
                     @endif
                 </div>
             </div>
+            <div class="row m-0 mb-3">
+                <label for="collection_method" class="col-2">
+                    <h4>Payment Method <b>:</b></h4>
+                </label>
+                <div class="ps-4 col-10">
+                    <select name="payment_method" id="payment_method_id" class="form-control">
+                        <option value="" selected disabled>Select the Payment Method for This Order</option>
+                        <option value="cash-on-delivery" @if(old('payment_method')=='cash-on-delivery' ) selected @endif>Cash On Delivery</option>
+                        <option value="item-prepaid" @if(old('payment_method')=='item-prepaid' ) selected @endif>Item Prepaid</option>
+                        <option value="all-prepaid" @if(old('payment_method')=='all-prepaid' ) selected @endif>All Prepaid</option>
+                    </select>
+                    @if ($errors->has('payment_method'))
+                    <span class="text-danger"><strong>{{ $errors->first('payment_method') }}</strong></span>
+                    @endif
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <label for="note" class="col-2">
+                    <h4>Note <b>:</b></h4>
+                </label>
+                <div class="ps-4 col-10">
+                    <textarea id="note" name="note" class="form-control" style="height: 100px">{{old('remark')}}</textarea>
+                </div>
+            </div>
             <div class="footer-button float-end">
                 <a href="{{route('orders.index')}}" class="btn btn-light">Cancel</a>
                 <input type="submit" class="btn btn-success ">
