@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\CityApiController;
 use App\Http\Controllers\Api\CollectionApiController;
 use App\Http\Controllers\Api\CustomerPaymentApiController;
+use App\Http\Controllers\Api\DeliveryTypeApiController;
 use App\Http\Controllers\Api\ItemTypeApiController;
 use App\Http\Controllers\Api\OrderApiController;
 use App\Http\Controllers\Api\PaymentTypeApiController;
@@ -102,3 +103,4 @@ Route::get('get-item-type-list', [ItemTypeApiController::class, 'getAllItemType'
 Route::post('get-order-code',[OrderApiController::class, 'getOrderCode']);
 Route::post('get-delivery-fees-by-township', [TownshipApiController::class, 'getDeliveryFees']);
 Route::post('/tracking', [OrderApiController::class, 'trackOrder']);
+Route::get('get-delivery-type-list', [DeliveryTypeApiController::class, 'getAllDeliveryTypeList']);
