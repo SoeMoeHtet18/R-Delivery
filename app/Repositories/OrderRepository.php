@@ -265,6 +265,24 @@ class OrderRepository
             ->select('orders.*',  'shops.name as shop_name', 'riders.name as rider_name');
         return $query;
     }
+    
+    public function getCancelOrdersQuery()
+    {
+        $query = Order::where('orders.status', 'cancel')
+            ->leftJoin('riders', 'riders.id', 'orders.rider_id')
+            ->leftJoin('shops', 'shops.id', 'orders.shop_id')
+            ->select('orders.*',  'shops.name as shop_name', 'riders.name as rider_name');
+        return $query;
+    }
+    
+    public function getWarehouseOrderListQuery()
+    {
+        $query = Order::where('orders.status', 'in-warehouse')
+            ->leftJoin('riders', 'riders.id', 'orders.rider_id')
+            ->leftJoin('shops', 'shops.id', 'orders.shop_id')
+            ->select('orders.*',  'shops.name as shop_name', 'riders.name as rider_name');
+        return $query;
+    }
 
     public function getWarehouseOrdersQuery()
     {

@@ -131,7 +131,7 @@
                     <h4>Item Type <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    {{ $order->item_type->name }}
+                    {{ $order->itemType->name }}
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -183,6 +183,28 @@
                 </div>
                 <div class="col-10">
                     <img src="{{asset('/storage/customer payment/' . $order->proof_of_payment)}}" alt="" style="width: 200px;">
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <div class="col-2">
+                    <h4>Payment Method <b>:</b></h4>
+                </div>
+                <div class="col-10">
+                @if($order->payment_method == 'cash-on-delivery')
+                    Cash On Delivery
+                    @elseif($order->payment_method == 'item-prepaid')
+                    Item Prepaid
+                    @elseif($order->payment_method == 'all-prepaid')
+                    All Prepaid
+                    @endif
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <div class="col-2">
+                    <h4>Note <b>:</b></h4>
+                </div>
+                <div class="col-10">
+                    {{ $order->note }}
                 </div>
             </div>
         </div>

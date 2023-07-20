@@ -43,6 +43,8 @@ class OrderService
         $order->type =  $data['type'];
         $order->collection_method = $data['collection_method'];
         $order->proof_of_payment = $data['proof_of_payment'] ?? null;
+        $order->payment_method = $data['payment_method'] ?? null;
+        $order->note = $data['note'] ?? null;
         $order->save();
         return $order;
     }
@@ -50,7 +52,7 @@ class OrderService
     public function saveOrderByShopID($data, $shop_id)
     {
         $delivery_fees = Township::where('id', $data['township_id'])->first()->delivery_fees;
-        $itemType = ItemType::find($data['item_type']);
+        
         $order = new Order();
         $orderCode = Helper::nomenclature('orders', 'OD', 'id', $shop_id);
         $order->order_code =  $orderCode;
@@ -66,12 +68,13 @@ class OrderService
         $order->markup_delivery_fees =  $data['markup_delivery_fees'] ?? 0;
         $order->remark =  $data['remark'] ?? null;
         $order->status = "pending";
-        $order->item_type =  $data['item_type_id'] ?? null;
+        $order->item_type_id =  $data['item_type_id'] ?? null;
         $order->full_address =  $data['full_address'] ?? null;
         $order->schedule_date =  $data['schedule_date'] ?? Carbon::tomorrow();;
         $order->type =  $data["type"];
         $order->collection_method =  $data['collection_method'];
         $order->proof_of_payment =  $data['proof_of_payment'] ?? null;
+        $order->payment_method = $data['payment_method'];
         $order->save();
         return $order;
     }
@@ -109,6 +112,8 @@ class OrderService
         $order->schedule_date =  $data['schedule_date'] ?? Carbon::tomorrow();;
         $order->type =  $data['type'];
         $order->collection_method =  $data['collection_method'];
+        $order->payment_method = $data['payment_method'];
+        $order->note = $data['note'];
         if ($file) {
             $file_name = $this->uploadFile($file, 'public', 'customer payment');
             $order->proof_of_payment = $file_name;

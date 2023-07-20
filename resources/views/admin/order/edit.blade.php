@@ -141,6 +141,7 @@
                     <select name="status" id="status_id" class="form-control">
                         <option value="" selected disabled>Select Status for This Order</option>
                         <option value="pending" @if($order->status == "pending") {{'selected'}} @endif>Pending</option>
+                        <option value="in-warehouse" @if($order->status == "in-warehouse") {{'selected'}} @endif>In Warehouse</option>
                         <option value="success" @if($order->status == "success") {{'selected'}} @endif>Success</option>
                         <option value="delay" @if($order->status == "delay") {{'selected'}} @endif>Delay</option>
                         <option value="cancel" @if($order->status == "cancel") {{'selected'}} @endif>Cancel</option>
@@ -155,7 +156,7 @@
                     <select name="item_type_id" id="item_type_id" class="form-control">
                         <option value="" selected disabled>Select Item Type for This Order</option>
                         @foreach($item_types as $item_type)
-                        <option value="{{$item_type->id}}" @if($order->item_type == $item_type->name) {{'selected'}} @endif>{{$item_type->name}}</option>
+                        <option value="{{$item_type->id}}" @if($order->item_type == $item_type->id) {{'selected'}} @endif>{{$item_type->name}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -213,6 +214,27 @@
                     @if ($errors->has('proof_of_payment'))
                     <span class="text-danger"><strong>{{ $errors->first('proof_of_payment') }}</strong></span>
                     @endif
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <div class="col-2">
+                    <h4>Payment Method <b>:</b></h4>
+                </div>
+                <div class="col-10">
+                    <select name="payment_method" id="payment_method_id" class="form-control">
+                        <option value="" selected disabled>Select the Payment Method for This Order</option>
+                        <option value="cash-on-delivery" @if($order->payment_method == "cash-on-delivery") {{'selected'}} @endif>Cash On Delivery</option>
+                        <option value="item-prepaid" @if($order->payment_method == "pickup") {{'item-prepaid'}} @endif>Item Prepaid</option>
+                        <option value="all-prepaid" @if($order->payment_method == "pickup") {{'all-prepaid'}} @endif>All Prepaid</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <div class="col-2">
+                    <h4>Note <b>:</b></h4>
+                </div>
+                <div class="col-10">
+                    <input type="text" id="note" name="note" value="{{$order->note}}" class="form-control" />
                 </div>
             </div>
             <div class="footer-button float-end">

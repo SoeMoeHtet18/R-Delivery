@@ -83,6 +83,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/import-orders', [OrderImportController::class, 'index']);
     Route::post('/import-orders', [OrderImportController::class, 'upload']);
     Route::get('/ajax-get-cancel-request-orders-data', [OrderController::class, 'getAjaxCancelRequestOrderData']);
+    Route::get('/ajax-get-cancel-orders-data', [OrderController::class, 'getAjaxCancelOrderData']);
+    Route::get('/ajax-get-warehouse-orders-data', [OrderController::class, 'getAjaxWarehouseOrderData']);
     Route::post('/orders/{id}/change-status', [OrderController::class, 'changeStatus']);
     Route::get('/generate-pdf', [OrderController::class, 'generatePDF']);
     Route::resource('/collection-groups', CollectionGroupController::class);
