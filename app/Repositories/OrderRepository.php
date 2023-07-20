@@ -163,28 +163,41 @@ class OrderRepository
         return $orders;
     }
 
-    public function getUpcomingOrderList($rider_id)
+    public function getUpcomingOrderList($rider_id, $start_date, $end_date, $page)
     {
         $today = Carbon::today();
+        $limit = 10; 
+        $offset = ($page - 1) * $limit; 
         $orders = Order::where('orders.rider_id', $rider_id)
             ->whereIn('orders.status', ['pending', 'delay'])
-            ->whereDate('orders.schedule_date', '>', $today)
             ->leftJoin('shops', 'shops.id', 'orders.shop_id')
-            ->select('orders.*', 'shops.name as shop_name')
-            ->orderBy('updated_at', 'asc')
-            ->get();
+            ->select('orders.*', 'shops.name as shop_name');
+            
+        if($start_date != 'null' && $end_date != 'null') {
+            $orders = $orders->whereBetween('orders.schedule_date', [$start_date, $end_date]);
+        } else {
+            $orders = $orders->whereDate('orders.schedule_date', '>', $today);
+        }
+        $orders = $orders->offset($offset)->limit($limit)->orderBy('orders.id','DESC')->get();
         return $orders;
     }
 
-    public function getOrderHistoryList($rider_id)
+    public function getOrderHistoryList($rider_id, $start_date, $end_date, $page)
     {
+        $limit = 10; 
+        $offset = ($page - 1) * $limit; 
+        $currentDate = Carbon::now()->format('Y-m-d');
         $orders = Order::where('orders.rider_id', $rider_id)
-            ->where('status', 'success')
+            ->where('status', 'delivered')
             ->leftJoin('shops', 'shops.id', 'orders.shop_id')
-            ->select('orders.*', 'shops.name as shop_name')
-            ->orderBy('updated_at', 'desc')
-            ->get();
-
+            ->select('orders.*', 'shops.name as shop_name');
+        
+        if($start_date != 'null' && $end_date != 'null') {
+            $orders = $orders->whereBetween('orders.created_at', [$start_date, $end_date]);
+        } else {
+            $orders = $orders->whereDate('orders.created_at', $currentDate);
+        }
+        $orders = $orders->offset($offset)->limit($limit)->orderBy('orders.id','DESC')->get();
         return $orders;
     }
 

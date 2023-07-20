@@ -78,17 +78,21 @@ class OrderApiController extends Controller
         return response()->json(['data' => $orders, 'message' => 'Successfully Get One Day Order List By Rider', 'status' => 'success'], 200);
     }
 
-    public function getUpcomingOrderListByRider()
+    public function getUpcomingOrderListByRider(Request $request,$page = 1)
     {
+        $start_date = $request->start_date;
+        $end_date = $request->end_date;
         $rider_id = auth()->guard('rider-api')->user()->id;
-        $orders = $this->orderRepository->getUpcomingOrderList($rider_id);
+        $orders = $this->orderRepository->getUpcomingOrderList($rider_id, $start_date, $end_date, $page);
         return response()->json(['data' => $orders, 'message' => 'Successfully Get Upcoming Order List By Rider', 'status' => 'success'], 200);
     }
 
-    public function getOrderHistoryListByRider()
+    public function getOrderHistoryListByRider(Request $request,$page = 1)
     {
+        $start_date = $request->start_date;
+        $end_date = $request->end_date;
         $rider_id = auth()->guard('rider-api')->user()->id;
-        $orders = $this->orderRepository->getOrderHistoryList($rider_id);
+        $orders = $this->orderRepository->getOrderHistoryList($rider_id, $start_date, $end_date, $page);
         return response()->json(['data' => $orders, 'message' => 'Successfully Get Upcoming Order List By Rider', 'status' => 'success'], 200);
     }
 

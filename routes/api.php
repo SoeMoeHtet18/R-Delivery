@@ -72,8 +72,8 @@ Route::middleware('auth:rider-api')->group(function() {
     Route::get('order-count-by-rider-id', [OrderApiController::class, 'getOrderCountByRiderID']);
     Route::post('order-total-amount-by-rider-id', [OrderApiController::class, 'getOrderTotalAmountByRiderID']);
     Route::get('get-one-day-order-list-by-rider', [OrderApiController::class, 'getOneDayOrderListByRider']);
-    Route::get('get-upcoming-order-list-by-rider', [OrderApiController::class, 'getUpcomingOrderListByRider']);
-    Route::get('get-order-history-list-by-rider', [OrderApiController::class, 'getOrderHistoryListByRider']);
+    Route::get('get-upcoming-order-list-by-rider/{page?}', [OrderApiController::class, 'getUpcomingOrderListByRider']);
+    Route::get('get-order-history-list-by-rider/{page?}', [OrderApiController::class, 'getOrderHistoryListByRider']);
     Route::get('get-order-list-count-by-rider', [OrderApiController::class, 'getOrderListCountByRiderID']);
     Route::post('upload-proof-of-payment-by-rider',[OrderApiController::class, 'uploadProofOfPaymentByRider']);
     Route::get('get-order-detail', [OrderApiController::class, 'getOrderDetail']);
@@ -82,13 +82,14 @@ Route::middleware('auth:rider-api')->group(function() {
     Route::post('make-notification-read-by-rider', [RiderApiController::class, 'makeNoticationRead']);
     Route::get('get-notification-count-by-rider', [RiderApiController::class, 'getNotificationCount']);
     Route::post('change-password-by-rider',[RiderApiController::class, 'changePassword']);
-    Route::post('update-collection-by-rider/{collection_id}', [CollectionApiController::class, 'updateCollectionByRider']);
+    Route::post('update-collection-by-rider', [CollectionApiController::class, 'updateCollectionByRider']);
     Route::get('get-collection-by-id/{collection_id}', [CollectionApiController::class, 'getCollectionById']);
     Route::post('update-schedule-date-by-rider', [OrderApiController::class, 'updateScheduleDateByRider']);
     Route::get('get-collection-list-by-rider-id', [CollectionApiController::class, 'getCollectionsByRiderId']);
     Route::post('update-payment-channel', [OrderApiController::class, 'updatePaymentChannel']);
     Route::get('get-total-collection-fees', [RiderApiController::class, 'getTotalCollectionFees']);
     Route::get('get-total-delivery-fees', [RiderApiController::class, 'getTotalDeliveryFees']);
+    Route::get('get-rider-total-salary', [RiderApiController::class, 'getRiderTotalSalary']);
 });
 
 Route::get('get-shop-list', [ShopApiController::class, 'getAllShopList']);

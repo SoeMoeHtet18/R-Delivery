@@ -13,7 +13,8 @@ class CollectionService
         $collection->total_amount       = $data['total_amount'];
         $collection->paid_amount        = $data['paid_amount'];
         $collection->collected_at       = $data['collected_at'];
-        $collection->status             = $data['status'];
+        // $collection->status             = $data['status'];
+        $collection->note             = $data['note'];
         $collection->save();
         return $collection;
     }
