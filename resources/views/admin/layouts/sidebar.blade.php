@@ -35,10 +35,10 @@
                     <span class="title">Order</span>
                 </a>
             </li>
-            <li class="@if(request()->is('delivery-types*')) {{'active'}} @endif">
-                <a href="{{route('delivery-types.index')}}">
+            <li class="@if(request()->is('collections*')) {{'active'}} @endif">
+                <a href="{{route('collections.index')}}">
                     <!-- <i class="fa fa-users"></i> -->
-                    <span class="title">Delivery Type</span>
+                    <span class="title">Collections</span>
                 </a>
             </li>
             <li>
@@ -95,6 +95,12 @@
                         <a href="{{route('itemtypes.index')}}">
                             <!-- <i class="fa fa-users"></i> -->
                             <span class="title">Item Type</span>
+                        </a>
+                    </li>
+                    <li class="@if(request()->is('delivery-types*')) {{'active'}} @endif">
+                        <a href="{{route('delivery-types.index')}}">
+                            <!-- <i class="fa fa-users"></i> -->
+                            <span class="title">Delivery Type</span>
                         </a>
                     </li>
                     <!-- <li class="@if(request()->is('payment-types*')) {{'active'}} @endif">

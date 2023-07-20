@@ -41,6 +41,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/riders', RiderController::class);
     Route::get('/riders/get-pending-orders-by-rider-id/{id}', [OrderController::class, 'getPendingOrdersTableByRiderID']);
     Route::get('/riders/get-order-history-by-rider-id/{id}', [OrderController::class, 'getOrderHistoryTableByRiderID']);
+    Route::get('/riders/get-collection-by-rider-id/{id}', [CollectionController::class, 'getCollectionByRiderID']);
     Route::get('/riders/{id}/assign-township', [RiderController::class, 'assignTownship']);
     Route::put('/riders/{id}/assign-township', [RiderController::class, 'assignTownshipToRider']);
     Route::resource('/shopusers', ShopUserController::class);
@@ -53,6 +54,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/shops/get-shop-orders-by-shop-id/{id}', [OrderController::class, 'getShopOrdersTable']);
     Route::get('/shops/{id}/get-shop-payment-by-shop-id', [ShopPaymentController::class, 'getShopPaymentTableByShopID']);
     Route::get('/shops/{id}/get-transactions-for-shop-by-shop-id', [TransactionsForShopController::class, 'getTransactionsTableByShopID']);
+    Route::get('/shops/{id}/get-collections-for-shop-by-shop-id', [CollectionController::class, 'getCollectionsTableByShopID']);
     Route::resource('/orders', OrderController::class);
     Route::get('/order-create-by-shop-id', [OrderController::class, 'createByShopID']);
     Route::get('/orders/{id}/assign-rider', [OrderController::class, 'assignRider']);
@@ -88,6 +90,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/orders/{id}/change-status', [OrderController::class, 'changeStatus']);
     Route::get('/generate-pdf', [OrderController::class, 'generatePDF']);
     Route::resource('/collection-groups', CollectionGroupController::class);
+    Route::resource('/collections', CollectionController::class);
+    Route::get('/ajax-get-collection-data', [CollectionController::class, 'getAjaxCollections']);
     Route::get('/ajax-get-collection-groups-data', [CollectionGroupController::class, 'getAjaxCollectionGroups']);
     Route::get('/ajax-get-collections-data-for-shops', [CollectionController::class, 'getAjaxCollectionsForShops']);
     Route::get('/get-collection-list-by-rider-id', [CollectionController::class, 'getCollectionListByRiderId']);

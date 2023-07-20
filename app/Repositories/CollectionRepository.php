@@ -37,4 +37,35 @@ class CollectionRepository
         $collections = Collection::where('shop_id', $shop_id);
         return $collections;
     }
+
+    public function getAllCollections()
+    {
+        $collections = Collection::get();
+        return $collections;
+    }
+
+    public function getAllCollectionsQuery()
+    {
+        $query = Collection::select('*');
+        return $query;
+    }
+
+    public function getCollectionsByID($id)
+    {
+        $deliveryType = Collection::findOrFail($id);
+        return $deliveryType;
+    }
+
+    public function getCollectionsQueryByShopID($id) 
+    {
+        $query = Collection::where('shop_id',$id);
+        return $query;
+    }
+
+    public function getCollectionsQueryByRiderID($id)
+    {
+        $query = Collection::where('rider_id',$id);
+        return $query;
+    }
+
 }
