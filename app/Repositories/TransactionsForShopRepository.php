@@ -41,4 +41,22 @@ class TransactionsForShopRepository
         $query = TransactionsForShop::where('shop_id',$id)->leftJoin('users','users.id','transactions_for_shops.paid_by')->select('transactions_for_shops.*','users.name as paid_by');
         return $query;
     }
+
+    public function getPaidAmountByShopUser($shop_id)
+    {
+        $paid_credit = TransactionsForShop::where('shop_id',$shop_id)->sum('amount');
+        return $paid_credit;
+    }
+
+    public function getPaymentHistoryForShop($shop_id)
+    {
+        $payment_histories = TransactionsForShop::where('shop_id',$shop_id)
+            ->orderByDesc('created_at')
+            ->select('amount as paid_amount','created_at')
+            ->get();
+        foreach($payment_histories as $payment_history) {
+            $payment_history->type = 'company';
+        }
+        return $payment_histories;
+    }
 }

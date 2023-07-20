@@ -58,6 +58,8 @@ Route::middleware('auth:shop-user-api')->group( function () {
     Route::post('change-password-by-shop-user',[ShopUserApiController::class, 'changePassword']);
     Route::post('create-collection-by-shop-user',[CollectionApiController::class, 'createCollectionByShopUser']);
     Route::get('get-collections-by-shop-user', [CollectionApiController::class, 'getAllCollectionsByShopUser']);
+    Route::get('get-payment-credits-by-shop-user', [ShopApiController::class, 'getPaymentCreditForShop']);
+    Route::get('get-payment-history-by-shop-user', [ShopApiController::class, 'getPaymentHistoryForShop']);
 });
 Route::post('rider-login', [RiderApiController::class, 'riderLoginApi']);
 Route::post('rider/create', [RiderApiController::class, 'create']);
