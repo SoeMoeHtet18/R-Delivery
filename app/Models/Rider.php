@@ -23,4 +23,9 @@ class Rider extends Authenticatable
     {
         return $this->morphToMany(Notification::class, 'notifiable');
     }
+
+    public function deficits()
+    {
+        return $this->hasMany(Deficit::class);
+    }
 }

@@ -14,16 +14,16 @@ class Collection extends Model
 
     public function collectionGroup() 
     {
-        $this->belongsToMany(CollectionGroup::class, 'collection_group_id', 'id')->withTrashed();
+        return $this->belongsToMany(CollectionGroup::class, 'collection_group_id', 'id')->withTrashed();
     }
 
     public function shop() 
     {
-        $this->belongsTo(Shop::class, 'shop_id', 'id')->withTrashed();
+        return $this->belongsTo(Shop::class, 'shop_id', 'id')->withTrashed();
     }
 
     public function rider()
     {
-        $this->belongsTo(Rider::class, 'rider_id', 'id')->withTrashed();
+        return $this->belongsTo(Rider::class, 'rider_id', 'id')->withTrashed();
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Requests\RiderCreateApiRequest;
 use App\Http\Requests\RiderLoginApiRequest;
 use App\Http\Requests\RiderUpdateApiRequest;
 use App\Models\Collection;
+use App\Models\Deficit;
 use App\Models\Order;
 use App\Models\Rider;
 use App\Repositories\NotificationRepository;
@@ -196,5 +197,32 @@ class RiderApiController extends Controller
             $total_deli_fees = $rider_fees * $order_count;
             return response()->json(['data' => $total_deli_fees, 'message' => 'Successfully Get Total Delivery Fees of Rider', 'status' => 'success'], 200);
         }
+    }
+
+    public function getRiderTotalSalary()
+    {
+        $rider = auth()->guard('rider-api')->user();
+        $rider_fees = $rider->townships->first()->pivot->rider_fees;
+        if($rider->salary_type == 'daily') {
+            $currentDate = Carbon::now()->format('Y-m-d');
+            $order_count = Order::where('rider_id',$rider->id)->where('status','delivered')->whereDate('schedule_date', $currentDate)->count();
+            $collection_count = Collection::where('rider_id',$rider->id)->whereDate('collected_at', $currentDate)->count();
+            $deficit_fees = Deficit::where('rider_id',$rider->id)->whereDate('created_at',$currentDate)->sum('total_amount'); 
+        } else {
+            $startDate = Carbon::now()->startOfMonth()->format('Y-m-d');
+            $endDate = Carbon::now()->endOfMonth()->format('Y-m-d');
+            $order_count = Order::where('rider_id', $rider->id)->where('status','delivered')->whereBetween('schedule_date', [$startDate, $endDate])->count();
+            $collection_count = Collection::where('rider_id', $rider->id)->whereBetween('collected_at', [$startDate, $endDate])->count();
+            $deficit_fees = Deficit::where('rider_id',$rider->id)->whereBetween('created_at',[$startDate, $endDate])->sum('total_amount');
+        }
+        $total_collection_fees = $rider_fees * $collection_count;
+        $total_deli_fees = $rider_fees * $order_count;
+        $total_salary    = ($total_collection_fees + $total_deli_fees + $rider->base_salary) - $deficit_fees;
+        $data = [];
+        $data['total_salary'] = $total_salary;
+        $data['deficit_fees'] = $deficit_fees;
+        $data['collection_count'] = $collection_count;
+        $data['order_count'] = $order_count;
+        return response()->json(['data' => $data, 'message' => 'Successfully Get Total Salary for Rider', 'status' => 'success'], 200);
     }
 }

@@ -18,8 +18,9 @@ class CollectionApiController extends Controller
         $this->collectionService    = $collectionService;
     }
 
-    public function updateCollectionByRider(Request $request,$collection_id) {
+    public function updateCollectionByRider(Request $request) {
         $data = $request->all();
+        $collection_id = $request->collection_id;
         $collection = $this->collectionService->updateCollectionByRider($data, $collection_id);
         return response()->json(['data' => $collection, 'message' => 'Successfully Updated Collection By Rider', 'status' => 'success'], 200);
     }
@@ -31,6 +32,7 @@ class CollectionApiController extends Controller
 
     public function getCollectionsByRiderId() {
         $rider_id = auth()->guard('rider-api')->user()->id;
+        // dd($rider_id);
         $collections = $this->collectionRepository->getCollectionsByRiderId($rider_id);
         return response()->json(['data' => $collections, 'message' => 'Successfully Get Collection list By Rider ID', 'status' => 'success'], 200);
     }
