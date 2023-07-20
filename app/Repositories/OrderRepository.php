@@ -307,4 +307,13 @@ class OrderRepository
             ->select('orders.*', 'townships.name as township_name', 'shops.name as shop_name', 'riders.name as rider_name', 'cities.name as city_name');
         return $query;
     }
+
+    public function getTotalCreditForShop($shop_id)
+    {
+        $total_credit = Order::where('shop_id', $shop_id)
+            ->where('status','success')
+            ->where('payment_method', 'cash_on_delivery')
+            ->sum('total_amount');
+        return $total_credit;
+    }
 }
