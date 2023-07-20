@@ -31,4 +31,42 @@ class CollectionService
         $collection->save();
         return $collection;
     }
+
+    public function saveCollectionData($data)
+    {
+        $collection = new Collection();
+        $collection->total_quantity =  $data['total_quantity'];
+        $collection->total_amount =  $data['total_amount'];
+        $collection->paid_amount =  $data['paid_amount'];
+        $collection->rider_id =  $data['rider_id'];
+        $collection->shop_id =  $data['shop_id'];
+        $collection->assigned_at =  $data['assigned_at'];
+        $collection->collected_at =  $data['collected_at'];
+        $collection->note =  $data['note'];
+        $collection->status =  $data['status'];
+        $collection->is_payable =  false;
+        $collection->save();
+        return $collection;
+    }
+
+    public function updateCollectionByID($data, $collection)
+    {
+        $collection->total_quantity =  $data['total_quantity'];
+        $collection->total_amount =  $data['total_amount'];
+        $collection->paid_amount =  $data['paid_amount'];
+        $collection->rider_id =  $data['rider_id'];
+        $collection->shop_id =  $data['shop_id'];
+        $collection->assigned_at =  $data['assigned_at'];
+        $collection->collected_at =  $data['collected_at'];
+        $collection->note =  $data['note'];
+        $collection->status =  $data['status'];
+        $collection->is_payable =  false;
+        $collection->save();
+        return $collection;
+    }
+
+    public function deleteCollectionByID($id)
+    {
+        Collection::destroy($id);
+    }
 }

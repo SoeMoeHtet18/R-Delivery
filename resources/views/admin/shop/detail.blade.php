@@ -58,6 +58,14 @@
                     {{ $shop->payable_amount }}
                 </div>
             </div>
+            <div class="row m-0 mb-3">
+                <div class="col-2">
+                    <h4>Remaining Amuount <b>:</b></h4>
+                </div>
+                <div class="col-10">
+                    {{ $remainig_amount }}
+                </div>
+            </div>
         </div>
 
         <hr>
@@ -73,6 +81,9 @@
             </li>
             <li>
                 <a href="#payment-for-shop-display" id="payment-for-shop-tab" class="nav-link" data-toggle="tab">Transactions For Shop</a>
+            </li>
+            <li>
+                <a href="#collection-for-shop-display" id="collection-for-shop-tab" class="nav-link" data-toggle="tab">Collections For Shop</a>
             </li>
         </ul>
         <input type="hidden" id="current_screen" value="shop-user-display">
@@ -182,6 +193,38 @@
                                 <th>Paid By</th>
                                 <th>Description</th>
                                 <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="collection-for-shop-display" class="portlet box green tab-pane">
+                <div class="portlet-title">
+                    <div class="caption">Collections For Shop Lists</div>
+                </div>
+                <div class="portlet-body">
+                    <div class="create-button pb-5">
+                        <a href="{{url('/transactions-for-shop-create-by-shop-id')}}?shop_id={{$shop->id}}" class="btn create-btn">Add New Collection</a>
+                    </div>
+                    <table id="collection-for-shop-datatable" class="table table-striped table-hover table-responsive datatable">
+                        <thead>
+                            <tr>
+                            <th>#</th>
+                            <th>Total Quantity</th>
+                            <th>Total Amount</th>
+                            <th>Paid Amount</th>
+                            <th>Collection Group Id</th>
+                            <th>Rider Id</th>
+                            <th>Shop Id</th>
+                            <th>Assigned At</th>
+                            <th>Collected At</th>
+                            <th>Note</th>
+                            <th>Status</th>
+                            <th>Is payable</th>
+                            <th>Created At</th>
+                            <th>Updated At</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -396,6 +439,9 @@
                         if (row.status == 'cancel_request') {
                             return 'Cancel Request';
                         }
+                        if (row.status == 'in-warehouse') {
+                                return "In Warehouse";
+                            }
                     },
                     "targets": 13
                 },
@@ -525,6 +571,71 @@
                 },
                 "targets": 2
             }, ]
+        });
+        // Initialize collection-for-shop-datatable
+        $("#collection-for-shop-datatable").DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "/shops/" + shop_id + "/get-collections-for-shop-by-shop-id",
+            columns: [{
+                    data: 'DT_RowIndex',
+                    name: 'id'
+                },
+                {
+                    data: 'total_quantity',
+                    name: 'total_quantity'
+                },
+                {
+                    data: 'total_amount',
+                    name: 'total_amount',
+                },
+                {
+                    data: 'paid_amount',
+                    name: 'paid_amount',
+                },
+                {
+                    data: 'collection_group_id',
+                    name: 'collection_group_id',
+                },
+                {
+                    data: 'rider_id',
+                    name: 'rider_id',
+                },
+                {
+                    data: 'shop_id',
+                    name: 'shop_id',
+                },
+                {
+                    data: 'assigned_at',
+                    name: 'assigned_at',
+                },
+                {
+                    data: 'collected_at',
+                    name: 'collected_at',
+                },
+                {
+                    data: 'note',
+                    name: 'note',
+                },
+                {
+                    data: 'status',
+                    name: 'status',
+                },
+                {
+                    data: 'is_payable',
+                    name: 'is_payable',
+                },
+                {
+                    data: 'created_at',
+                    name: 'created_at',
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false
+                },
+            ],
         });
     });
 </script>

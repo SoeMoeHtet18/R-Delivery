@@ -104,6 +104,9 @@
             <li class="nav-item">
                 <a href="#order-history-display" id="order-history-tab" class="nav-link" data-toggle="tab">Orders History</a>
             </li>
+            <li class="nav-item">
+                <a href="#collection-display" id="collection-tab" class="nav-link" data-toggle="tab">Collections</a>
+            </li>
         </ul>
         <input type="hidden" id="current_screen" value="pending-order-tab">
         <div class="tab-content">
@@ -166,6 +169,37 @@
                                 <th>Type</th>
                                 <th>Collection Method</th>
                                 <th>Last Updated By</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="collection-display" class="portlet box green tab-pane">
+                <div class="portlet-title">
+                    <div class="caption">Pending Orders</div>
+                </div>
+                <div class="portlet-body">
+                    <table id="collection-datatable" class="table table-striped table-hover table-responsive datatable">
+                        <thead>
+                            <tr>
+                            <th>#</th>
+                            <th>Total Quantity</th>
+                            <th>Total Amount</th>
+                            <th>Paid Amount</th>
+                            <th>Collection Group Id</th>
+                            <th>Rider Id</th>
+                            <th>Shop Id</th>
+                            <th>Assigned At</th>
+                            <th>Collected At</th>
+                            <th>Note</th>
+                            <th>Status</th>
+                            <th>Is payable</th>
+                            <th>Created At</th>
+                            <th>Updated At</th>
                             </tr>
                         </thead>
 
@@ -415,6 +449,68 @@
                     "targets": 15
                 },
             ]
+        });
+        $('#collection-datatable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "/riders/get-collection-by-rider-id/" + rider_id,
+            columns: [{
+                    data: 'DT_RowIndex',
+                    name: 'id'
+                },
+                {
+                    data: 'total_quantity',
+                    name: 'total_quantity'
+                },
+                {
+                    data: 'total_amount',
+                    name: 'total_amount',
+                },
+                {
+                    data: 'paid_amount',
+                    name: 'paid_amount',
+                },
+                {
+                    data: 'collection_group_id',
+                    name: 'collection_group_id',
+                },
+                {
+                    data: 'rider_id',
+                    name: 'rider_id',
+                },
+                {
+                    data: 'shop_id',
+                    name: 'shop_id',
+                },
+                {
+                    data: 'assigned_at',
+                    name: 'assigned_at',
+                },
+                {
+                    data: 'collected_at',
+                    name: 'collected_at',
+                },
+                {
+                    data: 'note',
+                    name: 'note',
+                },
+                {
+                    data: 'status',
+                    name: 'status',
+                },
+                {
+                    data: 'is_payable',
+                    name: 'is_payable',
+                },
+                {
+                    data: 'created_at',
+                    name: 'created_at',
+                },
+                {
+                    data: 'updated_at',
+                    name: 'updated_at',
+                },
+            ],
         });
     });
 </script>
