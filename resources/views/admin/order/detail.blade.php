@@ -131,7 +131,7 @@
                     <h4>Item Type <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    {{ $order->item_type->name }}
+                    {{ $order->item_types->name }}
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -185,6 +185,18 @@
                     <img src="{{asset('/storage/customer payment/' . $order->proof_of_payment)}}" alt="" style="width: 200px;">
                 </div>
             </div>
+            @if($order->payment_channel != null && $order->payment_channel == 'online_payment' && $order->is_payment_channel_confirm == false)
+            <div class="row m-0 mb-3">
+                <div class="col-2">
+                    <h4>Payment Channel Confirm <b>:</b></h4>
+                </div>
+                <div class="col-10">
+                    <div class="create-button">
+                        <a href="/payment-channel-confirm/{{$order->id}}" class="btn create-btn" style="width: 100px;">Confirm</a>
+                    </div>
+                </div>
+            </div>
+            @endif
         </div>
 
     </div>

@@ -493,4 +493,10 @@ class OrderController extends Controller
             ->orderColumn('id', '-orders.id')
             ->make(true);
     }
+
+    public function confirmPaymentChannel($id) {
+        $order = $this->orderRepository->getOrderByID($id); 
+        $this->orderService->confirmPaymentChannel($order);
+        return redirect('/orders/' . $id);
+    }
 }
