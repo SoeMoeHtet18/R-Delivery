@@ -21,12 +21,30 @@ class CollectionGroupService
             $shopIds = $data['shop_id'];
             foreach ($shopIds as $shopId) {
                 $collections[] = [
-                    'collection_group_id' => $collectionGroup->id,
+                    'collection_group_id' => $collectionGroup->id, 
                     'shop_id' => $shopId
                 ];
             }    
         }
         Collection::insert($collections);
+        return $collectionGroup;
+    }
+
+    public function saveCollectionGroup($data)
+    {
+        $collectionGroup = CollectionGroup::create([
+            'total_amount' => $data['total_amount'],
+            'rider_id' => $data['rider_id'],
+            'assigned_date' => $data['assigned_date']
+        ]);
+
+        $collections = [];
+        if(isset($data['collection_id'])) {
+            $collectionIds = $data['collection_id'];
+            foreach ($collectionIds as $collectionId) {
+                $collection = Collection::where('id', $collectionId)->update(['collection_group_id' => $collectionGroup->id]);
+            }    
+        }
         return $collectionGroup;
     }
 

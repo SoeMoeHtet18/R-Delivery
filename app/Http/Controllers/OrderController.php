@@ -565,4 +565,18 @@ class OrderController extends Controller
                 ->orderColumn('id', '-orders.id')
                 ->make(true);
     }
+
+    public function confirmRemainingAmount($id) {
+
+        $order = $this->orderRepository->getOrderByID($id); 
+        $this->orderService->confirmRemainingAmount($order);
+        return redirect('/orders/' . $id);
+    }
+
+    public function cancelRemainingAmount($id) {
+
+        $order = $this->orderRepository->getOrderByID($id); 
+        $this->orderService->cancelRemainingAmount($order);
+        return redirect('/orders/' . $id);
+    }
 }

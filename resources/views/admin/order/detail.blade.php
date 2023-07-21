@@ -2,6 +2,16 @@
 @section('title','Dashboard')
 @section('sub-title','Order Detail')
 @section('content')
+<style>
+    .yes-btn{
+        background-color: green;
+        color: white;
+    }
+    .no-btn{
+        background-color: red;
+        color: white;
+    }
+</style>
 <div class="card card-container detail-card">
     <div class="card-body">
         <h2 class="ps-1 card-header-title">
@@ -205,6 +215,17 @@
                 </div>
                 <div class="col-10">
                     {{ $order->note }}
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <div class="col-2">
+                    <h4>Remaining Amount Substraction <b>:</b></h4> 
+                </div>
+                <div class="col-10">
+                <div class="create-button">
+                    <a href="{{route('orders.show' , $order->id)}}" class="btn btn-light yes-btn ">Yes</a>
+                    <a href="{{route('orders.show' , $order->id)}}" class="btn btn-light no-btn">No</a>
+                </div>
                 </div>
             </div>
         </div>

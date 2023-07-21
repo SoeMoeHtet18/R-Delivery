@@ -156,7 +156,7 @@
                     <select name="item_type_id" id="item_type_id" class="form-control">
                         <option value="" selected disabled>Select Item Type for This Order</option>
                         @foreach($item_types as $item_type)
-                        <option value="{{$item_type->id}}" @if($order->item_type == $item_type->id) {{'selected'}} @endif>{{$item_type->name}}</option>
+                        <option value="{{$item_type->id}}" @if($order->item_type_id == $item_type->id) {{'selected'}} @endif>{{$item_type->name}}</option>
                         @endforeach
                     </select>
                 </div>

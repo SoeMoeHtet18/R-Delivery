@@ -90,6 +90,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/orders/{id}/change-status', [OrderController::class, 'changeStatus']);
     Route::get('/generate-pdf', [OrderController::class, 'generatePDF']);
     Route::resource('/collection-groups', CollectionGroupController::class);
+    Route::get('/ajax-get-collection-groups', [CollectionGroupController::class, 'getAjaxCollectionGroupsdata']);
     Route::resource('/collections', CollectionController::class);
     Route::get('/ajax-get-collection-data', [CollectionController::class, 'getAjaxCollections']);
     Route::get('/ajax-get-collection-groups-data', [CollectionGroupController::class, 'getAjaxCollectionGroups']);
@@ -97,6 +98,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/get-collection-list-by-rider-id', [CollectionController::class, 'getCollectionListByRiderId']);
     Route::resource('/delivery-types', DeliveryTypeController::class);
     Route::get('/ajax-get-delivery-types', [DeliveryTypeController::class, 'getDeliveryTypes']);
+    Route::get('/remaining-amount-confirm/{order_id}', [OrderController::class, 'confirmRemainingAmount']);
+    Route::get('/remaining-amount-cancel/{order_id}', [OrderController::class, 'cancelRemainingAmount']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

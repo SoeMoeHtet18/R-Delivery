@@ -37,6 +37,6 @@ class Order extends Model
 
     public function itemType()
     {
-        return $this->belongsTo(ItemType::class, 'item_type', 'id')->withTrashed();
+        return $this->belongsTo(ItemType::class, 'item_type_id', 'id')->withTrashed();
     }
 }

@@ -41,6 +41,12 @@
                     <span class="title">Collections</span>
                 </a>
             </li>
+            <li class="@if(request()->is('collection_groups*')) {{'active'}} @endif">
+                <a href="{{route('collection-groups.index')}}">
+                    <!-- <i class="fa fa-users"></i> -->
+                    <span class="title">Collection Group</span>
+                </a>
+            </li>
             <li>
                 <a id="paymentBoxCollapse" data-bs-toggle="collapse" href="#paymentBox" role="button" aria-expanded="false" aria-controls="collapseExample">
                     <span class="title">Payments<span class="arrow"></span></span>
