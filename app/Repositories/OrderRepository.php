@@ -36,21 +36,26 @@ class OrderRepository
         return $data;
     }
 
-    public function getOrdersByShopID($id, $status)
+    public function getOrdersByShopID($id, $status, $start_date, $end_date, $page)
     {
+        $limit = 10; 
+        $offset = ($page - 1) * $limit;
         if ($status == 'success') {
-            $order = Order::where('shop_id', $id)->where('status', 'success')
-                ->orderBy('id', 'desc')
-                ->get();
+            $order = Order::where('shop_id', $id)
+                ->where('status', 'success');
         } else if ($status == 'canceled') {
-            $order = Order::where('shop_id', $id)->where('status', 'cancel')
-                ->orderBy('updated_at', 'desc')
-                ->get();
+            $order = Order::where('shop_id', $id)
+                ->where('status', 'cancel');
         } else {
-            $order = Order::where('shop_id', $id)->where('status', 'pending')->orWhere('status', 'delay')->orWhere('status', 'cancel_request')
-                ->orderBy('id', 'desc')
-                ->get();
+            $order = Order::where('shop_id', $id)
+                ->whereNot('status', 'success')
+                ->whereNot('status', 'cancel');
         }
+        if($start_date != 'null' && $end_date != 'null') {
+            $order = $order->whereBetween('orders.schedule_date', [$start_date, $end_date]);
+        }
+
+        $order = $order->offset($offset)->limit($limit)->orderBy('id','DESC')->get();
         return $order;
     }
 
@@ -62,24 +67,24 @@ class OrderRepository
 
     public function getOrdersStatusCountByShopID($shop_id)
     {
-        $status = ['pending', 'success', 'delay', 'cancel', 'cancel_request'];
-        $orders = Order::where('shop_id', $shop_id)
-            ->select('status', DB::raw('count(*) as count'))
-            ->whereIn('status', $status)
-            ->groupBy('status')
-            ->get();
-        $count = [];
-        foreach ($status as $s) {
-            $count[$s] = 0;
-        }
+        $count = Order::selectRaw('COUNT(*) as total_order')
+            ->selectRaw('COUNT(CASE WHEN status NOT IN ("success", "cancel") THEN 1 END) as on_going')
+            ->selectRaw('COUNT(CASE WHEN status = "success" THEN 1 END) as success')
+            ->selectRaw('COUNT(CASE WHEN status = "cancel" THEN 1 END) as cancel')
+            ->where('shop_id', $shop_id)
+            ->first();
 
-        foreach ($orders as $order) {
-            $count[$order->status] = $order->count;
-        }
+        // Convert the results to an associative array
+        $result = [
+            'on_going' => $count->on_going ?? 0,
+            'success' => $count->success ?? 0,
+            'cancel' => $count->cancel ?? 0,
+            'total_order' => $count->total_order ?? 0,
+        ];
 
-        $count['total_order'] = array_sum($count);
-        return $count;
+        return $result;
     }
+
 
     public function getOrdersTotalAmountByShopID($shop_id)
     {

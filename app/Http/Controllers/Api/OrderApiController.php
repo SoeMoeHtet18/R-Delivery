@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
+use App\Repositories\CollectionRepository;
 use App\Repositories\OrderRepository;
+use App\Repositories\TransactionsForShopRepository;
 use App\Services\OrderService;
 use Illuminate\Http\Request;
 
@@ -12,11 +14,15 @@ class OrderApiController extends Controller
 {
     protected $orderRepository;
     protected $orderService;
+    protected $collectionRepository;
+    protected $transactionForShopRepository;
 
-    public function __construct(OrderRepository $orderRepository, OrderService $orderService)
+    public function __construct(OrderRepository $orderRepository, OrderService $orderService, CollectionRepository $collectionRepository, TransactionsForShopRepository $transactionForShopRepository)
     {
         $this->orderRepository = $orderRepository;
         $this->orderService = $orderService;
+        $this->collectionRepository = $collectionRepository;
+        $this->transactionForShopRepository = $transactionForShopRepository;
     }
 
     public function getOrderCode(Request $request)
@@ -50,9 +56,13 @@ class OrderApiController extends Controller
     {
         $shop_user = auth()->guard('shop-user-api')->user();
         $shop_id   = $shop_user->shop_id;
-        $total_amount = $this->orderRepository->getOrdersTotalAmountByShopID($shop_id);
-        $total_amount['total_amount'] = $total_amount['total_amount'] ?? '0.00';
-        return response()->json(['data' => $total_amount['total_amount'], 'message' => 'Successfully Get Orders Total Amount By Shop ID', 'status' => 'success'], 200);
+        $total_credit = $this->orderRepository->getTotalCreditForShop($shop_id);
+
+        $paid_credit_from_collection = $this->collectionRepository->getPaidAmountByShopUser($shop_id);
+        $paid_credit_from_transaction = $this->transactionForShopRepository->getPaidAmountByShopUser($shop_id);
+        $total_amount = strval($total_credit - ($paid_credit_from_collection + $paid_credit_from_transaction));
+        
+        return response()->json(['data' => $total_amount, 'message' => 'Successfully Get Orders Total Amount By Shop ID', 'status' => 'success'], 200);
     }
 
     public function getOrderCountByRiderID()
