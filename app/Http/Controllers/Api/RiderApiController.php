@@ -10,6 +10,7 @@ use App\Models\Collection;
 use App\Models\Deficit;
 use App\Models\Order;
 use App\Models\Rider;
+use App\Models\RiderPayment;
 use App\Repositories\NotificationRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\RiderRepository;
@@ -224,5 +225,13 @@ class RiderApiController extends Controller
         $data['collection_count'] = $collection_count;
         $data['order_count'] = $order_count;
         return response()->json(['data' => $data, 'message' => 'Successfully Get Total Salary for Rider', 'status' => 'success'], 200);
+    }
+
+    public function getRiderPaymentHistory($page = 1) {
+        $rider = auth()->guard('rider-api')->user();
+        $limit = 10; 
+        $offset = ($page - 1) * $limit; 
+        $riderPayments = RiderPayment::where('rider_id',$rider->id)->offset($offset)->limit($limit)->orderBy('id','DESC')->get();
+        return response()->json(['data' => $riderPayments, 'message' => 'Successfully Get Rider Payment History', 'status' => 'success'], 200);
     }
 }
