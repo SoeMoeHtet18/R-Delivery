@@ -131,11 +131,7 @@
                     <h4>Item Type <b>:</b></h4>
                 </div>
                 <div class="col-10">
-<<<<<<< HEAD
                     {{ $order->itemType->name }}
-=======
-                    {{ $order->item_types->name }}
->>>>>>> feature/remaining-feature-for-rider
                 </div>
             </div>
             <div class="row m-0 mb-3">
