@@ -18,6 +18,12 @@ class CollectionGroupRepository
         return $collectionGroups;
     }
 
+    public function getAllCollectionGroupData()
+    {
+        $collectionGroups = CollectionGroup::select('*');
+        return $collectionGroups;
+    }
+
     public function getAllCollectionGroupsQuery()
     {
         $collectionGroups = CollectionGroup::leftJoin('riders', 'riders.id', 'collection_groups.rider_id')

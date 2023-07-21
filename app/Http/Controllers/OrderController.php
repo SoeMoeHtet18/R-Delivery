@@ -571,4 +571,18 @@ class OrderController extends Controller
         $this->orderService->confirmPaymentChannel($order);
         return redirect('/orders/' . $id);
     }
+
+    public function confirmRemainingAmount($id) {
+
+        $order = $this->orderRepository->getOrderByID($id); 
+        $this->orderService->confirmRemainingAmount($order);
+        return redirect('/orders/' . $id);
+    }
+
+    public function cancelRemainingAmount($id) {
+
+        $order = $this->orderRepository->getOrderByID($id); 
+        $this->orderService->cancelRemainingAmount($order);
+        return redirect('/orders/' . $id);
+    }
 }

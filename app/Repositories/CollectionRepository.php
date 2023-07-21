@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Collection;
+use App\Models\CollectionGroup;
 
 class CollectionRepository
 {   
@@ -43,6 +44,18 @@ class CollectionRepository
     public function getAllCollections()
     {
         $collections = Collection::get();
+        return $collections;
+    }
+
+    public function getAllCollectionByCollectionGroupId($id)
+    {
+        $collections = Collection::where('collection_group_id', $id)->get();
+        return $collections;
+    }
+
+    public function getAllCollectionsWithoutRider()
+    {
+        $collections = Collection::whereNull('rider_id')->get();
         return $collections;
     }
 
