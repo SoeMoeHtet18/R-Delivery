@@ -185,7 +185,6 @@
                     <img src="{{asset('/storage/customer payment/' . $order->proof_of_payment)}}" alt="" style="width: 200px;">
                 </div>
             </div>
-<<<<<<< HEAD
             <div class="row m-0 mb-3">
                 <div class="col-2">
                     <h4>Payment Method <b>:</b></h4>
@@ -208,7 +207,6 @@
                     {{ $order->note }}
                 </div>
             </div>
-=======
             @if($order->payment_channel != null && $order->payment_channel == 'online_payment' && $order->is_payment_channel_confirm == false)
             <div class="row m-0 mb-3">
                 <div class="col-2">
@@ -221,7 +219,6 @@
                 </div>
             </div>
             @endif
->>>>>>> feature/remaining-feature-for-rider
         </div>
 
     </div>
