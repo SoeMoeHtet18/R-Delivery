@@ -184,7 +184,7 @@ class OrderRepository
 
     public function getOrderHistoryList($rider_id, $start_date, $end_date, $page)
     {
-        $limit = 7; 
+        $limit = 10; 
         $offset = ($page - 1) * $limit; 
         $currentDate = Carbon::now()->format('Y-m-d');
         $orders = Order::where('orders.rider_id', $rider_id)
