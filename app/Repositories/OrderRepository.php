@@ -51,6 +51,16 @@ class OrderRepository
                 ->whereNot('status', 'success')
                 ->whereNot('status', 'cancel');
         }
+        
+        $order->leftJoin('cities', 'cities.id', 'orders.city_id')
+            ->leftJoin('townships', 'townships.id', 'orders.township_id')
+            ->leftJoin('item_types', 'item_types.id', 'orders.item_type_id')
+            ->leftJoin('delivery_types', 'delivery_types.id', 'orders.delivery_type_id')
+            ->select('orders.*', 'cities.name as city_name', 
+                'townships.name as township_name', 
+                'item_types.name as item_type_name', 
+                'delivery_types.name as delivery_type_name');
+
         if($start_date != 'null' && $end_date != 'null') {
             $order = $order->whereBetween('orders.schedule_date', [$start_date, $end_date]);
         }
