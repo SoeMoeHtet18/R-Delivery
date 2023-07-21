@@ -12,9 +12,11 @@ class CollectionRepository
         return $collection;
     }
     
-    public function getCollectionsByRiderId($rider_id) 
+    public function getCollectionsByRiderId($rider_id, $page) 
     {
-        $collections = Collection::with('shop')->where('rider_id',$rider_id)->get();
+        $limit = 10; 
+        $offset = ($page - 1) * $limit;
+        $collections = Collection::with('shop')->where('rider_id',$rider_id)->offset($offset)->limit($limit)->orderBy('id','DESC')->get();
         foreach($collections as $collection) {
             $collection['shop_name'] = $collection->shop->name;
             $collection['shop_phone_number'] = $collection->shop->phone_number;

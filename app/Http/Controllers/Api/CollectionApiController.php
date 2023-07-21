@@ -30,10 +30,10 @@ class CollectionApiController extends Controller
         return response()->json(['data' => $collection, 'message' => 'Successfully get Collection By ID', 'status' => 'success'], 200);
     }
 
-    public function getCollectionsByRiderId() {
+    public function getCollectionsByRiderId($page = 1) {
         $rider_id = auth()->guard('rider-api')->user()->id;
         // dd($rider_id);
-        $collections = $this->collectionRepository->getCollectionsByRiderId($rider_id);
+        $collections = $this->collectionRepository->getCollectionsByRiderId($rider_id, $page);
         return response()->json(['data' => $collections, 'message' => 'Successfully Get Collection list By Rider ID', 'status' => 'success'], 200);
     }
     

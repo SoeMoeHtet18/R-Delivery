@@ -187,13 +187,13 @@ class RiderApiController extends Controller
         $rider_fees = $rider->townships->first()->pivot->rider_fees;
         if($rider->salary_type == 'daily') {
             $currentDate = Carbon::now()->format('Y-m-d');
-            $order_count = Order::where('rider_id',$rider->id)->where('status','delivered')->whereDate('schedule_date', $currentDate)->count();
+            $order_count = Order::where('rider_id',$rider->id)->where('status','success')->whereDate('schedule_date', $currentDate)->count();
             $total_deli_fees = $rider_fees * $order_count;
             return response()->json(['data' => $total_deli_fees, 'message' => 'Successfully Get Total Delivery Fees of Rider', 'status' => 'success'], 200);
         } else {
             $startDate = Carbon::now()->startOfMonth()->format('Y-m-d');
             $endDate = Carbon::now()->endOfMonth()->format('Y-m-d');
-            $order_count = Order::where('rider_id', $rider->id)->where('status','delivered')->whereBetween('schedule_date', [$startDate, $endDate])->count();
+            $order_count = Order::where('rider_id', $rider->id)->where('status','success')->whereBetween('schedule_date', [$startDate, $endDate])->count();
             $total_deli_fees = $rider_fees * $order_count;
             return response()->json(['data' => $total_deli_fees, 'message' => 'Successfully Get Total Delivery Fees of Rider', 'status' => 'success'], 200);
         }
@@ -205,13 +205,13 @@ class RiderApiController extends Controller
         $rider_fees = $rider->townships->first()->pivot->rider_fees;
         if($rider->salary_type == 'daily') {
             $currentDate = Carbon::now()->format('Y-m-d');
-            $order_count = Order::where('rider_id',$rider->id)->where('status','delivered')->whereDate('schedule_date', $currentDate)->count();
+            $order_count = Order::where('rider_id',$rider->id)->where('status','success')->whereDate('schedule_date', $currentDate)->count();
             $collection_count = Collection::where('rider_id',$rider->id)->whereDate('collected_at', $currentDate)->count();
             $deficit_fees = Deficit::where('rider_id',$rider->id)->whereDate('created_at',$currentDate)->sum('total_amount'); 
         } else {
             $startDate = Carbon::now()->startOfMonth()->format('Y-m-d');
             $endDate = Carbon::now()->endOfMonth()->format('Y-m-d');
-            $order_count = Order::where('rider_id', $rider->id)->where('status','delivered')->whereBetween('schedule_date', [$startDate, $endDate])->count();
+            $order_count = Order::where('rider_id', $rider->id)->where('status','success')->whereBetween('schedule_date', [$startDate, $endDate])->count();
             $collection_count = Collection::where('rider_id', $rider->id)->whereBetween('collected_at', [$startDate, $endDate])->count();
             $deficit_fees = Deficit::where('rider_id',$rider->id)->whereBetween('created_at',[$startDate, $endDate])->sum('total_amount');
         }

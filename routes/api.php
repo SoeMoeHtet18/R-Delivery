@@ -88,7 +88,7 @@ Route::middleware('auth:rider-api')->group(function() {
     Route::post('update-collection-by-rider', [CollectionApiController::class, 'updateCollectionByRider']);
     Route::get('get-collection-by-id/{collection_id}', [CollectionApiController::class, 'getCollectionById']);
     Route::post('update-schedule-date-by-rider', [OrderApiController::class, 'updateScheduleDateByRider']);
-    Route::get('get-collection-list-by-rider-id', [CollectionApiController::class, 'getCollectionsByRiderId']);
+    Route::get('get-collection-list-by-rider-id/{page?}', [CollectionApiController::class, 'getCollectionsByRiderId']);
     Route::post('update-payment-channel', [OrderApiController::class, 'updatePaymentChannel']);
     Route::get('get-total-collection-fees', [RiderApiController::class, 'getTotalCollectionFees']);
     Route::get('get-total-delivery-fees', [RiderApiController::class, 'getTotalDeliveryFees']);

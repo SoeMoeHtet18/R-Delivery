@@ -532,37 +532,43 @@ class OrderController extends Controller
 
     public function getAjaxWarehouseOrderData(Request $request)
     {
-            $search = $request->search;
-            $rider = $request->rider;
-            $shop  = $request->shop;
-            $data = $this->orderRepository->getWarehouseOrderListQuery();
-            if ($search) {
-                $data = $data->where('orders.order_code', 'like', '%' . $search . '%')->orWhere('orders.customer_name', 'like', '%' . $search . '%')->orWhere('orders.customer_phone_number', 'like', '%' . $search . '%')->orWhere('orders.item_type', 'like', '%' . $search . '%')->orWhere('orders.full_address', 'like', '%' . $search . '%');
-            }
-            if ($rider != null) {
-                $data = $data->where('orders.rider_id', $rider);
-            }
-            if ($shop != null) {
-                $data = $data->where('orders.shop_id', $shop);
-            }
+        $search = $request->search;
+        $rider = $request->rider;
+        $shop  = $request->shop;
+        $data = $this->orderRepository->getWarehouseOrderListQuery();
+        if ($search) {
+            $data = $data->where('orders.order_code', 'like', '%' . $search . '%')->orWhere('orders.customer_name', 'like', '%' . $search . '%')->orWhere('orders.customer_phone_number', 'like', '%' . $search . '%')->orWhere('orders.item_type', 'like', '%' . $search . '%')->orWhere('orders.full_address', 'like', '%' . $search . '%');
+        }
+        if ($rider != null) {
+            $data = $data->where('orders.rider_id', $rider);
+        }
+        if ($shop != null) {
+            $data = $data->where('orders.shop_id', $shop);
+        }
 
-            return DataTables::of($data)
-                ->addIndexColumn()
-                ->addColumn('order_code', function ($data) {
-                    return '<a href="' . route("orders.show", $data->id) . '">' . $data->order_code . '</a>';
-                })
-                ->addColumn('action', function ($row) {
-                    $actionBtn = '
-                    <a href="' . route("orders.show", $row->id) . '" class="btn btn-info btn-sm">View</a> 
-                    <form action="' . route("orders.destroy", $row->id) . '" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to delete this order?`);">
-                        <input type="hidden" name="_token" value="' . csrf_token() . '">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
-                    </form>';
-                    return $actionBtn;
-                })
-                ->rawColumns(['action', 'order_code'])
-                ->orderColumn('id', '-orders.id')
-                ->make(true);
+        return DataTables::of($data)
+            ->addIndexColumn()
+            ->addColumn('order_code', function ($data) {
+                return '<a href="' . route("orders.show", $data->id) . '">' . $data->order_code . '</a>';
+            })
+            ->addColumn('action', function ($row) {
+                $actionBtn = '
+                <a href="' . route("orders.show", $row->id) . '" class="btn btn-info btn-sm">View</a> 
+                <form action="' . route("orders.destroy", $row->id) . '" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to delete this order?`);">
+                    <input type="hidden" name="_token" value="' . csrf_token() . '">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
+                </form>';
+                return $actionBtn;
+            })
+            ->rawColumns(['action', 'order_code'])
+            ->orderColumn('id', '-orders.id')
+            ->make(true);
+    }
+
+    public function confirmPaymentChannel($id) {
+        $order = $this->orderRepository->getOrderByID($id); 
+        $this->orderService->confirmPaymentChannel($order);
+        return redirect('/orders/' . $id);
     }
 }

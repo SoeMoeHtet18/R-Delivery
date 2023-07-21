@@ -97,6 +97,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/get-collection-list-by-rider-id', [CollectionController::class, 'getCollectionListByRiderId']);
     Route::resource('/delivery-types', DeliveryTypeController::class);
     Route::get('/ajax-get-delivery-types', [DeliveryTypeController::class, 'getDeliveryTypes']);
+    Route::get('/payment-channel-confirm/{order_id}', [OrderController::class, 'confirmPaymentChannel']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
