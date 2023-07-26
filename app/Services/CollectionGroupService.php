@@ -57,20 +57,13 @@ class CollectionGroupService
         ]);
         $collectionGroup->save();
 
-        $shopIds = $data['shop_id'];
-        $existingCollectionIds = $collectionGroup->collections->pluck('id')->toArray();
-
-        foreach ($shopIds as $shopId) {
-            $collection = Collection::firstOrNew([
-                'collection_group_id' => $collectionGroup->id,
-                'shop_id' => $shopId
-            ]);
-
-            if (in_array($collection->id, $existingCollectionIds)) {
-                continue;
-            }
-
-            $collection->save();
+        $collections = [];
+        if(isset($data['collection_id'])) {
+            Collection::where('collection_group_id',$collectionGroup->id)->update(['collection_group_id' => null]);
+            $collectionIds = $data['collection_id'];
+            foreach ($collectionIds as $collectionId) {
+                $collection = Collection::where('id', $collectionId)->update(['collection_group_id' => $collectionGroup->id]);
+            }    
         }
         return $collectionGroup;
     }

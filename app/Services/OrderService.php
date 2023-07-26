@@ -229,7 +229,7 @@ class OrderService
     
     public function confirmRemainingAmount($order)
     {
-        $order->is_confirm = true;
+        $order->payable_or_not = 'yes';
         $order->save();
         return $order;
     }
@@ -243,7 +243,7 @@ class OrderService
     
     public function cancelRemainingAmount($order)
     {
-        $order->is_confirm = false;
+        $order->payable_or_not = 'no';
         $order->save();
         return $order;
     }
