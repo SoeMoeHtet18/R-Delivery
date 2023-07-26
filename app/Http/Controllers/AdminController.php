@@ -7,6 +7,7 @@ use App\Http\Requests\UserUpdateRequest;
 use App\Models\User;
 use App\Repositories\AdminRepository;
 use App\Services\AdminService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
@@ -111,5 +112,40 @@ class AdminController extends Controller
                 ->addIndexColumn()
                 ->orderColumn('id', '-id $1')
                 ->make(true);
+    }
+
+    public function getNotification() 
+    {
+        $todayDate = Carbon::today()->format('Y-m-d');
+        $notifications = auth()->user()->notifications;
+        $todayNotifications = [];
+        foreach($notifications as $notification){
+            $createdAt = Carbon::parse($notification->created_at);
+            if($createdAt->isSameDay($todayDate)){
+                $notification['latest_time'] = Carbon::parse($notification->created_at)->toDateTimeString();
+                $todayNotifications[] = $notification;
+            }
+        }
+       
+        return response()->json($todayNotifications); 
+    }
+    
+    public function getNewNotification(Request $request) 
+    {
+        $lastNotificationTime = $request->input('lastNotificationTime');
+        $formattedLastNotificationTime = Carbon::parse($lastNotificationTime)->toDateTimeString();
+        // dd($formattedLastNotificationTime);
+        $notifications = auth()->user()->notifications;
+        $newNotifications = [];
+        if($lastNotificationTime != null) {
+            foreach($notifications as $notification) {
+                if($notification->created_at > $lastNotificationTime){
+                    $notification['latest_time'] = Carbon::parse($notification->created_at)->toDateTimeString();
+                    $newNotifications[] = $notification;
+                }
+            }
+        }
+        
+        return response()->json($newNotifications); 
     }
 }

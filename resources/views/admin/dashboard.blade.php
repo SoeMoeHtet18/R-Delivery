@@ -35,6 +35,18 @@
     </style>
 
     <h4 class="info-box-title"><strong>Overview</strong></h4>
+    <!-- <div class="dropdown">
+        <a class="btn btn-secondary dropdown-toggle" type="button" id="notificationDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="background: #1f1f1f; border-color : #1f1f1f;" onclick="alert('click')">
+            <i class="fa fa-bell"></i>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="notificationDropdown">
+            <div class="dropdown-header">Notifications</div>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-body" id="notificationList">
+                <a class="dropdown-item" href="#">No notifications</a>
+            </div>
+        </div>
+    </div> -->
     <section class="content">
 
         <div class="row">

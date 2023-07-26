@@ -101,6 +101,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/payment-channel-confirm/{order_id}', [OrderController::class, 'confirmPaymentChannel']);
     Route::get('/remaining-amount-confirm/{order_id}', [OrderController::class, 'confirmRemainingAmount']);
     Route::get('/remaining-amount-cancel/{order_id}', [OrderController::class, 'cancelRemainingAmount']);
+    Route::get('/get-notifications', [AdminController::class, 'getNotification']);
+    Route::get('/get-new-notifications', [AdminController::class, 'getNewNotification']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
