@@ -118,4 +118,14 @@ class NotificationService
         //     $this->attachNotification($shop_user, $notification);
         // }
     }
+
+    public function orderCreateNotificationForShopUser($shop_id)
+    {
+        $message = 'Your order is created. Please wait to be picked by our rider';
+        $notification = $this->createNotification('create', $message);
+        $shop_users = ShopUser::where('shop_id', $shop_id)->get();
+        foreach ($shop_users as $shop_user) {
+            $this->attachNotification($shop_user, $notification);
+        }
+    }
 }

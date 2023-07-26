@@ -60,6 +60,7 @@ Route::middleware('auth:shop-user-api')->group( function () {
     Route::get('get-collections-by-shop-user', [CollectionApiController::class, 'getAllCollectionsByShopUser']);
     Route::get('get-payment-credits-by-shop-user', [ShopApiController::class, 'getPaymentCreditForShop']);
     Route::get('get-payment-history-by-shop-user', [ShopApiController::class, 'getPaymentHistoryForShop']);
+    Route::get('delete-order/{id}', [OrderApiController::class, 'deleteOrderByShopUser']);
 });
 Route::post('rider-login', [RiderApiController::class, 'riderLoginApi']);
 Route::post('rider/create', [RiderApiController::class, 'create']);

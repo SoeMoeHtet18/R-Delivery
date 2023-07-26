@@ -71,11 +71,15 @@ class OrderService
         $order->item_type_id =  $data['item_type_id'] ?? null;
         $order->full_address =  $data['full_address'] ?? null;
         $order->schedule_date =  $data['schedule_date'] ?? Carbon::tomorrow();;
-        $order->type =  $data["type"];
+        // $order->type =  $data["type"];
         $order->collection_method =  $data['collection_method'];
         $order->proof_of_payment =  $data['proof_of_payment'] ?? null;
         $order->payment_method = $data['payment_method'];
+        $order->delivery_type_id = $data['delivery_type_id'];
+        $order->is_payment_channel_confirm = 0;
+        $order->is_confirm = 0;
         $order->save();
+        $this->notificationService->orderCreateNotificationForShopUser($shop_id);
         return $order;
     }
 
