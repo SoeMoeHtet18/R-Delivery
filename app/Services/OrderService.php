@@ -7,6 +7,7 @@ use App\Http\Traits\FileUploadTrait;
 use App\Models\ItemType;
 use App\Models\Order;
 use App\Models\Township;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 
@@ -222,6 +223,13 @@ class OrderService
             $order->is_payment_channel_confirm= true;
         } else {
             $order->is_payment_channel_confirm= false;
+            $title = 'payment channel confirm';
+            $message = 'Please confirm payment channel for ' . $order->order_code .'; $order_id = ' . $order->id;
+            $notification = $this->notificationService->createNotification($title, $message);
+            $users = User::get();
+            foreach($users as $user) {
+                $this->notificationService->attachNotification($user, $notification);
+            }
         }
         $order->save();
         return $order;

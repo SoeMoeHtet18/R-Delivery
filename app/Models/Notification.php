@@ -20,4 +20,9 @@ class Notification extends Model
     {
         return $this->morphedByMany(ShopUser::class, 'notifiable');
     }
+    
+    public function users()
+    {
+        return $this->morphedByMany(User::class, 'notifiable');
+    }
 }

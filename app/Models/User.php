@@ -54,4 +54,14 @@ class User extends Authenticatable
     public function orders() {
         return $this->hasMany(Order::class, 'last_updated_by', 'id');
     }
+
+    public function notifications()
+    {
+        return $this->morphToMany(Notification::class, 'notifiable');
+    }
+
+    public function unreadNotifications()
+    {
+        return $this->morphToMany(Notification::class, 'notifiable')->wherePivot('is_read',0);
+    }
 }
