@@ -46,6 +46,8 @@ class OrderService
         $order->proof_of_payment = $data['proof_of_payment'] ?? null;
         $order->payment_method = $data['payment_method'] ?? null;
         $order->note = $data['note'] ?? null;
+        $order->is_payment_channel_confirm = 0;
+        $order->is_confirm = 0;
         $order->save();
         return $order;
     }
@@ -117,7 +119,7 @@ class OrderService
         $order->schedule_date =  $data['schedule_date'] ?? Carbon::tomorrow();;
         $order->type =  $data['type'];
         $order->collection_method =  $data['collection_method'];
-        $order->payment_method = $data['payment_method'];
+        $order->payment_method = $data['payment_method'] ?? null;
         $order->note = $data['note'];
         if ($file) {
             $file_name = $this->uploadFile($file, 'public', 'customer payment');
@@ -149,6 +151,13 @@ class OrderService
                 $updateField = 'canceled_at';
                 $this->notificationService->{$notificationMethod . 'Rider'}($order->rider_id, $order->order_code);
                 $this->notificationService->{$notificationMethod . 'ShopUsers'}($order->shop_id, $order->order_code);
+                $title = 'payable or not';
+                $message = 'Please confirm to subtract remaining amount or not for ' . $order->order_code .'; $order_id = ' . $order->id;
+                $notification = $this->notificationService->createNotification($title, $message);
+                $users = User::get();
+                foreach($users as $user) {
+                    $this->notificationService->attachNotification($user, $notification);
+                }
             } elseif ($order->status == 'delay') {
                 $notificationMethod = 'orderIssueNotificationFor';
                 $updateField = 'delayed_at';
@@ -241,7 +250,7 @@ class OrderService
     
     public function confirmRemainingAmount($order)
     {
-        $order->is_confirm = true;
+        $order->payable_or_not = 'yes';
         $order->save();
         return $order;
     }
@@ -255,7 +264,7 @@ class OrderService
     
     public function cancelRemainingAmount($order)
     {
-        $order->is_confirm = false;
+        $order->payable_or_not = 'no';
         $order->save();
         return $order;
     }

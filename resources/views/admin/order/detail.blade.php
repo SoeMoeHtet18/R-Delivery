@@ -229,7 +229,7 @@
                 </div>
             </div>
             @endif
-            @if($order->status == 'pending')
+            @if($order->status == 'cancel' && $order->payable_or_not == 'pending')
             <div class="row m-0 mb-3">
                 <div class="col-2">
                     <h4>Remaining Amount Substraction <b>:</b></h4> 

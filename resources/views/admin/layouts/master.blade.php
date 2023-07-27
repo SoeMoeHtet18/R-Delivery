@@ -66,7 +66,7 @@
                 console.log(data)
                 data.forEach(function(notification) {
                     html = '<a class="dropdown-item" href="#">' + notification.message + '</a>';
-                    if(notification.title == 'payment channel confirm'){
+                    if(notification.title == 'payment channel confirm' || notification.title =='payable or not'){
                         var parts = notification.message.split(';');
                         var message = parts[0].trim();
                         var part_two = notification.message.split('=');
@@ -123,7 +123,7 @@
         function showNotification(notifications) {
             notifications.forEach(function(notification) {
                 // Display the notification message using Toastify
-                if(notification.title == 'payment channel confirm'){
+                if(notification.title == 'payment channel confirm' || notification.title =='payable or not'){
                     var parts = notification.message.split(';');
                     var message = parts[0].trim();
                     Toastify({

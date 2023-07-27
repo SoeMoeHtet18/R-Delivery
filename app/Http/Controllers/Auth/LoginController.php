@@ -83,7 +83,7 @@ class LoginController extends Controller
         $encoded_response = curl_exec($ch);
         $response = json_decode($encoded_response, true);
         curl_close($ch);
-        if($response['success'] && $response['action'] == 'login' && $response['score']>0.5) {
+        // if($response['success'] && $response['action'] == 'login' && $response['score']>0.5) {
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and
         // the IP address of the client making these requests into this application.
@@ -96,9 +96,9 @@ class LoginController extends Controller
         }
 
         if ($this->attemptLogin($request)) {
-            if ($request->hasSession()) {
-                $request->session()->put('auth.password_confirmed_at', time());
-            }
+            // if ($request->hasSession()) {
+            //     $request->session()->put('auth.password_confirmed_at', time());
+            // }
 
             return $this->sendLoginResponse($request);
         }
@@ -109,10 +109,10 @@ class LoginController extends Controller
         $this->incrementLoginAttempts($request);
 
         return $this->sendFailedLoginResponse($request);
-        } else {
-            //score 1 is probably human score 0 is probably bot
-            abort(404);
-        }
+        // } else {
+        //     //score 1 is probably human score 0 is probably bot
+        //     abort(404);
+        // }
     }
 
     protected function credentials(Request $request)

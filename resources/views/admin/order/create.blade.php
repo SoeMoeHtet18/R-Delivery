@@ -191,9 +191,15 @@
                     <h4>Schedule Date <b>:</b></h4>
                 </label>
                 <div class="ps-4 col-10">
-                    <input type="date" id="schedule_date" name="schedule_date" value="<?php echo old('schedule_date') ?? date('Y-m-d'); ?>" class="form-control" />
+                    <?php
+                    // Get tomorrow's date
+                    $tomorrow = date('Y-m-d', strtotime('+1 day'));
+                    // Set the default value to tomorrow's date
+                    $defaultDate = old('schedule_date') ?? $tomorrow;
+                    ?>
+                    <input type="date" id="schedule_date" name="schedule_date" value="<?php echo $defaultDate; ?>" class="form-control" />
                     @if ($errors->has('schedule_date'))
-                    <span class="text-danger"><strong>{{ $errors->first('schedule_date') }}</strong></span>
+                        <span class="text-danger"><strong>{{ $errors->first('schedule_date') }}</strong></span>
                     @endif
                 </div>
             </div>
@@ -213,11 +219,11 @@
                 </div>
             </div>
             <div class="row m-0 mb-3">
-                <label for="collection_method" class="col-2">
+                <label for="payment_method" class="col-2">
                     <h4>Payment Method <b>:</b></h4>
                 </label>
                 <div class="ps-4 col-10">
-                    <select name="payment_method" id="payment_method_id" class="form-control">
+                    <select name="payment_method" id="payment_method" class="form-control">
                         <option value="" selected disabled>Select the Payment Method for This Order</option>
                         <option value="cash-on-delivery" @if(old('payment_method')=='cash-on-delivery' ) selected @endif>Cash On Delivery</option>
                         <option value="item-prepaid" @if(old('payment_method')=='item-prepaid' ) selected @endif>Item Prepaid</option>
