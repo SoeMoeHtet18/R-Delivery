@@ -46,7 +46,7 @@
                 <label for="rider_id" class="col-2">
                     <h4>Rider <b>:</b></h4>
                 </label>
-                <div class="ps-4 col-10">
+                <div class="col-10">
                     <select name="rider_id" id="rider_id" class="form-control">
                         <option value="" selected disabled>Select the Rider for This Collection</option>
                         @foreach ( $riders as $rider)
@@ -65,7 +65,7 @@
                 <label for="shop_id" class="col-2">
                     <h4>Shop <b>:</b></h4>
                 </label>
-                <div class="ps-4 col-10">
+                <div class="col-10">
                     <select name="shop_id" id="shop_id" class="form-control">
                         <option value="" selected disabled>Select the Rider for This Collection</option>
                         @foreach ( $shops as $shop)
@@ -110,17 +110,6 @@
                     <input type="text" id="note" name="note" class="form-control" />
                     @if ($errors->has('note'))
                     <span class="text-danger"><strong>{{ $errors->first('note') }}</strong></span>
-                    @endif
-                </div>
-            </div>
-            <div class="row m-0 mb-3">
-                <label for="status" class="col-2">
-                    <h4>Status <b>:</b></h4>
-                </label>
-                <div class="col-10">
-                    <input type="text" id="status" name="status" class="form-control" />
-                    @if ($errors->has('status'))
-                    <span class="text-danger"><strong>{{ $errors->first('status') }}</strong></span>
                     @endif
                 </div>
             </div>

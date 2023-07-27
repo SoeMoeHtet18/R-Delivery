@@ -44,7 +44,7 @@ class CollectionService
         $collection->assigned_at =  $data['assigned_at'];
         $collection->collected_at =  $data['collected_at'];
         $collection->note =  $data['note'];
-        $collection->status =  $data['status'];
+        $collection->status =  'pending';
         $collection->is_payable =  false;
         $collection->save();
         return $collection;
