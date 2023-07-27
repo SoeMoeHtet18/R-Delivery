@@ -10,6 +10,7 @@ use App\Http\Controllers\DeliveryTypeController;
 use App\Http\Controllers\ItemTypeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderImportController;
+use App\Http\Controllers\PaymentNotificationListController;
 use App\Http\Controllers\PaymentTypeController;
 use App\Http\Controllers\RiderController;
 use App\Http\Controllers\ShopController;
@@ -103,6 +104,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/remaining-amount-cancel/{order_id}', [OrderController::class, 'cancelRemainingAmount']);
     Route::get('/get-notifications', [AdminController::class, 'getNotification']);
     Route::get('/get-new-notifications', [AdminController::class, 'getNewNotification']);
+    Route::get('/payment-notifications', [PaymentNotificationListController::class, 'index']);
+    Route::get('/ajax-get-unpaid-order-list', [OrderController::class, 'getAjaxUnpaidOrderList']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
