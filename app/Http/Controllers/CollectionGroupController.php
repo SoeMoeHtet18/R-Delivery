@@ -94,7 +94,7 @@ class CollectionGroupController extends Controller
         $collectionGroup = $this->collectionGroupRepository->getCollectionGroupByID($id);
         $this->collectionGroupService->updateCollectionGroupByAdmin($collectionGroup, $data);
 
-        return redirect()->route('collection_groups.show', $id);
+        return redirect()->route('collection-groups.show', $id);
     }
 
     /**
