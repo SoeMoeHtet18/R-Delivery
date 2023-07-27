@@ -5,7 +5,7 @@
 <div class="card card-container action-form-card">
     <div class="card-body">
         <h2 class="ps-1 card-header-title">
-            <strong>Update Order</strong>
+            <strong>Update Collection</strong>
         </h2>
         <form action="{{route('collections.update', $collection->id)}}" method="POST" class="action-form" enctype="multipart/form-data">
             @csrf
@@ -36,10 +36,15 @@
             </div>
             <div class="row m-0 mb-3">
                 <label for="collection_group_id" class="col-2">
-                    <h4>Collection Group Id <b>:</b></h4>
+                    <h4>Collection Group <b>:</b></h4>
                 </label>
                 <div class="col-10">
-                    <input type="text" id="collection_group_id" name="collection_group_id" value="{{$collection->collection_group_id}}" class="form-control"  />
+                    <select name="collection_group_id" id="collection_group_id" class="form-control">
+                        <option value="" selected disabled>Select the Collection Group for This Collection</option>
+                        @foreach ( $collection_groups as $collection_group)
+                        <option value="{{$collection_group->id}}" @if($collection->collection_group_id == $collection_group->id) {{'selected'}} @endif>{{$collection_group->id}}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -103,7 +108,12 @@
                     <h4>Status <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    <input type="text" id="status" name="note" value="{{$collection->status}}" class="form-control" />
+                    <select name="status" id="status" class="form-control">
+                        <option value="" selected disabled>Select the Status for This Order</option>
+                        <option value="pending" @if($collection->status == "pending") {{'selected'}} @endif>Pending</option>
+                        <option value="in-warehouse" @if($collection->status == "in-warehouse") {{'selected'}} @endif>In Warehouse</option>
+                        <option value="complete" @if($collection->status == "complete") {{'selected'}} @endif>Complete</option>
+                    </select>
                 </div>
             </div>
             <div class="footer-button float-end">

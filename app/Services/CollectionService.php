@@ -56,6 +56,7 @@ class CollectionService
         $collection->total_amount =  $data['total_amount'];
         $collection->paid_amount =  $data['paid_amount'];
         $collection->rider_id =  $data['rider_id'] ?? null;
+        $collection->collection_group_id =  $data['collection_group_id'] ?? null;
         $collection->shop_id =  $data['shop_id'];
         $collection->assigned_at =  $data['assigned_at'];
         $collection->collected_at =  $data['collected_at'];

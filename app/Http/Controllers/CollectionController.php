@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Collection;
+use App\Repositories\CollectionGroupRepository;
 use App\Repositories\CollectionRepository;
 use App\Repositories\RiderRepository;
 use App\Repositories\ShopRepository;
@@ -17,14 +18,16 @@ class CollectionController extends Controller
     protected $collectionService;
     protected $shopRepository;
     protected $riderRepository;
+    protected $collectionGroupRepository;
 
     public function __construct(CollectionRepository $collectionRepository, CollectionService $collectionService, ShopRepository $shopRepository,
-    RiderRepository $riderRepository )
+    RiderRepository $riderRepository,CollectionGroupRepository $collectionGroupRepository)
     {
         $this->collectionRepository = $collectionRepository;
         $this->collectionService    = $collectionService;
         $this->shopRepository = $shopRepository;
         $this->riderRepository = $riderRepository;
+        $this->collectionGroupRepository = $collectionGroupRepository;
     }
     /**
      * Display a listing of the resource.
@@ -82,7 +85,9 @@ class CollectionController extends Controller
         $assignedAt = $assignedAt->format('Y-m-d');
         $collectedAt = new Carbon($collection->collected_at);
         $collectedAt = $collectedAt->format('Y-m-d');
-        return view('admin.collections.edit', compact('collection','collectedAt','assignedAt', 'shops', 'riders'));
+        $collection_groups = $this->collectionGroupRepository->getAllCollectionGroups();
+        $collection_groups = $collection_groups->sortByDesc('id');
+        return view('admin.collections.edit', compact('collection','collectedAt','assignedAt', 'shops', 'riders', 'collection_groups'));
     }
 
     /**
@@ -94,7 +99,7 @@ class CollectionController extends Controller
         $data = $request->all();
         $this->collectionService->updateCollectionByID($data, $collection);
 
-        return redirect()->route('orders.index');
+        return redirect()->route('collections.index');
     }
 
     /**

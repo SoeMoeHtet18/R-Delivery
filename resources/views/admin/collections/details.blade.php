@@ -53,18 +53,26 @@
             </div>
             <div class="row m-0 mb-3">
                 <div class="col-2">
-                    <h4>Rider Id <b>:</b></h4>
+                    <h4>Rider <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    {{ $collection->rider_id }}
+                    @if($collection->rider_id != null)
+                        {{ $collection->rider->name }}
+                    @else
+                     'N/A'
+                    @endif 
                 </div>
             </div>
             <div class="row m-0 mb-3">
                 <div class="col-2">
-                    <h4>Shop Id <b>:</b></h4>
+                    <h4>Shop <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    {{ $collection->shop_id }}
+                @if($collection->shop_id != null)
+                        {{ $collection->shop->name }}
+                @else
+                    'N/A'
+                @endif
                 </div>
             </div>
             <div class="row m-0 mb-3">
