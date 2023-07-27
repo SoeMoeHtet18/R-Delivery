@@ -11,16 +11,19 @@
             
 
             <div class="top-menu" style="display: flex;">
-                <a id="notificationCollapse" class="btn btn-secondary" data-bs-toggle="collapse" href="#notification" role="button" aria-expanded="false" aria-controls="collapseExample">
-                <i class="fa fa-bell"></i>
-                </a>
-                <div class="dropdown-menu collapse customize-collapse" aria-labelledby="notificationDropdown" id="notification">
-            <div class="dropdown-header">Notifications</div>
-            <div class="dropdown-divider"></div>
-            <div class="dropdown-body" id="notificationList">
-                <a class="dropdown-item" href="#">No notifications</a>
-            </div>
-        </div>
+            
+                <div style="display: flex; flex-direction: column;">
+                    <a id="notificationCollapse" class="btn btn-secondary" data-bs-toggle="collapse" href="#notification" role="button" aria-expanded="false" aria-controls="collapseExample" style="align-self: flex-end;">
+                        <i class="fa fa-bell"></i>
+                    </a>
+                    <div class="dropdown-menu collapse customize-collapse" aria-labelledby="notificationDropdown" id="notification" style="position: initial;">
+                        <div class="dropdown-header">Notifications</div>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-body" id="notificationList">
+                            <a class="dropdown-item" href="#">No notifications</a>
+                        </div>
+                    </div>
+                </div>
                 
                 <div class="nav navbar-nav pull-right hidden-xs">
                     <span class="current-user">
@@ -29,6 +32,7 @@
                 </div>
 
             </div>
+            
             <div class="navbar-header">
                 <a href="{{ URL::to('/dashboard') }}" class="navbar-brand topbar-brand">
                     R-Delivery
