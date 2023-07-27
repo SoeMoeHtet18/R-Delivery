@@ -23,7 +23,7 @@
                 <label for="rider_id" class="col-2">
                     <h4>Rider <b>:</b></h4>
                 </label>
-                <div class="ps-4 col-10">
+                <div class="col-10">
                     <select name="rider_id" id="rider_id" class="form-control">
                         <option value="" selected disabled>Select the Rider for This Collection</option>
                         @foreach ( $riders as $rider)
@@ -73,6 +73,7 @@
 @section('javascript')
 <script type="text/javascript">
     $(function() {
+        $('#rider_id').select2();
         $('#collection_id').select2({
             placeholder: 'Select Collections',
             allowClear: true

@@ -133,7 +133,7 @@ class CollectionGroupController extends Controller
             })
             ->rawColumns(['action'])
             ->addIndexColumn()
-            ->orderColumn('id', '-id $1')
+            ->orderColumn('collection_groups.id', '-id $1')
             ->make(true);
     }
 }

@@ -43,9 +43,9 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Total Quantity</th>
-                    <th>Total Amount</th>
-                    <th>Paid Amount</th>
+                    <th>Total Quantity of Collection</th>
+                    <th>Total Amount of Collection</th>
+                    <th>Paid Amount By Rider</th>
                     <th>Collection Group Id</th>
                     <th>Rider Id</th>
                     <th>Shop Id</th>

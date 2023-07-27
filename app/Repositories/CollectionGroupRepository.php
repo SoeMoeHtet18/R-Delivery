@@ -20,14 +20,14 @@ class CollectionGroupRepository
 
     public function getAllCollectionGroupData()
     {
-        $collectionGroups = CollectionGroup::select('*');
+        $collectionGroups = CollectionGroup::select('collection_groups.*', 'riders.name as rider_name')->leftJoin('riders', 'riders.id', 'collection_groups.rider_id');
         return $collectionGroups;
     }
 
     public function getAllCollectionGroupsQuery()
     {
         $collectionGroups = CollectionGroup::leftJoin('riders', 'riders.id', 'collection_groups.rider_id')
-            ->select('collection_groups*', 'riders.name as rider_name');
+            ->select('collection_groups.*', 'riders.name as rider_name');
         foreach($collectionGroups as $collectionGroup) {
             $collections = $collectionGroup->collections;
             if($collections) {

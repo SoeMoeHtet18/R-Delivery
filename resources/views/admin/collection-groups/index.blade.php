@@ -43,7 +43,7 @@
                 <tr>
                     <th>#</th>
                     <th>Total Amount</th>
-                    <th>Rider Id</th>
+                    <th>Rider Name</th>
                     <th>Assigned Date</th>
                     <th>Created At</th>
                     <th>Updated At</th>
@@ -83,7 +83,7 @@
                         name: 'total_amount',
                     },
                     {
-                        data: 'rider_id',
+                        data: 'rider_name',
                         name: 'rider_id',
                     },
                     {

@@ -65,6 +65,7 @@
 @section('javascript')
 <script type="text/javascript">
     $(function() {
+        $('#rider_id').select2();
         $('#collection_id').select2({
             placeholder: 'Select Collections',
             allowClear: true
