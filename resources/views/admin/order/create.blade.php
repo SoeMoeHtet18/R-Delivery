@@ -23,7 +23,6 @@
                             @if($shop->id == old('shop_id')) selected
                             @endif
                             @endisset
-
                             >{{$shop->name}}</option>
                         @endforeach
                     </select>
@@ -128,6 +127,17 @@
                 </div>
             </div>
             <div class="row m-0 mb-3">
+                <label for="extra_charges" class="col-2">
+                    <h4>Extra Charges <b>:</b></h4>
+                </label>
+                <div class="ps-4 col-10">
+                    <input type="text" id="extra_charges" name="extra_charges" value="{{old('extra_charges')}}" class="form-control" />
+                    @if ($errors->has('extra_charges'))
+                    <span class="text-danger"><strong>{{ $errors->first('extra_charges') }}</strong></span>
+                    @endif
+                </div>
+            </div>
+            <!-- <div class="row m-0 mb-3">
                 <label for="markup_delivery_fees" class="col-2 text-nowrap">
                     <h4>Markup Delivery Fees <b>:</b></h4>
                 </label>
@@ -137,7 +147,7 @@
                     <span class="text-danger"><strong>{{ $errors->first('markup_delivery_fees') }}</strong></span>
                     @endif
                 </div>
-            </div>
+            </div> -->
             <div class="row m-0 mb-3">
                 <label for="remark" class="col-2">
                     <h4>Remark <b>:</b></h4>
@@ -177,9 +187,9 @@
                 <div class="ps-4 col-10">
                     <select name="type" id="type_id" class="form-control">
                         <option value="" selected disabled>Select the Type for This Order</option>
-                        <option value="standard" @if(old('type')=='standard' ) selected @endif>Standard</option>
-                        <option value="express" @if(old('type')=='express' ) selected @endif>Express</option>
-                        <option value="doortodoor" @if(old('type')=='doortodoor' ) selected @endif>Door To Door</option>
+                        @foreach($delivery_types as $delivery_type)
+                        <option value="{{$delivery_type->id}}" @if($delivery_type->name == old('type')) selected @endif>{{$delivery_type->name}}</option>
+                        @endforeach
                     </select>
                     @if ($errors->has('type'))
                     <span class="text-danger"><strong>{{ $errors->first('type') }}</strong></span>
@@ -225,9 +235,9 @@
                 <div class="ps-4 col-10">
                     <select name="payment_method" id="payment_method" class="form-control">
                         <option value="" selected disabled>Select the Payment Method for This Order</option>
-                        <option value="cash-on-delivery" @if(old('payment_method')=='cash-on-delivery' ) selected @endif>Cash On Delivery</option>
-                        <option value="item-prepaid" @if(old('payment_method')=='item-prepaid' ) selected @endif>Item Prepaid</option>
-                        <option value="all-prepaid" @if(old('payment_method')=='all-prepaid' ) selected @endif>All Prepaid</option>
+                        <option value="cash_on_delivery" @if(old('payment_method')=='cash_on_delivery' ) selected @endif>Cash On Delivery</option>
+                        <option value="item_prepaid" @if(old('payment_method')=='item_prepaid' ) selected @endif>Item Prepaid</option>
+                        <option value="all_prepaid" @if(old('payment_method')=='all_prepaid' ) selected @endif>All Prepaid</option>
                     </select>
                     @if ($errors->has('payment_method'))
                     <span class="text-danger"><strong>{{ $errors->first('payment_method') }}</strong></span>
@@ -239,7 +249,7 @@
                     <h4>Note <b>:</b></h4>
                 </label>
                 <div class="ps-4 col-10">
-                    <textarea id="note" name="note" class="form-control" style="height: 100px">{{old('remark')}}</textarea>
+                    <textarea id="note" name="note" class="form-control" style="height: 100px">{{old('note')}}</textarea>
                 </div>
             </div>
             <div class="footer-button float-end">
@@ -262,6 +272,7 @@
         $('#item_type_id').select2();
         $('#type_id').select2();
         $('#collection_method_id').select2();
+        $('#payment_method').select2();
 
         $('#type_id').change(function() {
             console.log($('#type_id').val());

@@ -93,17 +93,6 @@
                 </div>
             </div>
             <div class="row m-0 mb-3">
-                <label for="delivery_fees" class="col-2">
-                    <h4>Delivery Fees <b>:</b></h4>
-                </label>
-                <div class="col-10">
-                    <input type="text" id="delivery_fees" name="delivery_fees" value="{{$order->delivery_fees}}" class="form-control" />
-                    @if ($errors->has('delivery_fees'))
-                    <span class="text-danger"><strong>{{ $errors->first('delivery_fees') }}</strong></span>
-                    @endif
-                </div>
-            </div>
-            <div class="row m-0 mb-3">
                 <label for="total_amount" class="col-2">
                     <h4>Total Amount <b>:</b></h4>
                 </label>
@@ -115,6 +104,28 @@
                 </div>
             </div>
             <div class="row m-0 mb-3">
+                <label for="delivery_fees" class="col-2">
+                    <h4>Delivery Fees <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <input type="text" id="delivery_fees" name="delivery_fees" value="{{$order->delivery_fees}}" class="form-control" />
+                    @if ($errors->has('delivery_fees'))
+                    <span class="text-danger"><strong>{{ $errors->first('delivery_fees') }}</strong></span>
+                    @endif
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <label for="extra_charges" class="col-2">
+                    <h4>Extra Charges <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <input type="text" id="extra_charges" name="extra_charges" value="{{$order->extra_charges}}" class="form-control" />
+                    @if ($errors->has('extra_charges'))
+                    <span class="text-danger"><strong>{{ $errors->first('extra_charges') }}</strong></span>
+                    @endif
+                </div>
+            </div>
+            <!-- <div class="row m-0 mb-3">
                 <label for="markup_delivery_fees" class="col-2">
                     <h4>Markup Delivery Fees <b>:</b></h4>
                 </label>
@@ -124,13 +135,13 @@
                     <span class="text-danger"><strong>{{ $errors->first('markup_delivery_fees') }}</strong></span>
                     @endif
                 </div>
-            </div>
+            </div> -->
             <div class="row m-0 mb-3">
                 <label for="remark" class="col-2">
                     <h4>Remark <b>:</b></h4>
                 </label>
                 <div class="col-10">
-                    <input type="text" id="remark" name="remark" value="{{$order->remark}}" class="form-control" />
+                    <textarea id="remark" name="remark" class="form-control" style="height: 100px">{{$order->remark}}</textarea>
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -141,8 +152,10 @@
                     <select name="status" id="status_id" class="form-control">
                         <option value="" selected disabled>Select Status for This Order</option>
                         <option value="pending" @if($order->status == "pending") {{'selected'}} @endif>Pending</option>
-                        <option value="in-warehouse" @if($order->status == "in-warehouse") {{'selected'}} @endif>In Warehouse</option>
-                        <option value="success" @if($order->status == "success") {{'selected'}} @endif>Success</option>
+                        <option value="picking-up" @if($order->status == "picking-up") {{'selected'}} @endif>Picking Up</option>
+                        <option value="warehouse" @if($order->status == "warehouse") {{'selected'}} @endif>In Warehouse</option>
+                        <option value="delivering" @if($order->status == "delivering") {{'selected'}} @endif>Delivering</option>
+                        <option value="success" @if($order->status == "success") {{'selected'}} @endif>Delivered</option>
                         <option value="delay" @if($order->status == "delay") {{'selected'}} @endif>Delay</option>
                         <option value="cancel" @if($order->status == "cancel") {{'selected'}} @endif>Cancel</option>
                     </select>
@@ -176,9 +189,9 @@
                 <div class="col-10">
                     <select name="type" id="type_id" class="form-control">
                         <option value="" selected disabled>Select the Type for This Order</option>
-                        <option value="standard" @if($order->type == "standard") {{'selected'}} @endif>Standard</option>
-                        <option value="express" @if($order->type == "express") {{'selected'}} @endif>Express</option>
-                        <option value="doortodoor" @if($order->type == "doortodoor") {{'selected'}} @endif>Door To Door</option>
+                        @foreach($delivery_types as $delivery_type)
+                            <option value="{{$delivery_type->id}}" @if($delivery_type->id == $order->delivery_type_id) {{'selected'}} @endif>{{$delivery_type->name}}</option>
+                        @endforeach
                     </select>
                 </div>
             </div>
@@ -221,20 +234,20 @@
                     <h4>Payment Method <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    <select name="payment_method" id="payment_method_id" class="form-control">
+                    <select name="payment_method" id="payment_method" class="form-control">
                         <option value="" selected disabled>Select the Payment Method for This Order</option>
-                        <option value="cash-on-delivery" @if($order->payment_method == "cash-on-delivery") {{'selected'}} @endif>Cash On Delivery</option>
-                        <option value="item-prepaid" @if($order->payment_method == "pickup") {{'item-prepaid'}} @endif>Item Prepaid</option>
-                        <option value="all-prepaid" @if($order->payment_method == "pickup") {{'all-prepaid'}} @endif>All Prepaid</option>
+                        <option value="cash-on-delivery" @if($order->payment_method == "cash_on_delivery") {{'selected'}} @endif>Cash On Delivery</option>
+                        <option value="item-prepaid" @if($order->payment_method == "item_prepaid") {{'selected'}} @endif>Item Prepaid</option>
+                        <option value="all-prepaid" @if($order->payment_method == "all_prepaid") {{'selected'}} @endif>All Prepaid</option>
                     </select>
                 </div>
             </div>
             <div class="row m-0 mb-3">
-                <div class="col-2">
+                <label for="note" class="col-2">
                     <h4>Note <b>:</b></h4>
-                </div>
+                </label>
                 <div class="col-10">
-                    <input type="text" id="note" name="note" value="{{$order->note}}" class="form-control" />
+                    <textarea id="note" name="note" class="form-control" style="height: 100px">{{$order->note}}</textarea>
                 </div>
             </div>
             <div class="footer-button float-end">
@@ -257,6 +270,8 @@
         $('#item_type_id').select2();
         $('#type_id').select2();
         $('#collection_method_id').select2();
+        $('#payment_method').select2();
+
 
         $('#type_id').change(function() {
             console.log($('#type_id').val());

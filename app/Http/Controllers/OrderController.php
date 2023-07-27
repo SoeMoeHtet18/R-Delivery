@@ -9,6 +9,7 @@ use App\Http\Requests\OrderCreateRequest;
 use App\Http\Requests\OrderUpdateRequest;
 use App\Http\Requests\RiderAssignRequest;
 use App\Repositories\CityRepository;
+use App\Repositories\DeliveryTypesRepository;
 use App\Repositories\ItemTypeRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\RiderRepository;
@@ -31,6 +32,7 @@ class OrderController extends Controller
     protected $orderRepository;
     protected $townshipRepository;
     protected $orderService;
+    protected $deliveryTypeRepository;
 
     public function __construct(
         ShopRepository $shopRepository,
@@ -39,7 +41,8 @@ class OrderController extends Controller
         ItemTypeRepository $itemTypeRepository,
         TownshipRepository $townshipRepository,
         OrderRepository $orderRepository,
-        OrderService $orderService
+        OrderService $orderService,
+        DeliveryTypesRepository $deliveryTypeRepository,
     ) {
         $this->shopRepository = $shopRepository;
         $this->riderRepository = $riderRepository;
@@ -48,6 +51,7 @@ class OrderController extends Controller
         $this->townshipRepository = $townshipRepository;
         $this->orderRepository = $orderRepository;
         $this->orderService = $orderService;
+        $this->deliveryTypeRepository = $deliveryTypeRepository;
     }
     /**
      * Display a listing of the resource.
@@ -76,9 +80,9 @@ class OrderController extends Controller
         $townships = $this->townshipRepository->getAllTownships();
         $townships = $townships->sortByDesc('id');
         $item_types = $this->itemTypeRepository->getAllItemTypes();
-        $item_types = $item_types->sortByDesc('id');
+        $delivery_types = $this->deliveryTypeRepository->getAllDeliveryTypes();
 
-        return view('admin.order.create', compact('shops', 'riders', 'cities', 'item_types', 'townships'));
+        return view('admin.order.create', compact('shops', 'riders', 'cities', 'item_types', 'townships', 'delivery_types'));
     }
 
     /**
@@ -111,7 +115,6 @@ class OrderController extends Controller
         $cities = $this->cityRepository->getAllCities();
         $cities = $cities->sortByDesc('id');
         $item_types = $this->itemTypeRepository->getAllItemTypes();
-        $item_types = $item_types->sortByDesc('id');
 
         $city_id = $order->city_id;
         $townships = $this->townshipRepository->getAllTownshipsByCityID($city_id);
@@ -123,8 +126,9 @@ class OrderController extends Controller
 
         $date = new Carbon($order->schedule_date);
         $scheduledate = $date->format('Y-m-d');
+        $delivery_types = $this->deliveryTypeRepository->getAllDeliveryTypes();
 
-        return view('admin.order.edit', compact('order', 'shops', 'riders', 'townships', 'cities', 'item_types', 'scheduledate'));
+        return view('admin.order.edit', compact('order', 'shops', 'riders', 'townships', 'cities', 'item_types', 'scheduledate', 'delivery_types'));
     }
 
     /**
@@ -222,6 +226,7 @@ class OrderController extends Controller
         $rider = $request->rider;
         $shop  = $request->shop;
         $data = $this->orderRepository->getAllOrdersQuery();
+
         if ($status != null) {
             $data = $data->where('orders.status', $status);
         }

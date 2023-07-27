@@ -487,7 +487,7 @@
                         name: 'schedule_date'
                     },
                     {
-                        data: 'type',
+                        data: 'delivery_type_name',
                         name: 'type'
                     },
                     {
@@ -522,7 +522,7 @@
                                 return "Pending";
                             }
                             if (row.status == 'success') {
-                                return "Success";
+                                return "Delivered";
                             }
                             if (row.status == 'delay') {
                                 return "Delay";
@@ -533,8 +533,14 @@
                             if (row.status == 'cancel') {
                                 return "Cancel";
                             }
-                            if (row.status == 'in-warehouse') {
+                            if (row.status == 'warehouse') {
                                 return "In Warehouse";
+                            }
+                            if (row.status == 'picking-up') {
+                                return "Picking Up";
+                            }
+                            if (row.status == 'delivering') {
+                                return "Delivering";
                             }
                         },
                         "targets": 14
@@ -553,20 +559,6 @@
                             return formattedDate;
                         },
                         "targets": 17
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            if (row.type == 'standard') {
-                                return "Standard";
-                            }
-                            if (row.type == 'express') {
-                                return "Express";
-                            }
-                            if (row.type == 'doortodoor') {
-                                return "Door To Door";
-                            }
-                        },
-                        "targets": 18
                     },
                     {
                         "render": function(data, type, row) {

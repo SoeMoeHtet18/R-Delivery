@@ -84,7 +84,7 @@
                     <h4>Rider Name <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    @if($order->rider !== null){{ $order->rider->name }} @endif
+                @if($order->rider != null) {{$order->rider->name}} @else {{'N/A'}}  @endif
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -103,12 +103,20 @@
                     {{ $order->delivery_fees }}
                 </div>
             </div>
-            <div class="row m-0 mb-3">
+            <!-- <div class="row m-0 mb-3">
                 <div class="col-2">
                     <h4>Markup Delivery Fees <b>:</b></h4>
                 </div>
                 <div class="col-10">
                     {{ $order->markup_delivery_fees }}
+                </div>
+            </div> -->
+            <div class="row m-0 mb-3">
+                <div class="col-2">
+                    <h4>Extra Charges <b>:</b></h4>
+                </div>
+                <div class="col-10">
+                @if($order->delivery_fees != null) {{$order->delivery_fees}} @else {{'N/A'}}  @endif
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -116,7 +124,7 @@
                     <h4>Remark <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    {{ $order->remark }}
+                @if($order->remark != null) {{$order->remark}} @else {{'N/A'}}  @endif
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -134,14 +142,13 @@
                     Cancel
                     @endif
                 </div>
-
             </div>
             <div class="row m-0 mb-3">
                 <div class="col-2">
                     <h4>Item Type <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    {{ $order->itemType->name }}
+                @if($order->itemType != null) {{$order->itemType->name}} @else {{'N/A'}}  @endif
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -192,7 +199,9 @@
                     <h4>Proof of Payment <b>:</b></h4>
                 </div>
                 <div class="col-10">
+                @if($order->itemType != null)
                     <img src="{{asset('/storage/customer payment/' . $order->proof_of_payment)}}" alt="" style="width: 200px;">
+                @else {{'N/A'}}  @endif
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -200,11 +209,11 @@
                     <h4>Payment Method <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                @if($order->payment_method == 'cash-on-delivery')
+                @if($order->payment_method == 'cash_on_delivery')
                     Cash On Delivery
-                    @elseif($order->payment_method == 'item-prepaid')
+                    @elseif($order->payment_method == 'item_prepaid')
                     Item Prepaid
-                    @elseif($order->payment_method == 'all-prepaid')
+                    @elseif($order->payment_method == 'all_prepaid')
                     All Prepaid
                     @endif
                 </div>
@@ -214,7 +223,9 @@
                     <h4>Note <b>:</b></h4>
                 </div>
                 <div class="col-10">
+                    @if($order->note)
                     {{ $order->note }}
+                    @else {{'N/A'}}  @endif
                 </div>
             </div>
             @if($order->payment_channel != null && $order->payment_channel == 'online_payment' && $order->is_payment_channel_confirm == false)
