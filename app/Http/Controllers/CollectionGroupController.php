@@ -6,6 +6,7 @@ use App\Http\Requests\CollectionCreateRequest;
 use App\Repositories\CollectionGroupRepository;
 use App\Repositories\CollectionRepository;
 use App\Repositories\RiderRepository;
+use App\Repositories\ShopRepository;
 use App\Services\CollectionGroupService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -17,13 +18,15 @@ class CollectionGroupController extends Controller
     protected $collectionGroupService;
     protected $riderRepository;
     protected $collectionRepository;
+    protected $shopRepository;
 
-    public function __construct(CollectionGroupRepository $collectionGroupRepository, CollectionGroupService $collectionGroupService, RiderRepository $riderRepository, CollectionRepository $collectionRepository)
+    public function __construct(CollectionGroupRepository $collectionGroupRepository, CollectionGroupService $collectionGroupService, RiderRepository $riderRepository, CollectionRepository $collectionRepository, ShopRepository $shopRepository)
     {
         $this->collectionGroupRepository = $collectionGroupRepository;
         $this->collectionGroupService = $collectionGroupService;
         $this->riderRepository = $riderRepository;
         $this->collectionRepository = $collectionRepository;
+        $this->shopRepository = $shopRepository;
     }
     /**
      * Display a listing of the resource.
@@ -40,11 +43,12 @@ class CollectionGroupController extends Controller
     {
         $riders = $this->riderRepository->getAllRiders();
         $riders = $riders->sortByDesc('id');
+        $shops  = $this->shopRepository->getAllShops();
 
         $collections = $this->collectionRepository->getAllCollectionsWithoutRider();
         $collections = $collections->sortByDesc('id');
 
-        return view('admin.collection-groups.create', compact('riders', 'collections'));
+        return view('admin.collection-groups.create', compact('riders', 'collections', 'shops'));
     }
 
     /**

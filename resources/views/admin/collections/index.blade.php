@@ -46,9 +46,9 @@
                     <th>Total Quantity of Collection</th>
                     <th>Total Amount of Collection</th>
                     <th>Paid Amount By Rider</th>
-                    <th>Collection Group Id</th>
-                    <th>Rider Id</th>
-                    <th>Shop Id</th>
+                    <th>Collection Group Number</th>
+                    <th>Rider</th>
+                    <th>Shop</th>
                     <th>Assigned At</th>
                     <th>Collected At</th>
                     <th>Note</th>
@@ -104,11 +104,11 @@
                         name: 'collection_group_id',
                     },
                     {
-                        data: 'rider_id',
+                        data: 'rider_name',
                         name: 'rider_id',
                     },
                     {
-                        data: 'shop_id',
+                        data: 'shop_name',
                         name: 'shop_id',
                     },
                     {

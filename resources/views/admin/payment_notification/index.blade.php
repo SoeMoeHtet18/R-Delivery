@@ -1,6 +1,6 @@
 @extends('admin.layouts.master')
 @section('title','Dashboard')
-@section('sub-title','Order Listing')
+@section('sub-title','Payment Due Order List')
 @section('content')
 <style>
     .pdf-ul {
@@ -32,6 +32,44 @@
     }
 </style>
 
+<div class="card m-3">
+    <div class="row tdFilter">
+        <div class="col-md-12 col-sm-12 m-3">
+            <h2>Filter</h2>
+        </div>
+    </div>
+<div class="row">
+        <div class="filter-box">
+            <div class="mb-3 p-3 col-4">
+                <label for="township">
+                    <strong>Shop</strong>
+                </label>
+                <div class="col-10">
+                    <select name="shop" id="shop" class="form-control">
+                        <option value="" selected disabled>Select</option>
+                        @foreach($shops as $shop)
+                        <option value="{{$shop->id}}">{{$shop->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-flex flex-row-reverse pb-3">
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 btncenter margin-btn">
+            <button class="btn btn-primary search_filter">Filter</button>
+
+            <button class="btn btn-secondary" id="reset">Reset</button>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex justify-content-between mb-3">
+    <div class="create-button">
+        <a class="btn create-btn" id="create-transaction">Add Transaction</a>
+    </div>
+</div>
+
 <input type="hidden" id="current_screen" value="all-orders-display">
 <div class="tab-content">
     <div id="all-orders-display" class="portlet box green tab-pane active">
@@ -43,23 +81,24 @@
                 <thead>
                     <tr>
                         <th>#</th>
+                        <th id="first_column"><input type="checkbox" name="check_all" id="checkAll"></th>
+                        <th>Type</th>
+                        <th>Schedule Date</th>
+                        <th>Status</th>
+                        <th>Shop</th>
                         <th>Paid</th>
                         <th>Total Amount</th>
                         <th>Delivery Fees</th>
                         <th>Markup Delivery Fees</th>
                         <th>Order Code</th>
-                        <th>Shop</th>
                         <th>Rider</th>
                         <th>Customer Name</th>
                         <th>Customer Phone Number</th>
                         <th>City</th>
                         <th>Township</th>
                         <th>Remark</th>
-                        <th>Status</th>
                         <th>Item Type</th>
                         <th>Full Address</th>
-                        <th>Schedule Date</th>
-                        <th>Type</th>
                         <th>Collection Method</th>
                         <th>Last Updated By</th>
                         <th>Action</th>
@@ -82,6 +121,52 @@
 
 <script type="text/javascript">
     $(document).ready(function() {  
+        $('#shop').select2();
+
+        $("#create-transaction").click(function() {
+            processPayment();
+        });
+
+        function processPayment() {
+            var process_data = [];
+            var shop_ids = [];
+            var order_ids = [];
+
+            $('.order-payment:checked').each(function() {
+                var push_data = {
+                    id: $(this).data('id'),
+                    shop_id: $(this).data('shop_id'),
+                    payment_flag: $(this).data('payment_flag')
+                };
+                process_data.push(push_data);
+                shop_ids.push(push_data.shop_id);
+                order_ids.push(push_data.id);
+            });
+
+            shop_ids = [...new Set(shop_ids)];
+            order_ids = [...new Set(order_ids)];
+
+            if (process_data.length === 0) {
+                showErrorToast("Please select at least one order.");
+            } else if (shop_ids.length > 1) {
+                showErrorToast("Please select only orders of the same shop.");
+            } else if (process_data.some(order => order.payment_flag === 1)) {
+                showErrorToast("Please select only orders that are unpaid.");
+            } else {
+                var redirectUrl = '/create-transaction-for-shop-for-selected-orders?order_ids=' + order_ids + '&shop_id=' + shop_ids;
+                window.location = redirectUrl;
+            }
+        }
+
+        $('#checkAll').click(function() {
+            var isChecked = $(this).prop("checked");
+            $('td input').prop('checked', isChecked);
+        });
+
+        $('.order-payment').click(function() {
+            var allChecked = $('.order-payment:checked').length === $('.order-payment').length;
+            $('#checkAll').prop('checked', allChecked);
+        });
 
         function showErrorToast(message) {
             Toastify({
@@ -97,7 +182,7 @@
 
         get_ajax_dynamic_data(search = '', city = '', rider = '', shop = '', status = '', township = '');
 
-        function get_ajax_dynamic_data(search, city, rider, shop, status, township) {
+        function get_ajax_dynamic_data(shop) {
             var visible_column = [];
             var table = $('#all-orders-datatable').DataTable({
                 processing: true,
@@ -136,6 +221,28 @@
                         name: 'id'
                     },
                     {
+                        data: 'first_column',
+                        name: 'first_column',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'delivery_type_name',
+                        name: 'delivery_type_name'
+                    },
+                    {
+                        data: 'schedule_date',
+                        name: 'schedule_date'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status'
+                    },
+                    {
+                        data: 'shop_name',
+                        name: 'shop_name'
+                    },
+                    {
                         data: 'payment_flag',
                         name: 'paid'
                     },
@@ -154,10 +261,6 @@
                     {
                         data: 'order_code',
                         name: 'order_code'
-                    },
-                    {
-                        data: 'shop_name',
-                        name: 'shop'
                     },
                     {
                         data: 'rider_name',
@@ -184,24 +287,12 @@
                         name: 'remark'
                     },
                     {
-                        data: 'status',
-                        name: 'status'
-                    },
-                    {
                         data: 'item_type_name',
                         name: 'item_type'
                     },
                     {
                         data: 'full_address',
                         name: 'full_address'
-                    },
-                    {
-                        data: 'schedule_date',
-                        name: 'schedule_date'
-                    },
-                    {
-                        data: 'type',
-                        name: 'type'
                     },
                     {
                         data: 'collection_method',
@@ -227,7 +318,7 @@
                                 return "Paid";
                             }
                         },
-                        "targets": 1
+                        "targets": 6
                     },
                     {
                         "render": function(data, type, row) {
@@ -250,7 +341,7 @@
                                 return "In Warehouse";
                             }
                         },
-                        "targets": 13
+                        "targets": 4
                     },
                     {
                         "render": function(data, type, row) {
@@ -265,20 +356,6 @@
                             });
                             return formattedDate;
                         },
-                        "targets": 16
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            if (row.type == 'standard') {
-                                return "Standard";
-                            }
-                            if (row.type == 'express') {
-                                return "Express";
-                            }
-                            if (row.type == 'doortodoor') {
-                                return "Door To Door";
-                            }
-                        },
                         "targets": 17
                     },
                     {
@@ -290,36 +367,21 @@
                                 return "Pick Up";
                             }
                         },
-                        "targets": 18
+                        "targets": 19
                     },
                 ]
             });
 
             $('.search_filter').click(function() {
-                var status = $('#status').val();
-                var township = $('#township').val();
-                var search = $('#search').val();
-                var rider = $('#rider').val();
-                var city = $('#city').val();
                 var shop = $('#shop').val();
                 table.destroy();
-                get_ajax_dynamic_data(search, city, rider, shop, status, township);
+                get_ajax_dynamic_data(shop);
             });
             $("#reset").click(function() {
-                $("#status").val("").trigger("change");
-                $("#township").val("").trigger("change");
-                $("#search").val("").trigger("change");
-                $("#rider").val("").trigger("change");
-                $("#city").val("").trigger("change");
                 $("#shop").val("").trigger("change");
-                var status = $("#status").val();
-                var township = $('#township').val();
-                var search = $('#search').val();
-                var rider = $('#rider').val();
-                var city = $('#city').val();
                 var shop = $('#shop').val();
                 table.destroy();
-                get_ajax_dynamic_data(search, city, rider, shop, status, township);
+                get_ajax_dynamic_data(shop);
             });
         };
 
