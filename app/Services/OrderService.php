@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\Township;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class OrderService
@@ -56,7 +57,7 @@ class OrderService
     public function saveOrderByShopID($data, $shop_id)
     {
         $delivery_fees = Township::where('id', $data['township_id'])->first()->delivery_fees;
-        
+
         $order = new Order();
         $orderCode = Helper::nomenclature('orders', 'OD', 'id', $shop_id);
         $order->order_code =  $orderCode;
@@ -154,10 +155,10 @@ class OrderService
                 $this->notificationService->{$notificationMethod . 'Rider'}($order->rider_id, $order->order_code);
                 $this->notificationService->{$notificationMethod . 'ShopUsers'}($order->shop_id, $order->order_code);
                 $title = 'payable or not';
-                $message = 'Please confirm to subtract remaining amount or not for ' . $order->order_code .'; $order_id = ' . $order->id;
+                $message = 'Please confirm to subtract remaining amount or not for ' . $order->order_code . '; $order_id = ' . $order->id;
                 $notification = $this->notificationService->createNotification($title, $message);
                 $users = User::get();
-                foreach($users as $user) {
+                foreach ($users as $user) {
                     $this->notificationService->attachNotification($user, $notification);
                 }
             } elseif ($order->status == 'delay') {
@@ -234,22 +235,22 @@ class OrderService
     {
         $order = Order::where('id', $order_id)->first();
         $order->payment_channel = $data['payment_channel'];
-        if($data['payment_channel'] == 'cash') {
-            $order->is_payment_channel_confirm= true;
+        if ($data['payment_channel'] == 'cash') {
+            $order->is_payment_channel_confirm = true;
         } else {
-            $order->is_payment_channel_confirm= false;
+            $order->is_payment_channel_confirm = false;
             $title = 'payment channel confirm';
-            $message = 'Please confirm payment channel for ' . $order->order_code .'; $order_id = ' . $order->id;
+            $message = 'Please confirm payment channel for ' . $order->order_code . '; $order_id = ' . $order->id;
             $notification = $this->notificationService->createNotification($title, $message);
             $users = User::get();
-            foreach($users as $user) {
+            foreach ($users as $user) {
                 $this->notificationService->attachNotification($user, $notification);
             }
         }
         $order->save();
         return $order;
     }
-    
+
     public function confirmRemainingAmount($order)
     {
         $order->payable_or_not = 'yes';
@@ -257,17 +258,41 @@ class OrderService
         return $order;
     }
 
-    public function confirmPaymentChannel($order)  
+    public function confirmPaymentChannel($order)
     {
         $order->is_payment_channel_confirm = true;
         $order->save();
         return $order;
     }
-    
+
     public function cancelRemainingAmount($order)
     {
         $order->payable_or_not = 'no';
         $order->save();
         return $order;
+    }
+
+    public function bulkDiscountUpdate($data)
+    {
+        $order_ids = $data['order_ids'];
+        $order_ids = explode(',', $order_ids);
+        $type = $data['bulk-discount-type'];
+        $amount = $data['amount'];
+        $orders = Order::whereIn('id', $order_ids)->get();
+        foreach ($orders as $order) {
+            if ($type == 'normal_discount') {
+                $order->discount = $amount;
+                $order->save();
+            } else {
+                if ($order->delivery_fees > $amount) {
+                    $amount_to_substract = $amount - $order->delivery_fees;
+                    $amount_to_substract = abs($amount_to_substract);
+                } else {
+                    $amount_to_substract = 0;
+                }
+                $order->discount = $amount_to_substract;
+                $order->save();
+            }
+        }
     }
 }

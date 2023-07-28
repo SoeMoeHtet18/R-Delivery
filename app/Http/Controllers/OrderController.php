@@ -590,4 +590,11 @@ class OrderController extends Controller
         $this->orderService->cancelRemainingAmount($order);
         return redirect('/orders/' . $id);
     }
+
+    public function bulkDiscountUpdate(Request $request)
+    {
+        $data = $request->all();
+        $this->orderService->bulkDiscountUpdate($data);
+        return redirect()->route('orders.index');
+    }
 }

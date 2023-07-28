@@ -106,6 +106,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/get-new-notifications', [AdminController::class, 'getNewNotification']);
     Route::resource('/customer-collections', CustomerCollectionController::class);
     Route::get('/ajax-get-customer-collections-data', [CustomerCollectionController::class, 'getAjaxCustomerCollections']);
+    Route::post('/bulk-discount-update', [OrderController::class, 'bulkDiscountUpdate']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

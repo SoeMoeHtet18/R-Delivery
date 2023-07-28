@@ -30,6 +30,65 @@
     .pdf-ul li a:first-child {
         border-right: 1px solid #dfe2ea;
     }
+
+    .modal {
+        display: none;
+        /* Hidden by default */
+        position: fixed;
+        /* Stay in place */
+        z-index: 1;
+        /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%;
+        /* Full width */
+        height: 100%;
+        /* Full height */
+        overflow: auto;
+        /* Enable scroll if needed */
+        background-color: rgba(0, 0, 0, 0.4);
+        /* Black w/ opacity */
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        /* 15% from the top and centered */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        /* Could be more or less, depending on screen size */
+    }
+
+    /* Close button */
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    .tabs {
+        width: 150px;
+        height: 40px;
+        border: 1px solid #64C5B1;
+        cursor: pointer;
+    }
+
+    .text-green {
+        color: #64C5B1;
+    }
+
+    .bg-cyan {
+        background-color: #64C5B1;
+    }
 </style>
 
 <div class="create-button">
@@ -140,8 +199,13 @@
 </div>
 
 <div class="d-flex justify-content-between mb-3">
-    <div class="create-button">
-        <a class="btn create-btn" id="create-transaction">Add Transaction</a>
+    <div class="d-flex">
+        <div class="create-button">
+            <a class="btn create-btn" id="create-transaction">Add Transaction</a>
+        </div>
+        <div class="create-button">
+            <a class="btn create-btn" id="bulk-discount-update">Bulk Discount Update</a>
+        </div>
     </div>
     <div>
         <div class="create-button d-inline-block">
@@ -161,6 +225,50 @@
         </div>
     </div>
 </div>
+<!-- Modal (Pop-up card) -->
+<div id="popupCard" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5 class="modal-title text-center">Bulk Discount Update</h5>
+            </div>
+            <form action="{{url('/bulk-discount-update')}}" method="POST" class="action-form">
+                <!-- Modal Body -->
+                <div class="modal-body">
+
+                    @csrf
+                    <input type="hidden" name="order_ids" id="discounted_order_ids">
+                    <div class="row m-0 mb-3">
+                        <label class="col-sm-12">
+                            <h5>Discount Type</h5>
+                        </label>
+                        <div id="tabs-container" class="col-sm-12 d-flex mt-2">
+                            <div id="tab-one" class="tabs tab-one d-flex justify-content-center align-items-center text-green">Fixed Fees Discount</div>
+                            <div id="tab-two" class="tabs tab-two d-flex justify-content-center align-items-center text-green">Normal Discount</div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="bulk-discount-type" name="bulk-discount-type">
+                    <div class="row m-0 mb-3">
+                        <label for="amount">
+                            <h5>Amount<b>:</b></h5>
+                        </label>
+                        <div>
+                            <input type="text" id="amount" name="amount" class="form-control" />
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="modal-footer">
+                    <button type="button" id="pop-up-close-btn" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <input type="submit" id="discount-update-btn" class="btn green" data-dismiss="modal" value="Update">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <ul class="nav nav-tabs mb-4">
     <li class="nav-item">
         <a href="#all-orders-display" id="all-orders-tab" class="nav-link active" data-toggle="tab">All Orders</a>
@@ -175,6 +283,7 @@
         <a href="#warehouse-order-display" id="warehouse-order-tab" class="nav-link" data-toggle="tab">Warehouse Orders</a>
     </li>
 </ul>
+
 <input type="hidden" id="current_screen" value="all-orders-display">
 <div class="tab-content">
     <div id="all-orders-display" class="portlet box green tab-pane active">
@@ -312,6 +421,52 @@
         $('#township').select2();
         $('#rider').select2();
         $('#shop').select2();
+
+        $('#bulk-discount-update').click(function() {
+            var order_ids = Array.from(new Set(
+                $('.order-payment:checked').map(function() {
+                    return $(this).data('id');
+                }).get()
+            ));
+
+            if (order_ids.length > 0) {
+                $('#discounted_order_ids').val(order_ids);
+                showPopupCard();
+                console.log($('#discounted_order_ids').val());
+            } else {
+                showErrorToast("Please select at least one order.");
+            }
+        });
+
+
+        $('#pop-up-close-btn').click(function() {
+            hidePopupCard();
+        });
+
+        $('#tabs-container').on('click', '.tabs', function() {
+            var $this = $(this);
+            var $tabs = $('.tabs'); // Cache all tabs
+
+            $tabs.not($this).removeClass('bg-cyan text-white clicked'); // Remove classes from other tabs
+            $this.addClass('bg-cyan text-white clicked'); // Add classes to the clicked tab
+
+            if ($this.attr('id') == 'tab-one') {
+                $('#bulk-discount-type').val('fixed_fees_discount');
+            } else {
+                $('#bulk-discount-type').val('normal_discount');
+            }
+        });
+
+        function showPopupCard() {
+            var popupCard = document.getElementById('popupCard');
+            popupCard.style.display = 'block';
+        }
+
+        function hidePopupCard() {
+            console.log('hided');
+            var popupCard = document.getElementById('popupCard');
+            popupCard.style.display = 'none';
+        }
 
         $("#create-transaction").click(function() {
             processPayment();
@@ -943,8 +1098,6 @@
         console.log(current_tab);
         console.log('a[href="#' + current_tab + '"]');
         $('a[href="#' + current_tab + '"]').click();
-
-
 
         // Get the form element
         const form = $('#pdf_form');
