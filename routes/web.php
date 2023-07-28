@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\CollectionGroupController;
+use App\Http\Controllers\CustomerCollectionController;
 use App\Http\Controllers\CustomerPaymentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeliveryTypeController;
@@ -106,6 +107,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/get-new-notifications', [AdminController::class, 'getNewNotification']);
     Route::get('/payment-notifications', [PaymentNotificationListController::class, 'index']);
     Route::get('/ajax-get-unpaid-order-list', [OrderController::class, 'getAjaxUnpaidOrderList']);
+    Route::resource('/customer-collections', CustomerCollectionController::class);
+    Route::get('/ajax-get-customer-collections-data', [CustomerCollectionController::class, 'getAjaxCustomerCollections']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

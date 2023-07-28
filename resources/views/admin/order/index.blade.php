@@ -190,7 +190,7 @@
                         <th>Paid</th>
                         <th>Total Amount</th>
                         <th>Delivery Fees</th>
-                        <th>Markup Delivery Fees</th>
+                        <!-- <th>Markup Delivery Fees</th> -->
                         <th>Order Code</th>
                         <th>Shop</th>
                         <th>Rider</th>
@@ -228,7 +228,7 @@
                         <th>Action</th>
                         <th>Total Amount</th>
                         <th>Delivery Fees</th>
-                        <th>Markup Delivery Fees</th>
+                        <!-- <th>Markup Delivery Fees</th> -->
                         <th>Order Code</th>
                         <th>Shop</th>
                         <th>Rider</th>
@@ -246,7 +246,7 @@
     </div>
     <div id="rejected-order-display" class="portlet box green tab-pane">
         <div class="portlet-title">
-            <div class="caption">Cancel Request Orders Lists</div>
+            <div class="caption">Rejected Orders Lists</div>
         </div>
         <div class="portlet-body">
             <table id="cancel-orders-datatable" class="table table-striped table-hover table-responsive datatable">
@@ -256,7 +256,7 @@
                         <th>Action</th>
                         <th>Total Amount</th>
                         <th>Delivery Fees</th>
-                        <th>Markup Delivery Fees</th>
+                        <!-- <th>Markup Delivery Fees</th> -->
                         <th>Order Code</th>
                         <th>Shop</th>
                         <th>Rider</th>
@@ -284,7 +284,7 @@
                         <th>Action</th>
                         <th>Total Amount</th>
                         <th>Delivery Fees</th>
-                        <th>Markup Delivery Fees</th>
+                        <!-- <th>Markup Delivery Fees</th> -->
                         <th>Order Code</th>
                         <th>Shop</th>
                         <th>Rider</th>
@@ -307,8 +307,6 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-
-
         $('#city').select2([]);
         $('#status').select2();
         $('#township').select2();
@@ -434,10 +432,10 @@
                         data: 'delivery_fees',
                         name: 'delivery_fees'
                     },
-                    {
-                        data: 'markup_delivery_fees',
-                        name: 'markup_delivery_fees'
-                    },
+                    // {
+                    //     data: 'markup_delivery_fees',
+                    //     name: 'markup_delivery_fees'
+                    // },
                     {
                         data: 'order_code',
                         name: 'order_code'
@@ -642,10 +640,10 @@
                         data: 'delivery_fees',
                         name: 'delivery_fees'
                     },
-                    {
-                        data: 'markup_delivery_fees',
-                        name: 'markup_delivery_fees'
-                    },
+                    // {
+                    //     data: 'markup_delivery_fees',
+                    //     name: 'markup_delivery_fees'
+                    // },
                     {
                         data: 'order_code',
                         name: 'order_code'
@@ -723,10 +721,10 @@
                         data: 'delivery_fees',
                         name: 'delivery_fees'
                     },
-                    {
-                        data: 'markup_delivery_fees',
-                        name: 'markup_delivery_fees'
-                    },
+                    // {
+                    //     data: 'markup_delivery_fees',
+                    //     name: 'markup_delivery_fees'
+                    // },
                     {
                         data: 'order_code',
                         name: 'order_code'
@@ -851,10 +849,10 @@
                         data: 'delivery_fees',
                         name: 'delivery_fees'
                     },
-                    {
-                        data: 'markup_delivery_fees',
-                        name: 'markup_delivery_fees'
-                    },
+                    // {
+                    //     data: 'markup_delivery_fees',
+                    //     name: 'markup_delivery_fees'
+                    // },
                     {
                         data: 'order_code',
                         name: 'order_code'

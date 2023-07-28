@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\Collection;
-use App\Models\CollectionGroup;
 
 class CollectionRepository
 {   
