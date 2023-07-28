@@ -35,16 +35,22 @@
                     <span class="title">Order</span>
                 </a>
             </li>
-            <li class="@if(request()->is('collections*')) {{'active'}} @endif">
-                <a href="{{route('collections.index')}}">
-                    <!-- <i class="fa fa-users"></i> -->
-                    <span class="title">Collections</span>
-                </a>
-            </li>
-            <li class="@if(request()->is('collection_groups*')) {{'active'}} @endif">
+            <li class="@if(request()->is('collection-groups*')) {{'active'}} @endif">
                 <a href="{{route('collection-groups.index')}}">
                     <!-- <i class="fa fa-users"></i> -->
                     <span class="title">Collection Group</span>
+                </a>
+            </li>
+            <li class="@if(request()->is('collections*')) {{'active'}} @endif">
+                <a href="{{route('collections.index')}}">
+                    <!-- <i class="fa fa-users"></i> -->
+                    <span class="title">Collection</span>
+                </a>
+            </li>
+            <li class="@if(request()->is('customer-collections*')) {{'active'}} @endif">
+                <a href="{{route('customer-collections.index')}}">
+                    <!-- <i class="fa fa-users"></i> -->
+                    <span class="title">Customer Collection</span>
                 </a>
             </li>
             <li>

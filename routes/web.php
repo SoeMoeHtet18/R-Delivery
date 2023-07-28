@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\CollectionGroupController;
+use App\Http\Controllers\CustomerCollectionController;
 use App\Http\Controllers\CustomerPaymentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeliveryTypeController;
@@ -103,6 +104,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/remaining-amount-cancel/{order_id}', [OrderController::class, 'cancelRemainingAmount']);
     Route::get('/get-notifications', [AdminController::class, 'getNotification']);
     Route::get('/get-new-notifications', [AdminController::class, 'getNewNotification']);
+    Route::resource('/customer-collections', CustomerCollectionController::class);
+    Route::get('/ajax-get-customer-collections-data', [CustomerCollectionController::class, 'getAjaxCustomerCollections']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

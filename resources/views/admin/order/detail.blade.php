@@ -19,6 +19,9 @@
         </h2>
         <div class="card-toolbar">
             <div>
+                <a href="{{url('/customer-collections/create?order_id='.$order->id)}}" class="btn portlet green me-3">Create Customer Collection</a>
+            </div>
+            <div>
                 <a href="{{url('/orders/'.$order->id.'/assign-rider')}}" class="btn btn-secondary me-3">Assign Rider</a>
             </div>
             <div class="create-button">
