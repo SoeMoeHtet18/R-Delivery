@@ -1,6 +1,16 @@
 @extends('admin.layouts.master')
 @section('title','Collection Group Create')
 @section('content')
+<style>
+    .plus-btn {
+        background-color: black;
+        color: white;
+        padding: 10px;
+        border-radius: 20px;
+        size: 24px;
+        float: right;
+    }
+</style>
 <div class="card card-container action-form-card">
     <div class="card-body">
         <h2 class="ps-1 card-header-title">
@@ -39,18 +49,6 @@
                 </div>
             </div>
             <div class="row m-0 mb-3">
-                <label for="collection_id" class="col-2">
-                    <h4>Collections <b>:</b></h4>
-                </label>
-                <div class="col-10">
-                    <select name="collection_id[]" id="collection_id" class="form-control" multiple>
-                        @foreach($collections as $collection)
-                        <option value="{{$collection->id}}" @if(in_array($collection->id, old('collection_id', []))) selected @endif>{{$collection->id}}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-            <div class="row m-0 mb-3">
                 <label for="assigned_date" class="col-2">
                     <h4>Assigned Date <b>:</b></h4>
                 </label>
@@ -68,6 +66,33 @@
         </form>
     </div>
 </div>
+<div class="card card-container action-form-card">
+<div class="card-body">
+<div class="row">
+    <div class="generat_sku margin10" id="addMoreCategory" style="cursor: pointer;"><i class="fal fa-plus plus-btn"
+        style="cursor: pointer;"></i></div>
+    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+        <label for="shop">
+            <strong>Shop</strong>
+        </label>
+        <div class="col-10">
+            <select name="shop" id="shop" class="form-control">
+                <option value="" selected disabled>Select</option>
+                @foreach($shops as $shop)
+                <option value="{{$shop->id}}">{{$shop->name}}</option>
+                @endforeach
+            </select>
+        </div>
+    </div>
+    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+    <label><strong>Amount</strong></label>
+    <input type="text" id="total_amount" name="total_amount" class="form-control" />
+    </div>
+</div>
+<div id="extraHtml">
+</div>
+</div>
+</div>
 
 @endsection
 @section('javascript')
@@ -79,5 +104,16 @@
             allowClear: true
         });
     });
+
+    var appendCategory = () => {return '<div class="row" ><div class="col-lg-4 col-md-4 col-sm-6 col-xs-6"><label for="shop"><strong>Shop</strong></label><div class="col-10"><select name="shop" id="shop" class="form-control"><option value="" selected disabled>Select</option>@foreach($shops as $shop)<option value="{{$shop->id}}">{{$shop->name}}</option>@endforeach</select></div></div><div class="col-lg-4 col-md-4col-sm-12 col-xs-6"><label><strong>Amount</strong></label><input type="text" id="total_amount" name="total_amount" class="form-control" /></div></div>'
+    };
+
+    var addMoreCategory = () => {
+      document.getElementById('addMoreCategory').addEventListener('click', (e) => {
+        console.log('addMoreCategory')
+        $('#extraHtml').append(appendCategory());
+      });
+    }
+    addMoreCategory();
 </script>
 @endsection

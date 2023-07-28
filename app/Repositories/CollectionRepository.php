@@ -60,7 +60,7 @@ class CollectionRepository
 
     public function getAllCollectionsQuery()
     {
-        $query = Collection::select('*');
+        $query = Collection::select('collections.*', 'riders.name as rider_name', 'shops.name as shop_name')->leftJoin('riders', 'riders.id', 'collections.rider_id')->leftJoin('shops', 'shops.id', 'collections.shop_id');
         return $query;
     }
 
