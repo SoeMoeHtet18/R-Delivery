@@ -365,7 +365,6 @@
                         <th>Action</th>
                         <th>Total Amount</th>
                         <th>Delivery Fees</th>
-                        <!-- <th>Markup Delivery Fees</th> -->
                         <th>Order Code</th>
                         <th>Shop</th>
                         <th>Rider</th>
@@ -829,7 +828,7 @@
                                 return "Paid";
                             }
                         },
-                        "targets": 10
+                        "targets": 9
                     },
 
                 ]
@@ -854,7 +853,8 @@
                         r.township = township;
                     }
                 },
-                columns: [{
+                columns: [
+                    {
                         data: 'DT_RowIndex',
                         name: 'id'
                     },
@@ -876,10 +876,6 @@
                         data: 'delivery_fees',
                         name: 'delivery_fees'
                     },
-                    // {
-                    //     data: 'markup_delivery_fees',
-                    //     name: 'markup_delivery_fees'
-                    // },
                     {
                         data: 'order_code',
                         name: 'order_code'
@@ -901,7 +897,8 @@
                         name: 'customer_phone_number'
                     },
                 ],
-                columnDefs: [{
+                columnDefs: [
+                    {
                         "render": function(data, type, row) {
                             if (row.payment_flag == 0) {
                                 return "Unpaid";
@@ -910,56 +907,56 @@
                                 return "Paid";
                             }
                         },
-                        "targets": 10
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            return row.total_amount;
-                        },
-                        "targets": 2
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            return row.delivery_fees;
-                        },
-                        "targets": 3
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            return row.markup_delivery_fees;
-                        },
-                        "targets": 4
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            return row.order_code;
-                        },
-                        "targets": 5
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            return row.shop_name;
-                        },
-                        "targets": 6
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            return row.rider_name;
-                        },
-                        "targets": 7
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            return row.customer_name;
-                        },
-                        "targets": 8
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            return row.customer_phone_number;
-                        },
                         "targets": 9
                     },
+                    // {
+                    //     "render": function(data, type, row) {
+                    //         return row.total_amount;
+                    //     },
+                    //     "targets": 2
+                    // },
+                    // {
+                    //     "render": function(data, type, row) {
+                    //         return row.delivery_fees;
+                    //     },
+                    //     "targets": 3
+                    // },
+                    // {
+                    //     "render": function(data, type, row) {
+                    //         return row.markup_delivery_fees;
+                    //     },
+                    //     "targets": 4
+                    // },
+                    // {
+                    //     "render": function(data, type, row) {
+                    //         return row.order_code;
+                    //     },
+                    //     "targets": 5
+                    // },
+                    // {
+                    //     "render": function(data, type, row) {
+                    //         return row.shop_name;
+                    //     },
+                    //     "targets": 6
+                    // },
+                    // {
+                    //     "render": function(data, type, row) {
+                    //         return row.rider_name;
+                    //     },
+                    //     "targets": 7
+                    // },
+                    // {
+                    //     "render": function(data, type, row) {
+                    //         return row.customer_name;
+                    //     },
+                    //     "targets": 8
+                    // },
+                    // {
+                    //     "render": function(data, type, row) {
+                    //         return row.customer_phone_number;
+                    //     },
+                    //     "targets": 9
+                    // },
                 ]
             });
         }
@@ -1029,7 +1026,8 @@
                         name: 'customer_phone_number'
                     },
                 ],
-                columnDefs: [{
+                columnDefs: [
+                    {
                         "render": function(data, type, row) {
                             if (row.payment_flag == 0) {
                                 return "Unpaid";
@@ -1038,56 +1036,56 @@
                                 return "Paid";
                             }
                         },
-                        "targets": 10
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            return row.total_amount;
-                        },
-                        "targets": 2
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            return row.delivery_fees;
-                        },
-                        "targets": 3
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            return row.markup_delivery_fees;
-                        },
-                        "targets": 4
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            return row.order_code;
-                        },
-                        "targets": 5
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            return row.shop_name;
-                        },
-                        "targets": 6
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            return row.rider_name;
-                        },
-                        "targets": 7
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            return row.customer_name;
-                        },
-                        "targets": 8
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            return row.customer_phone_number;
-                        },
                         "targets": 9
                     },
+                    // {
+                    //     "render": function(data, type, row) {
+                    //         return row.total_amount;
+                    //     },
+                    //     "targets": 2
+                    // },
+                    // {
+                    //     "render": function(data, type, row) {
+                    //         return row.delivery_fees;
+                    //     },
+                    //     "targets": 3
+                    // },
+                    // {
+                    //     "render": function(data, type, row) {
+                    //         return row.markup_delivery_fees;
+                    //     },
+                    //     "targets": 4
+                    // },
+                    // {
+                    //     "render": function(data, type, row) {
+                    //         return row.order_code;
+                    //     },
+                    //     "targets": 5
+                    // },
+                    // {
+                    //     "render": function(data, type, row) {
+                    //         return row.shop_name;
+                    //     },
+                    //     "targets": 6
+                    // },
+                    // {
+                    //     "render": function(data, type, row) {
+                    //         return row.rider_name;
+                    //     },
+                    //     "targets": 7
+                    // },
+                    // {
+                    //     "render": function(data, type, row) {
+                    //         return row.customer_name;
+                    //     },
+                    //     "targets": 8
+                    // },
+                    // {
+                    //     "render": function(data, type, row) {
+                    //         return row.customer_phone_number;
+                    //     },
+                    //     "targets": 9
+                    // },
 
                 ]
             });
