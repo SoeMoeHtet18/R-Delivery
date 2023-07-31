@@ -110,6 +110,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/customer-collections', CustomerCollectionController::class);
     Route::get('/ajax-get-customer-collections-data', [CustomerCollectionController::class, 'getAjaxCustomerCollections']);
     Route::post('/bulk-discount-update', [OrderController::class, 'bulkDiscountUpdate']);
+    Route::get('/get-collections-by-shop', [ShopController::class, 'getCollectionByShop']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
