@@ -491,23 +491,48 @@
 
             if (order_ids.length > 0) {
                 $('#printed_order_ids').val(order_ids);
-                $.ajax({
-                    url: "{{ url('/generate-qrcode') }}",
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        order_ids: order_ids,
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(data) {
-                        // Handle the AJAX response here
-                        $('#ajaxResult').html(data.result);
-                    },
-                    error: function(xhr, status, error) {
-                        // Handle errors, if any
-                        console.log(xhr.responseText);
-                    }
-                });
+                // $.ajax({
+                //     url: "{{ url('/generate-qrcode') }}",
+                //     type: 'POST',
+                //     dataType: 'json',
+                //     data: {
+                //         order_ids: order_ids,
+                //         _token: '{{ csrf_token() }}'
+                //     },
+                //     success: function(data) {
+                //         // Handle the AJAX response here
+                //         $('#ajaxResult').html(data.result);
+                //     },
+                //     error: function(xhr, status, error) {
+                //         // Handle errors, if any
+                //         console.log(xhr.responseText);
+                //     }
+                // });
+                // Create a form element
+                var form = document.createElement('form');
+                form.method = 'POST';
+                form.action = "{{ url('/generate-qrcode') }}";
+                form.target = '_blank';
+
+                // Create hidden input fields for order_ids and _token
+                var orderIdsInput = document.createElement('input');
+                orderIdsInput.type = 'hidden';
+                orderIdsInput.name = 'order_ids';
+                orderIdsInput.value = order_ids;
+
+                var csrfTokenInput = document.createElement('input');
+                csrfTokenInput.type = 'hidden';
+                csrfTokenInput.name = '_token';
+                csrfTokenInput.value = '{{ csrf_token() }}';
+
+                // Append the input fields to the form
+                form.appendChild(orderIdsInput);
+                form.appendChild(csrfTokenInput);
+
+                // Append the form to the document body and submit it
+                document.body.appendChild(form);
+                form.submit();
+
                 // showPopupQrCard();
             } else {
                 showErrorToast("Please select at least one order.");

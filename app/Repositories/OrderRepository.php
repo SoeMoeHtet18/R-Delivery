@@ -361,7 +361,23 @@ class OrderRepository
 
     public function getOrdersByIds($order_ids)
     {
+        // Check if $order_ids is a string, then convert it to an array
+        if (is_string($order_ids)) {
+            $order_ids = explode(',', $order_ids);
+        }
+
+        // Make sure $order_ids is an array before proceeding
+        if (!is_array($order_ids)) {
+            return response()->json(['error' => 'Invalid input'], 400);
+        }
+
+        // Remove any empty elements from the array
+        $order_ids = array_filter($order_ids, 'strlen');
+
+        // Fetch the orders using the filtered array of IDs
         $orders = Order::whereIn('id', $order_ids)->get();
+
         return $orders;
     }
+
 }
