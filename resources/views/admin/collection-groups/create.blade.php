@@ -2,14 +2,16 @@
 @section('title','Collection Group Create')
 @section('content')
 <style>
-    .plus-btn {
-        background-color: black;
-        color: white;
-        padding: 10px;
-        border-radius: 20px;
-        size: 24px;
-        float: right;
+    /* Assuming .plus-btn is the direct child of .generat_sku */
+    .generat_sku > .plus-btn {
+    background-color: #000000;
+    padding: 10px;
+    color: white;
+    border-radius: 20px;
+    font-size: 23px;
+    float: right;
     }
+
 </style>
 <div class="card card-container action-form-card">
     <div class="card-body">
@@ -59,39 +61,47 @@
                     @endif
                 </div>
             </div>
-            <div class="footer-button float-end">
-                <a href="{{route('collection-groups.index')}}" class="btn btn-light">Cancel</a>
-                <input type="submit" class="btn btn-success ">
-            </div>
         </form>
     </div>
 </div>
 <div class="card card-container action-form-card">
-<div class="card-body">
-<div class="row">
-    <div class="generat_sku margin10" id="addMoreCategory" style="cursor: pointer;"><i class="fal fa-plus plus-btn"
-        style="cursor: pointer;"></i></div>
-    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
-        <label for="shop">
-            <strong>Shop</strong>
-        </label>
-        <div class="col-10">
-            <select name="shop" id="shop" class="form-control">
-                <option value="" selected disabled>Select</option>
-                @foreach($shops as $shop)
-                <option value="{{$shop->id}}">{{$shop->name}}</option>
-                @endforeach
-            </select>
+    <div class="card-body">
+        <div class="row">
+            <div class="generat_sku margin10"  style="cursor: pointer;"><i id="addMoreCategory" class="fal fa-plus plus-btn"
+                style="cursor: pointer;"></i></div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                <label for="shop">
+                    <strong>Shop</strong>
+                </label>
+                <div class="col-10">
+                    <select name="shop" id="shop" class="form-control shop-dropdown">
+                        <option value="" selected disabled>Select</option>
+                        @foreach($shops as $shop)
+                        <option value="{{$shop->id}}">{{$shop->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+            <label><strong>Amount</strong></label>
+            <input type="text" id="total_amount" name="total_amount" class="form-control" />
+            </div>
+        </div>
+        <div id="extraHtml">
         </div>
     </div>
-    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
-    <label><strong>Amount</strong></label>
-    <input type="text" id="total_amount" name="total_amount" class="form-control" />
+</div>
+
+<div class="card card-container action-form-card">
+    <div class="card-body">
+        <div id="collectionList">
+        </div>
     </div>
 </div>
-<div id="extraHtml">
-</div>
-</div>
+
+<div class="footer-button float-end">
+    <a href="{{route('collection-groups.index')}}" class="btn btn-light">Cancel</a>
+    <input type="submit" class="btn btn-success ">
 </div>
 
 @endsection
@@ -105,7 +115,7 @@
         });
     });
 
-    var appendCategory = () => {return '<div class="row" ><div class="col-lg-4 col-md-4 col-sm-6 col-xs-6"><label for="shop"><strong>Shop</strong></label><div class="col-10"><select name="shop" id="shop" class="form-control"><option value="" selected disabled>Select</option>@foreach($shops as $shop)<option value="{{$shop->id}}">{{$shop->name}}</option>@endforeach</select></div></div><div class="col-lg-4 col-md-4col-sm-12 col-xs-6"><label><strong>Amount</strong></label><input type="text" id="total_amount" name="total_amount" class="form-control" /></div></div>'
+    var appendCategory = () => {return '<div class="row" ><div class="col-lg-4 col-md-4 col-sm-6 col-xs-6"><label for="shop"><strong>Shop</strong></label><div class="col-10"><select name="shop" id="shop" class="form-control shop-dropdown"><option value="" selected disabled>Select</option>@foreach($shops as $shop)<option value="{{$shop->id}}">{{$shop->name}}</option>@endforeach</select></div></div><div class="col-lg-4 col-md-4col-sm-12 col-xs-6"><label><strong>Amount</strong></label><input type="text" id="total_amount" name="total_amount" class="form-control" /></div></div>'
     };
 
     var addMoreCategory = () => {
@@ -115,5 +125,36 @@
       });
     }
     addMoreCategory();
+
+    $(document).ready(function() {
+        var shopDropdownValues = [];
+        $('body').on('change', '.shop-dropdown', function(e) {
+            var selectedValue = $(this).val();
+            var dropdownIndex = $('.shop-dropdown').index(this);
+            shopDropdownValues[dropdownIndex] = selectedValue;
+            console.log(shopDropdownValues);
+            data = {
+                shop_ids: shopDropdownValues,
+            };
+            console.log(data);
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    url: '/get-collections-by-shop',
+                    type: "GET",
+                    data: data,
+                    success: function(datas) {
+                        if (datas) {
+                            $("#collectionList").html(datas);
+                        } else {
+                            $("#collectionList").html("");
+                        }
+                    }
+                });
+        });
+    });
 </script>
 @endsection
