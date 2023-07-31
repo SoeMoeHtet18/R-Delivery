@@ -206,6 +206,9 @@
         <div class="create-button">
             <a class="btn create-btn" id="bulk-discount-update">Bulk Discount Update</a>
         </div>
+        <div class="create-button">
+            <a class="btn create-btn" id="qr-code-generate">Print QrCode</a>
+        </div>
     </div>
     <div>
         <div class="create-button d-inline-block">
@@ -268,6 +271,46 @@
             </form>
         </div>
     </div>
+</div>
+<div id="popupQrCard" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5 class="modal-title text-center">Print Qr</h5>
+            </div>
+            <form action="">
+                <!-- Modal Body -->
+                <div class="modal-body">
+
+                    @csrf
+                    <input type="hidden" name="qr_order_ids" id="printed_order_ids">
+                    <div class="row m-0 mb-3">
+                        <div>
+                            <h4>Select Template <b>*</b></h4>
+                        </div>
+                        <div>
+                            <select name="template" id="template" class="form-control">
+                                <option value="" selected disabled>Select template </option>
+                                <option value="roll_1x2">1" x 2" (Roll Format)</option>
+                                <option value="roll_2x3">2" x 3" (Roll Format)</option>
+                                <option value="roll_3x5_cm">3cm x 5cm (Roll Format)</option>
+                                <option value="roll_4x6_cm">4cm x 6cm (Roll Format)</option>
+                                <option value="sheet_1x2">1" x 2" (Sheet Format - Portrait)</option>
+                                <option value="sheet_3x5cm_portrait">3cm x 5cm (Sheet Format - Portrait)</option>
+                                <option value="sheet_3x5cm_landscape">3cm x 5cm (Sheet Format - Landscape)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="qr-pop-up-close-btn" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <input type="submit" id="qr-code-generate-btn" class="btn green" data-dismiss="modal" value="Print">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 </div>
 <ul class="nav nav-tabs mb-4">
     <li class="nav-item">
@@ -421,6 +464,7 @@
         $('#township').select2();
         $('#rider').select2();
         $('#shop').select2();
+        $('#template').select2();
 
         $('#bulk-discount-update').click(function() {
             var order_ids = Array.from(new Set(
@@ -438,11 +482,49 @@
             }
         });
 
+        $('#qr-code-generate').click(function() {
+            var order_ids = Array.from(new Set(
+                $('.order-payment:checked').map(function() {
+                    return $(this).data('id');
+                }).get()
+            ));
+
+            if (order_ids.length > 0) {
+                $('#printed_order_ids').val(order_ids);
+                $.ajax({
+                    url: "{{ url('/generate-qrcode') }}",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        order_ids: order_ids,
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(data) {
+                        // Handle the AJAX response here
+                        $('#ajaxResult').html(data.result);
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle errors, if any
+                        console.log(xhr.responseText);
+                    }
+                });
+                // showPopupQrCard();
+            } else {
+                showErrorToast("Please select at least one order.");
+            }
+        });
+
+
+        $('#qr-pop-up-close-btn').click(function() {
+            hidePopupQrCard();
+        });
+
+
+
 
         $('#pop-up-close-btn').click(function() {
             hidePopupCard();
         });
-
         $('#tabs-container').on('click', '.tabs', function() {
             var $this = $(this);
             var $tabs = $('.tabs'); // Cache all tabs
@@ -465,6 +547,17 @@
         function hidePopupCard() {
             console.log('hided');
             var popupCard = document.getElementById('popupCard');
+            popupCard.style.display = 'none';
+        }
+
+        function showPopupQrCard() {
+            var popupCard = document.getElementById('popupQrCard');
+            popupCard.style.display = 'block';
+        }
+
+        function hidePopupQrCard() {
+            console.log('hided');
+            var popupCard = document.getElementById('popupQrCard');
             popupCard.style.display = 'none';
         }
 
@@ -696,7 +789,7 @@
                                 return "Delivering";
                             }
                         },
-                        "targets": 14
+                        "targets": 13
                     },
                     {
                         "render": function(data, type, row) {
@@ -711,7 +804,7 @@
                             });
                             return formattedDate;
                         },
-                        "targets": 17
+                        "targets": 16
                     },
                     {
                         "render": function(data, type, row) {
@@ -722,7 +815,7 @@
                                 return "Pick Up";
                             }
                         },
-                        "targets": 19
+                        "targets": 18
                     },
                 ]
             });
@@ -1123,7 +1216,6 @@
             // Navigate to the download URL
             window.location.href = downloadUrl;
         }
-
     });
 </script>
 @endsection

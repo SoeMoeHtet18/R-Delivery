@@ -358,4 +358,10 @@ class OrderRepository
             ->select('orders.*', 'townships.name as township_name', 'shops.name as shop_name', 'riders.name as rider_name', 'users.name as last_updated_by_name', 'cities.name as city_name', 'item_types.name as item_type_name', 'delivery_types.name as delivery_type_name', 'delivery_types.notified_on as notified_on');
         return $query;
     }
+
+    public function getOrdersByIds($order_ids)
+    {
+        $orders = Order::whereIn('id', $order_ids)->get();
+        return $orders;
+    }
 }

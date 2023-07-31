@@ -12,9 +12,9 @@ class Collection extends Model
         'total_quantity', 'total_amount', 'paid_amount', 'collection_group_id', 'rider_id', 'shop_id', 'assigned_at', 'collected_at', 'note', 'status', 'is_payable'
     ];
 
-    public function collectionGroup() 
+    public function collection_gorup() 
     {
-        return $this->belongsToMany(CollectionGroup::class, 'collection_group_id', 'id')->withTrashed();
+        return $this->belongsTo(CollectionGroup::class, 'collection_group_id', 'id')->withTrashed();
     }
 
     public function shop() 

@@ -13,6 +13,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderImportController;
 use App\Http\Controllers\PaymentNotificationListController;
 use App\Http\Controllers\PaymentTypeController;
+use App\Http\Controllers\QrCodeController;
 use App\Http\Controllers\RiderController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\ShopPaymentController;
@@ -110,6 +111,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/customer-collections', CustomerCollectionController::class);
     Route::get('/ajax-get-customer-collections-data', [CustomerCollectionController::class, 'getAjaxCustomerCollections']);
     Route::post('/bulk-discount-update', [OrderController::class, 'bulkDiscountUpdate']);
+    Route::get('/create-qrcode', [QrCodeController::class, 'index']);
+    Route::post('/generate-qrcode', [QrCodeController::class, 'generateQrCode']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
