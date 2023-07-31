@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Rider;
 use App\Models\Township;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class RiderService
@@ -18,15 +19,15 @@ class RiderService
         $rider->salary_type = $data['salary_type'];
         $rider->device_id = $data['device_id'] ?? null;
         $rider->save();
-        if(isset($data['township_id'])) {
+        if (isset($data['township_id'])) {
             $townships = [];
             $township_ids = $data['township_id'];
-            foreach($township_ids as $township_id) {
+            foreach ($township_ids as $township_id) {
                 $township = Township::find($township_id);
                 $townships[$township_id] = [
                     'rider_fees' => $township->delivery_fees,
                 ];
-            }        
+            }
             $rider->townships()->sync($townships);
         }
         return $rider;
@@ -37,21 +38,21 @@ class RiderService
         $rider->name = $data['name'];
         $rider->phone_number = $data['phone_number'];
         $rider->email = $data['email'] ?? $rider->email;
-        if(isset($data['password'])) {
+        if (isset($data['password'])) {
             $rider->password =  bcrypt($data['password']);
         }
         $rider->device_id = $data['device_id'] ?? $rider->device_id;
         $rider->salary_type = $data['salary_type'];
-        
-        if(isset($data['township_id'])) {
+
+        if (isset($data['township_id'])) {
             $townships = [];
             $township_ids = $data['township_id'];
-            foreach($township_ids as $township_id) {
+            foreach ($township_ids as $township_id) {
                 $township = Township::find($township_id);
                 $townships[$township_id] = [
                     'rider_fees' => $township->delivery_fees,
                 ];
-            }          
+            }
             $rider->townships()->sync($townships);
         }
         $rider->save();
@@ -66,17 +67,32 @@ class RiderService
     public function assignTownship($rider, $data)
     {
         $townships = $data['township_id'];
-        $rider->townships()->sync($townships);
+        $rider_fees = $data['rider_fees'];
+        
+        $rider->townships()->sync([]);
+        
+        // Insert the records into the pivot table with rider_fees values
+        $records = [];
+        for ($i = 0; $i < count($townships); $i++) {
+            $records[] = [
+                'rider_id' => $rider->id,
+                'township_id' => $townships[$i],
+                'rider_fees' => $rider_fees[$i],
+            ];
+        }
+        
+        DB::table('rider_township')->insert($records);        
     }
 
-    public function changePassword($rider, $old_password, $new_password) {
+    public function changePassword($rider, $old_password, $new_password)
+    {
         $password = $rider->password;
         if (Hash::check($old_password, $password)) {
             $rider->password = bcrypt($new_password);
             $rider->save();
             return true;
         } else {
-           return false;
+            return false;
         }
     }
 }

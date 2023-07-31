@@ -696,7 +696,7 @@
                                 return "Delivering";
                             }
                         },
-                        "targets": 14
+                        "targets": 13
                     },
                     {
                         "render": function(data, type, row) {
@@ -711,7 +711,7 @@
                             });
                             return formattedDate;
                         },
-                        "targets": 17
+                        "targets": 16
                     },
                     {
                         "render": function(data, type, row) {
@@ -722,7 +722,7 @@
                                 return "Pick Up";
                             }
                         },
-                        "targets": 19
+                        "targets": 18
                     },
                 ]
             });

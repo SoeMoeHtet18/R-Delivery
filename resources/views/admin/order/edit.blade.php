@@ -213,7 +213,7 @@
                 <div class="col-10">
                     <select name="collection_method" id="collection_method_id" class="form-control">
                         <option value="" selected disabled>Select the Collection Method for This Order</option>
-                        <option value="pickup" @if($order->collection_method == "pickup") {{'selected'}} @endif>PickUp</option>
+                        <option value="pickup" @if($order->collection_method == "pickup") {{'selected'}} @endif>Pick Up</option>
                         <option value="dropoff" @if($order->collection_method == "dropoff") {{'selected'}} @endif>Drop Off</option>
                     </select>
                 </div>

@@ -49,7 +49,7 @@ class OrderService
         $order->note = $data['note'] ?? null;
         $order->is_payment_channel_confirm = 0;
         $order->is_confirm = 0;
-        $order->extra_charges = $data['extra_charges'];
+        $order->extra_charges = $data['extra_charges'] ?? 0;
         $order->save();
         return $order;
     }
@@ -83,7 +83,7 @@ class OrderService
         $order->delivery_type_id = $data['delivery_type_id'];
         $order->is_payment_channel_confirm = 0;
         $order->is_confirm = 0;
-        $order->extra_charges = $data['extra_charges'];
+        $order->extra_charges = $data['extra_charges'] ?? 0;
         $order->save();
         $this->notificationService->orderCreateNotificationForShopUser($shop_id);
         return $order;
