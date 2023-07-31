@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Collection;
 use App\Models\CollectionGroup;
+use App\Models\CustomerCollection;
 use Carbon\Carbon;
 
 class CollectionGroupService
@@ -38,12 +39,15 @@ class CollectionGroupService
             'assigned_date' => $data['assigned_date']
         ]);
 
-        $collections = [];
-        if(isset($data['collection_id'])) {
-            $collectionIds = $data['collection_id'];
-            foreach ($collectionIds as $collectionId) {
-                $collection = Collection::where('id', $collectionId)->update(['collection_group_id' => $collectionGroup->id]);
-            }    
+        if(isset($data['checkedShopCollections'])) {
+            $shopCollections = $data['checkedShopCollections'];
+            Collection::whereIn('id', $shopCollections)->update(['collection_group_id' => $collectionGroup->id]);
+            
+        }
+        if(isset($data['checkedCustomerCollections'])) {
+            $shopCollections = $data['checkedCustomerCollections'];
+            CustomerCollection::whereIn('id', $shopCollections)->update(['collection_group_id' => $collectionGroup->id]);
+            
         }
         return $collectionGroup;
     }

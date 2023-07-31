@@ -18,7 +18,7 @@
         <h2 class="ps-1 card-header-title">
             <strong>Add New Collection Group</strong>
         </h2>
-        <form action="{{route('collection-groups.store')}}" method="POST" class="action-form">
+        <form action="{{route('collection-groups.store')}}" method="POST" class="action-form" id="collectionForm">
             @csrf
             <div class="row m-0 mb-3">
                 <label for="total_amount" class="col-2">
@@ -82,10 +82,10 @@
                     </select>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
+            <!-- <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
             <label><strong>Amount</strong></label>
             <input type="text" id="total_amount" name="total_amount" class="form-control" />
-            </div>
+            </div> -->
         </div>
         <div id="extraHtml">
         </div>
@@ -101,7 +101,7 @@
 
 <div class="footer-button float-end">
     <a href="{{route('collection-groups.index')}}" class="btn btn-light">Cancel</a>
-    <input type="submit" class="btn btn-success ">
+    <input type="button" class="btn btn-success submit-button" onclick="getCheckedValues()" value="Submit">
 </div>
 
 @endsection
@@ -115,7 +115,7 @@
         });
     });
 
-    var appendCategory = () => {return '<div class="row" ><div class="col-lg-4 col-md-4 col-sm-6 col-xs-6"><label for="shop"><strong>Shop</strong></label><div class="col-10"><select name="shop" id="shop" class="form-control shop-dropdown"><option value="" selected disabled>Select</option>@foreach($shops as $shop)<option value="{{$shop->id}}">{{$shop->name}}</option>@endforeach</select></div></div><div class="col-lg-4 col-md-4col-sm-12 col-xs-6"><label><strong>Amount</strong></label><input type="text" id="total_amount" name="total_amount" class="form-control" /></div></div>'
+    var appendCategory = () => {return '<div class="row" ><div class="col-lg-4 col-md-4 col-sm-6 col-xs-6"><label for="shop"><strong>Shop</strong></label><div class="col-10"><select name="shop" id="shop" class="form-control shop-dropdown"><option value="" selected disabled>Select</option>@foreach($shops as $shop)<option value="{{$shop->id}}">{{$shop->name}}</option>@endforeach</select></div></div>'
     };
 
     var addMoreCategory = () => {
@@ -128,6 +128,7 @@
 
     $(document).ready(function() {
         var shopDropdownValues = [];
+        var checkValues = [];
         $('body').on('change', '.shop-dropdown', function(e) {
             var selectedValue = $(this).val();
             var dropdownIndex = $('.shop-dropdown').index(this);
@@ -155,6 +156,53 @@
                     }
                 });
         });
+
+        // $('body').on('click', '.submit-button', function(e) {
+        //     console.log('submit-button');
+        //     var checkbox = $('.shop-dropdown').val();
+        //     // checkValues[checkbox] = selectedValue;
+        //     console.log(checkbox);
+        // });
     });
+
+    function getCheckedValues() {
+        // Get the checked collection_checkbox values
+        var shopCollectionCheckboxes = document.getElementsByName("collection_checkbox[]");
+        var checkedShopCollectionValues = [];
+        for (var i = 0; i < shopCollectionCheckboxes.length; i++) {
+            if (shopCollectionCheckboxes[i].checked) {
+                checkedShopCollectionValues.push(shopCollectionCheckboxes[i].value);
+            }
+        }
+        console.log(checkedShopCollectionValues);
+
+        //Get the checked customer_collection_checkbox values
+        var customerCollectionCheckboxes = document.getElementsByName("customer_collection_checkbox[]");
+        var checkedCustomerCollectionValues = [];
+        for (var j = 0; j < customerCollectionCheckboxes.length; j++) {
+            if (customerCollectionCheckboxes[j].checked) {
+                checkedCustomerCollectionValues.push(customerCollectionCheckboxes[j].value);
+            }
+        }
+
+        // // Add the checked values to the form as hidden fields before submitting
+        var form = document.getElementById("collectionForm");
+        var shopCollectionInput = document.createElement("input");
+        shopCollectionInput.type = "hidden";
+        shopCollectionInput.name = "checked_shop_collections";
+        shopCollectionInput.value = JSON.stringify(checkedShopCollectionValues);
+        form.appendChild(shopCollectionInput);
+
+        
+        var customerCollectionInput = document.createElement("input");
+        customerCollectionInput.type = "hidden";
+        customerCollectionInput.name = "checked_customer_collections";
+        customerCollectionInput.value = JSON.stringify(checkedCustomerCollectionValues);
+        form.appendChild(customerCollectionInput);
+        
+
+        // // Submit the form
+        form.submit();
+    }
 </script>
 @endsection
