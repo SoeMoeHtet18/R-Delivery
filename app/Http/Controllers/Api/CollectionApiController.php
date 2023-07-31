@@ -53,4 +53,12 @@ class CollectionApiController extends Controller
         $collections = $this->collectionRepository->getAllCollectionsByShopUser($shop_id);
         return response()->json(['data' => $collections, 'message' => 'Successfully get collections by shop user', 'status' => 'success'], 200);
     }
+
+    public function getCollectionsByShop($page = 1,Request $request) {
+        $shop_id = $request->shop_id;
+        $collection_group_id = $request->collection_group_id;
+        // dd($rider_id);
+        $collections = $this->collectionRepository->getCollectionsByShop($shop_id,$collection_group_id, $page);
+        return response()->json(['data' => $collections, 'message' => 'Successfully Get Collection list By Shop', 'status' => 'success'], 200);
+    }
 }

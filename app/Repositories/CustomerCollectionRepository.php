@@ -26,4 +26,13 @@ class CustomerCollectionRepository
         return $customer_collections;
         
     }
+
+    public function show($id) 
+    {
+        $customer_collection = CustomerCollection::with(['order.rider', 'order.shop'])->first();
+        $customer_collection['order_code'] = $customer_collection->order->order_code;
+        $customer_collection['customer_name'] = $customer_collection->order->customer_name;
+        $customer_collection['shop_name'] = $customer_collection->order->shop->name;
+        return $customer_collection;
+    }
 }

@@ -255,4 +255,23 @@ class RiderApiController extends Controller
         $customerCollection = $this->customerCollectionService->saveCustomerCollectionByRider($rider, $data);
         return response()->json(['data' => $customerCollection, 'message' => 'Successfully Create Customer Collection by Rider', 'status' => 'success'], 200);
     }
+
+    public function getRiderPaymentHistory($page = 1) {
+        $rider = auth()->guard('rider-api')->user();
+        $limit = 10; 
+        $offset = ($page - 1) * $limit; 
+        $riderPayments = RiderPayment::where('rider_id',$rider->id)->offset($offset)->limit($limit)->orderBy('id','DESC')->get();
+        return response()->json(['data' => $riderPayments, 'message' => 'Successfully Get Rider Payment History', 'status' => 'success'], 200);
+    }
+    
+    public function updateCustomerCollectionByRider(Request $request) {
+        $rider = auth()->guard('rider-api')->user();
+        $data = $request->all();
+        $reuploadPhoto = false;
+        if($request->has('photo')){
+            $reuploadPhoto = true;
+        }
+        $customerCollection = $this->customerCollectionService->updateCustomerCollectionByRider($data,$reuploadPhoto);
+        return response()->json(['data' => $customerCollection, 'message' => 'Successfully Update Customer Collection by Rider', 'status' => 'success'], 200);
+    }
 }

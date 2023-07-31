@@ -63,4 +63,20 @@ class CustomerCollectionService
         $customer_collection->save();
         return $customer_collection;
     }
+    
+    public function updateCustomerCollectionByRider($data, $reuploadPhoto)
+    {
+        $customer_collection =  CustomerCollection::where('id',$data['id'])->first();
+        $customer_collection->paid_amount  = $data['amount'];
+        $customer_collection->note   = $data['reason'];
+        $file_name = null;
+        if ($reuploadPhoto) {
+            $photo = $data['photo'];
+            $file_name = $this->uploadFile($photo, 'public', 'customer_collection');
+            $imageUrl = asset('/storage/customer_collection/' . $file_name);
+            $customer_collection->item_image = $file_name;
+        }
+        $customer_collection->save();
+        return $customer_collection;
+    }
 }
