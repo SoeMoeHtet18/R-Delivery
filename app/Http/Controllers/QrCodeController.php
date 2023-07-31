@@ -30,6 +30,9 @@ class QrCodeController extends Controller
     $orders = $this->orderRepository->getOrdersByIds($order_ids);
     $dataArray = [];
 
+    $imageUrl =  config('app.url') . '/images/tcp_delivery.jpg';
+    $logoImageData = base64_encode(file_get_contents($imageUrl));
+
     foreach ($orders as $order) {
       // Create a new array for each order
       $orderData = [];
@@ -41,6 +44,7 @@ class QrCodeController extends Controller
       $orderData['delivery_fees'] = ($order->delivery_fees + $order->extra_charges) - $order->discount;
       $orderData['item_amount'] = $order->total_amount;
       $orderData['cash_to_collect'] = 0;
+      $orderData['logo_image'] = $logoImageData;
 
       if ($order->payment_method == 'cash_on_delivery') {
         $orderData['cash_to_collect'] = $order->total_amount + $orderData['delivery_fees'];
@@ -108,10 +112,10 @@ class QrCodeController extends Controller
     }
 
     foreach ($pdfs as $pdfPath) {
-      $fileName = basename($pdfPath);
-      header('Content-Type: application/pdf');
-      header('Content-Disposition: attachment; filename="' . $fileName . '"');
-      readfile($pdfPath);
+      // Use the appropriate method to send the PDF to the printer.
+      // The method will depend on your printer and setup.
+      // For example, on a Linux system, you can use 'lp' command:
+      exec("lp $pdfPath");
     }
 
     // $mpdf = new Mpdf();

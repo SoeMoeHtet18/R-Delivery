@@ -58,7 +58,7 @@
                 <div><b class="content">Township :</b><span class="font"> {{$data['township']}}</span></div>
             </div>
             <div class="right">
-                 <img src="data:image/png;base64, aHR0cDovL3JkZWxpdmVyeS5yZXZlbGlvLmRpZ2l0YWxpbWFnZXMvdGNwX2RlbGl2ZXJ5LmpwZw==">
+                 <img src="data:image/png;base64, {{$data['logo_image']}}" alt="{{ config('app.name') }}">
             </div>
             <div class="bot">
                 <b class="content">Hotline :</b><span class="font"> 09740814035</span>
