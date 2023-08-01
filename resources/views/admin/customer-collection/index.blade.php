@@ -212,14 +212,16 @@
                         searchable: false
                     },
                 ],
-                columnDefs: [
-                    {
+                columnDefs: [ {
                         "render": function(data, type, row) {
                             if (row.is_way_fees_payable == 0) {
                                 return "No";
                             }
                             if (row.is_way_fees_payable == 1) {
                                 return "Yes";
+                            }
+                            if (row.is_way_fees_payable == null) {
+                                return "Pending";
                             }
                         },
                         "targets": 8
@@ -276,8 +278,7 @@
                         r.status = status;
                     }
                 },
-                columns: [
-                    {
+                columns: [{
                         data: 'DT_RowIndex',
                         name: 'id'
                     },
@@ -331,6 +332,9 @@
                         }
                         if (row.is_way_fees_payable == 1) {
                             return "Yes";
+                        }
+                        if (row.is_way_fees_payable == null) {
+                            return "Pending";
                         }
                     },
                     "targets": 8
