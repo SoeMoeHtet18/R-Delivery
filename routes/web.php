@@ -119,6 +119,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/get-collections-by-shop', [ShopController::class, 'getCollectionByShop']);
     Route::get('/riders/get-deficit-by-rider-id/{id}', [RiderController::class, 'getDeficitByRider']);
     Route::post('/add-deficit-to-rider', [RiderController::class, 'addDeficitToRider']);
+    Route::get('/ajax-get-warehouse-customer-collections-data', [CustomerCollectionController::class, 'getAjaxWarehouseCustomerCollections']);
     Route::resource('/rider-payments', RiderPaymentController::class);
     Route::get('/ajax-get-rider-payment-data', [RiderPaymentController::class, 'getAjaxRiderPaymentData']);
     Route::resource('/braches', BranchController::class);

@@ -63,7 +63,6 @@
             if (data.length === 0) {
                 notificationList.append('<a class="dropdown-item" href="#">No notifications</a>');
             } else {
-                console.log(data)
                 data.forEach(function(notification) {
                     html = '<a class="dropdown-item" href="#">' + notification.message + '</a>';
                     if(notification.title == 'payment channel confirm' || notification.title =='payable or not'){
@@ -86,10 +85,8 @@
                 method: 'GET',
                 success: function(data) {
                     populateNotifications(data);
-                    console.log(data.length);
                     if(data.length > 0) {
-                        console.log('true');
-                        console.log('fecth' + data[data.length - 1].latest_time);
+                       
                         lastNotificationTime = data[data.length - 1].latest_time;
                     }
                 },
@@ -100,14 +97,11 @@
         }
 
         function checkNewNotifications() {
-            console.log('check-new-noti');
-            console.log(lastNotificationTime);
             $.ajax({
                 url: '/get-new-notifications', // Replace with your actual API endpoint
                 method: 'GET',
                 data: { lastNotificationTime: lastNotificationTime },
                 success: function(response) {
-                    console.log('checknewnoti' + response.length)
                     if (response.length > 0) {
                         showNotification(response);
                         lastNotificationTime = response[response.length - 1].latest_time; // Update last notification time

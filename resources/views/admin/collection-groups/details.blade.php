@@ -1,10 +1,11 @@
 @extends('admin.layouts.master')
-@section('sub-title','Collection Group Detail')
+@section('title','Collection Groups')
+@section('sub-title','Collection Groups Detail')
 @section('content')
 <div class="card card-container detail-card">
     <div class="card-body">
         <h2 class="ps-1 card-header-title">
-            <strong>Collections Detail</strong>
+            <strong>Collection Groups Detail</strong>
         </h2>
 
         <div class="card-toolbar">
@@ -28,10 +29,10 @@
             </div>
             <div class="row m-0 mb-3">
                 <div class="col-2">
-                    <h4>Rider Id <b>:</b></h4>
+                    <h4>Rider Name <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    {{ $collectionGroup->rider_id }}
+                    {{ $collectionGroup->rider->name }}
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -43,6 +44,30 @@
                 </div>
             </div>
         </div>
+
+        <div class="row">
+            <div class="card col-12">
+                <div class="card-body">
+                    <h5 class="text-center">Collections</h5>
+                    <ol>
+
+                    </ol>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="card col-12">
+                <div class="card-body">
+                    <h5 class="text-center">Customer Collections</h5>
+                    <ol>
+                        @foreach($customer_collections as $customer_collection)
+                        <li><a href="{{route('customer-collections.show', $customer_collection->id)}}">{{$customer_collection->customer_collection_code}}</a></li>
+                        @endforeach
+                    </ol>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 @endsection

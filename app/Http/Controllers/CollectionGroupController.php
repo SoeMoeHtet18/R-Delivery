@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CollectionCreateRequest;
 use App\Repositories\CollectionGroupRepository;
 use App\Repositories\CollectionRepository;
+use App\Repositories\CustomerCollectionRepository;
 use App\Repositories\RiderRepository;
 use App\Repositories\ShopRepository;
 use App\Services\CollectionGroupService;
@@ -19,14 +20,16 @@ class CollectionGroupController extends Controller
     protected $riderRepository;
     protected $collectionRepository;
     protected $shopRepository;
+    protected $customerCollectionRepository;
 
-    public function __construct(CollectionGroupRepository $collectionGroupRepository, CollectionGroupService $collectionGroupService, RiderRepository $riderRepository, CollectionRepository $collectionRepository, ShopRepository $shopRepository)
+    public function __construct(CollectionGroupRepository $collectionGroupRepository, CollectionGroupService $collectionGroupService, RiderRepository $riderRepository, CollectionRepository $collectionRepository, ShopRepository $shopRepository, CustomerCollectionRepository $customerCollectionRepository)
     {
         $this->collectionGroupRepository = $collectionGroupRepository;
         $this->collectionGroupService = $collectionGroupService;
         $this->riderRepository = $riderRepository;
         $this->collectionRepository = $collectionRepository;
         $this->shopRepository = $shopRepository;
+        $this->customerCollectionRepository = $customerCollectionRepository;
     }
     /**
      * Display a listing of the resource.
@@ -72,7 +75,9 @@ class CollectionGroupController extends Controller
     public function show($id)
     {
         $collectionGroup = $this->collectionGroupRepository->getCollectionGroupById($id);
-        return view('admin.collection-groups.details', compact('collectionGroup'));
+        $collections =  $this->collectionRepository->getAllCollectionByCollectionGroupId($id);
+        $customer_collections = $this->customerCollectionRepository->getAllCustomerCollectionsByGroupId($id);
+        return view('admin.collection-groups.details', compact('collectionGroup', 'collections', 'customer_collections'));
     }
 
     /**
