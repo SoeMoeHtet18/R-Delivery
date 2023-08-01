@@ -6,8 +6,10 @@ use App\Http\Requests\RiderCreateRequest;
 use App\Http\Requests\RiderUpdateRequest;
 use App\Http\Requests\TownshipAssignRequest;
 use App\Models\Rider;
+use App\Repositories\DeficitRepository;
 use App\Repositories\RiderRepository;
 use App\Repositories\TownshipRepository;
+use App\Services\DeficitService;
 use App\Services\RiderService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -18,12 +20,16 @@ class RiderController extends Controller
     protected $riderRepository;
     protected $riderService;
     protected $townshipRepository;
-    
-    public function __construct(RiderRepository $riderRepository, RiderService $riderService, TownshipRepository $townshipRepository)
+    protected $deficitRepository;
+    protected $deficitService;
+
+    public function __construct(RiderRepository $riderRepository, RiderService $riderService, TownshipRepository $townshipRepository, DeficitRepository $deficitRepository, DeficitService $deficitService)
     {
         $this->riderRepository = $riderRepository;
         $this->riderService = $riderService;
         $this->townshipRepository = $townshipRepository;
+        $this->deficitRepository = $deficitRepository;
+        $this->deficitService = $deficitService;
     }
     /**
      * Display a listing of the resource.
@@ -82,7 +88,7 @@ class RiderController extends Controller
     {
         $rider = $this->riderRepository->getRiderByID($id);
         $data = $request->all();
-        $this->riderService->updateRiderByID($data,$rider);
+        $this->riderService->updateRiderByID($data, $rider);
 
         return redirect(route('riders.show', $id));
     }
@@ -113,29 +119,46 @@ class RiderController extends Controller
     }
 
     public function getAjaxRiderData(Request $request)
-    {   
+    {
         $search = $request->search;
 
         $data = $this->riderRepository->getAllRidersQuery();
-            if($search) {
-                $data = $data->where('riders.name','like', '%' . $search . '%')->orWhere('riders.phone_number','like', '%' . $search . '%')->orWhere('riders.email','like', '%' . $search . '%');
-            }
-            return DataTables::of($data)
+        if ($search) {
+            $data = $data->where('riders.name', 'like', '%' . $search . '%')->orWhere('riders.phone_number', 'like', '%' . $search . '%')->orWhere('riders.email', 'like', '%' . $search . '%');
+        }
+        return DataTables::of($data)
 
-                ->addIndexColumn()
-                ->addColumn('action', function($riders){
-                    $actionBtn = '
-                        <a href="'. route("riders.show", $riders->id) .'" class="edit btn btn-info btn-sm">View</a> 
-                        <a href="'. route("riders.edit", $riders->id) .'" class="edit btn btn-light btn-sm">Edit</a> 
-                        <form action="'.route("riders.destroy", $riders->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this rider?`);">
-                            <input type="hidden" name="_token" value="'. csrf_token() .'">
+            ->addIndexColumn()
+            ->addColumn('action', function ($riders) {
+                $actionBtn = '
+                        <a href="' . route("riders.show", $riders->id) . '" class="edit btn btn-info btn-sm">View</a> 
+                        <a href="' . route("riders.edit", $riders->id) . '" class="edit btn btn-light btn-sm">Edit</a> 
+                        <form action="' . route("riders.destroy", $riders->id) . '" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this rider?`);">
+                            <input type="hidden" name="_token" value="' . csrf_token() . '">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
                         </form>';
-                    return $actionBtn;
-                })
-                ->rawColumns(['action'])
-                ->orderColumn('id', '-id $1')
-                ->make(true);
+                return $actionBtn;
+            })
+            ->rawColumns(['action'])
+            ->orderColumn('id', '-id $1')
+            ->make(true);
+    }
+
+    public function addDeficitToRider(Request $request)
+    {
+        $data = $request->all();
+        $this->deficitService->addDeficitToRider($data);
+        return redirect(route('riders.show', $data['rider_id']));
+    }
+
+    public function getDeficitByRider($id)
+    {
+        $data = $this->deficitRepository->getDeficitByRiderId($id);
+       
+        return DataTables::of($data)
+            ->addIndexColumn()
+            ->orderColumn('id', '-id $1')
+            ->make(true);
     }
 }

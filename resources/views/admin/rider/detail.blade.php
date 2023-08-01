@@ -9,12 +9,48 @@
         line-height: 2rem;
     }
 </style>
+<div id="popupCard" class="modal mt-5">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5 class="modal-title text-center">Add Deficit</h5>
+            </div>
+            <form action="{{url('/add-deficit-to-rider')}}" method="POST" class="action-form">
+                <!-- Modal Body -->
+                <div class="modal-body">
+
+                    @csrf
+                    <input type="hidden" name="rider_id" id="rider_id" value="{{$rider->id}}">
+                    <div class="row m-0 mb-3">
+                        <label for="amount">
+                            <h5>Amount<b>:</b></h5>
+                        </label>
+                        <div>
+                            <input type="text" id="amount" name="amount" class="form-control" />
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Modal Footer -->
+                <div class="modal-footer">
+                    <button type="button" id="pop-up-close-btn" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <input type="submit" id="add-deficit-btn" class="btn green" data-dismiss="modal" value="Add">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <div class="card card-container detail-card">
     <div class="card-body">
         <h2 class="ps-1 card-header-title">
             <strong>Rider Detail</strong>
         </h2>
         <div class="card-toolbar">
+            <div class="create-button">
+                <a class="btn create-btn" id="add-deficit">Add Deficit</a>
+            </div>
             <a href="{{url('/riders/'.$rider->id.'/assign-township')}}" class="btn btn-secondary me-3">Assign Township</a>
             <div class="create-button">
                 <a href="{{route('riders.edit' , $rider->id)}}" class="btn btn-light">Edit</a>
@@ -107,6 +143,9 @@
             <li class="nav-item">
                 <a href="#collection-display" id="collection-tab" class="nav-link" data-toggle="tab">Collections</a>
             </li>
+            <li class="nav-item">
+                <a href="#deficit-display" id="deficit-tab" class="nav-link" data-toggle="tab">Deficits</a>
+            </li>
         </ul>
         <input type="hidden" id="current_screen" value="pending-order-tab">
         <div class="tab-content">
@@ -180,26 +219,45 @@
             </div>
             <div id="collection-display" class="portlet box green tab-pane">
                 <div class="portlet-title">
-                    <div class="caption">Pending Orders</div>
+                    <div class="caption">Collections</div>
                 </div>
                 <div class="portlet-body">
                     <table id="collection-datatable" class="table table-striped table-hover table-responsive datatable">
                         <thead>
                             <tr>
-                            <th>#</th>
-                            <th>Total Quantity</th>
-                            <th>Total Amount</th>
-                            <th>Paid Amount</th>
-                            <th>Collection Group Id</th>
-                            <th>Rider Id</th>
-                            <th>Shop Id</th>
-                            <th>Assigned At</th>
-                            <th>Collected At</th>
-                            <th>Note</th>
-                            <th>Status</th>
-                            <th>Is payable</th>
-                            <th>Created At</th>
-                            <th>Updated At</th>
+                                <th>#</th>
+                                <th>Total Quantity</th>
+                                <th>Total Amount</th>
+                                <th>Paid Amount</th>
+                                <th>Collection Group Id</th>
+                                <th>Rider Id</th>
+                                <th>Shop Id</th>
+                                <th>Assigned At</th>
+                                <th>Collected At</th>
+                                <th>Note</th>
+                                <th>Status</th>
+                                <th>Is payable</th>
+                                <th>Created At</th>
+                                <th>Updated At</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="deficit-display" class="portlet box green tab-pane">
+                <div class="portlet-title">
+                    <div class="caption">Deficits</div>
+                </div>
+                <div class="portlet-body">
+                    <table id="deficit-datatable" class="table table-striped table-hover table-responsive datatable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Amount</th>
                             </tr>
                         </thead>
 
@@ -210,7 +268,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 @endsection
@@ -218,6 +275,26 @@
 <script type="text/javascript">
     $(function() {
         var rider_id = document.getElementById('rider-id').getAttribute('data-rider-id');
+
+        $('#add-deficit').click(function() {
+            console.log('showed');
+            showPopupCard();
+        });
+
+        $('#pop-up-close-btn').click(function() {
+            hidePopupCard();
+        });
+
+        function showPopupCard() {
+            var popupCard = document.getElementById('popupCard');
+            popupCard.style.display = 'block';
+        }
+
+        function hidePopupCard() {
+            console.log('hided');
+            var popupCard = document.getElementById('popupCard');
+            popupCard.style.display = 'none';
+        }
 
         $('#pending-order-datatable').DataTable({
             processing: true,
@@ -481,6 +558,21 @@
                 {
                     data: 'updated_at',
                     name: 'updated_at',
+                },
+            ],
+        });
+
+        $('#deficit-datatable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "/riders/get-deficit-by-rider-id/" + rider_id,
+            columns: [{
+                    data: 'DT_RowIndex',
+                    name: 'id'
+                },
+                {
+                    data: 'total_amount',
+                    name: 'amount',
                 },
             ],
         });
