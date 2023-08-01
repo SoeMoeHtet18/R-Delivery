@@ -231,19 +231,6 @@ class OrderService
         $order->note = $data['remark'];
         $order->status = 'delay';
         $order->save();
-        // $this->notificationService->orderIssueNotificationForShopUsers($order->shop_id, $order->order_code);
-        // $orders = [];
-        // if (Storage::exists('order_data.txt')) {
-        //     $orderDataJson = Storage::get('order_data.txt');
-        //     $orders = json_decode($orderDataJson, true);
-        // }
-
-        // $orderId = $order->order_code;
-        // $orders[$orderId]['delayed_at'] = $order->updated_at;
-
-        // $orderDataJson = json_encode($orders);
-        // Storage::put('order_data.txt', $orderDataJson);
-
         return $order;
     }
 
