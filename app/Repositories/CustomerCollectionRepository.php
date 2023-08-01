@@ -104,4 +104,10 @@ class CustomerCollectionRepository
         $customer_collection['shop_name'] = $customer_collection->order->shop->name;
         return $customer_collection;
     }
+    
+    public function getAllCustomerCollectionsByGroupId($id) 
+    {
+        $customer_collections = CustomerCollection::where('collection_group_id',$id)->get();
+        return $customer_collections;
+    }
 }

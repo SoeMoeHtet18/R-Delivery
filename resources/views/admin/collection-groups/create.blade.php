@@ -1,5 +1,6 @@
 @extends('admin.layouts.master')
-@section('title','Collection Group Create')
+@section('title','Collection Groups')
+@section('sub-title','Collection Groups Create')
 @section('content')
 <style>
     /* Assuming .plus-btn is the direct child of .generat_sku */

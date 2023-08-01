@@ -1,5 +1,6 @@
 @extends('admin.layouts.master')
 @section('title','Collection Groups')
+@section('sub-title','Collection Groups Listing')
 @section('content')
 
 <div class="create-button">
