@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BranchController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\CollectionController;
 use App\Http\Controllers\CollectionGroupController;
@@ -120,6 +121,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/add-deficit-to-rider', [RiderController::class, 'addDeficitToRider']);
     Route::resource('/rider-payments', RiderPaymentController::class);
     Route::get('/ajax-get-rider-payment-data', [RiderPaymentController::class, 'getAjaxRiderPaymentData']);
+    Route::resource('/braches', BranchController::class);
+    Route::get('/third-party-vendor', [AdminController::class, 'thirdPartyVendor']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

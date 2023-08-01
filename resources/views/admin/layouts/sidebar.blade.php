@@ -127,6 +127,18 @@
                             <span class="title">Delivery Type</span>
                         </a>
                     </li>
+                    <li class="@if(request()->is('braches*')) {{'active'}} @endif">
+                        <a href="{{route('braches.index')}}">
+                            <!-- <i class="fa fa-users"></i> -->
+                            <span class="title">Branch</span>
+                        </a>
+                    </li>
+                    <li class="@if(request()->is('third-party-vendor*')) {{'active'}} @endif">
+                        <a href="/third-party-vendor">
+                            <!-- <i class="fa fa-users"></i> -->
+                            <span class="title">Third Party Vendor</span>
+                        </a>
+                    </li>
                     <!-- <li class="@if(request()->is('payment-types*')) {{'active'}} @endif">
                         <a href="{{route('payment-types.index')}}">
                             <span class="title">Payment Type</span>

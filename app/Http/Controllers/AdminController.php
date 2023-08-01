@@ -148,4 +148,8 @@ class AdminController extends Controller
         
         return response()->json($newNotifications); 
     }
+
+    public function thirdPartyVendor() {
+        return view('admin.third-party-vendor.index');
+    }
 }
