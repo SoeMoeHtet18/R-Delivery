@@ -127,7 +127,7 @@
                                 <th>Shop</th>
                                 <th>Total Amount</th>
                                 <th>Delivery Fees</th>
-                                <th>Markup Delivery Fees</th>
+                                <!-- <th>Markup Delivery Fees</th> -->
                                 <th>Remark</th>
                                 <th>Item Type</th>
                                 <th>Full Address</th>
@@ -161,7 +161,7 @@
                                 <th>Shop</th>
                                 <th>Total Amount</th>
                                 <th>Delivery Fees</th>
-                                <th>Markup Delivery Fees</th>
+                                <!-- <th>Markup Delivery Fees</th> -->
                                 <th>Remark</th>
                                 <th>Item Type</th>
                                 <th>Full Address</th>
@@ -259,10 +259,10 @@
                     data: 'delivery_fees',
                     name: 'delivery_fees'
                 },
-                {
-                    data: 'markup_delivery_fees',
-                    name: 'markup_delivery_fees'
-                },
+                // {
+                //     data: 'markup_delivery_fees',
+                //     name: 'markup_delivery_fees'
+                // },
                 {
                     data: 'remark',
                     name: 'remark'
@@ -280,7 +280,7 @@
                     name: 'schedule_date'
                 },
                 {
-                    data: 'type',
+                    data: 'delivery_type_name',
                     name: 'type'
                 },
                 {
@@ -305,21 +305,7 @@
                         });
                         return formattedDate;
                     },
-                    "targets": 13
-                },
-                {
-                    "render": function(data, type, row) {
-                        if (row.type == 'standard') {
-                            return "Standard";
-                        }
-                        if (row.type == 'express') {
-                            return "Express";
-                        }
-                        if (row.type == 'doortodoor') {
-                            return "Door To Door";
-                        }
-                    },
-                    "targets": 14
+                    "targets": 12
                 },
                 {
                     "render": function(data, type, row) {
@@ -330,7 +316,7 @@
                             return "Pick Up";
                         }
                     },
-                    "targets": 15
+                    "targets": 14
                 },
             ]
         });
@@ -375,10 +361,10 @@
                     data: 'delivery_fees',
                     name: 'delivery_fees'
                 },
-                {
-                    data: 'markup_delivery_fees',
-                    name: 'markup_delivery_fees'
-                },
+                // {
+                //     data: 'markup_delivery_fees',
+                //     name: 'markup_delivery_fees'
+                // },
                 {
                     data: 'remark',
                     name: 'remark'
@@ -396,7 +382,7 @@
                     name: 'schedule_date'
                 },
                 {
-                    data: 'type',
+                    data: 'delivery_type_name',
                     name: 'type'
                 },
                 {
@@ -421,21 +407,7 @@
                         });
                         return formattedDate;
                     },
-                    "targets": 13
-                },
-                {
-                    "render": function(data, type, row) {
-                        if (row.type == 'standard') {
-                            return "Standard";
-                        }
-                        if (row.type == 'express') {
-                            return "Express";
-                        }
-                        if (row.type == 'doortodoor') {
-                            return "Door To Door";
-                        }
-                    },
-                    "targets": 14
+                    "targets": 12
                 },
                 {
                     "render": function(data, type, row) {
@@ -446,7 +418,7 @@
                             return "Pick Up";
                         }
                     },
-                    "targets": 15
+                    "targets": 14
                 },
             ]
         });
