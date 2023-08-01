@@ -3,12 +3,17 @@
 namespace App\Repositories;
 
 use App\Models\Collection;
+use App\Models\CollectionGroup;
+use App\Models\CustomerCollection;
+use Carbon\Carbon;
 
 class CollectionRepository
 {   
     public function getCollectionById($id) 
     {
-        $collection = Collection::where('id',$id)->first();
+        $collection = Collection::with('shop')->where('id',$id)->first();
+        $collection['shop_name'] = $collection->shop->name;
+        $collection['shop_phone_number'] = $collection->shop->phone_number;
         return $collection;
     }
     
@@ -16,10 +21,20 @@ class CollectionRepository
     {
         $limit = 10; 
         $offset = ($page - 1) * $limit;
-        $collections = Collection::with('shop')->where('rider_id',$rider_id)->offset($offset)->limit($limit)->orderBy('id','DESC')->get();
+        $todayDate = Carbon::now()->format('Y-m-d');
+        $collections = Collection::with(['shop','collection_group'])->whereHas('collection_group',function($query) use($rider_id,$todayDate) {
+            $query->where('rider_id',$rider_id)->where('assigned_date',$todayDate);
+        })->where('rider_id',$rider_id)->offset($offset)->limit($limit)->orderBy('id','DESC')->get();
         foreach($collections as $collection) {
             $collection['shop_name'] = $collection->shop->name;
             $collection['shop_phone_number'] = $collection->shop->phone_number;
+            $shop_id = $collection->shop_id;
+            $collectionGroupId = $collection->collection_group_id;
+            //count customer collection by shop id
+            $customerCollectionCount = CustomerCollection::with(['order', 'collection_group'])->whereHas('order',function($q) use ($shop_id){
+                $q->where('shop_id',$shop_id);
+            })->where('collection_group_id',$collectionGroupId)->count();
+            $collection['customer_collection_count'] = $customerCollectionCount;    
         }
         return $collections;
     }
@@ -60,7 +75,7 @@ class CollectionRepository
 
     public function getAllCollectionsQuery()
     {
-        $query = Collection::select('*');
+        $query = Collection::select('collections.*', 'riders.name as rider_name', 'shops.name as shop_name')->leftJoin('riders', 'riders.id', 'collections.rider_id')->leftJoin('shops', 'shops.id', 'collections.shop_id');
         return $query;
     }
 
@@ -101,5 +116,22 @@ class CollectionRepository
             $payment_history->type = 'rider';
         }
         return $payment_histories;
+    }
+
+    public function getCollectionsByShop($shop_id, $collection_group_id, $page) 
+    {
+        $limit = 10; 
+        $offset = ($page - 1) * $limit;
+        $customerCollections = CustomerCollection::with(['order.shop', 'collection_group'])->whereHas('order',function($q) use ($shop_id){
+                $q->where('shop_id',$shop_id);
+            })->where('collection_group_id',$collection_group_id)->offset($offset)->limit($limit)->orderBy('id','DESC')->get();
+        foreach($customerCollections as $customerCollection){
+            $customerCollection['customer_name'] =  $customerCollection->order->customer_name;
+            $customerCollection['total_amount'] = $customerCollection->order->total_amount;
+            $customerCollection['order_id'] = $customerCollection->order->order_code;
+            $customerCollection['shop_name'] = $customerCollection->order->shop->name;
+        }
+            
+        return $customerCollections;
     }
 }

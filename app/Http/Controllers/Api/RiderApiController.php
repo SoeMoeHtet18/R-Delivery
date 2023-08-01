@@ -7,6 +7,7 @@ use App\Http\Requests\RiderCreateApiRequest;
 use App\Http\Requests\RiderLoginApiRequest;
 use App\Http\Requests\RiderUpdateApiRequest;
 use App\Models\Collection;
+use App\Models\CustomerCollection;
 use App\Models\Deficit;
 use App\Models\Order;
 use App\Models\Rider;
@@ -15,6 +16,7 @@ use App\Repositories\NotificationRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\RiderRepository;
 use App\Repositories\TownshipRepository;
+use App\Services\CustomerCollectionService;
 use App\Services\NotificationService;
 use App\Services\OrderService;
 use App\Services\RiderService;
@@ -33,8 +35,9 @@ class RiderApiController extends Controller
     protected $townshipRepository;
     protected $notificationRepository;
     protected $notificationservice;
+    protected $customerCollectionService;
 
-    public function __construct(RiderRepository $riderRepository, RiderService $riderService, OrderRepository $orderRepository, OrderService $orderService, TownshipRepository $townshipRepository, NotificationRepository $notificationRepository, NotificationService $notificationservice,)
+    public function __construct(RiderRepository $riderRepository, RiderService $riderService, OrderRepository $orderRepository, OrderService $orderService, TownshipRepository $townshipRepository, NotificationRepository $notificationRepository, NotificationService $notificationservice, CustomerCollectionService $customerCollectionService)
     {
         $this->riderRepository = $riderRepository;
         $this->riderService = $riderService;
@@ -43,6 +46,7 @@ class RiderApiController extends Controller
         $this->townshipRepository = $townshipRepository;
         $this->notificationRepository = $notificationRepository;
         $this->notificationservice = $notificationservice;
+        $this->customerCollectionService = $customerCollectionService;
     }
 
     public function riderLoginApi(RiderLoginApiRequest $request)
@@ -227,11 +231,47 @@ class RiderApiController extends Controller
         return response()->json(['data' => $data, 'message' => 'Successfully Get Total Salary for Rider', 'status' => 'success'], 200);
     }
 
+    public function getCustomerCollectionByRiderId($page = 1) {
+        $rider = auth()->guard('rider-api')->user();
+        $limit = 10; 
+        $offset = ($page - 1) * $limit; 
+        $customerCollections = CustomerCollection::with(['order.rider','order.shop'])->whereHas('order', function ($q) use($rider) {
+            $q->where('rider_id', $rider->id);
+        })->offset($offset)->limit($limit)->orderBy('id','DESC')->get();
+        foreach($customerCollections as $customerCollection) {
+            $customerCollection['rider_name'] = $customerCollection->order->rider->name;
+            $customerCollection['shop_name'] = $customerCollection->order->shop->name;
+            $customerCollection['customer_name'] = $customerCollection->order->customer_name;
+            $customerCollection['customer_phone_number'] = $customerCollection->order->customer_phone_number;
+            $customerCollection['total_amount'] = $customerCollection->order->total_amount;
+            $customerCollection['order_id'] = $customerCollection->order->order_code;
+        }
+        return response()->json(['data' => $customerCollections, 'message' => 'Successfully Get Customer Collection list by Rider Id', 'status' => 'success'], 200);
+    }
+    
+    public function createCustomerCollectionByRider(Request $request) {
+        $rider = auth()->guard('rider-api')->user();
+        $data = $request->all();
+        $customerCollection = $this->customerCollectionService->saveCustomerCollectionByRider($rider, $data);
+        return response()->json(['data' => $customerCollection, 'message' => 'Successfully Create Customer Collection by Rider', 'status' => 'success'], 200);
+    }
+
     public function getRiderPaymentHistory($page = 1) {
         $rider = auth()->guard('rider-api')->user();
         $limit = 10; 
         $offset = ($page - 1) * $limit; 
         $riderPayments = RiderPayment::where('rider_id',$rider->id)->offset($offset)->limit($limit)->orderBy('id','DESC')->get();
         return response()->json(['data' => $riderPayments, 'message' => 'Successfully Get Rider Payment History', 'status' => 'success'], 200);
+    }
+    
+    public function updateCustomerCollectionByRider(Request $request) {
+        $rider = auth()->guard('rider-api')->user();
+        $data = $request->all();
+        $reuploadPhoto = false;
+        if($request->has('photo')){
+            $reuploadPhoto = true;
+        }
+        $customerCollection = $this->customerCollectionService->updateCustomerCollectionByRider($data,$reuploadPhoto);
+        return response()->json(['data' => $customerCollection, 'message' => 'Successfully Update Customer Collection by Rider', 'status' => 'success'], 200);
     }
 }

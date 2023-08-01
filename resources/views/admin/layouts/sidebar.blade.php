@@ -53,6 +53,12 @@
                     <span class="title">Customer Collection</span>
                 </a>
             </li>
+            <li class="@if(request()->is('payment_notification*')) {{'active'}} @endif">
+                <a href="{{url('/payment-notifications')}}">
+                    <!-- <i class="fa fa-users"></i> -->
+                    <span class="title">Payment Due Order List</span>
+                </a>
+            </li>
             <li>
                 <a id="paymentBoxCollapse" data-bs-toggle="collapse" href="#paymentBox" role="button" aria-expanded="false" aria-controls="collapseExample">
                     <span class="title">Payments<span class="arrow"></span></span>

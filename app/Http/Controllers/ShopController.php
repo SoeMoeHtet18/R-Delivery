@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ShopCreateRequest;
 use App\Http\Requests\ShopUpdateRequest;
 use App\Models\Collection;
+use App\Models\CustomerCollection;
 use App\Repositories\OrderRepository;
 use App\Repositories\ShopRepository;
 use App\Services\ShopService;
@@ -126,5 +127,15 @@ class ShopController extends Controller
                 ->rawColumns(['action'])
                 ->orderColumn('id', '-id $1')
                 ->make(true);
+    }
+
+    public function getCollectionByShop(Request $request){
+        // dd($request->shop_ids);
+        $shop_ids = $request->shop_ids;
+        $shop_collections = Collection::whereIn('shop_id',$shop_ids)->whereNull('rider_id')->get();
+        $customer_collections = CustomerCollection::with('order')->whereHas('order', function ($query) use($shop_ids) {
+            $query->whereIn('shop_id',$shop_ids);
+        })->whereNull('collection_group_id')->get();
+        return view('admin.collection-groups.assign_collection',compact('shop_collections','customer_collections'));
     }
 }

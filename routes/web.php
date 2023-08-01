@@ -113,6 +113,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/bulk-discount-update', [OrderController::class, 'bulkDiscountUpdate']);
     Route::get('/create-qrcode', [QrCodeController::class, 'index']);
     Route::post('/generate-qrcode', [QrCodeController::class, 'generateQrCode']);
+    Route::get('/get-collections-by-shop', [ShopController::class, 'getCollectionByShop']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
