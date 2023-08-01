@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\CustomerCollection;
 use App\Repositories\CustomerCollectionRepository;
 use App\Repositories\OrderRepository;
+use App\Repositories\ShopRepository;
 use App\Services\CustomerCollectionService;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -14,19 +15,26 @@ class CustomerCollectionController extends Controller
     protected $customerCollectionRepository;
     protected $customerCollectionService;
     protected $orderRepository;
-    
-    public function __construct(CustomerCollectionRepository $customerCollectionRepository,CustomerCollectionService $customerCollectionService, OrderRepository $orderRepository)
+    protected $shopRepository;
+
+    public function __construct(CustomerCollectionRepository $customerCollectionRepository,
+     CustomerCollectionService $customerCollectionService,
+      OrderRepository $orderRepository,
+      ShopRepository $shopRepository,
+      )
     {
         $this->customerCollectionRepository = $customerCollectionRepository;
         $this->customerCollectionService = $customerCollectionService;
         $this->orderRepository = $orderRepository;
+        $this->shopRepository = $shopRepository;
     }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('admin.customer-collection.index');
+        $shops = $this->shopRepository->getAllShops();
+        return view('admin.customer-collection.index', compact('shops'));
     }
 
     /**
@@ -57,7 +65,7 @@ class CustomerCollectionController extends Controller
         $customer_collection = $this->customerCollectionRepository->getCustomerCollectionById($id);
         return view('admin.customer-collection.detail', compact('customer_collection'));
     }
-    
+
 
     /**
      * Show the form for editing the specified resource.
@@ -89,18 +97,36 @@ class CustomerCollectionController extends Controller
 
     public function getAjaxCustomerCollections(Request $request)
     {
-        $search = $request->search;
-        $data = $this->customerCollectionRepository->getAllCustomerCollectionsQuery();
-        
-        if($search) {
-           
-        }
+        $request = $request->all();
+        $data = $this->customerCollectionRepository->getAllCustomerCollections($request);
+
         return DataTables::of($data)
-            ->addColumn('action', function($row){
+            ->addColumn('action', function ($row) {
                 $actionBtn = '<a href="' . route("customer-collections.show", $row->id) . '" class="info btn btn-info btn-sm">View</a>
                 <a href="' . route("customer-collections.edit", $row->id) . '" class="edit btn btn-light btn-sm">Edit</a>
-                <form action="'.route("customer-collections.destroy", $row->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this city?`);">
-                    <input type="hidden" name="_token" value="'. csrf_token() .'">
+                <form action="' . route("customer-collections.destroy", $row->id) . '" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this city?`);">
+                    <input type="hidden" name="_token" value="' . csrf_token() . '">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
+                </form>';
+                return $actionBtn;
+            })
+            ->rawColumns(['action'])
+            ->addIndexColumn()
+            ->make(true);
+    }
+
+    public function getAjaxWarehouseCustomerCollections(Request $request)
+    {
+        $request = $request->all();
+        $data = $this->customerCollectionRepository->getWarehouseCustomerCollections($request);
+
+        return DataTables::of($data)
+            ->addColumn('action', function ($row) {
+                $actionBtn = '<a href="' . route("customer-collections.show", $row->id) . '" class="info btn btn-info btn-sm">View</a>
+                <a href="' . route("customer-collections.edit", $row->id) . '" class="edit btn btn-light btn-sm">Edit</a>
+                <form action="' . route("customer-collections.destroy", $row->id) . '" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this city?`);">
+                    <input type="hidden" name="_token" value="' . csrf_token() . '">
                     <input type="hidden" name="_method" value="DELETE">
                     <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
                 </form>';
