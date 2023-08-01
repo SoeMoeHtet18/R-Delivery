@@ -58,7 +58,7 @@
         <div class="row">
             <div class="card col-12">
                 <div class="card-body">
-                    <h5 class="text-center">Customer Collections</h5>
+                    <h5 class="text-center">Customer Exchange</h5>
                     <ol>
                         @foreach($customer_collections as $customer_collection)
                         <li><a href="{{route('customer-collections.show', $customer_collection->id)}}">{{$customer_collection->customer_collection_code}}</a></li>
