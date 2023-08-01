@@ -57,6 +57,10 @@ class CollectionGroupController extends Controller
     public function store(CollectionCreateRequest $request)
     {
         $data = $request->all();
+        $checkedShopCollections = json_decode($request->input('checked_shop_collections'));
+        $checkedCustomerCollections = json_decode($request->input('checked_customer_collections'));
+        $data['checkedShopCollections'] = $checkedShopCollections;
+        $data['checkedCustomerCollections'] = $checkedCustomerCollections;
         // $this->collectionGroupService->saveCollectionGroupByAdmin($data);
         $this->collectionGroupService->saveCollectionGroup($data);
         return redirect()->route('collection-groups.index');

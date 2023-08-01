@@ -206,6 +206,9 @@
         <div class="create-button">
             <a class="btn create-btn" id="bulk-discount-update">Bulk Discount Update</a>
         </div>
+        <div class="create-button">
+            <a class="btn create-btn" id="qr-code-generate">Print QrCode</a>
+        </div>
     </div>
     <div>
         <div class="create-button d-inline-block">
@@ -268,6 +271,46 @@
             </form>
         </div>
     </div>
+</div>
+<div id="popupQrCard" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5 class="modal-title text-center">Print Qr</h5>
+            </div>
+            <form action="">
+                <!-- Modal Body -->
+                <div class="modal-body">
+
+                    @csrf
+                    <input type="hidden" name="qr_order_ids" id="printed_order_ids">
+                    <div class="row m-0 mb-3">
+                        <div>
+                            <h4>Select Template <b>*</b></h4>
+                        </div>
+                        <div>
+                            <select name="template" id="template" class="form-control">
+                                <option value="" selected disabled>Select template </option>
+                                <option value="roll_1x2">1" x 2" (Roll Format)</option>
+                                <option value="roll_2x3">2" x 3" (Roll Format)</option>
+                                <option value="roll_3x5_cm">3cm x 5cm (Roll Format)</option>
+                                <option value="roll_4x6_cm">4cm x 6cm (Roll Format)</option>
+                                <option value="sheet_1x2">1" x 2" (Sheet Format - Portrait)</option>
+                                <option value="sheet_3x5cm_portrait">3cm x 5cm (Sheet Format - Portrait)</option>
+                                <option value="sheet_3x5cm_landscape">3cm x 5cm (Sheet Format - Landscape)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="qr-pop-up-close-btn" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <input type="submit" id="qr-code-generate-btn" class="btn green" data-dismiss="modal" value="Print">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 </div>
 <ul class="nav nav-tabs mb-4">
     <li class="nav-item">
@@ -365,7 +408,6 @@
                         <th>Action</th>
                         <th>Total Amount</th>
                         <th>Delivery Fees</th>
-                        <!-- <th>Markup Delivery Fees</th> -->
                         <th>Order Code</th>
                         <th>Shop</th>
                         <th>Rider</th>
@@ -421,6 +463,7 @@
         $('#township').select2();
         $('#rider').select2();
         $('#shop').select2();
+        $('#template').select2();
 
         $('#bulk-discount-update').click(function() {
             var order_ids = Array.from(new Set(
@@ -438,11 +481,74 @@
             }
         });
 
+        $('#qr-code-generate').click(function() {
+            var order_ids = Array.from(new Set(
+                $('.order-payment:checked').map(function() {
+                    return $(this).data('id');
+                }).get()
+            ));
+
+            if (order_ids.length > 0) {
+                $('#printed_order_ids').val(order_ids);
+                // $.ajax({
+                //     url: "{{ url('/generate-qrcode') }}",
+                //     type: 'POST',
+                //     dataType: 'json',
+                //     data: {
+                //         order_ids: order_ids,
+                //         _token: '{{ csrf_token() }}'
+                //     },
+                //     success: function(data) {
+                //         // Handle the AJAX response here
+                //         $('#ajaxResult').html(data.result);
+                //     },
+                //     error: function(xhr, status, error) {
+                //         // Handle errors, if any
+                //         console.log(xhr.responseText);
+                //     }
+                // });
+                // Create a form element
+                var form = document.createElement('form');
+                form.method = 'POST';
+                form.action = "{{ url('/generate-qrcode') }}";
+                form.target = '_blank';
+
+                // Create hidden input fields for order_ids and _token
+                var orderIdsInput = document.createElement('input');
+                orderIdsInput.type = 'hidden';
+                orderIdsInput.name = 'order_ids';
+                orderIdsInput.value = order_ids;
+
+                var csrfTokenInput = document.createElement('input');
+                csrfTokenInput.type = 'hidden';
+                csrfTokenInput.name = '_token';
+                csrfTokenInput.value = '{{ csrf_token() }}';
+
+                // Append the input fields to the form
+                form.appendChild(orderIdsInput);
+                form.appendChild(csrfTokenInput);
+
+                // Append the form to the document body and submit it
+                document.body.appendChild(form);
+                form.submit();
+
+                // showPopupQrCard();
+            } else {
+                showErrorToast("Please select at least one order.");
+            }
+        });
+
+
+        $('#qr-pop-up-close-btn').click(function() {
+            hidePopupQrCard();
+        });
+
+
+
 
         $('#pop-up-close-btn').click(function() {
             hidePopupCard();
         });
-
         $('#tabs-container').on('click', '.tabs', function() {
             var $this = $(this);
             var $tabs = $('.tabs'); // Cache all tabs
@@ -465,6 +571,17 @@
         function hidePopupCard() {
             console.log('hided');
             var popupCard = document.getElementById('popupCard');
+            popupCard.style.display = 'none';
+        }
+
+        function showPopupQrCard() {
+            var popupCard = document.getElementById('popupQrCard');
+            popupCard.style.display = 'block';
+        }
+
+        function hidePopupQrCard() {
+            console.log('hided');
+            var popupCard = document.getElementById('popupQrCard');
             popupCard.style.display = 'none';
         }
 
@@ -829,7 +946,7 @@
                                 return "Paid";
                             }
                         },
-                        "targets": 10
+                        "targets": 9
                     },
 
                 ]
@@ -854,7 +971,8 @@
                         r.township = township;
                     }
                 },
-                columns: [{
+                columns: [
+                    {
                         data: 'DT_RowIndex',
                         name: 'id'
                     },
@@ -876,10 +994,6 @@
                         data: 'delivery_fees',
                         name: 'delivery_fees'
                     },
-                    // {
-                    //     data: 'markup_delivery_fees',
-                    //     name: 'markup_delivery_fees'
-                    // },
                     {
                         data: 'order_code',
                         name: 'order_code'
@@ -901,7 +1015,8 @@
                         name: 'customer_phone_number'
                     },
                 ],
-                columnDefs: [{
+                columnDefs: [
+                    {
                         "render": function(data, type, row) {
                             if (row.payment_flag == 0) {
                                 return "Unpaid";
@@ -910,56 +1025,56 @@
                                 return "Paid";
                             }
                         },
-                        "targets": 10
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            return row.total_amount;
-                        },
-                        "targets": 2
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            return row.delivery_fees;
-                        },
-                        "targets": 3
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            return row.markup_delivery_fees;
-                        },
-                        "targets": 4
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            return row.order_code;
-                        },
-                        "targets": 5
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            return row.shop_name;
-                        },
-                        "targets": 6
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            return row.rider_name;
-                        },
-                        "targets": 7
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            return row.customer_name;
-                        },
-                        "targets": 8
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            return row.customer_phone_number;
-                        },
                         "targets": 9
                     },
+                    // {
+                    //     "render": function(data, type, row) {
+                    //         return row.total_amount;
+                    //     },
+                    //     "targets": 2
+                    // },
+                    // {
+                    //     "render": function(data, type, row) {
+                    //         return row.delivery_fees;
+                    //     },
+                    //     "targets": 3
+                    // },
+                    // {
+                    //     "render": function(data, type, row) {
+                    //         return row.markup_delivery_fees;
+                    //     },
+                    //     "targets": 4
+                    // },
+                    // {
+                    //     "render": function(data, type, row) {
+                    //         return row.order_code;
+                    //     },
+                    //     "targets": 5
+                    // },
+                    // {
+                    //     "render": function(data, type, row) {
+                    //         return row.shop_name;
+                    //     },
+                    //     "targets": 6
+                    // },
+                    // {
+                    //     "render": function(data, type, row) {
+                    //         return row.rider_name;
+                    //     },
+                    //     "targets": 7
+                    // },
+                    // {
+                    //     "render": function(data, type, row) {
+                    //         return row.customer_name;
+                    //     },
+                    //     "targets": 8
+                    // },
+                    // {
+                    //     "render": function(data, type, row) {
+                    //         return row.customer_phone_number;
+                    //     },
+                    //     "targets": 9
+                    // },
                 ]
             });
         }
@@ -1029,7 +1144,8 @@
                         name: 'customer_phone_number'
                     },
                 ],
-                columnDefs: [{
+                columnDefs: [
+                    {
                         "render": function(data, type, row) {
                             if (row.payment_flag == 0) {
                                 return "Unpaid";
@@ -1038,56 +1154,56 @@
                                 return "Paid";
                             }
                         },
-                        "targets": 10
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            return row.total_amount;
-                        },
-                        "targets": 2
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            return row.delivery_fees;
-                        },
-                        "targets": 3
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            return row.markup_delivery_fees;
-                        },
-                        "targets": 4
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            return row.order_code;
-                        },
-                        "targets": 5
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            return row.shop_name;
-                        },
-                        "targets": 6
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            return row.rider_name;
-                        },
-                        "targets": 7
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            return row.customer_name;
-                        },
-                        "targets": 8
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            return row.customer_phone_number;
-                        },
                         "targets": 9
                     },
+                    // {
+                    //     "render": function(data, type, row) {
+                    //         return row.total_amount;
+                    //     },
+                    //     "targets": 2
+                    // },
+                    // {
+                    //     "render": function(data, type, row) {
+                    //         return row.delivery_fees;
+                    //     },
+                    //     "targets": 3
+                    // },
+                    // {
+                    //     "render": function(data, type, row) {
+                    //         return row.markup_delivery_fees;
+                    //     },
+                    //     "targets": 4
+                    // },
+                    // {
+                    //     "render": function(data, type, row) {
+                    //         return row.order_code;
+                    //     },
+                    //     "targets": 5
+                    // },
+                    // {
+                    //     "render": function(data, type, row) {
+                    //         return row.shop_name;
+                    //     },
+                    //     "targets": 6
+                    // },
+                    // {
+                    //     "render": function(data, type, row) {
+                    //         return row.rider_name;
+                    //     },
+                    //     "targets": 7
+                    // },
+                    // {
+                    //     "render": function(data, type, row) {
+                    //         return row.customer_name;
+                    //     },
+                    //     "targets": 8
+                    // },
+                    // {
+                    //     "render": function(data, type, row) {
+                    //         return row.customer_phone_number;
+                    //     },
+                    //     "targets": 9
+                    // },
 
                 ]
             });
@@ -1123,7 +1239,6 @@
             // Navigate to the download URL
             window.location.href = downloadUrl;
         }
-
     });
 </script>
 @endsection

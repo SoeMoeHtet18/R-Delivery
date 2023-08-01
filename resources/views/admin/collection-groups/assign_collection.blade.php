@@ -1,6 +1,3 @@
-<!-- Assuming you have the $shop_collections array available -->
-
-<!-- Add this CSS to style the checkboxes and cards -->
 <style>
     .card-wrapper {
         display: flex;
@@ -66,7 +63,7 @@
 </div>
 @foreach($customer_collections as $customer_collection)
 <div class="card-container card-wrapper">
-    <input type="checkbox" class="card-checkbox" name="collection_checkbox[]" value="{{$shop_collection->id}}">
+    <input type="checkbox" class="card-checkbox" name="customer_collection_checkbox[]" value="{{$customer_collection->id}}">
     <div class="card">
         <div class="card-body">
             <div class="row m-0 mb-3">

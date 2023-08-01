@@ -47,6 +47,7 @@ class OrderService
         $order->proof_of_payment = $data['proof_of_payment'] ?? null;
         $order->payment_method = $data['payment_method'] ?? null;
         $order->note = $data['note'] ?? null;
+        $order->delivery_type_id = $data['delivery_type_id'];
         $order->is_payment_channel_confirm = 0;
         $order->is_confirm = 0;
         $order->extra_charges = $data['extra_charges'] ?? 0;
@@ -131,6 +132,8 @@ class OrderService
             $order->proof_of_payment =  $order->proof_of_payment;
         }
         $order->last_updated_by = auth()->user()->id;
+        $order->extra_charges = $data['extra_charges'] ?? 0;
+        $order->delivery_type_id = $data['delivery_type_id'];
         $order->save();
         return $order;
     }
