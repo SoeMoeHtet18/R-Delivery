@@ -16,4 +16,8 @@ class CollectionGroup extends Model
     public function collections() {
         return $this->hasMany(Collection::class)->withTrashed();
     }
+
+    public function rider() {
+        return $this->belongsTo(Rider::class);
+    }
 }

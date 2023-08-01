@@ -235,11 +235,12 @@ class RiderApiController extends Controller
         $rider = auth()->guard('rider-api')->user();
         $limit = 10; 
         $offset = ($page - 1) * $limit; 
-        $customerCollections = CustomerCollection::with(['order.rider','order.shop'])->whereHas('order', function ($q) use($rider) {
-            $q->where('rider_id', $rider->id);
+        $todayDate = Carbon::now()->format('Y-m-d');
+        $customerCollections = CustomerCollection::with(['order.shop', 'collection_group.rider'])->whereHas('collection_group', function ($q) use($rider,$todayDate) {
+            $q->where('rider_id', $rider->id)->where('assigned_date',$todayDate);
         })->offset($offset)->limit($limit)->orderBy('id','DESC')->get();
         foreach($customerCollections as $customerCollection) {
-            $customerCollection['rider_name'] = $customerCollection->order->rider->name;
+            $customerCollection['rider_name'] = $customerCollection->collection_group->rider->name;
             $customerCollection['shop_name'] = $customerCollection->order->shop->name;
             $customerCollection['customer_name'] = $customerCollection->order->customer_name;
             $customerCollection['customer_phone_number'] = $customerCollection->order->customer_phone_number;
