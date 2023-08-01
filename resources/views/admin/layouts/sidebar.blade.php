@@ -84,6 +84,12 @@
                             <span class="title">Transactions For Shop</span>
                         </a>
                     </li>
+                    <li class="@if(request()->is('rider-payments*')) {{'active'}} @endif">
+                        <a href="{{route('rider-payments.index')}}">
+                            <!-- <i class="fa fa-users"></i> -->
+                            <span class="title">Rider Payment</span>
+                        </a>
+                    </li>
             </ul>
             <li>
                 <a id="adminToolsCollapse" data-bs-toggle="collapse" href="#adminTools" role="button" aria-expanded="false" aria-controls="collapseExample">
