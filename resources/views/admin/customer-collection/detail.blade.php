@@ -83,7 +83,7 @@
                     <h4>Is Way Fees Payable<b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    @if($customer_collection->is_way_fees_payable == 0) False @else True @endif
+                    @if($customer_collection->is_way_fees_payable == 0) No @else Yes @endif
                 </div>
             </div>
             <div class="row m-0 mb-3">

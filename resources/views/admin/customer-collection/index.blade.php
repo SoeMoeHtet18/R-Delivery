@@ -104,13 +104,13 @@
                     {
                         "render": function(data, type, row) {
                             if (row.is_way_fees_payable == 0) {
-                                return "False";
+                                return "No";
                             }
                             if (row.is_way_fees_payable == 1) {
-                                return "True";
+                                return "Yes";
                             }
                         },
-                        "targets": 7
+                        "targets": 8
                     },
                     {
                         "render": function(data, type, row) {
@@ -124,7 +124,7 @@
                                 return "Completed";
                             }
                         },
-                        "targets": 8
+                        "targets": 9
                     },
                     
                 ]
