@@ -42,7 +42,7 @@ class OrderService
         $order->item_type_id =  $data['item_type_id'] ?? null;
         $order->full_address =  $data['full_address'] ?? null;
         $order->schedule_date =  $data['schedule_date'] ?? Carbon::tomorrow();;
-        $order->type =  $data['type'];
+        // $order->type =  $data['type'] ?? null;
         $order->collection_method = $data['collection_method'];
         $order->proof_of_payment = $data['proof_of_payment'] ?? null;
         $order->payment_method = $data['payment_method'] ?? null;
@@ -121,7 +121,7 @@ class OrderService
         $order->item_type_id =  $data['item_type_id'] ?? null;
         $order->full_address =  $data['full_address'] ?? null;
         $order->schedule_date =  $data['schedule_date'] ?? Carbon::tomorrow();;
-        $order->type =  $data['type'];
+        // $order->type =  $data['type'];
         $order->collection_method =  $data['collection_method'];
         $order->payment_method = $data['payment_method'] ?? null;
         $order->note = $data['note'];
