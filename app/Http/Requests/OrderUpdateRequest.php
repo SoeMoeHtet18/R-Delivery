@@ -29,9 +29,9 @@ class OrderUpdateRequest extends FormRequest
             'shop_id'               => 'required',
             'total_amount'          => 'required',
             'delivery_fees'         => 'required',
-            'type'                  => 'required',
+            'delivery_type_id'      => 'required',
             'collection_method'     => 'required',
-            'proof_of_payment'    => 'mimes:jpg,jpeg,webp,png,bmp'
+            'proof_of_payment'      => 'mimes:jpg,jpeg,webp,png,bmp'
         ];
     }
 
@@ -52,9 +52,9 @@ class OrderUpdateRequest extends FormRequest
             'total_amount.required'             => 'Total Amount field is required',
             'delivery_fees.required'            => 'Delivery Fees is required',
             'item_type.required'                => 'Item Type field is required',
-            'type.required'                     => 'Type field is required',
+            'delivery_type_id.required'         => 'Type field is required',
             'collection_method.required'        => 'Collection Method field is required',
-            'proof_of_payment.mimes'     => 'The proof of payment must be in JPG, JPEG, WEBP, PNG or BMP format'
+            'proof_of_payment.mimes'            => 'The proof of payment must be in JPG, JPEG, WEBP, PNG or BMP format'
         ];
     }
 }

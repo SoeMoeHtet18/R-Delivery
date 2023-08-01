@@ -20,6 +20,7 @@ class CustomerCollectionRepository
             $customer_collection['order_code'] = $customer_collection->order->order_code;
             $customer_collection['customer_name'] = $customer_collection->order->customer_name;
             $customer_collection['shop_name'] = $customer_collection->order->shop->name;
+            $customer_collection['collection_group'] = $customer_collection->collection_group->id ?? null;
             return $customer_collection;
         });
         

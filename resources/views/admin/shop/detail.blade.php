@@ -134,7 +134,7 @@
                                 <th>Rider</th>
                                 <th>Total Amount</th>
                                 <th>Delivery Fees</th>
-                                <th>Markup Delivery Fees</th>
+                                <!-- <th>Markup Delivery Fees</th> -->
                                 <th>Remark</th>
                                 <th>Status</th>
                                 <th>Item Type</th>
@@ -374,10 +374,10 @@
                     data: 'delivery_fees',
                     name: 'delivery_fees'
                 },
-                {
-                    data: 'markup_delivery_fees',
-                    name: 'markup_delivery_fees'
-                },
+                // {
+                //     data: 'markup_delivery_fees',
+                //     name: 'markup_delivery_fees'
+                // },
                 {
                     data: 'remark',
                     name: 'remark'
@@ -399,7 +399,7 @@
                     name: 'schedule_date'
                 },
                 {
-                    data: 'type',
+                    data: 'delivery_type_name',
                     name: 'type'
                 },
                 {
@@ -443,7 +443,7 @@
                                 return "In Warehouse";
                             }
                     },
-                    "targets": 13
+                    "targets": 12
                 },
                 {
                     "render": function(data, type, row) {
@@ -458,21 +458,7 @@
                         });
                         return formattedDate;
                     },
-                    "targets": 16
-                },
-                {
-                    "render": function(data, type, row) {
-                        if (row.type == 'standard') {
-                            return "Standard";
-                        }
-                        if (row.type == 'express') {
-                            return "Express";
-                        }
-                        if (row.type == 'doortodoor') {
-                            return "Door To Door";
-                        }
-                    },
-                    "targets": 17
+                    "targets": 15
                 },
                 {
                     "render": function(data, type, row) {
@@ -483,7 +469,7 @@
                             return "Pick Up";
                         }
                     },
-                    "targets": 18
+                    "targets": 17
                 },
             ]
         });

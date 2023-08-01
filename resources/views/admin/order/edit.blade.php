@@ -187,7 +187,7 @@
                     <h4>Type <b>:</b></h4>
                 </label>
                 <div class="col-10">
-                    <select name="type" id="type_id" class="form-control">
+                    <select name="delivery_type_id" id="delivery_type_id" class="form-control">
                         <option value="" selected disabled>Select the Type for This Order</option>
                         @foreach($delivery_types as $delivery_type)
                             <option value="{{$delivery_type->id}}" @if($delivery_type->id == $order->delivery_type_id) {{'selected'}} @endif>{{$delivery_type->name}}</option>
@@ -213,7 +213,7 @@
                 <div class="col-10">
                     <select name="collection_method" id="collection_method_id" class="form-control">
                         <option value="" selected disabled>Select the Collection Method for This Order</option>
-                        <option value="pickup" @if($order->collection_method == "pickup") {{'selected'}} @endif>PickUp</option>
+                        <option value="pickup" @if($order->collection_method == "pickup") {{'selected'}} @endif>Pick Up</option>
                         <option value="dropoff" @if($order->collection_method == "dropoff") {{'selected'}} @endif>Drop Off</option>
                     </select>
                 </div>
@@ -268,7 +268,7 @@
         $('#shop_id').select2();
         $('#status_id').select2();
         $('#item_type_id').select2();
-        $('#type_id').select2();
+        $('#delivery_type_id').select2();
         $('#collection_method_id').select2();
         $('#payment_method').select2();
 

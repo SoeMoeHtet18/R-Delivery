@@ -31,7 +31,7 @@ class OrderCreateRequest extends FormRequest
             'shop_id'               => 'required',
             'total_amount'          => 'required',
             'delivery_fees'         => 'required',
-            'type'                  => 'required',
+            'delivery_type_id'      => 'required',
             'collection_method'     => 'required',
             'proof_of_payment'    => 'mimes:jpg,jpeg,webp,png,bmp'
         ];
@@ -52,10 +52,9 @@ class OrderCreateRequest extends FormRequest
             'city_id.required'                  => 'City field is required',
             'township_id.required'              => 'Township field is required',
             'shop_id.required'                  => 'Shop field is required',
-            'quantity.required'                 => 'Quantity field is required',
             'total_amount'                      => 'Total Amount field is required',
             'delivery_fees.required'            => 'Delivery Fees is required',
-            'type.required'                     => 'Type field is required',
+            'delivery_type_id.required'         => 'Type field is required',
             'collection_method.required'        => 'Collection Method field is required',
             'proof_of_payment.mimes'     => 'The proof of payment must be in JPG, JPEG, WEBP, PNG or BMP format'
         ];
