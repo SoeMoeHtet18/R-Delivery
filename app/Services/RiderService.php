@@ -19,17 +19,8 @@ class RiderService
         $rider->salary_type = $data['salary_type'];
         $rider->device_id = $data['device_id'] ?? null;
         $rider->save();
-        if (isset($data['township_id'])) {
-            $townships = [];
-            $township_ids = $data['township_id'];
-            foreach ($township_ids as $township_id) {
-                $township = Township::find($township_id);
-                $townships[$township_id] = [
-                    'rider_fees' => $township->delivery_fees,
-                ];
-            }
-            $rider->townships()->sync($townships);
-        }
+        
+        $this->assignTownship($rider, $data);
         return $rider;
     }
 
@@ -43,18 +34,6 @@ class RiderService
         }
         $rider->device_id = $data['device_id'] ?? $rider->device_id;
         $rider->salary_type = $data['salary_type'];
-
-        if (isset($data['township_id'])) {
-            $townships = [];
-            $township_ids = $data['township_id'];
-            foreach ($township_ids as $township_id) {
-                $township = Township::find($township_id);
-                $townships[$township_id] = [
-                    'rider_fees' => $township->delivery_fees,
-                ];
-            }
-            $rider->townships()->sync($townships);
-        }
         $rider->save();
         return $rider;
     }

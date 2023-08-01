@@ -76,16 +76,32 @@
                     <input type="password" id="password-confirm" name="password_confirmation" class="form-control" required autocomplete="new-password" />
                 </div>
             </div>
-            <div class="row m-0 mb-3">
-                <label for="township_id" class="col-2">
-                    <h4>Township Name <b>:</b></h4>
-                </label>
-                <div class="col-10">
-                    <select name="township_id[]" id="township_id" class="form-control" multiple>
-                        @foreach($townships as $township)
-                        <option value="{{$township->id}}" @if(in_array($township->id, old('township_id', []))) selected @endif>{{$township->name}}</option>
-                        @endforeach
-                    </select>
+            <button type="button" id="add-card-btn" class="btn green rounded-pill">+</button>
+            <div id="assign-container">
+                <div class="card card-container action-form-card">
+                    <div class="card-body">
+                        <div class="row m-0 mb-3">
+                            <label for="township_id" class="col-2">
+                                <h4>Township Name <b>:</b></h4>
+                            </label>
+                            <div class="col-10">
+                                <select name="township_id[]" id="township_id" class="form-control township_id">
+                                    <option value="" selected disabled>Select the Township for This Order</option>
+                                    @foreach ( $townships as $township)
+                                    <option value="{{$township->id}}">{{$township->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row m-0 mb-3">
+                            <label for="rider_fees" class="col-2">
+                                <h4>Rider Fees <b>:</b></h4>
+                            </label>
+                            <div class="col-10">
+                                <input type="text" name="rider_fees[]" id="rider_fees" class="form-control">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="footer-button float-end">
@@ -99,10 +115,51 @@
 @section('javascript')
 <script type="text/javascript">
     $(function() {
-        $('#township_id').select2({
-            placeholder: 'Select Townships',
-            allowClear: true
-        });
+        $('#salary_type').select2();
+        $('#township_id').select2();
     });
+
+    var clonecard = () => {
+        const newIndex = $("#assign-container .card-container").length + 1; // Increment the index for the new card
+
+        return `<div class="card card-container action-form-card">
+            <div class="card-body">
+                <div class="row m-0 mb-3">
+                    <label for="township_id_${newIndex}" class="col-2">
+                        <h4>Township Name <b>:</b></h4>
+                    </label>
+                    <div class="col-10">
+                        <select name="township_id[]" id="township_id_${newIndex}" class="form-control township_id">
+                            <option value="" selected disabled>Select the Township for This Order</option>
+                            @foreach ($townships as $township)
+                                <option value="{{$township->id}}">{{$township->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="row m-0 mb-3">
+                    <label for="rider_fees_${newIndex}" class="col-2">
+                        <h4>Rider Fees <b>:</b></h4>
+                    </label>
+                    <div class="col-10">
+                        <input type="text" name="rider_fees[]" id="rider_fees_${newIndex}" class="form-control">
+                    </div>
+                </div>
+            </div>
+        </div>`;
+    };
+
+    var addMoreCard = () => {
+        $("#add-card-btn").click(function() {
+            console.log("add more cards");
+            $("#assign-container").append(clonecard());
+
+            // Initialize select2 for the newly cloned card
+            const newIndex = $("#assign-container .card-container").length; // Get the index of the last cloned card
+            $(`#township_id_${newIndex}`).select2();
+        });
+    }
+
+    addMoreCard();
 </script>
 @endsection
