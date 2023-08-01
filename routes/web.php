@@ -15,11 +15,13 @@ use App\Http\Controllers\PaymentNotificationListController;
 use App\Http\Controllers\PaymentTypeController;
 use App\Http\Controllers\QrCodeController;
 use App\Http\Controllers\RiderController;
+use App\Http\Controllers\RiderPaymentController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\ShopPaymentController;
 use App\Http\Controllers\ShopUserController;
 use App\Http\Controllers\TownshipController;
 use App\Http\Controllers\TransactionsForShopController;
+use App\Models\RiderPayment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -117,6 +119,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/riders/get-deficit-by-rider-id/{id}', [RiderController::class, 'getDeficitByRider']);
     Route::post('/add-deficit-to-rider', [RiderController::class, 'addDeficitToRider']);
     Route::get('/ajax-get-warehouse-customer-collections-data', [CustomerCollectionController::class, 'getAjaxWarehouseCustomerCollections']);
+    Route::resource('/rider-payments', RiderPaymentController::class);
+    Route::get('/ajax-get-rider-payment-data', [RiderPaymentController::class, 'getAjaxRiderPaymentData']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
