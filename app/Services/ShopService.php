@@ -8,10 +8,12 @@ class ShopService
 {
     public function saveShopData($data)
     {
+        $user = auth()->user();
         $shop = new Shop();
         $shop->name = $data['name'];
         $shop->address =  $data['address'];
         $shop->phone_number = $data['phone_number'];
+        $shop->branch_id = $user->branch_id;
         $shop->save();
         return $shop;
     }

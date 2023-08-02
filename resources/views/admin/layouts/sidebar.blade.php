@@ -38,19 +38,19 @@
             <li class="@if(request()->is('collection-groups*')) {{'active'}} @endif">
                 <a href="{{route('collection-groups.index')}}">
                     <!-- <i class="fa fa-users"></i> -->
-                    <span class="title">Collection Group</span>
+                    <span class="title">Pick Up Group</span>
                 </a>
             </li>
             <li class="@if(request()->is('collections*')) {{'active'}} @endif">
                 <a href="{{route('collections.index')}}">
                     <!-- <i class="fa fa-users"></i> -->
-                    <span class="title">Collection</span>
+                    <span class="title">Pick Up</span>
                 </a>
             </li>
             <li class="@if(request()->is('customer-collections*')) {{'active'}} @endif">
                 <a href="{{route('customer-collections.index')}}">
                     <!-- <i class="fa fa-users"></i> -->
-                    <span class="title">Customer Collection</span>
+                    <span class="title">Customer Exchange</span>
                 </a>
             </li>
             <li class="@if(request()->is('payment_notification*')) {{'active'}} @endif">
