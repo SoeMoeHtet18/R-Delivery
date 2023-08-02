@@ -124,6 +124,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/ajax-get-rider-payment-data', [RiderPaymentController::class, 'getAjaxRiderPaymentData']);
     Route::resource('/branches', BranchController::class);
     Route::get('/third-party-vendor', [AdminController::class, 'thirdPartyVendor']);
+    Route::get('/ajax-get-branch-data', [BranchController::class, 'getAjaxBranchData']);
+
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
