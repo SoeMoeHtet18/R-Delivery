@@ -3,10 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\Branch;
+use App\Repositories\BranchRepository;
+use App\Services\BranchService;
 use Illuminate\Http\Request;
 
 class BranchController extends Controller
 {
+    protected $branchRepository;
+    protected $branchService;
+
+    public function __construct(BranchRepository $branchRepository, BranchService $branchService)
+    {
+        $this->branchRepository = $branchRepository;
+        $this->branchService = $branchService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -20,7 +31,7 @@ class BranchController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.branches.create');
     }
 
     /**
@@ -28,15 +39,18 @@ class BranchController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        $this->branchService->saveBranchData($data);
+        return redirect(route('branches.index'));
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Branch $branch)
+    public function show($id)
     {
-        //
+        $branch = $this->branchRepository->show($id);
+        return view('admin.branches.detail', compact('branch'));
     }
 
     /**
