@@ -35,6 +35,7 @@ class CollectionService
 
     public function saveCollectionData($data)
     {
+        $user = auth()->user();
         $collection = new Collection();
         $collection->total_quantity =  $data['total_quantity'];
         $collection->total_amount =  $data['total_amount'];
@@ -46,6 +47,7 @@ class CollectionService
         $collection->note =  $data['note'];
         $collection->status =  'pending';
         $collection->is_payable =  false;
+        $collection->branch_id =  $user->branch_id;
         $collection->save();
         return $collection;
     }

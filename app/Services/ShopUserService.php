@@ -9,6 +9,8 @@ class ShopUserService
 {
     public function saveShopUserData($data)
     {
+        $user = auth()->user();
+
         $shop_user = new ShopUser();
         $shop_user->name = $data['name'];
         $shop_user->phone_number = $data['phone_number'];
@@ -16,6 +18,7 @@ class ShopUserService
         $shop_user->password = bcrypt($data['password']);
         $shop_user->device_id = $data['device_id'] ?? null;
         $shop_user->shop_id = $data['shop_id'] ?? null;
+        $shop_user->branch_id = $user->branch_id;
         $shop_user->save();
         return $shop_user;
     }

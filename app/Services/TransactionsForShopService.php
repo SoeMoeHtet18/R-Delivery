@@ -11,6 +11,8 @@ class TransactionsForShopService
     use FileUploadTrait;
     public function saveTransactionForShopData($data, $file)
     {
+        $user = auth()->user();
+
         $transactions_for_shops = new TransactionsForShop();
         $transactions_for_shops->shop_id = $data['shop_id'];
         $transactions_for_shops->amount =  $data['amount'];
@@ -23,6 +25,7 @@ class TransactionsForShopService
         $transactions_for_shops->type = $data['type'];
         $transactions_for_shops->paid_by = $data['paid_by'];
         $transactions_for_shops->description = $data['description'] ?? null;
+        $transactions_for_shops->branch_id = $user->branch_id;
         $transactions_for_shops->save();
     }
 

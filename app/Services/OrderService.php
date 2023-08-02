@@ -24,6 +24,8 @@ class OrderService
     }
     public function saveOrderData($data)
     {
+        $user = auth()->user();
+        
         $order = new Order();
         $order->order_code =  $data['order_code'];
         $order->shop_id =  $data['shop_id'];
@@ -51,6 +53,7 @@ class OrderService
         $order->is_payment_channel_confirm = 0;
         $order->is_confirm = 0;
         $order->extra_charges = $data['extra_charges'] ?? 0;
+        $order->branch_id = $user->branch_id;
         $order->save();
         return $order;
     }

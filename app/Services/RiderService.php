@@ -11,6 +11,8 @@ class RiderService
 {
     public function saveRiderData($data)
     {
+        $user = auth()->user();
+
         $rider = new Rider();
         $rider->name = $data['name'];
         $rider->phone_number = $data['phone_number'];
@@ -18,6 +20,7 @@ class RiderService
         $rider->password = bcrypt($data['password']);
         $rider->salary_type = $data['salary_type'];
         $rider->device_id = $data['device_id'] ?? null;
+        $rider->branch_id = $user->branch_id;
         $rider->save();
         
         $this->assignTownship($rider, $data);

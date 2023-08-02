@@ -8,10 +8,13 @@ class RiderPaymentService
 {
     public function saveRiderPaymentData($data)
     {
+        $user = auth()->user();
+
         $rider_payment = new RiderPayment();
         $rider_payment->rider_id = $data['rider_id'];
         $rider_payment->total_amount =  $data['total_amount'];
         $rider_payment->total_routine = $data['total_routine'];
+        $rider_payment->branch_id = $user->branch_id;
         $rider_payment->save();
     }
 

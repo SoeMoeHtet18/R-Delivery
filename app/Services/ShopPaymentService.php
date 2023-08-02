@@ -11,6 +11,8 @@ class ShopPaymentService
 
     public function saveShopPaymentData($data, $file)
     {
+        $user = auth()->user();
+
         $shop_payment = new ShopPayment();
         $shop_payment->shop_id = $data['shop_id'];
         $shop_payment->amount =  $data['amount'];
@@ -22,6 +24,7 @@ class ShopPaymentService
         }
         $shop_payment->type = $data['type'];
         $shop_payment->description = $data['description'] ?? null;
+        $shop_payment->branch_id = $user->branch_id;
         $shop_payment->save();
         return $shop_payment;
     }

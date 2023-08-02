@@ -13,6 +13,7 @@ class CustomerCollectionService
     use  FileUploadTrait;
     public function createCustomerCollection($data)
     {
+        $user = auth()->user();
         $customer_collection = new CustomerCollection();
         $customer_collection->customer_collection_code = $data['customer_collection_code'];
         $customer_collection->order_id = $data['order_id'];
@@ -21,6 +22,7 @@ class CustomerCollectionService
         $customer_collection->is_way_fees_payable = $data['is_way_fees_payable'];
         $customer_collection->status = 'pending';
         $customer_collection->note = $data['note'] ?? null;
+        $customer_collection->branch_id = $user->branch_id;
         $customer_collection->save();
     }
 

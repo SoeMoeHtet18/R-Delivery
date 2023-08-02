@@ -11,6 +11,8 @@ class CustomerPaymentService
 
     public function saveCustomerPayment($data, $file)
     {
+        $user = auth()->user();
+
         $customer_payment = new CustomerPayment();
         $customer_payment->order_id =  $data['order_id'];
         $customer_payment->amount =  $data['amount'];
@@ -24,6 +26,7 @@ class CustomerPaymentService
         $customer_payment->paid_at =  $data['paid_at'] ?? null;
         $customer_payment->last_updated_by =  $data['last_updated_by'] ?? null;
         $customer_payment->description = $data['description'] ?? null;
+        $customer_payment->branch_id = $user->branch_id;
         $customer_payment->save();
         return $customer_payment;
     }
