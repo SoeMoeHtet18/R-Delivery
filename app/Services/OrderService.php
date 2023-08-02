@@ -6,6 +6,7 @@ use App\Helpers\Helper;
 use App\Http\Traits\FileUploadTrait;
 use App\Models\ItemType;
 use App\Models\Order;
+use App\Models\Shop;
 use App\Models\Township;
 use App\Models\User;
 use Carbon\Carbon;
@@ -60,6 +61,7 @@ class OrderService
 
     public function saveOrderByShopID($data, $shop_id)
     {
+        $shop = Shop::where('id', $shop_id)->first();
         $delivery_fees = Township::where('id', $data['township_id'])->first()->delivery_fees;
 
         $order = new Order();
@@ -88,6 +90,7 @@ class OrderService
         $order->is_payment_channel_confirm = 0;
         $order->is_confirm = 0;
         $order->extra_charges = $data['extra_charges'] ?? 0;
+        $order->branch_id = $shop->branch_id;
         $order->save();
         $this->notificationService->orderCreateNotificationForShopUser($shop_id);
         return $order;

@@ -23,16 +23,16 @@ class ShopPaymentApiController extends Controller
         $this->shopPaymentService = $shopPaymentService;
     }
 
-    public function insertShopPayment(ShopPaymentApiRequest $request)
-    {
-        $shop_user = auth()->guard('shop-user-api')->user();
-        $data = $request->all();
-        $data['shop_id'] = $shop_user->shop_id;
-        $file = $request->file('image');
-        $shop_payment = $this->shopPaymentService->saveShopPaymentData($data, $file);
+    // public function insertShopPayment(ShopPaymentApiRequest $request)
+    // {
+    //     $shop_user = auth()->guard('shop-user-api')->user();
+    //     $data = $request->all();
+    //     $data['shop_id'] = $shop_user->shop_id;
+    //     $file = $request->file('image');
+    //     $shop_payment = $this->shopPaymentService->saveShopPaymentData($data, $file);
 
-        return response()->json(['data' => $shop_payment, 'message' => 'Successfully Create Shop Payment ', 'status' => 'success'], 200);
-    }
+    //     return response()->json(['data' => $shop_payment, 'message' => 'Successfully Create Shop Payment ', 'status' => 'success'], 200);
+    // }
 
     public function getShopPaymentListByShopID()
     {

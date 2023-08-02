@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Collection;
+use App\Models\Shop;
 
 class CollectionService
 {
@@ -21,6 +22,8 @@ class CollectionService
 
     public function createCollectionByShopUser($data, $shop_id)
     {
+        $shop_user = auth()->guard('shop-user-api')->user();
+
         $collection = new Collection();
         $collection->total_quantity     = $data['total_quantity'];
         $collection->total_amount       = $data['total_amount'];
@@ -29,6 +32,7 @@ class CollectionService
         $collection->status             = $data['status'];
         $collection->note               = $data['note'];
         $collection->is_payable         = 0;
+        $collection->branch_id         = $shop_user->branch_id;
         $collection->save();
         return $collection;
     }

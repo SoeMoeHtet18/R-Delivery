@@ -62,6 +62,7 @@ class CustomerCollectionService
             $imageUrl = asset('/storage/customer_collection/' . $file_name);
         }
         $customer_collection->item_image = $file_name;
+        $customer_collection->branch_id = $rider->branch_id;
         $customer_collection->save();
         return $customer_collection;
     }
