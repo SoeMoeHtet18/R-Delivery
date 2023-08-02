@@ -127,8 +127,8 @@
                             <span class="title">Delivery Type</span>
                         </a>
                     </li>
-                    <li class="@if(request()->is('braches*')) {{'active'}} @endif">
-                        <a href="{{route('braches.index')}}">
+                    <li class="@if(request()->is('branches*')) {{'active'}} @endif">
+                        <a href="{{route('branches.index')}}">
                             <!-- <i class="fa fa-users"></i> -->
                             <span class="title">Branch</span>
                         </a>
