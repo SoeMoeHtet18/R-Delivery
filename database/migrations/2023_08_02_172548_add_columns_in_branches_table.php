@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreign('city_id')->references('id')->on('cities');
             $table->string('address');
             $table->string('phone_number');
+            $table->softDeletes();
         });
     }
 
@@ -29,6 +30,7 @@ return new class extends Migration
             $table->dropColumn('city_id');
             $table->dropColumn('address');
             $table->dropColumn('phone_number');
+            $table->dropSoftDeletes();
         });
     }
 };

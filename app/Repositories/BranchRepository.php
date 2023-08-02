@@ -8,7 +8,7 @@ class BranchRepository
 {
     public function getAllBranchQuery()
     {
-        $query = Branch::select('branches.*');
+        $query = Branch::leftJoin('cities', 'cities.id','branches.city_id')->select('branches.*','cities.name as city_name');
         return $query;
     }
 

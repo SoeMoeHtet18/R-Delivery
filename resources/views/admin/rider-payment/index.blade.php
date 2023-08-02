@@ -18,7 +18,7 @@
         <div class="filter-box">
             <div class="mb-3 p-3 col-4">
                 <label for="rider_name">
-                    <strong>Shop</strong>
+                    <strong>Rider</strong>
                 </label>
                 <div class="col-10">
                     <select name="rider_name" id="rider_name" class="form-control">
