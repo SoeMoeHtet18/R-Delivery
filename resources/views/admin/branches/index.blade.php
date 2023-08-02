@@ -5,7 +5,7 @@
 
 
 <div class="create-button" style="margin-bottom: 50px">
-    <a href="#" class="btn create-btn">Add New Branch</a>
+    <a href="{{route('branches.create')}}" class="btn create-btn">Add New Branch</a>
 </div>
 
 
