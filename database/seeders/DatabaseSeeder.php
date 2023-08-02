@@ -6,6 +6,7 @@ namespace Database\Seeders;
 
 use App\Models\Branch;
 use App\Models\City;
+use App\Models\DeliveryType;
 use App\Models\ItemType;
 use App\Models\Rider;
 use App\Models\ShopUser;
@@ -53,12 +54,24 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('shopuser123'),
             'branch_id' => 1
         ]);
-        ItemType::create([
+        ItemType::create(
+        [
             'name' => 'Clothing',
-        ], [
+        ], 
+        [
             'name' => 'Document',
-        ], [
+        ], 
+        [
             'name' => 'Others',
+        ]);
+        DeliveryType::create(
+        [
+            'name' => 'Standard',
+            'notified_on' => 1
+        ],
+        [
+            'name' => 'Door To Door',
+            'notified_on' => 5
         ]);
     }
 }
