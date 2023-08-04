@@ -126,7 +126,7 @@ class ShopUserApiTest extends TestCase
         $rand_method = $methods[array_rand($methods)];
         DB::beginTransaction();
         $response = $this->postJson('/api/shop-user/create-order-list', [
-            "order_code" => Helper::nomenclature('orders', 'OD', 'id', $shop_id),
+            "order_code" => Helper::nomenclature('orders', 'OD', 'id', $shop_id, 'S'),
             "customer_phone_number" => $this->faker->phoneNumber,
             "customer_name" => $this->faker->name,
             "city_id" => City::all()->random()->id,

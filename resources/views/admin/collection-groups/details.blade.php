@@ -1,11 +1,11 @@
 @extends('admin.layouts.master')
-@section('title','Collection Groups')
-@section('sub-title','Collection Groups Detail')
+@section('title','Collections')
+@section('sub-title','Pick Up Group Detail')
 @section('content')
 <div class="card card-container detail-card">
     <div class="card-body">
         <h2 class="ps-1 card-header-title">
-            <strong>Collection Groups Detail</strong>
+            <strong>Pick Up Group Detail</strong>
         </h2>
 
         <div class="card-toolbar">

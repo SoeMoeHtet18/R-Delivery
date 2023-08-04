@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Api\CollectionApiController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\CollectionController;
@@ -125,6 +126,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/branches', BranchController::class);
     Route::get('/third-party-vendor', [AdminController::class, 'thirdPartyVendor']);
     Route::get('/ajax-get-branch-data', [BranchController::class, 'getAjaxBranchData']);
+    Route::get('get-collection-group-code', [CollectionGroupController::class, 'getCollectionGroupCode']);
+    Route::get('get-collection-code', [CollectionApiController::class, 'getCollectionCode']);
 
 });
 Auth::routes();

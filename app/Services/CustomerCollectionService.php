@@ -50,7 +50,7 @@ class CustomerCollectionService
         $customer_collection = new CustomerCollection();
         $customer_collection->order_id = $data['order_id'];
         $shop_id = Order::where('id',$data['order_id'])->first()->shop_id;
-        $customer_collection_code = Helper::nomenclature('customer_collections', 'CC', 'id', $shop_id);
+        $customer_collection_code = Helper::nomenclature('customer_collections', 'CE', 'id', $shop_id, 'S');
         $customer_collection->customer_collection_code  = $customer_collection_code;
         $customer_collection->paid_amount  = $data['amount'];
         $customer_collection->note   = $data['reason'];

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Helpers\Helper;
 use App\Models\Collection;
 use App\Models\CollectionGroup;
 use App\Models\CustomerCollection;
@@ -39,6 +40,7 @@ class CollectionGroupService
         $user = auth()->user();
 
         $collectionGroup = CollectionGroup::create([
+            'collection_group_code' => $data['collection_group_id'],
             'total_amount' => $data['total_amount'],
             'rider_id' => $data['rider_id'],
             'assigned_date' => $data['assigned_date'],

@@ -1,10 +1,10 @@
 @extends('admin.layouts.master')
-@section('title','Collection Groups')
-@section('sub-title','Collection Groups Listing')
+@section('title','Collections')
+@section('sub-title','Pick Up Group Listing')
 @section('content')
 
 <div class="create-button">
-    <a class="btn create-btn" href="{{route('collection-groups.create')}}">Add Collection Group</a>
+    <a class="btn create-btn" href="{{route('collection-groups.create')}}">Add Pick Up Group</a>
 </div>
 <div class="card m-3">
     <div class="row tdFilter">
@@ -36,7 +36,7 @@
 
 <div class="portlet box green">
     <div class="portlet-title">
-        <div class="caption">Collections Groups</div>
+        <div class="caption">Pick Up Group List</div>
     </div>
     <div class="portlet-body">
         <table id="datatable" class="table table-striped table-hover table-responsive datatable">

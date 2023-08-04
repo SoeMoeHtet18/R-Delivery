@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\CityApiController;
 use App\Http\Controllers\Api\CollectionApiController;
+use App\Http\Controllers\Api\CollectionGroupApiController;
 use App\Http\Controllers\Api\CustomerCollectionApiController;
 use App\Http\Controllers\Api\CustomerPaymentApiController;
 use App\Http\Controllers\Api\DeliveryTypeApiController;

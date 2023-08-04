@@ -1,10 +1,10 @@
 @extends('admin.layouts.master')
-@section('title','Admin Tools')
-@section('sub-title','Collections Listing')
+@section('title','Collections')
+@section('sub-title','Pick Up Listing')
 @section('content')
 
 <div class="create-button">
-    <a class="btn create-btn" href="{{route('collections.create')}}">Add Collection</a>
+    <a class="btn create-btn" href="{{route('collections.create')}}">Add Pick Up</a>
 </div>
 <div class="card m-3">
     <div class="row tdFilter">
@@ -36,26 +36,25 @@
 
 <div class="portlet box green">
     <div class="portlet-title">
-        <div class="caption">Collections Lists</div>
+        <div class="caption">Pick Up Lists</div>
     </div>
     <div class="portlet-body">
         <table id="datatable" class="table table-striped table-hover table-responsive datatable">
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Total Quantity of Collection</th>
-                    <th>Total Amount of Collection</th>
+                    <th>Pick Up Code</th>
+                    <th>Pick Up Group Code</th>
+                    <th>Total Quantity of Pick Up</th>
+                    <th>Total Amount of Pick Up</th>
                     <th>Paid Amount By Rider</th>
-                    <th>Collection Group Number</th>
                     <th>Rider</th>
                     <th>Shop</th>
-                    <th>Assigned At</th>
+                    <th>Scheduled At</th>
                     <th>Collected At</th>
                     <th>Note</th>
                     <th>Status</th>
-                    <th>Is payable</th>
-                    <th>Created At</th>
-                    <th>Updated At</th>
+                    <th>Is Payable</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -88,32 +87,36 @@
                         name: 'id'
                     },
                     {
+                        data: 'collection_code',
+                        name: "pick_up_code"
+                    }, 
+                    {
+                        data: 'collection_group_code',
+                        name: "pick_up_group_code"
+                    },    
+                    {
                         data: 'total_quantity',
-                        name: 'total_quantity'
+                        name: 'total_quantity_of_pick_up'
                     },
                     {
                         data: 'total_amount',
-                        name: 'total_amount',
+                        name: 'total_amount_of_pick_up',
                     },
                     {
                         data: 'paid_amount',
-                        name: 'paid_amount',
-                    },
-                    {
-                        data: 'collection_group_id',
-                        name: 'collection_group_id',
+                        name: 'paid_amount_by_rider',
                     },
                     {
                         data: 'rider_name',
-                        name: 'rider_id',
+                        name: 'rider',
                     },
                     {
                         data: 'shop_name',
-                        name: 'shop_id',
+                        name: 'shop',
                     },
                     {
                         data: 'assigned_at',
-                        name: 'assigned_at',
+                        name: 'scheduled_at',
                     },
                     {
                         data: 'collected_at',
@@ -132,20 +135,39 @@
                         name: 'is_payable',
                     },
                     {
-                        data: 'created_at',
-                        name: 'created_at',
-                    },
-                    {
-                        data: 'updated_at',
-                        name: 'updated_at',
-                    },
-                    {
                         data: 'action',
                         name: 'action',
                         orderable: false,
                         searchable: false
                     },
-                ]
+                ],
+                columnDefs: [
+                    {
+                        "render": function(data, type, row) {
+                            if (row.status == 'pending') {
+                                return "Pending";
+                            }
+                            if (row.status == 'complete') {
+                                return "Completed";
+                            }
+                            if (row.status == 'in-warehouse') {
+                                return "In Warehouse";
+                            }
+                        },
+                        "targets": 11   
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            if (row.is_payable == 0) {
+                                return "No";
+                            }
+                            if (row.payment_flag == 1) {
+                                return "Yes";
+                            }
+                        },
+                        "targets": 12
+                    },
+                ],
             });
 
             $('.search_filter').click(function() {

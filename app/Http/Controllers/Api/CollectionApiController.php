@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Repositories\CollectionRepository;
 use App\Services\CollectionService;
@@ -60,5 +61,12 @@ class CollectionApiController extends Controller
         // dd($rider_id);
         $collections = $this->collectionRepository->getCollectionsByShop($shop_id,$collection_group_id, $page);
         return response()->json(['data' => $collections, 'message' => 'Successfully Get Collection list By Shop', 'status' => 'success'], 200);
+    }
+
+    public function getCollectionCode(Request $request) 
+    {
+        $shop_id = $request['shop_id'];
+        $collection_code = Helper::nomenclature('collections', 'P', 'id', $shop_id, 'S');
+        return response()->json(['data' => $collection_code,  'status' => 'success', 'message' => 'Successfully get collection code'], 200);
     }
 }

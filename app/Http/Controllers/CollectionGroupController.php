@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Helper;
 use App\Http\Requests\CollectionCreateRequest;
 use App\Repositories\CollectionGroupRepository;
 use App\Repositories\CollectionRepository;
@@ -148,5 +149,12 @@ class CollectionGroupController extends Controller
             ->addIndexColumn()
             ->orderColumn('collection_groups.id', '-id $1')
             ->make(true);
+    }
+
+    public function getCollectionGroupCode()
+    {
+        $user = auth()->user();
+        $collection_group_code = Helper::nomenclature('collection_groups', 'PG', 'id', $user->branch_id, 'B');
+        return response()->json(['data' => $collection_group_code,  'status' => 'success', 'message' => 'Successfully get collection group code'], 200);
     }
 }

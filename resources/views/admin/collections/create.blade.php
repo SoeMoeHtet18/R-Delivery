@@ -1,76 +1,23 @@
 @extends('admin.layouts.master')
-@section('title','Admin Tools')
-@section('sub-title','Collection Create')
+@section('title','Collections')
+@section('sub-title','Pick Up Create')
 @section('content')
 <div class="card card-container action-form-card">
     <div class="card-body">
         <h2 class="ps-1 card-header-title">
-            <strong>Add New Collection</strong>
+            <strong>Add New Pick Up</strong>
         </h2>
         <form action="{{route('collections.store')}}" method="POST" class="action-form">
             @csrf
-            <div class="row m-0 mb-3">
-                <label for="total_quantity" class="col-2">
-                    <h4>Total Quantity <b>:</b></h4>
-                </label>
-                <div class="col-10">
-                    <input type="text" id="total_quantity" name="total_quantity" class="form-control" />
-                    @if ($errors->has('total_quantity'))
-                    <span class="text-danger"><strong>{{ $errors->first('total_quantity') }}</strong></span>
-                    @endif
-                </div>
-            </div>
-            <div class="row m-0 mb-3">
-                <label for="total_amount" class="col-2">
-                    <h4>Total Amount <b>:</b></h4>
-                </label>
-                <div class="col-10">
-                    <input type="text" id="total_amount" name="total_amount" class="form-control" />
-                    @if ($errors->has('total_amount'))
-                    <span class="text-danger"><strong>{{ $errors->first('total_amount') }}</strong></span>
-                    @endif
-                </div>
-            </div>
-            <div class="row m-0 mb-3">
-                <label for="total_quantity" class="col-2">
-                    <h4>Paid Amount <b>:</b></h4>
-                </label>
-                <div class="col-10">
-                    <input type="text" id="paid_amount" name="paid_amount" class="form-control" />
-                    @if ($errors->has('paid_amount'))
-                    <span class="text-danger"><strong>{{ $errors->first('paid_amount') }}</strong></span>
-                    @endif
-                </div>
-            </div>
-            <div class="row m-0 mb-3">
-                <label for="rider_id" class="col-2">
-                    <h4>Rider <b>:</b></h4>
-                </label>
-                <div class="col-10">
-                    <select name="rider_id" id="rider_id" class="form-control">
-                        <option value="" selected disabled>Select the Rider for This Collection</option>
-                        @foreach ( $riders as $rider)
-                        <option value="{{$rider->id}}" 
-                            @if($rider->id == old('rider_id')) selected
-                            @endif
-                            >{{$rider->name}}</option>
-                        @endforeach
-                    </select>
-                    @if ($errors->has('rider_id'))
-                    <span class="text-danger"><strong>{{ $errors->first('rider_id') }}</strong></span>
-                    @endif
-                </div>
-            </div>
             <div class="row m-0 mb-3">
                 <label for="shop_id" class="col-2">
                     <h4>Shop <b>:</b></h4>
                 </label>
                 <div class="col-10">
                     <select name="shop_id" id="shop_id" class="form-control">
-                        <option value="" selected disabled>Select the Rider for This Collection</option>
+                        <option value="" selected disabled>Select the Shop To Be Picked Up</option>
                         @foreach ( $shops as $shop)
-                        <option value="{{$shop->id}}" 
-                            @if($shop->id == old('shop_id')) selected
+                        <option value="{{$shop->id}}" @if($shop->id == old('shop_id')) selected
                             @endif
                             >{{$shop->name}}</option>
                         @endforeach
@@ -81,24 +28,43 @@
                 </div>
             </div>
             <div class="row m-0 mb-3">
-                <label for="assigned_at" class="col-2">
-                    <h4>Assigned At <b>:</b></h4>
+                <label for="collection_code" class="col-2">
+                    <h4>Pick Up Code <b>:</b></h4>
                 </label>
                 <div class="col-10">
-                    <input type="date" id="assigned_at" name="assigned_at" class="form-control" />
-                    @if ($errors->has('assigned_at'))
-                    <span class="text-danger"><strong>{{ $errors->first('assigned_at') }}</strong></span>
+                    <input type="text" id="collection_code" name="collection_code" class="form-control" readonly />
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <label for="total_quantity" class="col-2">
+                    <h4>Total Quantity of Pick Up <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <input type="text" id="total_quantity" name="total_quantity" class="form-control" />
+                    @if ($errors->has('total_quantity'))
+                    <span class="text-danger"><strong>{{ $errors->first('total_quantity') }}</strong></span>
                     @endif
                 </div>
             </div>
             <div class="row m-0 mb-3">
-                <label for="collected_at" class="col-2">
-                    <h4>Collected At <b>:</b></h4>
+                <label for="total_amount" class="col-2">
+                    <h4>Total Amount of Pick Up <b>:</b></h4>
                 </label>
                 <div class="col-10">
-                    <input type="date" id="collected_at" name="collected_at" class="form-control" />
-                    @if ($errors->has('collected_at'))
-                    <span class="text-danger"><strong>{{ $errors->first('collected_at') }}</strong></span>
+                    <input type="text" id="total_amount" name="total_amount" class="form-control" />
+                    @if ($errors->has('total_amount'))
+                    <span class="text-danger"><strong>{{ $errors->first('total_amount') }}</strong></span>
+                    @endif
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <label for="total_quantity" class="col-2">
+                    <h4>Paid Amount By Rider<b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <input type="text" id="paid_amount" name="paid_amount" class="form-control" />
+                    @if ($errors->has('paid_amount'))
+                    <span class="text-danger"><strong>{{ $errors->first('paid_amount') }}</strong></span>
                     @endif
                 </div>
             </div>
@@ -107,7 +73,7 @@
                     <h4>Note <b>:</b></h4>
                 </label>
                 <div class="col-10">
-                    <input type="text" id="note" name="note" class="form-control" />
+                    <textarea id="note" style="height: 100px" name="note" class="form-control"></textarea>
                     @if ($errors->has('note'))
                     <span class="text-danger"><strong>{{ $errors->first('note') }}</strong></span>
                     @endif
@@ -121,4 +87,25 @@
     </div>
 </div>
 
+@endsection
+@section('javascript')
+<script>
+    $('#shop_id').select2();
+
+    $('#shop_id').on('change', function() {
+        var shop_id = $('#shop_id').val();
+        $.ajax({
+            url: '/get-collection-code',
+            type: "GET",
+            data: {
+                shop_id: shop_id
+            },
+            success: function(res) {
+                if (res) {
+                    $("#collection_code").val(res.data);
+                }
+            }
+        });
+    })
+</script>
 @endsection

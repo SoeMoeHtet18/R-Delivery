@@ -86,14 +86,6 @@
                                 <td><span class="font"> {{ $order->shop->name }}</span></td>
                             </tr>
                             <tr>
-                                <td><span class="content">Item Amount:</span></td>
-                                <td><span class="font"> {{ $order->total_amount }} MMK </span></td>
-                            </tr>
-                            <tr>
-                                <td><span class="content">Delivery Fees:</span></td>
-                                <td><span class="font"> {{ $order->delivery_fees }} MMK</span></td>
-                            </tr>
-                            <tr>
                                 <td><span class="content">Cash To Collect:</span></td>
                                 <td><span class="font">
                                         @if ($order->payment_method === 'cash_on_delivery')

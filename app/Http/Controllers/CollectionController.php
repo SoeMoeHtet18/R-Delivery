@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Helper;
 use App\Models\Collection;
 use App\Repositories\CollectionGroupRepository;
 use App\Repositories\CollectionRepository;
@@ -66,7 +67,7 @@ class CollectionController extends Controller
      */
     public function show($id)
     {
-        $collection = $this->collectionRepository->getCollectionsByID($id);
+        $collection = $this->collectionRepository->getCollectionByIDWithData($id);
         return view('admin.collections.details', compact('collection'));
     }
 
@@ -140,7 +141,7 @@ class CollectionController extends Controller
             ->addColumn('action', function($row){
                 $actionBtn = '<a href="' . route("collections.show", $row->id) . '" class="info btn btn-info btn-sm">View</a>
                 <a href="' . route("collections.edit", $row->id) . '" class="edit btn btn-light btn-sm">Edit</a>
-                <form action="'.route("collections.destroy", $row->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this city?`);">
+                <form action="'.route("collections.destroy", $row->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this pick up?`);">
                     <input type="hidden" name="_token" value="'. csrf_token() .'">
                     <input type="hidden" name="_method" value="DELETE">
                     <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
@@ -161,7 +162,7 @@ class CollectionController extends Controller
             ->addColumn('action', function($row){
                 $actionBtn = '<a href="' . route("collections.show", $row->id) . '" class="info btn btn-info btn-sm">View</a>
                 <a href="' . route("collections.edit", $row->id) . '" class="edit btn btn-light btn-sm">Edit</a>
-                <form action="'.route("collections.destroy", $row->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this city?`);">
+                <form action="'.route("collections.destroy", $row->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this pick up?`);">
                     <input type="hidden" name="_token" value="'. csrf_token() .'">
                     <input type="hidden" name="_method" value="DELETE">
                     <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
