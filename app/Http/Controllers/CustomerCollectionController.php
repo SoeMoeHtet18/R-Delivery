@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CustomerCollection;
+use App\Repositories\CollectionGroupRepository;
 use App\Repositories\CustomerCollectionRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\ShopRepository;
@@ -16,17 +17,20 @@ class CustomerCollectionController extends Controller
     protected $customerCollectionService;
     protected $orderRepository;
     protected $shopRepository;
+    protected $collectionGroupRepository;
 
-    public function __construct(CustomerCollectionRepository $customerCollectionRepository,
-     CustomerCollectionService $customerCollectionService,
-      OrderRepository $orderRepository,
-      ShopRepository $shopRepository,
-      )
-    {
+    public function __construct(
+        CustomerCollectionRepository $customerCollectionRepository,
+        CustomerCollectionService $customerCollectionService,
+        OrderRepository $orderRepository,
+        ShopRepository $shopRepository,
+        CollectionGroupRepository $collectionGroupRepository,
+    ) {
         $this->customerCollectionRepository = $customerCollectionRepository;
         $this->customerCollectionService = $customerCollectionService;
         $this->orderRepository = $orderRepository;
         $this->shopRepository = $shopRepository;
+        $this->collectionGroupRepository = $collectionGroupRepository;
     }
     /**
      * Display a listing of the resource.
@@ -43,8 +47,13 @@ class CustomerCollectionController extends Controller
     public function create(Request $request)
     {
         $order_id = $request->order_id;
-        $order = $this->orderRepository->getOrderByID($order_id);
-        return view('admin.customer-collection.create', compact('order'));
+        if ($order_id) {
+            $order = $this->orderRepository->getOrderByID($order_id);
+            return view('admin.customer-collection.create', compact('order'));
+        } else {
+            $orders = $this->orderRepository->getAllOrders();
+            return view('admin.customer-collection.create', compact('orders'));
+        }
     }
 
     /**
@@ -73,7 +82,11 @@ class CustomerCollectionController extends Controller
     public function edit($id)
     {
         $customer_collection = $this->customerCollectionRepository->getCustomerCollectionById($id);
-        return view('admin.customer-collection.edit', compact('customer_collection'));
+        $collection_groups = $this->collectionGroupRepository->getAllCollectionGroups();
+        $collection_groups = $collection_groups->sortByDesc('id');
+        $orders = $this->orderRepository->getAllOrders();
+        $orders = $orders->sortByDesc('id');
+        return view('admin.customer-collection.edit', compact('customer_collection', 'collection_groups', 'orders'));
     }
 
     /**

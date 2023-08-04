@@ -1,11 +1,11 @@
 @extends('admin.layouts.master')
-@section('title','Collection')
-@section('sub-title','Customer Collection Detail')
+@section('title','Collections')
+@section('sub-title','Customer Exchange Detail')
 @section('content')
 <div class="card card-container detail-card">
     <div class="card-body">
         <h2 class="ps-1 card-header-title">
-            <strong>Customer Collection Detail</strong>
+            <strong>Customer Exchange Detail</strong>
         </h2>
         <div class="card-toolbar">
             <div class="create-button">
@@ -20,7 +20,7 @@
         <div class="detail-infos">
             <div class="row m-0 mb-3">
                 <div class="col-2">
-                    <h4>Customer Collection Code<b>:</b></h4>
+                    <h4>Customer Exchange Code<b>:</b></h4>
                 </div>
                 <div class="col-10"> 
                     {{ $customer_collection->customer_collection_code }}
@@ -28,7 +28,7 @@
             </div>
             <div class="row m-0 mb-3">
                 <div class="col-2">
-                    <h4>Collection Group<b>:</b></h4>
+                    <h4>Pick Up Group<b>:</b></h4>
                 </div>
                 <div class="col-10">
                     @if($customer_collection->order->collection_group != null) {{ $customer_collection->order->collection_group }}

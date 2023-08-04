@@ -25,7 +25,7 @@
                     <h4>Pick Up Group Code <b>:</b></h4>
                 </label>
                 <div class="col-10">
-                    <input type="text" id="collection_group_code" name="collection_group_code" class="form-control" readonly/>
+                    <input type="text" id="collection_group_code" name="collection_group_code" class="form-control" readonly />
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -106,7 +106,7 @@
 </div>
 
 <div class="footer-button float-end">
-    <a href="{{route('collection-groups.index')}}" class="btn btn-light">Cancel</a>
+    <a href="{{url()->previous() }}" class="btn btn-light">Cancel</a>
     <input type="button" class="btn btn-success submit-button" onclick="getCheckedValues()" value="Submit">
 </div>
 

@@ -1,6 +1,6 @@
 @extends('admin.layouts.master')
-@section('title','Collection')
-@section('sub-title','Customer Collection Editing')
+@section('title','Collections')
+@section('sub-title','Customer Exchange Editing')
 @section('style')
 <style>
     .tabs {
@@ -23,17 +23,43 @@
 <div class="card card-container action-form-card">
     <div class="card-body">
         <h2 class="ps-1 card-header-title">
-            <strong>Update Customer Collection</strong>
+            <strong>Update Exchange Collection</strong>
         </h2>
         <form action="{{route('customer-collections.update', $customer_collection->id)}}" method="POST" class="action-form" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="row m-0 mb-3">
                 <label for="customer_collection_code" class="col-2">
-                    <h4>Customer Collection Code<b>:</b></h4>
+                    <h4>Customer Exchange Code<b>:</b></h4>
                 </label>
                 <div class="col-10">
                     <input type="text" id="customer_collection_code" name="customer_collection_code" value="{{$customer_collection->customer_collection_code}}" class="form-control" readonly />
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <label for="collection_group_id" class="col-2">
+                    <h4>Collection Group <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <select name="collection_group_id" id="collection_group_id" class="form-control">
+                        <option value="" selected disabled>Select Collection Group for This Collection</option>
+                        @foreach ( $collection_groups as $collection_group)
+                        <option value="{{$collection_group->id}}" @if($customer_collection->collection_group_id == $collection_group->id) {{'selected'}} @endif>{{$collection_group->collection_group_code}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <label for="order_id" class="col-2">
+                    <h4>Order <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <select name="order_id" id="order_id" class="form-control">
+                        <option value="" selected disabled>Select Order for This Collection</option>
+                        @foreach ( $orders as $order)
+                        <option value="{{$order->id}}" @if($customer_collection->order_id == $order->id) {{'selected'}} @endif>{{$order->order_code}}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -59,14 +85,6 @@
                 </div>
             </div>
             <div class="row m-0 mb-3">
-                <label for="note" class="col-2">
-                    <h4>Note <b>:</b></h4>
-                </label>
-                <div class="col-10">
-                    <textarea id="note" name="note" class="form-control" style="height: 100px">{{$customer_collection->note}}</textarea>
-                </div>
-            </div>
-            <div class="row m-0 mb-3">
                 <label for="status" class="col-2">
                     <h4>Status <b>:</b></h4>
                 </label>
@@ -80,6 +98,15 @@
                 </div>
             </div>
             <div class="row m-0 mb-3">
+                <label for="note" class="col-2">
+                    <h4>Note <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <textarea id="note" name="note" class="form-control" style="height: 100px">{{$customer_collection->note}}</textarea>
+                </div>
+            </div>
+
+            <div class="row m-0 mb-3">
                 <label>
                     <h4>Is Way Fees Payable</h4>
                 </label>
@@ -90,7 +117,7 @@
             </div>
             <input type="hidden" name="is_way_fees_payable" id="is_way_fees_payable" value="{{$customer_collection->is_way_fees_payable}}">
             <div class="footer-button float-end">
-                <a href="{{route('customer-collections.show', $customer_collection->id)}}" class="btn btn-light">Cancel</a>
+                <a href="{{url()->previous() }}" class="btn btn-light">Cancel</a>
                 <input type="submit" class="btn btn-success ">
             </div>
         </form>
@@ -101,6 +128,9 @@
 @section('javascript')
 <script type="text/javascript">
     $('#status_id').select2();
+    $('#collection_group_id').select2();
+    $('#order_id').select2();
+
     var isWayFeesPayable = $('#is_way_fees_payable').val();
     if (isWayFeesPayable) {
         $('#tab-one').addClass('bg-cyan text-white clicked');

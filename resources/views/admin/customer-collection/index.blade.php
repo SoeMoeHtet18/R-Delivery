@@ -1,8 +1,10 @@
 @extends('admin.layouts.master')
-@section('title','Collection')
-@section('sub-title','Customer Collection Listing')
+@section('title','Collections')
+@section('sub-title','Customer Exchange Listing')
 @section('content')
-
+<div class="create-button">
+    <a class="btn create-btn" href="{{route('customer-collections.create')}}">Add Customer Exchange</a>
+</div>
 <div class="card m-3">
     <div class="row tdFilter">
         <div class="col-md-12 col-sm-12 m-3">
@@ -64,10 +66,10 @@
 
 <ul class="nav nav-tabs mb-4">
     <li class="nav-item">
-        <a href="#all-display" id="all-tab" class="nav-link active" data-toggle="tab">All Customer Collections</a>
+        <a href="#all-display" id="all-tab" class="nav-link active" data-toggle="tab">All Customer Exchanges</a>
     </li>
     <li class="nav-item">
-        <a href="#warehouse-display" id="warehouse-tab" class="nav-link" data-toggle="tab">Warehouse Customer Collections</a>
+        <a href="#warehouse-display" id="warehouse-tab" class="nav-link" data-toggle="tab">Warehouse Customer Exchanges</a>
     </li>
 </ul>
 
@@ -75,15 +77,15 @@
 <div class="tab-content">
     <div id="all-display" class="portlet box green tab-pane active">
         <div class="portlet-title">
-            <div class="caption">Customer Collection Lists</div>
+            <div class="caption">Customer Exchange Lists</div>
         </div>
         <div class="portlet-body">
             <table id="datatable" class="table table-striped table-hover table-responsive datatable">
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Customer Collection Code</th>
-                        <th>Collection Group</th>
+                        <th>Customer Exchange Code</th>
+                        <th>Pick Up Group</th>
                         <th>Order Code</th>
                         <th>Customer Name</th>
                         <th>Shop</th>
@@ -104,15 +106,15 @@
     </div>
     <div id="warehouse-display" class="portlet box green tab-pane">
         <div class="portlet-title">
-            <div class="caption">Warehouse Customer Collection Lists</div>
+            <div class="caption">Warehouse Customer Exchange Lists</div>
         </div>
         <div class="portlet-body">
             <table id="warehouse-datatable" class="table table-striped table-hover table-responsive datatable">
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Customer Collection Code</th>
-                        <th>Collection Group</th>
+                        <th>Customer Exchange Code</th>
+                        <th>Pick Up Group</th>
                         <th>Order Code</th>
                         <th>Customer Name</th>
                         <th>Shop</th>

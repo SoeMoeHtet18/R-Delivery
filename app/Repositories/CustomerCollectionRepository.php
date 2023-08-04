@@ -62,7 +62,7 @@ class CustomerCollectionRepository
         $search = $data['search'];
         $shop = $data['shop'];
 
-        $customer_collections = CustomerCollection::with(['order.rider', 'order.shop']);
+        $customer_collections = CustomerCollection::where('status','in-warehouse')->with(['order.rider', 'order.shop']);
 
         if ($search) {
             $customer_collections = $customer_collections

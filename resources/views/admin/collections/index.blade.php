@@ -44,7 +44,7 @@
                 <tr>
                     <th>#</th>
                     <th>Pick Up Code</th>
-                    <th>Pick Up Group Code</th>
+                    <th>Pick Up Group</th>
                     <th>Total Quantity of Pick Up</th>
                     <th>Total Amount of Pick Up</th>
                     <th>Paid Amount By Rider</th>
@@ -92,7 +92,7 @@
                     }, 
                     {
                         data: 'collection_group_code',
-                        name: "pick_up_group_code"
+                        name: "pick_up_group"
                     },    
                     {
                         data: 'total_quantity',

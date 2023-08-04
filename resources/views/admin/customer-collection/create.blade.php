@@ -27,8 +27,6 @@
         </h2>
         <form action="{{route('customer-collections.store')}}" method="POST" class="action-form" enctype="multipart/form-data">
             @csrf
-            <input type="hidden" name="order_id" value="{{$order->id}}">
-            <input type="hidden" id="shop_id" value="{{$order->shop_id}}">
             <div class="row m-0 mb-3">
                 <label for="customer_collection_code" class="col-2">
                     <h4>Customer Collection Code<b>:</b></h4>
@@ -37,6 +35,27 @@
                     <input type="text" id="customer_collection_code" name="customer_collection_code" class="form-control" readonly />
                 </div>
             </div>
+            @if(isset($order))
+            <input type="hidden" name="order_id" value="{{$order->id}}">
+            <input type="hidden" id="shop_id" value="{{$order->shop_id}}">
+            @else
+            <div class="row m-0 mb-3">
+                <label for="order_id" class="col-2">
+                    <h4>Order <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <select name="order_id" id="order_id" class="form-control">
+                        <option value="" selected disabled>Select Order For This Customer Exchange</option>
+                        @foreach($orders as $order)
+                        <option value="{{$order->id}}" @if($order->id == old('order_id')) selected @endif>{{$order->order_code}}</option>
+                        @endforeach
+                    </select>
+                    @if ($errors->has('order_id'))
+                    <span class="text-danger"><strong>{{ $errors->first('order_id') }}</strong></span>
+                    @endif
+                </div>
+            </div>
+            @endif
             <div class="row m-0 mb-3">
                 <label for="items" class="col-2">
                     <h4>Item<b>:</b></h4>
@@ -78,7 +97,7 @@
             </div>
             <input type="hidden" name="is_way_fees_payable" id="is_way_fees_payable">
             <div class="footer-button float-end">
-                <a href="{{route('orders.show', $order->id)}}" class="btn btn-light">Cancel</a>
+                <a href="{{url()->previous() }}" class="btn btn-light">Cancel</a>
                 <input type="submit" class="btn btn-success ">
             </div>
         </form>
@@ -89,6 +108,8 @@
 @section('javascript')
 <script type="text/javascript">
     $(document).ready(function() {
+        $('#order_id').select2();
+
         $.ajax({
             url: '/api/get-customer-collection-code',
             method: 'POST',
@@ -104,20 +125,21 @@
                 }
             }
         });
-    });
-    // Attach the click event to the parent container
-    $('#tabs-container').on('click', '.tabs', function() {
-        var $this = $(this);
-        var $tabs = $('.tabs'); // Cache all tabs
 
-        $tabs.not($this).removeClass('bg-cyan text-white clicked'); // Remove classes from other tabs
-        $this.addClass('bg-cyan text-white clicked'); // Add classes to the clicked tab
+        // Attach the click event to the parent container
+        $('#tabs-container').on('click', '.tabs', function() {
+            var $this = $(this);
+            var $tabs = $('.tabs'); // Cache all tabs
 
-        if ($this.attr('id') == 'tab-one') {
-            $('#is_way_fees_payable').val(1);
-        } else {
-            $('#is_way_fees_payable').val(0);
-        }
+            $tabs.not($this).removeClass('bg-cyan text-white clicked'); // Remove classes from other tabs
+            $this.addClass('bg-cyan text-white clicked'); // Add classes to the clicked tab
+
+            if ($this.attr('id') == 'tab-one') {
+                $('#is_way_fees_payable').val(1);
+            } else {
+                $('#is_way_fees_payable').val(0);
+            }
+        });
     });
 </script>
 @endsection
