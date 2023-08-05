@@ -23,11 +23,21 @@
             text-align: center;
             font-size: 22;
         }
+
+        .content {
+            font-size: 12px;
+        }
     </style>
 </head>
 
 <body>
     <h1>Orders</h1>
+    <span class="content">Total Amount : {{$total_amount}}</span>
+    <br>
+    <span class="content">Total Way : {{$total_way}}</span>
+    <br>
+    <span class="content">Total Delivery Fees : {{$total_delivery_fees}}</span>
+    <br>
     <table>
         <thead>
             <tr>
@@ -50,6 +60,8 @@
                 <th>Type</th>
                 <th>Collection Method</th>
                 <th>Payment Flag</th>
+                <th>Extra Charges</th>
+                <th>Discount</th>
             </tr>
         </thead>
         <tbody>
@@ -71,24 +83,20 @@
                 <td>{{ $order->markup_delivery_fees }}</td>
                 <td>{{ $order->remark }}</td>
                 <td> @if($order->status == 'pending')
-                    Pending @elseif($order->status == 'success')
-                    Success @elseif($order->status == 'dalay')
+                    Pending @elseif($order->status == 'picking-up')
+                    Picking Up @elseif($order->status == 'warehouse')
+                    In Warehouse @elseif($order->status == 'delivering')
+                    Delivering @elseif($order->status == 'success')
+                    Delivered @elseif($order->status == 'dalay')
                     Delay @elseif($order->status == 'cancel')
                     Cancel @else
                     Cancel Request
                     @endif
                 </td>
-                <td>{{ $order->item_type }}</td>
+                <td>{{ $order->item_type_name }}</td>
                 <td>{{ $order->full_address }}</td>
                 <td>{{ \Carbon\Carbon::parse($order->schedule_date)->format('d-m-Y') }}</td>
-                <td> @if($order->type == 'standard')
-                    Standard
-                    @elseif($order->type == 'express')
-                    Express
-                    @else
-                    Door To Door
-                    @endif
-                </td>
+                <td>{{$order->delivery_type_name}}</td>
                 <td>@if($order->collection_method == 'dropoff')
                     Drop Off @else
                     Pick Up
@@ -100,6 +108,8 @@
                     Paid
                     @endif
                 </td>
+                <td>{{$order->extra_charges}}</td>
+                <td>{{$order->discount}}</td>
             </tr>
             @endforeach
         </tbody>

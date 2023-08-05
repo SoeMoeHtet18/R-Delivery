@@ -8,6 +8,34 @@
         flex-direction: row;
         justify-content: flex-end;
     }
+
+    .pdf-ul {
+        padding-left: 0;
+        padding-right: 0;
+        border-radius: 3px;
+        display: flex;
+        list-style-type: none;
+        padding-left: 0;
+        margin-left: auto;
+        margin-bottom: 0;
+    }
+
+    .pdf-ul li {
+        background: #f4f5f8;
+        margin: 0;
+    }
+
+    .pdf-ul li a {
+        padding: 0;
+        padding-right: 6px;
+        padding-left: 2px;
+        font-size: 13px;
+        text-decoration: none;
+    }
+
+    .pdf-ul li a:first-child {
+        border-right: 1px solid #dfe2ea;
+    }
 </style>
 <div class="card card-container detail-card">
     <div class="card-body">
@@ -87,7 +115,31 @@
             </li>
         </ul>
         <input type="hidden" id="current_screen" value="shop-user-display">
-        <div class="tab-content">
+        <div class="d-flex justify-content-between">
+            
+                <label for="start_date">Start Date:</label>
+                <input type="date" name="start_date" id="start_date">
+
+                <label for="end_date">End Date:</label>
+                <input type="date" name="end_date" id="end_date">
+
+                <button id='filter'>Filter</button>
+                <button id="clear">Clear</button>
+            
+            <div class="d-inline-block">
+                <ul class="pdf-ul">
+                    <li>
+                        <form id="pdf_form" action="{{ url('/generate-pdf') }}" method="GET" style="display: inline;">
+                            <meta name="csrf-token" content="{{ csrf_token() }}">
+                            <button type="submit" id="pdf_button" class="btn border">
+                                <i class="fa-regular fa-file-pdf"></i>&nbsp;<span>PDF</span>
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="tab-content mt-4">
             <div id="shop-user-display" class="portlet box green tab-pane active">
                 <div class="portlet-title">
                     <div class="caption">ShopUser Lists</div>
@@ -211,20 +263,20 @@
                     <table id="collection-for-shop-datatable" class="table table-striped table-hover table-responsive datatable">
                         <thead>
                             <tr>
-                            <th>#</th>
-                            <th>Total Quantity</th>
-                            <th>Total Amount</th>
-                            <th>Paid Amount</th>
-                            <th>Collection Group Id</th>
-                            <th>Rider Id</th>
-                            <th>Shop Id</th>
-                            <th>Assigned At</th>
-                            <th>Collected At</th>
-                            <th>Note</th>
-                            <th>Status</th>
-                            <th>Is payable</th>
-                            <th>Created At</th>
-                            <th>Updated At</th>
+                                <th>#</th>
+                                <th>Total Quantity</th>
+                                <th>Total Amount</th>
+                                <th>Paid Amount</th>
+                                <th>Collection Group Id</th>
+                                <th>Rider Id</th>
+                                <th>Shop Id</th>
+                                <th>Assigned At</th>
+                                <th>Collected At</th>
+                                <th>Note</th>
+                                <th>Status</th>
+                                <th>Is payable</th>
+                                <th>Created At</th>
+                                <th>Updated At</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -323,157 +375,192 @@
             ],
         });
 
+        get_ajax_dynamic_shop_order_table(start = '', end = '');
+
         // Initialize shop-order-datatable
-        $('#shop-order-datatable').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: "/shops/get-shop-orders-by-shop-id/" + shop_id,
-            columns: [{
-                    data: 'DT_RowIndex',
-                    name: 'id'
-                },
-                {
-                    data: 'first_column',
-                    name: 'first_column',
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: 'payment_flag',
-                    name: 'paid'
-                },
-                {
-                    data: 'order_code',
-                    name: 'order_code'
-                },
-                {
-                    data: 'customer_name',
-                    name: 'customer_name'
-                },
-                {
-                    data: 'customer_phone_number',
-                    name: 'customer_phone_number'
-                },
-                {
-                    data: 'city_name',
-                    name: 'city'
-                },
-                {
-                    data: 'township_name',
-                    name: 'township'
-                },
-                {
-                    data: 'rider_name',
-                    name: 'rider'
-                },
-                {
-                    data: 'total_amount',
-                    name: 'total_amount'
-                },
-                {
-                    data: 'delivery_fees',
-                    name: 'delivery_fees'
-                },
-                // {
-                //     data: 'markup_delivery_fees',
-                //     name: 'markup_delivery_fees'
-                // },
-                {
-                    data: 'remark',
-                    name: 'remark'
-                },
-                {
-                    data: 'status',
-                    name: 'status'
-                },
-                {
-                    data: 'item_type_name',
-                    name: 'item_type'
-                },
-                {
-                    data: 'full_address',
-                    name: 'full_address'
-                },
-                {
-                    data: 'schedule_date',
-                    name: 'schedule_date'
-                },
-                {
-                    data: 'delivery_type_name',
-                    name: 'type'
-                },
-                {
-                    data: 'collection_method',
-                    name: 'collection_method'
-                },
-                {
-                    data: 'last_updated_by_name',
-                    name: 'last_updated_by'
-                },
-            ],
-            columnDefs: [{
-                    "render": function(data, type, row) {
-                        if (row.payment_flag == 0) {
-                            return "Unpaid";
-                        }
-                        if (row.payment_flag == 1) {
-                            return "Paid";
-                        }
+        function get_ajax_dynamic_shop_order_table(start, end) {
+            var order_table = $('#shop-order-datatable').DataTable({
+                processing: true,
+                serverSide: true,
+                buttons: [
+                    {
+                        extend: 'pdf',
+                        title: 'Orders',
+                        filename: 'orders',
+                        pageSize: 'LEGAL',
+                        charset: 'UTF-8',
+                        orientation: 'landscape',
                     },
-                    "targets": 2
+                ],
+                ajax: {
+                    "url": "/shops/get-shop-orders-by-shop-id/" + shop_id,
+                    "type": "GET",
+                    "data": function(r) {
+                        r.start = start;
+                        r.end = end;
+                    }
                 },
-                {
-                    "render": function(data, type, row) {
-                        if (row.status == 'pending') {
-                            return "Pending";
-                        }
-                        if (row.status == 'success') {
-                            return "Success";
-                        }
-                        if (row.status == 'delay') {
-                            return "Delay";
-                        }
-                        if (row.status == 'cancel') {
-                            return "Cancel";
-                        }
-                        if (row.status == 'cancel_request') {
-                            return 'Cancel Request';
-                        }
-                        if (row.status == 'in-warehouse') {
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'id'
+                    },
+                    {
+                        data: 'first_column',
+                        name: 'first_column',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'payment_flag',
+                        name: 'paid'
+                    },
+                    {
+                        data: 'order_code',
+                        name: 'order_code'
+                    },
+                    {
+                        data: 'customer_name',
+                        name: 'customer_name'
+                    },
+                    {
+                        data: 'customer_phone_number',
+                        name: 'customer_phone_number'
+                    },
+                    {
+                        data: 'city_name',
+                        name: 'city'
+                    },
+                    {
+                        data: 'township_name',
+                        name: 'township'
+                    },
+                    {
+                        data: 'rider_name',
+                        name: 'rider'
+                    },
+                    {
+                        data: 'total_amount',
+                        name: 'total_amount'
+                    },
+                    {
+                        data: 'delivery_fees',
+                        name: 'delivery_fees'
+                    },
+                    
+                    {
+                        data: 'remark',
+                        name: 'remark'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status'
+                    },
+                    {
+                        data: 'item_type_name',
+                        name: 'item_type'
+                    },
+                    {
+                        data: 'full_address',
+                        name: 'full_address'
+                    },
+                    {
+                        data: 'schedule_date',
+                        name: 'schedule_date'
+                    },
+                    {
+                        data: 'delivery_type_name',
+                        name: 'type'
+                    },
+                    {
+                        data: 'collection_method',
+                        name: 'collection_method'
+                    },
+                    {
+                        data: 'last_updated_by_name',
+                        name: 'last_updated_by'
+                    },
+                ],
+                columnDefs: [{
+                        "render": function(data, type, row) {
+                            if (row.payment_flag == 0) {
+                                return "Unpaid";
+                            }
+                            if (row.payment_flag == 1) {
+                                return "Paid";
+                            }
+                        },
+                        "targets": 2
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            if (row.status == 'pending') {
+                                return "Pending";
+                            }
+                            if (row.status == 'success') {
+                                return "Success";
+                            }
+                            if (row.status == 'delay') {
+                                return "Delay";
+                            }
+                            if (row.status == 'cancel') {
+                                return "Cancel";
+                            }
+                            if (row.status == 'cancel_request') {
+                                return 'Cancel Request';
+                            }
+                            if (row.status == 'in-warehouse') {
                                 return "In Warehouse";
                             }
+                        },
+                        "targets": 12
                     },
-                    "targets": 12
-                },
-                {
-                    "render": function(data, type, row) {
-                        if (row.schedule_date === null) {
-                            return '';
-                        }
-                        var date = new Date(row.schedule_date);
-                        var formattedDate = date.toLocaleDateString('my-MM', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric'
-                        });
-                        return formattedDate;
+                    {
+                        "render": function(data, type, row) {
+                            if (row.schedule_date === null) {
+                                return '';
+                            }
+                            var date = new Date(row.schedule_date);
+                            var formattedDate = date.toLocaleDateString('my-MM', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            });
+                            return formattedDate;
+                        },
+                        "targets": 15
                     },
-                    "targets": 15
-                },
-                {
-                    "render": function(data, type, row) {
-                        if (row.collection_method == 'dropoff') {
-                            return "Drop Off";
-                        }
-                        if (row.collection_method == 'pickup') {
-                            return "Pick Up";
-                        }
+                    {
+                        "render": function(data, type, row) {
+                            if (row.collection_method == 'dropoff') {
+                                return "Drop Off";
+                            }
+                            if (row.collection_method == 'pickup') {
+                                return "Pick Up";
+                            }
+                        },
+                        "targets": 17
                     },
-                    "targets": 17
-                },
-            ]
-        });
+                ]
+            });
 
+            $('#filter').click(function() {
+                var start = $('#start_date').val();
+                var end = $('#end_date').val();
+                order_table.destroy();
+                get_ajax_dynamic_shop_order_table(start, end);
+                console.log(end);
+            });
+            $("#clear").click(function() {
+                $("#start_date").val("").trigger("change");
+                $("#end_date").val("").trigger("change");
+                var start = $("#start_date").val();
+                var end = $('#end_date').val();
+                order_table.destroy();
+                get_ajax_dynamic_shop_order_table(start, end);
+                console.log(start);
+
+            });
+        }
         // Initialize shop-payment-datatable
         $("#shop-payment-datatable").DataTable({
             processing: true,
@@ -514,50 +601,79 @@
                 "targets": 2
             }, ]
         });
+
         // Initialize transaction-for-shop-datatable
-        $("#transaction-for-shop-datatable").DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: "/shops/" + shop_id + "/get-transactions-for-shop-by-shop-id",
-            columns: [{
-                    data: 'DT_RowIndex',
-                    name: 'id'
+        get_ajax_dynamic_shop_transaction_table(start = '', end = '');
+        function get_ajax_dynamic_shop_transaction_table(start, end) {
+            var transaction_table = $("#transaction-for-shop-datatable").DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url' : "/shops/" + shop_id + "/get-transactions-for-shop-by-shop-id",
+                    'method' : 'GET',
+                    'data': function(r) {
+                        r.start = start;
+                        r.end = end;
+                    },
                 },
-                {
-                    data: 'amount',
-                    name: 'amount'
-                },
-                {
-                    data: 'type',
-                    name: 'type'
-                },
-                {
-                    data: 'paid_by',
-                    name: 'paid_by'
-                },
-                {
-                    data: 'description',
-                    name: 'description'
-                },
-                {
-                    data: 'action',
-                    name: 'action',
-                    orderable: false,
-                    searchable: false
-                },
-            ],
-            columnDefs: [{
-                "render": function(data, type, row) {
-                    if (row.type == 'loan_payment') {
-                        return "Loan Payment";
-                    }
-                    if (row.type == 'fully_payment') {
-                        return "Fully Payment";
-                    }
-                },
-                "targets": 2
-            }, ]
-        });
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'id'
+                    },
+                    {
+                        data: 'amount',
+                        name: 'amount'
+                    },
+                    {
+                        data: 'type',
+                        name: 'type'
+                    },
+                    {
+                        data: 'paid_by',
+                        name: 'paid_by'
+                    },
+                    {
+                        data: 'description',
+                        name: 'description'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
+                ],
+                columnDefs: [{
+                    "render": function(data, type, row) {
+                        if (row.type == 'loan_payment') {
+                            return "Loan Payment";
+                        }
+                        if (row.type == 'fully_payment') {
+                            return "Fully Payment";
+                        }
+                    },
+                    "targets": 2
+                }, ]
+            });
+
+            $('#filter').click(function() {
+                var start = $('#start_date').val();
+                var end = $('#end_date').val();
+                transaction_table.destroy();
+                get_ajax_dynamic_shop_transaction_table(start, end);
+                console.log(end);
+            });
+            $("#clear").click(function() {
+                $("#start_date").val("").trigger("change");
+                $("#end_date").val("").trigger("change");
+                var start = $("#start_date").val();
+                var end = $('#end_date').val();
+                transaction_table.destroy();
+                get_ajax_dynamic_shop_transaction_table(start, end);
+                console.log(start);
+
+            });
+        }
         // Initialize collection-for-shop-datatable
         $("#collection-for-shop-datatable").DataTable({
             processing: true,
@@ -623,6 +739,26 @@
                 },
             ],
         });
+
+        const form = $('#pdf_form');
+
+        // Add event listener to the form submit event
+        form.submit(function(event) {
+            // Prevent the default form submission behavior
+            event.preventDefault();
+            var shop_id = document.getElementById('shop-id').getAttribute('data-shop-id');
+            var start = $('#start_date').val();
+            var end = $('#end_date').val();
+            
+            generatePDF(start, end, shop_id);
+        });
+
+        function generatePDF(start, end, shop_id) {
+            // Create the download URL with query parameters
+            const downloadUrl = `/generate-shop-pdf?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}&shop_id=${encodeURIComponent(shop_id)}`;
+            // Navigate to the download URL
+            window.location.href = downloadUrl;
+        }
     });
 </script>
 <script>
