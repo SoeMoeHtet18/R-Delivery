@@ -10,27 +10,100 @@
         <form action="{{route('rider-payments.store')}}" method="POST" class="action-form" enctype="multipart/form-data">
             @csrf
             <div class="row m-0 mb-3">
+                <label for="type" class="col-2">
+                    <h4>Choose Type <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <select name="type" id="type" class="form-control">
+                        <option value="" selected disabled>Select the Type of this Payment</option>
+                        <option value="daily" >Daily</option>
+                        <option value="monthly" >Monthly</option>
+                    </select>
+                    @if($errors->has('type'))
+                    <span class="text-danger"><strong>{{ $errors->first('type') }}</strong></span>
+                    @endif
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
                 <label for="rider_id" class="col-2">
                     <h4>Rider Name <b>:</b></h4>
                 </label>
                 <div class="col-10">
                     <select name="rider_id" id="rider_id" class="form-control">
                         <option value="" selected disabled>Select the Rider of this Payment</option>
-                        @foreach($riders as $rider)
+                        {{--@foreach($riders as $rider)
                         <option value="{{$rider->id}}" @isset($rider_id) @if($rider->id == $rider_id) selected
                             @endif
                             @else
                             @if($rider->id == old('rider_id')) selected
                             @endif
                             @endisset>{{$rider->name}}</option>
-                        @endforeach
+                        @endforeach--}}
                     </select>
                     @if($errors->has('rider_id'))
                     <span class="text-danger"><strong>{{ $errors->first('rider_id') }}</strong></span>
                     @endif
                 </div>
             </div>
-            
+            <div class="row m-0 mb-3" id="date_input">
+                <label for="date" class="col-2">
+                    <h4>Date <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <?php
+                    // Get today's date
+                    $today = date('Y-m-d');
+                    // Set the default value to today's date
+                    $defaultDate = old('date') ?? $today;
+                    ?>
+                    <input type="date" id="date" name="date" value="<?php echo $defaultDate; ?>" class="form-control" />
+                    @if ($errors->has('date'))
+                        <span class="text-danger"><strong>{{ $errors->first('date') }}</strong></span>
+                    @endif
+                </div>
+            </div>
+            <div class="row m-0 mb-3" id="date_input2">
+                <label for="monthly" class="col-2">
+                    <h4>Monthly <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <input type="month" id="monthly" name="monthly" value="{{ old('monthly', date('Y-m')) }}" class="form-control" />
+                    @if ($errors->has('monthly'))
+                        <span class="text-danger"><strong>{{ $errors->first('monthly') }}</strong></span>
+                    @endif
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <label for="pick_up" class="col-2">
+                    <h4>Total Pick-Up Ways <b>:</b></h4>
+                </label>
+                <div class="col-4">
+                    <input type="text" id="pick_up" name="pick_up" class="form-control" readonly/>
+                    @if($errors->has('pick_up'))
+                    <span class="text-danger"><strong>{{ $errors->first('pick_up') }}</strong></span>
+                    @endif
+                </div>
+                <label for="delivery" class="col-2">
+                    <h4>Total Delivery Ways <b>:</b></h4>
+                </label>
+                <div class="col-4">
+                    <input type="text" id="delivery" name="delivery" class="form-control" readonly/>
+                    @if($errors->has('delivery'))
+                    <span class="text-danger"><strong>{{ $errors->first('delivery') }}</strong></span>
+                    @endif
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <label for="deficit" class="col-2">
+                    <h4>Deficit <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <input type="text" id="deficit" name="deficit" class="form-control" readonly/>
+                    @if($errors->has('deficit'))
+                    <span class="text-danger"><strong>{{ $errors->first('deficit') }}</strong></span>
+                    @endif
+                </div>
+            </div>
             <div class="row m-0 mb-3">
                 <label for="total_amount" class="col-2">
                     <h4>Total Amount <b>:</b></h4>
@@ -42,7 +115,8 @@
                     @endif
                 </div>
             </div>
-            <div class="row m-0 mb-3">
+            <input type="hidden" id="total_routine" name="total_routine" class="form-control" />
+            {{--<div class="row m-0 mb-3">
                 <label for="total_routine" class="col-2">
                     <h4>Total Routine <b>:</b></h4>
                 </label>
@@ -52,7 +126,7 @@
                     <span class="text-danger"><strong>{{ $errors->first('total_routine') }}</strong></span>
                     @endif
                 </div>
-            </div>
+            </div>--}}
             <div class="footer-button float-end">
                 <a href="{{route('rider-payments.index')}}" class="btn btn-light">Cancel</a>
                 <input type="submit" class="btn btn-success ">
@@ -65,7 +139,78 @@
 @section('javascript')
 <script>
     $(document).ready(function() {
+        $('#type').select2();
         $('#rider_id').select2();
+        $('#date_input').hide();
+        $('#date_input2').hide();
+        $('#type').change(function() {
+            console.log('success');
+            var type = $('#type').val();
+            if(type == 'daily'){
+                $('#date_input').show();
+                $('#date_input2').hide();
+            }
+            if(type == 'monthly'){
+                $('#date_input2').show();
+                $('#date_input').hide();
+            }
+            $.ajax({
+                url: '/get-rider-by-type',
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    type: type
+                },
+                success: function(response) {
+                    // var township_id = $('#township_id').val();
+                    var riders = '<option value="" selected disabled>Select the Rider of this Payment</option>';
+                    if (response.data) {
+                        for (var i = 0; i < response.data.length; i++) {
+                            riders += '<option value="' + response.data[i].id + '">' + response.data[i].name + '</option>'; 
+                        }
+                    }
+                    console.log(riders);
+                    $('#rider_id').html(riders);
+                },
+            });
+        });
+
+        function updateRiderTotalSalaryBaseOnDate() {
+            var rider_id = $('#rider_id').val();
+            var type = $('#type').val();
+            var daily = $('#date').val();
+            var monthly = $('#monthly').val();
+            $.ajax({
+                url: '/get-rider-total-salary-by-date',
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    type: type,
+                    rider_id: rider_id,
+                    daily: daily,
+                    monthly: monthly
+                },
+                success: function(response) {
+                    console.log(response);
+                    $('#pick_up').val(response.data.total_pick_up_count);
+                    $('#delivery').val(response.data.total_deli_count);
+                    $('#deficit').val(response.data.deficit_fees);
+                    $('#total_amount').val(response.data.total_salary);
+                    var total_routine = response.data.total_pick_up_count + response.data.total_deli_count;
+                    $('#total_routine').val(total_routine);
+                },
+            });
+        }
+        
+        $('#rider_id').change(function() {
+            updateRiderTotalSalaryBaseOnDate();
+        });
+        $('#date').change(function() {
+            updateRiderTotalSalaryBaseOnDate();
+        });
+        $('#monthly').change(function() {
+            updateRiderTotalSalaryBaseOnDate();
+        });
     });
 </script>
 @endsection

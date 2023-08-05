@@ -46,6 +46,7 @@ class RiderPaymentController extends Controller
     public function store(RiderPaymentRequest $request)
     {
         $data = $request->all();
+        // dd($data);
         $this->riderPaymentService->saveRiderPaymentData($data);
         return redirect(route('rider-payments.index'));
     }

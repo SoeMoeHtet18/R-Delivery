@@ -10,7 +10,7 @@ class RiderPayment extends Model
 {
     use HasFactory, SoftDeletes;
     protected $fillable = [
-        'rider_id', 'total_routine', 'total_amount', 'branch_id'
+        'rider_id', 'total_routine', 'total_amount', 'branch_id', 'paid_date', 'type'
     ];
 
     public function rider() {

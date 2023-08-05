@@ -161,4 +161,24 @@ class RiderController extends Controller
             ->orderColumn('id', '-id $1')
             ->make(true);
     }
+    
+    public function getRiderByType(Request $request)
+    {
+        $type = $request->type;
+        $riders = $this->riderRepository->getRiderBySalaryType($type);
+       
+        return response()->json(['data' => $riders, 'message' => 'Successfully Get Rider By Salary Type', 'status' => 'success'], 200);
+    }
+    
+    public function getRiderTotalSalaryByDate(Request $request)
+    {
+        $rider_id = $request->rider_id;
+        $monthly    = $request->monthly;
+        $daily    = $request->daily;
+        $rider = $this->riderRepository->getRiderByID($rider_id);
+        $data = $this->riderRepository->getTotalSalaryByRider($rider,$daily,$monthly);
+        
+        return response()->json(['data' => $data, 'message' => 'Successfully Get Total Salary for Rider', 'status' => 'success'], 200);
+       
+    }
 }

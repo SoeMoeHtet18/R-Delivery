@@ -133,6 +133,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('get-description-for-shop', [ShopApiController::class, 'getDescriptionForShop']);
     Route::get('ajax-get-collection-data-by-group', [CollectionController::class, 'getCollectionsByGroup']);
     Route::get('ajax-get-customer-collections-data-by-group', [CustomerCollectionController::class, 'getCustomerCollectionsByGroup']);
+    Route::get('get-rider-by-type', [RiderController::class, 'getRiderByType']);
+    Route::get('get-rider-total-salary-by-date', [RiderController::class, 'getRiderTotalSalaryByDate']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
