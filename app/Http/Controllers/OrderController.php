@@ -203,9 +203,9 @@ class OrderController extends Controller
     public function assignRider($id)
     {
         $order = $this->orderRepository->getOrderByID($id);
-        $township = $this->townshipRepository->getTownshipById($order->township_id);
-        $riders = $township->riders;
-        return view('admin.order.assign_rider', compact('order', 'township', 'riders'));
+        $townships = $this->townshipRepository->getAllTownshipsByCityID($order->city_id);
+        // $riders = $township->riders;
+        return view('admin.order.assign_rider', compact('order', 'townships'));
     }
 
     public function assignRiderToOrder(RiderAssignRequest $request, $id)

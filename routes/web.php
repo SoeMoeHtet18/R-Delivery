@@ -135,6 +135,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('ajax-get-customer-collections-data-by-group', [CustomerCollectionController::class, 'getCustomerCollectionsByGroup']);
     Route::get('get-rider-by-type', [RiderController::class, 'getRiderByType']);
     Route::get('get-rider-total-salary-by-date', [RiderController::class, 'getRiderTotalSalaryByDate']);
+    Route::get('get-riders-by-township', [RiderController::class, 'getRidersByTownship']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

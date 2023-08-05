@@ -205,6 +205,7 @@ class OrderService
     public function assignRider($order, $data)
     {
         $order->rider_id = $data['rider_id'];
+        $order->township_id = $data['township_id'];
         $order->save();
         $notification = $this->notificationService->orderCreateNotificationForRider($order->rider_id);
         $orders = [];

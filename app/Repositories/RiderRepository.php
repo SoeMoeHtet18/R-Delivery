@@ -8,6 +8,7 @@ use App\Models\CustomerCollection;
 use App\Models\Deficit;
 use App\Models\Order;
 use App\Models\Rider;
+use App\Models\Township;
 use Carbon\Carbon;
 
 class RiderRepository
@@ -125,5 +126,12 @@ class RiderRepository
         $data['total_pick_up_count'] = $total_pick_up_count;
         $data['total_deli_count'] = $total_deli_count;
         return $data;
+    }
+
+    public function getRiderByTownship($township_id)
+    {
+        $township = Township::findOrFail($township_id);
+        $riders = $township->riders;
+        return $riders;
     }
 }

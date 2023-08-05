@@ -181,4 +181,13 @@ class RiderController extends Controller
         return response()->json(['data' => $data, 'message' => 'Successfully Get Total Salary for Rider', 'status' => 'success'], 200);
        
     }
+    
+    public function getRidersByTownship(Request $request)
+    {
+        $township_id = $request->township_id;
+        $data = $this->riderRepository->getRiderByTownship($township_id);
+        
+        return response()->json(['data' => $data, 'message' => 'Successfully Get Total Salary for Rider', 'status' => 'success'], 200);
+       
+    }
 }
