@@ -75,7 +75,10 @@ class CollectionRepository
 
     public function getAllCollectionsQuery()
     {
-        $query = Collection::select('collections.*', 'riders.name as rider_name', 'shops.name as shop_name')->leftJoin('riders', 'riders.id', 'collections.rider_id')->leftJoin('shops', 'shops.id', 'collections.shop_id');
+        $query = Collection::leftJoin('riders', 'riders.id', 'collections.rider_id')
+            ->leftJoin('shops', 'shops.id', 'collections.shop_id')
+            ->leftJoin('collection_groups', 'collection_groups.id', 'collections.collection_group_id')
+            ->select('collections.*', 'riders.name as rider_name', 'shops.name as shop_name', 'collection_groups.collection_group_code as collection_group_code');
         return $query;
     }
 
@@ -133,5 +136,19 @@ class CollectionRepository
         }
             
         return $customerCollections;
+    }
+
+    public function getCollectionByIDWithData($id)
+    {
+        $collection = Collection::where('id',$id)->with('collection_group','rider','shop')->firstOrFail();
+        return $collection;
+    }
+
+    public function getCollectionsQueryByGroupID($id)
+    {
+        $collections = Collection::where('collection_group_id', $id)
+            ->leftJoin('shops', 'shops.id', 'collections.shop_id')
+            ->select('collections.*', 'shops.name as shop_name');
+        return $collections;
     }
 }

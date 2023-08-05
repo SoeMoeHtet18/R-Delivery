@@ -1,10 +1,10 @@
 @extends('admin.layouts.master')
-@section('title','Collection Groups')
-@section('sub-title','Collection Groups Listing')
+@section('title','Collections')
+@section('sub-title','Pick Up Group Listing')
 @section('content')
 
 <div class="create-button">
-    <a class="btn create-btn" href="{{route('collection-groups.create')}}">Add Collection Group</a>
+    <a class="btn create-btn" href="{{route('collection-groups.create')}}">Add Pick Up Group</a>
 </div>
 <div class="card m-3">
     <div class="row tdFilter">
@@ -24,7 +24,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="d-flex flex-row-reverse pb-3">
         <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 btncenter margin-btn">
             <button class="btn btn-primary search_filter">Filter</button>
@@ -36,7 +36,7 @@
 
 <div class="portlet box green">
     <div class="portlet-title">
-        <div class="caption">Collections Groups</div>
+        <div class="caption">Pick Up Group List</div>
     </div>
     <div class="portlet-body">
         <table id="datatable" class="table table-striped table-hover table-responsive datatable">
@@ -46,8 +46,6 @@
                     <th>Total Amount</th>
                     <th>Rider Name</th>
                     <th>Assigned Date</th>
-                    <th>Created At</th>
-                    <th>Updated At</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -92,18 +90,31 @@
                         name: 'assigned_date',
                     },
                     {
-                        data: 'created_at',
-                        name: 'created_at',
-                    },
-                    {
-                        data: 'updated_at',
-                        name: 'updated_at',
-                    },
-                    {
                         data: 'action',
                         name: 'action',
                         orderable: false,
                         searchable: false
+                    },
+                ],
+                columnDefs: [
+                    {
+                        "render": function(data, type, row) {
+                            if (row.assigned_date === null) {
+                                return '';
+                            } else {
+                                var dateObject = new Date(row.assigned_date);
+
+                                // Format the date as "MMM DD, YYYY"
+                                var formattedDate = dateObject.toLocaleDateString("my-MM", {
+                                    month: "short",
+                                    day: "numeric",
+                                    year: "numeric"
+                                });
+
+                                return formattedDate;
+                            }
+                        },
+                        "targets": 3
                     },
                 ]
             });

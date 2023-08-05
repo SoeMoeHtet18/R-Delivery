@@ -11,7 +11,7 @@ class Shop extends Model
 {
     use HasFactory, SoftDeletes;
     protected $fillable = [
-        'name', 'address', 'phone_number'
+        'name', 'address', 'phone_number', 'branch_id'
     ];
     
     public function shop_users()

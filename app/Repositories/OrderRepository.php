@@ -380,4 +380,10 @@ class OrderRepository
         return $orders;
     }
 
+    public function getDataByOrder($id) {
+        $data = Order::where('id',$id)
+            ->select('shop_id','customer_name', 'customer_phone_number', 'rider_id')
+            ->first();
+        return $data;
+    }
 }

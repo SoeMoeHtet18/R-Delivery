@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Api\CollectionApiController;
+use App\Http\Controllers\Api\ShopApiController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\CollectionController;
@@ -22,6 +24,7 @@ use App\Http\Controllers\ShopPaymentController;
 use App\Http\Controllers\ShopUserController;
 use App\Http\Controllers\TownshipController;
 use App\Http\Controllers\TransactionsForShopController;
+use App\Models\Collection;
 use App\Models\RiderPayment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -116,7 +119,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/bulk-discount-update', [OrderController::class, 'bulkDiscountUpdate']);
     Route::get('/create-qrcode', [QrCodeController::class, 'index']);
     Route::post('/generate-qrcode', [QrCodeController::class, 'generateQrCode']);
-    Route::get('/get-collections-by-shop', [ShopController::class, 'getCollectionByShop']);
+    Route::get('/get-collections-by-shop', [ShopController::class, 'getAllCollectionsByShop']);
     Route::get('/riders/get-deficit-by-rider-id/{id}', [RiderController::class, 'getDeficitByRider']);
     Route::post('/add-deficit-to-rider', [RiderController::class, 'addDeficitToRider']);
     Route::get('/ajax-get-warehouse-customer-collections-data', [CustomerCollectionController::class, 'getAjaxWarehouseCustomerCollections']);
@@ -125,7 +128,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/branches', BranchController::class);
     Route::get('/third-party-vendor', [AdminController::class, 'thirdPartyVendor']);
     Route::get('/ajax-get-branch-data', [BranchController::class, 'getAjaxBranchData']);
-
+    Route::get('get-collection-group-code', [CollectionGroupController::class, 'getCollectionGroupCode']);
+    Route::get('get-collection-code', [CollectionApiController::class, 'getCollectionCode']);
+    Route::get('get-description-for-shop', [ShopApiController::class, 'getDescriptionForShop']);
+    Route::get('ajax-get-collection-data-by-group', [CollectionController::class, 'getCollectionsByGroup']);
+    Route::get('ajax-get-customer-collections-data-by-group', [CustomerCollectionController::class, 'getCustomerCollectionsByGroup']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

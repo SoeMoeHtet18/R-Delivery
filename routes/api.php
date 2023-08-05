@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\CityApiController;
 use App\Http\Controllers\Api\CollectionApiController;
+use App\Http\Controllers\Api\CollectionGroupApiController;
 use App\Http\Controllers\Api\CustomerCollectionApiController;
 use App\Http\Controllers\Api\CustomerPaymentApiController;
 use App\Http\Controllers\Api\DeliveryTypeApiController;
@@ -117,3 +118,5 @@ Route::post('get-delivery-fees-by-township', [TownshipApiController::class, 'get
 Route::post('/tracking', [OrderApiController::class, 'trackOrder']);
 Route::get('get-delivery-type-list', [DeliveryTypeApiController::class, 'getAllDeliveryTypeList']);
 Route::post('get-customer-collection-code',[CustomerCollectionApiController::class, 'getCustomerCollectionCode']);
+Route::post('change-customer-collection-code',[CustomerCollectionApiController::class, 'changeCustomerCollectionCode']);
+Route::post('get-data-by-order-for-customer-collection',[OrderApiController::class, 'getDataByOrderForCustomerCollection']);

@@ -28,7 +28,7 @@ class OrderApiController extends Controller
     public function getOrderCode(Request $request)
     {
         $shop_id = $request->shop_id;
-        $order_code = Helper::nomenclature('orders', 'OD', 'id', $shop_id);
+        $order_code = Helper::nomenclature('orders', 'OD', 'id', $shop_id, 'S');
         return response()->json(['data' => $order_code,  'status' => 'success', 'message' => 'Successfully get order code'], 200);
     }
 
@@ -161,5 +161,12 @@ class OrderApiController extends Controller
         $data = $request->all();
         $order    = $this->orderService->updatePaymentChannel($data, $order_id);
         return response()->json(['data' => $order, 'message' => 'Successfully Update Payment Channel', 'status' => 'success'], 200);
+    }
+
+    public function getDataByOrderForCustomerCollection(Request $request)
+    {
+        $order_id = $request->order_id;
+        $data = $this->orderRepository->getDataByOrder($order_id);
+        return response()->json(['data' => $data, 'message' => 'Successfully get data by order', 'status' => 'success'], 200);
     }
 }

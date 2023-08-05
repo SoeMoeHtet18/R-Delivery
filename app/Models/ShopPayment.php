@@ -10,7 +10,7 @@ class ShopPayment extends Model
 {
     use HasFactory,SoftDeletes;
     protected $fillable = [
-        'shop_id', 'amount', 'image', 'type'
+        'shop_id', 'amount', 'image', 'type', 'branch_id'
     ];
 
     public function shop() {

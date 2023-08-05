@@ -79,7 +79,7 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
         $formattedDate = $date->format('Y-m-d H:i:s');
 
         return Order::create([
-            'order_code' => Helper::nomenclature('orders', 'OD', 'id', $shop_id),
+            'order_code' => Helper::nomenclature('orders', 'OD', 'id', $shop_id, 'S'),
             'customer_name' => $row['customer_name'],
             'customer_phone_number' => $row['customer_phone_number'],
             'city_id' =>  $city_id,

@@ -65,7 +65,7 @@ class OrderService
         $delivery_fees = Township::where('id', $data['township_id'])->first()->delivery_fees;
 
         $order = new Order();
-        $orderCode = Helper::nomenclature('orders', 'OD', 'id', $shop_id);
+        $orderCode = Helper::nomenclature('orders', 'OD', 'id', $shop_id, 'S');
         $order->order_code =  $orderCode;
         $order->shop_id =  $shop_id;
         $order->customer_name =  $data['customer_name'];

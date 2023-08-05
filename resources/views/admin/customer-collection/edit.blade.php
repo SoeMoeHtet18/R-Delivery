@@ -1,6 +1,6 @@
 @extends('admin.layouts.master')
-@section('title','Collection')
-@section('sub-title','Customer Collection Editing')
+@section('title','Collections')
+@section('sub-title','Customer Exchange Editing')
 @section('style')
 <style>
     .tabs {
@@ -23,17 +23,94 @@
 <div class="card card-container action-form-card">
     <div class="card-body">
         <h2 class="ps-1 card-header-title">
-            <strong>Update Customer Collection</strong>
+            <strong>Update Exchange Collection</strong>
         </h2>
         <form action="{{route('customer-collections.update', $customer_collection->id)}}" method="POST" class="action-form" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="row m-0 mb-3">
                 <label for="customer_collection_code" class="col-2">
-                    <h4>Customer Collection Code<b>:</b></h4>
+                    <h4>Customer Exchange Code<b>:</b></h4>
                 </label>
                 <div class="col-10">
                     <input type="text" id="customer_collection_code" name="customer_collection_code" value="{{$customer_collection->customer_collection_code}}" class="form-control" readonly />
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <label for="collection_group_id" class="col-2">
+                    <h4>Collection Group <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <select name="collection_group_id" id="collection_group_id" class="form-control">
+                        <option value="" selected disabled>Select Collection Group for This Collection</option>
+                        @foreach ( $collection_groups as $collection_group)
+                        <option value="{{$collection_group->id}}" @if($customer_collection->collection_group_id == $collection_group->id) {{'selected'}} @endif>{{$collection_group->collection_group_code}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <label for="order_id" class="col-2">
+                    <h4>Order <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <select name="order_id" id="order_id" class="form-control">
+                        <option value="" selected disabled>Select Order for This Collection</option>
+                        @foreach ( $orders as $order)
+                        <option value="{{$order->id}}" @if($customer_collection->order_id == $order->id) {{'selected'}} @endif>{{$order->order_code}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <label for="shop_id" class="col-2">
+                    <h4>Shop <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <select name="shop_id" id="shop_id" class="form-control">
+                        <option value="" selected disabled>Select Shop For This Customer Exchange</option>
+                        @foreach($shops as $shop)
+                        <option value="{{$shop->id}}" @if($shop->id == $customer_collection->shop_id) selected @endif>{{$shop->name}}</option>
+                        @endforeach
+                    </select>
+                    @if ($errors->has('shop_id'))
+                    <span class="text-danger"><strong>{{ $errors->first('shop_id') }}</strong></span>
+                    @endif
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <label for="rider_id" class="col-2">
+                    <h4>Rider Name <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <select name="rider_id" id="rider_id" class="form-control">
+                        <option value="" selected disabled>Select Rider for This Customer Exchange</option>
+                        @foreach ( $riders as $rider)
+                        <option value="{{$rider->id}}" @if($rider->id == $customer_collection->rider_id) {{'selected'}} @endif>{{$rider->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <label for="customer_name" class="col-2">
+                    <h4>Customer Name<b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <input type="text" id="customer_name" name="customer_name" value="{{$customer_collection->customer_name}}" class="form-control" />
+                    @if ($errors->has('customer_name'))
+                    <span class="text-danger"><strong>{{ $errors->first('customer_name') }}</strong></span>
+                    @endif
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <label for="phone_number" class="col-2">
+                    <h4>Customer Phone Number<b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <input type="text" id="phone_number" name="phone_number" value="{{$customer_collection->customer_phone_number}}" class="form-control" />
+                    @if ($errors->has('phone_number'))
+                    <span class="text-danger"><strong>{{ $errors->first('phone_number') }}</strong></span>
+                    @endif
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -59,14 +136,6 @@
                 </div>
             </div>
             <div class="row m-0 mb-3">
-                <label for="note" class="col-2">
-                    <h4>Note <b>:</b></h4>
-                </label>
-                <div class="col-10">
-                    <textarea id="note" name="note" class="form-control" style="height: 100px">{{$customer_collection->note}}</textarea>
-                </div>
-            </div>
-            <div class="row m-0 mb-3">
                 <label for="status" class="col-2">
                     <h4>Status <b>:</b></h4>
                 </label>
@@ -80,6 +149,15 @@
                 </div>
             </div>
             <div class="row m-0 mb-3">
+                <label for="note" class="col-2">
+                    <h4>Note <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <textarea id="note" name="note" class="form-control" style="height: 100px">{{$customer_collection->note}}</textarea>
+                </div>
+            </div>
+
+            <div class="row m-0 mb-3">
                 <label>
                     <h4>Is Way Fees Payable</h4>
                 </label>
@@ -90,7 +168,7 @@
             </div>
             <input type="hidden" name="is_way_fees_payable" id="is_way_fees_payable" value="{{$customer_collection->is_way_fees_payable}}">
             <div class="footer-button float-end">
-                <a href="{{route('customer-collections.show', $customer_collection->id)}}" class="btn btn-light">Cancel</a>
+                <a href="{{url()->previous() }}" class="btn btn-light">Cancel</a>
                 <input type="submit" class="btn btn-success ">
             </div>
         </form>
@@ -101,6 +179,51 @@
 @section('javascript')
 <script type="text/javascript">
     $('#status_id').select2();
+    $('#collection_group_id').select2();
+    $('#order_id').select2();
+    $("#shop_id").select2();
+    $("#rider_id").select2();
+
+    $("#order_id").on('change', function() {
+        $.ajax({
+            url: '/api/get-data-by-order-for-customer-collection',
+            method: 'POST',
+            data: {
+                order_id: $('#order_id').val()
+            },
+            success: function(response) {
+                console.log(response);
+                if (response.status === 'success') {
+                    var data = response.data;
+                    $('#shop_id').val(data.shop_id);
+                    $('#shop_id').trigger('change');
+                    $('#rider_id').val(data.rider_id);
+                    $('#rider_id').trigger('change');
+                    $('#customer_name').val(data.customer_name);
+                    $('#phone_number').val(data.customer_phone_number);
+                }
+            }
+        });
+    })
+
+    $("#shop_id").on('change', function() {
+        $.ajax({
+            url: '/api/change-customer-collection-code',
+            method: 'POST',
+            data: {
+                shop_id: $('#shop_id').val()
+            },
+            success: function(response) {
+                console.log(response);
+                if (response.status === 'success') {
+                    var data = response.data;
+                    console.log(data);
+                    $('#customer_collection_code').val(data);
+                }
+            }
+        });
+    });
+
     var isWayFeesPayable = $('#is_way_fees_payable').val();
     if (isWayFeesPayable) {
         $('#tab-one').addClass('bg-cyan text-white clicked');

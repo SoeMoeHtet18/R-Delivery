@@ -8,9 +8,10 @@ use Illuminate\Support\Facades\DB;
 
 class Helper
 {
-    public static function nomenclature($tableName, $prefix, $columnName, $shop_id)
+    public static function nomenclature($tableName, $prefix, $columnName, $appendix_id, $appendix_type, $change_type = null)
     {
-        $formattedShopId = str_pad($shop_id, 3, '0', STR_PAD_LEFT);
+        $formattedAppendixId= str_pad($appendix_id, 3, '0', STR_PAD_LEFT);
+        $upperAppendixType = strtoupper($appendix_type);
 
         $carbon = Carbon::now()->format('ymd');
 
@@ -19,10 +20,14 @@ class Helper
         if ($maxId === null) {
             $nextId = 1;
         } else {
-            $nextId = (int)$maxId + 1;
+            if($change_type == null) {
+                $nextId = (int)$maxId + 1;
+            } else {
+                $nextId = (int)$maxId;
+            }
         }
 
-        $nomenclatureCode = $prefix . '-' . $formattedShopId . $carbon . str_pad($nextId, 6, '0', STR_PAD_LEFT);
+        $nomenclatureCode = $prefix . '-' . $upperAppendixType . $formattedAppendixId . $carbon . str_pad($nextId, 6, '0', STR_PAD_LEFT);
         return $nomenclatureCode;
     }
 }
