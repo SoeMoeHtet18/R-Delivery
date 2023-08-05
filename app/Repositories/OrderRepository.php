@@ -386,4 +386,11 @@ class OrderRepository
             ->first();
         return $data;
     }
+
+    public function getAllOrdersQueryByShop($id) 
+    {
+        $query = Order::where('shop_id', $id)
+            ->with('township','shop','rider');
+        return $query;
+    }
 }

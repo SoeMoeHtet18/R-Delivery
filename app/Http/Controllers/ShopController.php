@@ -10,8 +10,10 @@ use App\Repositories\OrderRepository;
 use App\Repositories\ShopRepository;
 use App\Services\ShopService;
 use App\Services\TransactionsForShopService;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Mpdf\Mpdf;
 use Yajra\DataTables\Facades\DataTables;
 
 class ShopController extends Controller
@@ -140,5 +142,35 @@ class ShopController extends Controller
         })->whereNull('collection_group_id')->get();
         return view('admin.collection-groups.assign_collection',
             compact('shop_collections','customer_collections', 'shop','new_index'));
+    }
+
+    public function generateShopPdf(Request $request) {
+        $mpdf = new Mpdf();
+
+            // Enable Myanmar language support
+            $mpdf->autoScriptToLang = true;
+            $mpdf->autoLangToFont = true;
+
+            // Set the font for Myanmar language
+            $mpdf->SetFont('myanmar3');
+
+            //retrieve data
+            $start = $request->start;
+            $end = $request->end;
+            $shop_id = $request->shop_id;
+            
+            $data = $this->orderRepository->getAllOrdersQueryByShop($shop_id);
+            
+            $orders = $data->get();
+            // Add HTML content with Myanmar text
+            $mpdf->WriteHTML(view('admin.shop.pdf_export', compact('orders')));
+
+            // Output the PDF for download
+            $mpdf->Output('shop.pdf', 'D');
+        // try {
+            
+        // } catch (Exception $e) {
+        //     return redirect()->back()->with('error', "Can't generate pdf");
+        // }
     }
 }

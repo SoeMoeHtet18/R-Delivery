@@ -43,7 +43,9 @@ class ShopRepository
             ->leftJoin('item_types', 'item_types.id', 'orders.item_type_id')
             ->leftJoin('delivery_types', 'delivery_types.id', 'orders.delivery_type_id')
             ->where('orders.shop_id', $id)
-            ->select('orders.*', 'townships.name as township_name', 'shops.name as shop_name', 'riders.name as rider_name', 'users.name as last_updated_by_name', 'cities.name as city_name', 'item_types.name as item_type_name', 'delivery_types.name as delivery_type_name');
+            ->select('orders.*', 'townships.name as township_name', 'shops.name as shop_name', 
+                'riders.name as rider_name', 'users.name as last_updated_by_name', 'cities.name as city_name', 
+                'item_types.name as item_type_name', 'delivery_types.name as delivery_type_name');
         return $query;
     }
 

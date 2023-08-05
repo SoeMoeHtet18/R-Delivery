@@ -152,6 +152,13 @@ class TransactionsForShopController extends Controller
     public function getTransactionsTableByShopID(Request $request, $id)
     {
         $data = $this->transactionsForShopRepository->getTransactionsQueryByShopID($id);
+
+        $start = $request->start;
+        $end = $request->end;
+        if($start && $end) {
+            $data = $data->whereBetween('transactions_for_shops.created_at',[$start,$end]);
+        }
+
         return DataTables::of($data)
             ->addIndexColumn()
             ->addColumn('action', function ($transaction_for_shops) {

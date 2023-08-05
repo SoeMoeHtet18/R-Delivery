@@ -136,6 +136,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('get-rider-by-type', [RiderController::class, 'getRiderByType']);
     Route::get('get-rider-total-salary-by-date', [RiderController::class, 'getRiderTotalSalaryByDate']);
     Route::get('get-riders-by-township', [RiderController::class, 'getRidersByTownship']);
+    Route::get('generate-shop-pdf', [ShopController::class, 'generateShopPdf']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

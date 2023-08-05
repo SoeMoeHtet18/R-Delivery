@@ -4,6 +4,7 @@ namespace App\Imports;
 
 use App\Helpers\Helper;
 use App\Models\City;
+use App\Models\DeliveryType;
 use App\Models\ItemType;
 use App\Models\Order;
 use App\Models\Rider;
@@ -50,7 +51,8 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
         Log::debug('reach');
         ++$this->rows;
         $shop = trim($row['shop']);
-        $shop_id = Shop::where('name', $shop)->first()->id;
+        $shop = Shop::where('name', $shop)->first();
+        $shop_id = $shop ? $shop->id : null;
 
         $rider_id = null;
         if ($row['rider']) {
@@ -59,13 +61,20 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
         }
 
         $city = trim($row['city']);
-        $city_id = City::where('name', $city)->first()->id;
+        $city = City::where('name', $city)->first();
+        $city_id = $city ? $city->id : null;
 
         $township = trim($row['township']);
-        $township_id = Township::where('name', $township)->first()->id;
+        $township = Township::where('name', $township)->first();
+        $township_id = $township ? $township->id : null;
 
         $item_type = trim($row['item_type']);
-        $item_type = ItemType::where('name', $item_type)->first()->name;
+        $item_type = ItemType::where('name', $item_type)->first();
+        $item_type_id = $item_type ? $item_type->id : null;
+
+        $delivery_type = trim($row['delivery_type']);
+        $delivery_type = DeliveryType::where('name', $delivery_type)->first();
+        $delivery_type_id = $delivery_type ? $delivery_type->id : null;
 
         $payment_flag = $this->convertData($row['payment_flag']);
         $payment_flag = ($payment_flag === 'paid') ? 1 : 0;
@@ -75,28 +84,34 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
         } else {
             $date = Carbon::tomorrow();
         }
-
+        
         $formattedDate = $date->format('Y-m-d H:i:s');
-
+        
+        Log::debug($formattedDate);
         return Order::create([
             'order_code' => Helper::nomenclature('orders', 'OD', 'id', $shop_id, 'S'),
             'customer_name' => $row['customer_name'],
             'customer_phone_number' => $row['customer_phone_number'],
             'city_id' =>  $city_id,
             'township_id' => $township_id,
-            'rider_id' => $rider_id,
+            'rider_id' => $rider_id ?? null,
             'shop_id' => $shop_id,
             'total_amount' => $row['total_amount'],
             'delivery_fees' => $row['delivery_fees'],
-            'markup_delivery_fees' =>  $row['markup_delivery_fees'],
-            'remark' => $row['remark'],
-            'status' => $this->convertData($row['status']),
-            'item_type' => $item_type,
-            'full_address' => $row['full_address'],
-            'schedule_date' => $formattedDate,
-            'type' => $this->convertData($row['type']),
+            'markup_delivery_fees' =>  $row['markup_delivery_fees'] ?? null,
+            'remark' => $row['remark'] ?? null,
+            'status' => $row['status'] == 'In Warehouse' ? 'warehouse' : $this->convertData($row['status']),
+            'item_type_id' => $item_type_id ?? null,
+            'full_address' => $row['full_address'] ?? null,
+            'schedule_date' => $formattedDate ?? null,
+            'delivery_type_id' => $delivery_type_id,
             'collection_method' => $this->convertData($row['collection_method']),
-            'payment_flag' => $payment_flag
+            'payment_flag' => $payment_flag,
+            'is_confirm' => false,
+            'is_payment_channel_confirm' => false,
+            'payable_or_not' => 'pending',
+            'branch_id' => auth()->user()->branch_id,
+            'pay_later' => $row['total_amount'] > 100000 ? true : false,
         ]);
     }
 
@@ -140,21 +155,19 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
             },
             'total_amount'          => 'required',
             'delivery_fees'         => 'required',
-            'item_type' => function ($attribute, $value, $onFailure) {
+            'item_type_id' => function ($attribute, $value, $onFailure) {
                 if ($value) {
                     $item_type = ItemType::where('name', trim($value))->first();
                     if ($item_type == null) {
                         $onFailure("Item Type is invalid.");
                     }
-                } else {
-                    $onFailure("Item Type is required");
                 }
             },
-            'type' => function ($attribute, $value, $onFailure) {
+            'delivery_type_id' => function ($attribute, $value, $onFailure) {
                 if ($value) {
-                    $types = array_keys(config('data.type'));
-                    if (!in_array($this->convertData($value), $types)) {
-                        $onFailure("Type is invalid.");
+                    $type = DeliveryType::where('name', trim($value))->first();
+                    if ($type == null) {
+                        $onFailure("Delivery type is invalid.");
                     }
                 } else {
                     $onFailure("Type is required");
@@ -170,7 +183,6 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
                     $onFailure("Collection Method is required");
                 }
             },
-            'full_address' => 'required',
         ];
     }
 
@@ -184,7 +196,6 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
             'customer_phone_number.required' => 'Customer Phone Number is required.',
             'total_amount.required' => 'Total Amount is required.',
             'delivery_fees.required' => 'Delivery Fees is required.',
-            'full_address.required' => 'Full Address is required.'
         ];
     }
 

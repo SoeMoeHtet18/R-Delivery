@@ -182,9 +182,16 @@ class OrderController extends Controller
     public function getShopOrdersTable(Request $request, $id)
     {
         $data = $this->shopRepository->getShopOrdersByShopID($id);
-        return DataTables::of($data)
-            ->addColumn('order_code', function ($data) {
-                return '<a href="' . route("orders.show", $data->id) . '">' . $data->order_code . '</a>';
+        $start = $request->start;
+        $end = $request->end;
+        if ($start && $end) {
+            $data = $data->whereBetween('orders.created_at', [$start, $end]);
+        }
+        $order = $data->get();
+
+        return DataTables::of($order)
+            ->addColumn('order_code', function ($order) {
+                return '<a href="' . route("orders.show", $order->id) . '">' . $order->order_code . '</a>';
             })
             ->addColumn('first_column', function ($row) {
                 $checkbox = '<input class="order-payment" type="checkbox" 
@@ -196,7 +203,7 @@ class OrderController extends Controller
             })
             ->addIndexColumn()
             ->rawColumns(['order_code', 'first_column'])
-            ->orderColumn('orders.id', '-id $1')
+            // ->orderColumn('orders.id', '-id $1')
             ->make(true);
     }
 
@@ -417,48 +424,62 @@ class OrderController extends Controller
 
     public function generatePDF(Request $request)
     {
+
+        $mpdf = new Mpdf();
+
+        // Enable Myanmar language support
+        $mpdf->autoScriptToLang = true;
+        $mpdf->autoLangToFont = true;
+
+        // Set the font for Myanmar language
+        $mpdf->SetFont('myanmar3');
+
+        //retrieve data
+        $status = $request->status;
+        $township = $request->township;
+        $search = $request->search;
+        $city = $request->city;
+        $rider = $request->rider;
+        $shop  = $request->shop;
+        $data = $this->orderRepository->getAllOrdersQuery();
+        if ($status != 'null') {
+            $data = $data->where('orders.status', $status);
+        }
+        if ($township != 'null') {
+            $data = $data->where('orders.township_id', $township);
+        }
+        if ($search) {
+            $data = $data->where('orders.order_code', 'like', '%' . $search . '%')->orWhere('orders.customer_name', 'like', '%' . $search . '%')->orWhere('orders.customer_phone_number', 'like', '%' . $search . '%')->orWhere('orders.item_type', 'like', '%' . $search . '%')->orWhere('orders.full_address', 'like', '%' . $search . '%');
+        }
+        if ($city != 'null') {
+            $data = $data->where('orders.city_id', $city);
+        }
+        if ($rider != 'null') {
+            $data = $data->where('orders.rider_id', $rider);
+        }
+        if ($shop != 'null') {
+            $data = $data->where('orders.shop_id', $shop);
+        }
+
+        $orders = $data->get();
+
+        $total_amount = $data->sum('total_amount');
+        $total_way = $data->count();
+        $total_delivery_fees = $data
+            ->selectRaw('(SELECT SUM(delivery_fees) FROM orders) + (SELECT SUM(extra_charges) FROM orders) - (SELECT SUM(discount) FROM orders) AS total_fees')
+            ->value('total_fees');
+
+        // Add HTML content with Myanmar text
+        $mpdf->WriteHTML(view('admin.order.pdf_export', compact(
+            'orders',
+            'total_amount',
+            'total_way',
+            'total_delivery_fees'
+        )));
+
+        // Output the PDF for download
+        $mpdf->Output('order.pdf', 'D');
         try {
-            $mpdf = new Mpdf();
-
-            // Enable Myanmar language support
-            $mpdf->autoScriptToLang = true;
-            $mpdf->autoLangToFont = true;
-
-            // Set the font for Myanmar language
-            $mpdf->SetFont('myanmar3');
-
-            //retrieve data
-            $status = $request->status;
-            $township = $request->township;
-            $search = $request->search;
-            $city = $request->city;
-            $rider = $request->rider;
-            $shop  = $request->shop;
-            $data = $this->orderRepository->getAllOrdersQuery();
-            if ($status != 'null') {
-                $data = $data->where('orders.status', $status);
-            }
-            if ($township != 'null') {
-                $data = $data->where('orders.township_id', $township);
-            }
-            if ($search) {
-                $data = $data->where('orders.order_code', 'like', '%' . $search . '%')->orWhere('orders.customer_name', 'like', '%' . $search . '%')->orWhere('orders.customer_phone_number', 'like', '%' . $search . '%')->orWhere('orders.item_type', 'like', '%' . $search . '%')->orWhere('orders.full_address', 'like', '%' . $search . '%');
-            }
-            if ($city != 'null') {
-                $data = $data->where('orders.city_id', $city);
-            }
-            if ($rider != 'null') {
-                $data = $data->where('orders.rider_id', $rider);
-            }
-            if ($shop != 'null') {
-                $data = $data->where('orders.shop_id', $shop);
-            }
-            $orders = $data->get();
-            // Add HTML content with Myanmar text
-            $mpdf->WriteHTML(view('admin.order.pdf_export', compact('orders')));
-
-            // Output the PDF for download
-            $mpdf->Output('order.pdf', 'D');
         } catch (Exception $e) {
             return redirect()->back()->with('error', "Can't generate pdf");
         }
@@ -472,7 +493,7 @@ class OrderController extends Controller
         $rider = $request->rider;
         $shop  = $request->shop;
         $data = $this->orderRepository->getAllOrdersQuery();
-       
+
         if ($township != null) {
             $data = $data->where('orders.township_id', $township);
         }
@@ -501,38 +522,38 @@ class OrderController extends Controller
 
     public function getAjaxCancelOrderData(Request $request)
     {
-            $search = $request->search;
-            $rider = $request->rider;
-            $shop  = $request->shop;
-            $data = $this->orderRepository->getCancelOrdersQuery();
-            if ($search) {
-                $data = $data->where('orders.order_code', 'like', '%' . $search . '%')->orWhere('orders.customer_name', 'like', '%' . $search . '%')->orWhere('orders.customer_phone_number', 'like', '%' . $search . '%')->orWhere('orders.item_type', 'like', '%' . $search . '%')->orWhere('orders.full_address', 'like', '%' . $search . '%');
-            }
-            if ($rider != null) {
-                $data = $data->where('orders.rider_id', $rider);
-            }
-            if ($shop != null) {
-                $data = $data->where('orders.shop_id', $shop);
-            }
+        $search = $request->search;
+        $rider = $request->rider;
+        $shop  = $request->shop;
+        $data = $this->orderRepository->getCancelOrdersQuery();
+        if ($search) {
+            $data = $data->where('orders.order_code', 'like', '%' . $search . '%')->orWhere('orders.customer_name', 'like', '%' . $search . '%')->orWhere('orders.customer_phone_number', 'like', '%' . $search . '%')->orWhere('orders.item_type', 'like', '%' . $search . '%')->orWhere('orders.full_address', 'like', '%' . $search . '%');
+        }
+        if ($rider != null) {
+            $data = $data->where('orders.rider_id', $rider);
+        }
+        if ($shop != null) {
+            $data = $data->where('orders.shop_id', $shop);
+        }
 
-            return DataTables::of($data)
-                ->addIndexColumn()
-                ->addColumn('order_code', function ($data) {
-                    return '<a href="' . route("orders.show", $data->id) . '">' . $data->order_code . '</a>';
-                })
-                ->addColumn('action', function ($row) {
-                    $actionBtn = '
+        return DataTables::of($data)
+            ->addIndexColumn()
+            ->addColumn('order_code', function ($data) {
+                return '<a href="' . route("orders.show", $data->id) . '">' . $data->order_code . '</a>';
+            })
+            ->addColumn('action', function ($row) {
+                $actionBtn = '
                     <a href="' . route("orders.show", $row->id) . '" class="btn btn-info btn-sm">View</a> 
                     <form action="' . route("orders.destroy", $row->id) . '" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to delete this order?`);">
                         <input type="hidden" name="_token" value="' . csrf_token() . '">
                         <input type="hidden" name="_method" value="DELETE">
                         <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
                     </form>';
-                    return $actionBtn;
-                })
-                ->rawColumns(['action', 'order_code'])
-                ->orderColumn('id', '-orders.id')
-                ->make(true);
+                return $actionBtn;
+            })
+            ->rawColumns(['action', 'order_code'])
+            ->orderColumn('id', '-orders.id')
+            ->make(true);
     }
 
     public function getAjaxWarehouseOrderData(Request $request)
@@ -571,22 +592,25 @@ class OrderController extends Controller
             ->make(true);
     }
 
-    public function confirmPaymentChannel($id) {
-        $order = $this->orderRepository->getOrderByID($id); 
+    public function confirmPaymentChannel($id)
+    {
+        $order = $this->orderRepository->getOrderByID($id);
         $this->orderService->confirmPaymentChannel($order);
         return redirect('/orders/' . $id);
     }
 
-    public function confirmRemainingAmount($id) {
+    public function confirmRemainingAmount($id)
+    {
 
-        $order = $this->orderRepository->getOrderByID($id); 
+        $order = $this->orderRepository->getOrderByID($id);
         $this->orderService->confirmRemainingAmount($order);
         return redirect('/orders/' . $id);
     }
 
-    public function cancelRemainingAmount($id) {
+    public function cancelRemainingAmount($id)
+    {
 
-        $order = $this->orderRepository->getOrderByID($id); 
+        $order = $this->orderRepository->getOrderByID($id);
         $this->orderService->cancelRemainingAmount($order);
         return redirect('/orders/' . $id);
     }
@@ -597,24 +621,24 @@ class OrderController extends Controller
         $this->orderService->bulkDiscountUpdate($data);
         return redirect()->route('orders.index');
     }
-    
+
     public function getAjaxUnpaidOrderList(Request $request)
     {
-        
+
         $orders = $this->orderRepository->getAllUnpaidOrderList()->get();
         $data = [];
-        foreach($orders as $order){
+        foreach ($orders as $order) {
             $todaydate = Carbon::now()->format('Y-m-d');
             $scheduledate = Carbon::parse($order->schedule_date)->addDay($order->notified_on - 1);
-            if($scheduledate->isSameDay($todaydate)){
-               $data[] = $order;
+            if ($scheduledate->isSameDay($todaydate)) {
+                $data[] = $order;
             }
         }
         // foreach
         // if($data->where('delivery_type_name','=', 'Door To Door')){
         //      $data;
         // }
-       
+
 
         return DataTables::of($data)
             ->addIndexColumn()
