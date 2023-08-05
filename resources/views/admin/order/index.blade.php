@@ -845,6 +845,7 @@
             });
 
             $('.search_filter').click(function() {
+                $("#search").val("").trigger("change");
                 var status = $('#status').val();
                 var township = $('#township').val();
                 var search = $('#search').val();
@@ -869,6 +870,16 @@
                 var shop = $('#shop').val();
                 table.destroy();
                 get_ajax_dynamic_data(search, city, rider, shop, status, township);
+            });
+
+            $('#search').keypress(function(e) {
+                console.log('keypress');
+                if (e.which === 13) { // Check if the pressed key is Enter (key code 13)
+                    e.preventDefault();
+                    var search = $('#search').val();
+                    table.destroy();
+                    get_ajax_dynamic_data(search, city = '', rider = '', shop = '', status = '', township = '');
+                }
             });
         };
 

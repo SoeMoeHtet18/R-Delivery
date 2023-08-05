@@ -33,8 +33,7 @@ class QrCodeController extends Controller
     
     $view = view('admin.qrs.multiple', compact('orders', 'logoImageData'));
     $html = $view->render();
-    $pdf = FacadePdf::loadHTML($html)->setPaper('a4', 'portrait');
-    
+    $pdf = FacadePdf::loadHTML($html)->setPaper('a4', 'landscape');
     return $pdf->stream('orders.pdf');
   }
 }

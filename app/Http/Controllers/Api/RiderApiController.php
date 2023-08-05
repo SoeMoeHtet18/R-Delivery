@@ -274,5 +274,15 @@ class RiderApiController extends Controller
         }
         $customerCollection = $this->customerCollectionService->updateCustomerCollectionByRider($data,$reuploadPhoto);
         return response()->json(['data' => $customerCollection, 'message' => 'Successfully Update Customer Collection by Rider', 'status' => 'success'], 200);
+    } 
+    
+    public function checkOrderRider($id) {
+        $rider_id = auth()->guard('rider-api')->user()->id;
+        $order = Order::where('id',$id)->first();
+        if($order->rider_id == $rider_id) {
+            return response()->json(['data' => true, 'message' => 'this order is assign for current rider.', 'status' => 'success'], 200);
+        } else {
+            return response()->json(['data' => false, 'message' => 'this order is not assign for current rider.', 'status' => 'fail'], 200);
+        }
     }
 }

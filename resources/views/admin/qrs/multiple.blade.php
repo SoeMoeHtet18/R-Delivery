@@ -7,8 +7,12 @@
     <title>Orders PDF</title>
     <style>
         /* Define your styles here */
+        body{
+            margin: 0;
+        }
         .container {
-            margin: 4rem 0rem;
+            /* margin: 4rem 0rem; */
+            width: 100%;
         }
 
         .dashed_container {
@@ -18,13 +22,15 @@
         }
 
         .left img {
-            width: 170px;
+            width: 350px;
         }
 
         .maincontent{
             position: relative;
-            padding:20px;
+            /* padding:20px; */
             width:435px;
+            height: 87%;
+            padding-left: 20px;
             padding-right:40px;
         }
 
@@ -37,19 +43,29 @@
         }
 
         .bot {
-            margin-top: 1rem;
+            /* margin-top: 1rem; */
             text-align: center;
             font-size:14px;
-            padding-top: 1rem;
+            width: 100px;
+            /* padding-top: 1rem; */
+        }
+        .bot img{
+            width: 130px;
         }
 
         .content {
             font-weight: bold;
-            margin-right:5px;
+            font-size: 1em;
         }
+        .phone_number {
+            font-weight: normal;
+            font-size: 2em;
+        }
+
 
         .font {
             font-family: Arial, sans-serif;
+            font-size: 2em;
         }
         .mr-3{
             margin-right:30px;
@@ -63,38 +79,38 @@
         <div class="dashed_container">
             <table>
                 <tr>
+                    <td  class="bot">
+                        <img src="data:image/png;base64, {{$logoImageData}}" alt="{{ config('app.name') }}">
+                        <!-- <span class="content">Hotline:</span><span class="font mr-3"> 09740814035</span> -->
+                    </td>
+                    <td class="contact">
+                        <span class="content">Hotline:</span><span class="phone_number"> 09740814035</span></br>
+                        <span class="content">Viber:</span><span class="phone_number"> 09740814036</span>
+                    </td>
+                    <!-- <td class="bot">
+                        <span class="content">Viber:</span><span class="font"> 09740814036</span>
+                    </td> -->
+                </tr>
+                <tr>
                     <td class="left">
                         <img src="data:image/png;base64, {{ base64_encode(QrCode::size(150)->generate($order->id)) }}">
-                    </td>
-                    <td class="maincontent">
-                        <img src="data:image/png;base64, {{$logoImageData}}" alt="{{ config('app.name') }}">
                         <table>
                             <tr>
-                                <td><span class="content">Customer Name:</span></td>
-                                <td><span class="font"> {{ $order->customer_name }}</span></td>
-                            </tr>
+                        <td><span class="font"> {{ $order->order_code }}</span></td>
+                    </tr>
+                        </table>
+                    </td>
+                    <td class="maincontent">
+                        
+                        
+                        <table>
                             <tr>
-                                <td><span class="content">Phone Number:</span></td>
-                                <td><span class="font"> {{ $order->customer_phone_number }}</span></td>
-                            </tr>
-                            <tr>
-                                <td><span class="content">Township:</span></td>
-                                <td><span class="font"> {{ $order->township->name }}</span></td>
-                            </tr>
-                            <tr>
-                                <td><span class="content">Supplier:</span></td>
                                 <td><span class="font"> {{ $order->shop->name }}</span></td>
                             </tr>
                             <tr>
-                                <td><span class="content">Item Amount:</span></td>
-                                <td><span class="font"> {{ $order->total_amount }} MMK </span></td>
+                                <td><span class="font"> {{ $order->township->name }}</span></td>
                             </tr>
                             <tr>
-                                <td><span class="content">Delivery Fees:</span></td>
-                                <td><span class="font"> {{ $order->delivery_fees }} MMK</span></td>
-                            </tr>
-                            <tr>
-                                <td><span class="content">Cash To Collect:</span></td>
                                 <td><span class="font">
                                         @if ($order->payment_method === 'cash_on_delivery')
                                             {{ $order->total_amount + ($order->delivery_fees + $order->extra_charges) - $order->discount }}
@@ -106,18 +122,19 @@
                                     MMK </span></td>
                             </tr>
                             <tr>
-                                <td><span class="content">Remark:</span></td>
+                                <td><span class="font"> {{ $order->customer_name }} ({{ $order->customer_phone_number }})</span></td>
+                            </tr>
+                            
+                            
+                            
+                            
+                            <tr>
                                 <td><span class="font"> {{ $order->remark }}</span></td>
                             </tr>     
                         </table>
                     </td>
                 </tr>
-                <tr>
-                    <td colspan="3" class="bot">
-                        <span class="content">Hotline:</span><span class="font mr-3"> 09740814035</span>
-                        <span class="content">Viber:</span><span class="font"> 09740814036</span>
-                    </td>
-                </tr>
+                
             </table>
         </div>
     </div>

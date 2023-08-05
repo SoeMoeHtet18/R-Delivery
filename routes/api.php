@@ -101,6 +101,7 @@ Route::middleware('auth:rider-api')->group(function() {
     Route::post('update-customer-collection-by-rider', [RiderApiController::class, 'updateCustomerCollectionByRider']);
     Route::get('get-customer-collection-by-id/{id}', [CustomerCollectionApiController::class, 'show']);
     Route::get('get-customer-collection-list-by-shop/{page?}', [CollectionApiController::class, 'getCollectionsByShop']);
+    Route::get('check-order/{id}', [RiderApiController::class, 'checkOrderRider']);
 });
 
 Route::get('get-shop-list', [ShopApiController::class, 'getAllShopList']);
