@@ -21,4 +21,9 @@ class Township extends Model
     {
         return $this->belongsToMany(Rider::class, 'rider_township', 'township_id', 'rider_id');
     }
+    
+    public function gates()
+    {
+        return $this->belongsToMany(Gate::class, 'gate_township', 'township_id', 'gate_id');
+    }
 }
