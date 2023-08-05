@@ -145,7 +145,8 @@ class ShopController extends Controller
     }
 
     public function generateShopPdf(Request $request) {
-        $mpdf = new Mpdf();
+        try {
+            $mpdf = new Mpdf();
 
             // Enable Myanmar language support
             $mpdf->autoScriptToLang = true;
@@ -167,10 +168,8 @@ class ShopController extends Controller
 
             // Output the PDF for download
             $mpdf->Output('shop.pdf', 'D');
-        // try {
-            
-        // } catch (Exception $e) {
-        //     return redirect()->back()->with('error', "Can't generate pdf");
-        // }
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', "Can't generate pdf");
+        }
     }
 }
