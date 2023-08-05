@@ -162,4 +162,11 @@ class OrderApiController extends Controller
         $order    = $this->orderService->updatePaymentChannel($data, $order_id);
         return response()->json(['data' => $order, 'message' => 'Successfully Update Payment Channel', 'status' => 'success'], 200);
     }
+
+    public function getDataByOrderForCustomerCollection(Request $request)
+    {
+        $order_id = $request->order_id;
+        $data = $this->orderRepository->getDataByOrder($order_id);
+        return response()->json(['data' => $data, 'message' => 'Successfully get data by order', 'status' => 'success'], 200);
+    }
 }

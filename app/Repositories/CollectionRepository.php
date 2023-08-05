@@ -143,4 +143,12 @@ class CollectionRepository
         $collection = Collection::where('id',$id)->with('collection_group','rider','shop')->firstOrFail();
         return $collection;
     }
+
+    public function getCollectionsQueryByGroupID($id)
+    {
+        $collections = Collection::where('collection_group_id', $id)
+            ->leftJoin('shops', 'shops.id', 'collections.shop_id')
+            ->select('collections.*', 'shops.name as shop_name');
+        return $collections;
+    }
 }

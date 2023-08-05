@@ -40,7 +40,7 @@ class CollectionGroupService
         $user = auth()->user();
 
         $collectionGroup = CollectionGroup::create([
-            'collection_group_code' => $data['collection_group_id'],
+            'collection_group_code' => $data['collection_group_code'],
             'total_amount' => $data['total_amount'],
             'rider_id' => $data['rider_id'],
             'assigned_date' => $data['assigned_date'],

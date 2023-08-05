@@ -41,7 +41,7 @@
                 </div>
             </div>
             <div class="mb-3 p-3 col-4">
-                <label for="township">
+                <label for="shop">
                     <strong>Shop</strong>
                 </label>
                 <div class="col-10">
@@ -49,6 +49,19 @@
                         <option value="" selected disabled>Select</option>
                         @foreach($shops as $shop)
                         <option value="{{$shop->id}}">{{$shop->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="mb-3 p-3 col-4">
+                <label for="rider">
+                    <strong>Rider</strong>
+                </label>
+                <div class="col-10">
+                    <select name="rider" id="rider" class="form-control">
+                        <option value="" selected disabled>Select</option>
+                        @foreach($riders as $rider)
+                        <option value="{{$rider->id}}">{{$rider->name}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -88,7 +101,9 @@
                         <th>Pick Up Group</th>
                         <th>Order Code</th>
                         <th>Customer Name</th>
+                        <th>Customer Phone Number</th>
                         <th>Shop</th>
+                        <th>Rider</th>
                         <th>Items</th>
                         <th>Paid Amount To Customer</th>
                         <th>Is Way Fees Payable</th>
@@ -117,7 +132,9 @@
                         <th>Pick Up Group</th>
                         <th>Order Code</th>
                         <th>Customer Name</th>
+                        <th>Customer Phone Number</th>
                         <th>Shop</th>
+                        <th>Rider</th>
                         <th>Items</th>
                         <th>Paid Amount To Customer</th>
                         <th>Is Way Fees Payable</th>
@@ -142,15 +159,16 @@
     $(document).ready(function() {
         $('#shop').select2();
         $('#status').select2();
+        $('#rider').select2();
 
         $('.nav-tabs a').click(function() {
             console.log('work')
             $(this).tab('show');
         });
 
-        get_ajax_dynamic_data(search = '', shop = '', status = '');
+        get_ajax_dynamic_data(search = '', shop = '', status = '', rider = '');
 
-        function get_ajax_dynamic_data(search, shop, status) {
+        function get_ajax_dynamic_data(search, shop, status, rider) {
             var table = $('#datatable').DataTable({
                 processing: true,
                 serverSide: true,
@@ -158,6 +176,7 @@
                     "url": '/ajax-get-customer-collections-data',
                     "type": "GET",
                     "data": function(r) {
+                        r.rider = rider
                         r.search = search;
                         r.shop = shop;
                         r.status = status;
@@ -172,7 +191,7 @@
                         name: 'customer_collection_code'
                     },
                     {
-                        data: 'collection_group',
+                        data: 'collection_group_code',
                         name: 'collection_group'
                     },
                     {
@@ -184,8 +203,16 @@
                         name: 'customer_name'
                     },
                     {
+                        data: 'customer_phone_number',
+                        name: 'customer_phone_number'
+                    },
+                    {
                         data: 'shop_name',
                         name: 'shop'
+                    },
+                    {
+                        data: 'rider_name',
+                        name: 'rider'
                     },
                     {
                         data: 'items',
@@ -226,7 +253,7 @@
                                 return "Pending";
                             }
                         },
-                        "targets": 8
+                        "targets": 10
                     },
                     {
                         "render": function(data, type, row) {
@@ -240,7 +267,7 @@
                                 return "Completed";
                             }
                         },
-                        "targets": 9
+                        "targets": 11
                     },
 
                 ]
@@ -250,24 +277,27 @@
                 var status = $('#status').val();
                 var shop = $('#shop').val();
                 var search = $('#search').val();
+                var rider = $('#rider').val();
                 table.destroy();
-                get_ajax_dynamic_data(search, shop, status);
+                get_ajax_dynamic_data(search, shop, status, rider);
             })
             $("#reset").click(function() {
                 $("#status").val("").trigger("change");
                 $("#shop").val("").trigger("change");
                 $("#search").val("").trigger("change");
+                $("#rider").val("").trigger("change");
                 var status = $('#status').val();
                 var shop = $('#shop').val();
                 var search = $('#search').val();
+                var rider = $('#rider').val();
                 table.destroy();
-                get_ajax_dynamic_data(search, shop, status);
+                get_ajax_dynamic_data(search, shop, status, rider);
             });
         };
 
-        get_ajax_dynamic_data_for_warehouse(search = '', shop = '', status = '');
+        get_ajax_dynamic_data_for_warehouse(search = '', shop = '',  rider = '');
 
-        function get_ajax_dynamic_data_for_warehouse(search, shop, status) {
+        function get_ajax_dynamic_data_for_warehouse(search, shop,  rider) {
             var table = $('#warehouse-datatable').DataTable({
                 processing: true,
                 serverSide: true,
@@ -276,8 +306,8 @@
                     "type": "GET",
                     "data": function(r) {
                         r.search = search;
+                        r.rider = rider
                         r.shop = shop;
-                        r.status = status;
                     }
                 },
                 columns: [{
@@ -289,7 +319,7 @@
                         name: 'customer_collection_code'
                     },
                     {
-                        data: 'collection_group',
+                        data: 'collection_group_code',
                         name: 'collection_group'
                     },
                     {
@@ -301,8 +331,16 @@
                         name: 'customer_name'
                     },
                     {
+                        data: 'customer_phone_number',
+                        name: 'customer_phone_number'
+                    },
+                    {
                         data: 'shop_name',
                         name: 'shop'
+                    },
+                    {
+                        data: 'rider_name',
+                        name: 'rider'
                     },
                     {
                         data: 'items',
@@ -339,23 +377,25 @@
                             return "Pending";
                         }
                     },
-                    "targets": 8
+                    "targets": 10
                 }, ]
             });
 
             $('.search_filter').click(function() {
                 var shop = $('#shop').val();
                 var search = $('#search').val();
+                var rider = $('#rider').val();
                 table.destroy();
-                get_ajax_dynamic_data_for_warehouse(search, shop);
+                get_ajax_dynamic_data_for_warehouse(search, shop, rider);
             })
             $("#reset").click(function() {
                 $("#shop").val("").trigger("change");
                 $("#search").val("").trigger("change");
                 var shop = $('#shop').val();
                 var search = $('#search').val();
+                var rider = $('#rider').val();
                 table.destroy();
-                get_ajax_dynamic_data_for_warehouse(search, shop);
+                get_ajax_dynamic_data_for_warehouse(search, shop, rider);
             });
         };
     });

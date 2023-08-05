@@ -129,13 +129,16 @@ class ShopController extends Controller
                 ->make(true);
     }
 
-    public function getCollectionByShop(Request $request){
-        // dd($request->shop_ids);
-        $shop_ids = $request->shop_ids;
-        $shop_collections = Collection::whereIn('shop_id',$shop_ids)->whereNull('rider_id')->get();
-        $customer_collections = CustomerCollection::with('order')->whereHas('order', function ($query) use($shop_ids) {
-            $query->whereIn('shop_id',$shop_ids);
+    public function getAllCollectionsByShop(Request $request){
+        
+        $shop_id = $request->shop_id;
+        $new_index = $request->new_index;
+        $shop = $this->shopRepository->getShopByID($shop_id);
+        $shop_collections = Collection::where('shop_id',$shop_id)->whereNull('rider_id')->get();
+        $customer_collections = CustomerCollection::with('order')->whereHas('order', function ($query) use($shop_id) {
+            $query->where('shop_id',$shop_id);
         })->whereNull('collection_group_id')->get();
-        return view('admin.collection-groups.assign_collection',compact('shop_collections','customer_collections'));
+        return view('admin.collection-groups.assign_collection',
+            compact('shop_collections','customer_collections', 'shop','new_index'));
     }
 }

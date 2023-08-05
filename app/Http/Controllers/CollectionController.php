@@ -193,4 +193,14 @@ class CollectionController extends Controller
             ->orderColumn('id', '-collections.id')
             ->make(true);
     }
+
+    public function getCollectionsByGroup(Request $request)
+    {
+        $id = $request['id'];
+        $data = $this->collectionRepository->getCollectionsQueryByGroupID($id);
+        return DataTables::of($data)
+            ->addIndexColumn()
+            ->orderColumn('id', '-collections.id')
+            ->make(true);
+    }
 }

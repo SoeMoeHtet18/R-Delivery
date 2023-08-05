@@ -10,6 +10,7 @@ use App\Repositories\CustomerCollectionRepository;
 use App\Repositories\RiderRepository;
 use App\Repositories\ShopRepository;
 use App\Services\CollectionGroupService;
+use App\Services\CollectionService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -22,8 +23,9 @@ class CollectionGroupController extends Controller
     protected $collectionRepository;
     protected $shopRepository;
     protected $customerCollectionRepository;
+    protected $collectionService;
 
-    public function __construct(CollectionGroupRepository $collectionGroupRepository, CollectionGroupService $collectionGroupService, RiderRepository $riderRepository, CollectionRepository $collectionRepository, ShopRepository $shopRepository, CustomerCollectionRepository $customerCollectionRepository)
+    public function __construct(CollectionGroupRepository $collectionGroupRepository, CollectionGroupService $collectionGroupService, RiderRepository $riderRepository, CollectionRepository $collectionRepository, ShopRepository $shopRepository, CustomerCollectionRepository $customerCollectionRepository, CollectionService $collectionService)
     {
         $this->collectionGroupRepository = $collectionGroupRepository;
         $this->collectionGroupService = $collectionGroupService;
@@ -31,6 +33,7 @@ class CollectionGroupController extends Controller
         $this->collectionRepository = $collectionRepository;
         $this->shopRepository = $shopRepository;
         $this->customerCollectionRepository = $customerCollectionRepository;
+        $this->collectionService = $collectionService;
     }
     /**
      * Display a listing of the resource.
@@ -61,12 +64,18 @@ class CollectionGroupController extends Controller
     public function store(CollectionCreateRequest $request)
     {
         $data = $request->all();
+        $rider_id = $data['rider_id'];
+        $collection_group = $this->collectionGroupService->saveCollectionGroup($data);
+
+        $data_for_collections = json_decode($data['create-collections-data'], true);
+        foreach($data_for_collections as $data_for_collection) {
+            $this->collectionService->saveCollectionFromGroup($data_for_collection, $rider_id, $collection_group->id);
+        } 
         $checkedShopCollections = json_decode($request->input('checked_shop_collections'));
         $checkedCustomerCollections = json_decode($request->input('checked_customer_collections'));
         $data['checkedShopCollections'] = $checkedShopCollections;
         $data['checkedCustomerCollections'] = $checkedCustomerCollections;
         // $this->collectionGroupService->saveCollectionGroupByAdmin($data);
-        $this->collectionGroupService->saveCollectionGroup($data);
         return redirect()->route('collection-groups.index');
     }
 

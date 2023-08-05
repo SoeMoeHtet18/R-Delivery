@@ -40,7 +40,7 @@
                         @foreach($collections as $collection)
                         <option value="{{$collection->id}}" @foreach($collectionGroupIds as $collectionGroupId)
                             @if($collectionGroupId->id == $collection->id) {{'selected'}} @endif
-                            @endforeach>{{$collection->id}}</option>
+                            @endforeach>{{$collection->collection_code}}</option>
                         @endforeach
                     </select>
                 </div>

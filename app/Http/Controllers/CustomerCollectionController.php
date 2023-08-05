@@ -6,6 +6,7 @@ use App\Models\CustomerCollection;
 use App\Repositories\CollectionGroupRepository;
 use App\Repositories\CustomerCollectionRepository;
 use App\Repositories\OrderRepository;
+use App\Repositories\RiderRepository;
 use App\Repositories\ShopRepository;
 use App\Services\CustomerCollectionService;
 use Illuminate\Http\Request;
@@ -18,6 +19,7 @@ class CustomerCollectionController extends Controller
     protected $orderRepository;
     protected $shopRepository;
     protected $collectionGroupRepository;
+    protected $riderRepository;
 
     public function __construct(
         CustomerCollectionRepository $customerCollectionRepository,
@@ -25,12 +27,14 @@ class CustomerCollectionController extends Controller
         OrderRepository $orderRepository,
         ShopRepository $shopRepository,
         CollectionGroupRepository $collectionGroupRepository,
+        RiderRepository $riderRepository,
     ) {
         $this->customerCollectionRepository = $customerCollectionRepository;
         $this->customerCollectionService = $customerCollectionService;
         $this->orderRepository = $orderRepository;
         $this->shopRepository = $shopRepository;
         $this->collectionGroupRepository = $collectionGroupRepository;
+        $this->riderRepository = $riderRepository;
     }
     /**
      * Display a listing of the resource.
@@ -38,7 +42,8 @@ class CustomerCollectionController extends Controller
     public function index()
     {
         $shops = $this->shopRepository->getAllShops();
-        return view('admin.customer-collection.index', compact('shops'));
+        $riders = $this->riderRepository->getAllRiders();
+        return view('admin.customer-collection.index', compact('shops', 'riders'));
     }
 
     /**
@@ -47,12 +52,17 @@ class CustomerCollectionController extends Controller
     public function create(Request $request)
     {
         $order_id = $request->order_id;
+        $shops = $this->shopRepository->getAllShops();
+        $shops = $shops->sortByDesc('id');
+        $riders = $this->riderRepository->getAllRiders();
+        $riders = $riders->sortByDesc('id');
+        
         if ($order_id) {
             $order = $this->orderRepository->getOrderByID($order_id);
             return view('admin.customer-collection.create', compact('order'));
         } else {
             $orders = $this->orderRepository->getAllOrders();
-            return view('admin.customer-collection.create', compact('orders'));
+            return view('admin.customer-collection.create', compact('orders', 'shops', 'riders'));
         }
     }
 
@@ -86,7 +96,12 @@ class CustomerCollectionController extends Controller
         $collection_groups = $collection_groups->sortByDesc('id');
         $orders = $this->orderRepository->getAllOrders();
         $orders = $orders->sortByDesc('id');
-        return view('admin.customer-collection.edit', compact('customer_collection', 'collection_groups', 'orders'));
+        $shops = $this->shopRepository->getAllShops();
+        $shops = $shops->sortByDesc('id');
+        $riders = $this->riderRepository->getAllRiders();
+        $riders = $riders->sortByDesc('id');
+        return view('admin.customer-collection.edit', compact('customer_collection', 'collection_groups', 
+            'orders', 'shops', 'riders'));
     }
 
     /**
@@ -126,6 +141,7 @@ class CustomerCollectionController extends Controller
             })
             ->rawColumns(['action'])
             ->addIndexColumn()
+            ->orderColumn('id', '-customer_collections.id')
             ->make(true);
     }
 
@@ -147,6 +163,29 @@ class CustomerCollectionController extends Controller
             })
             ->rawColumns(['action'])
             ->addIndexColumn()
+            ->orderColumn('id', '-customer_collections.id')
+            ->make(true);
+    }
+
+    public function getCustomerCollectionsByGroup(Request $request)
+    {
+        $request = $request->all();
+        $data = $this->customerCollectionRepository->getAllCustomerCollectionsByGroupId($request);
+
+        return DataTables::of($data)
+            ->addColumn('action', function ($row) {
+                $actionBtn = '<a href="' . route("customer-collections.show", $row->id) . '" class="info btn btn-info btn-sm">View</a>
+                <a href="' . route("customer-collections.edit", $row->id) . '" class="edit btn btn-light btn-sm">Edit</a>
+                <form action="' . route("customer-collections.destroy", $row->id) . '" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this city?`);">
+                    <input type="hidden" name="_token" value="' . csrf_token() . '">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
+                </form>';
+                return $actionBtn;
+            })
+            ->rawColumns(['action'])
+            ->addIndexColumn()
+            ->orderColumn('id', '-customer_collections.id')
             ->make(true);
     }
 }

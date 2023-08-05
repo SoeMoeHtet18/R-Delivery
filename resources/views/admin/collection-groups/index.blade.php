@@ -24,7 +24,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="d-flex flex-row-reverse pb-3">
         <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 btncenter margin-btn">
             <button class="btn btn-primary search_filter">Filter</button>
@@ -46,8 +46,6 @@
                     <th>Total Amount</th>
                     <th>Rider Name</th>
                     <th>Assigned Date</th>
-                    <th>Created At</th>
-                    <th>Updated At</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -92,18 +90,31 @@
                         name: 'assigned_date',
                     },
                     {
-                        data: 'created_at',
-                        name: 'created_at',
-                    },
-                    {
-                        data: 'updated_at',
-                        name: 'updated_at',
-                    },
-                    {
                         data: 'action',
                         name: 'action',
                         orderable: false,
                         searchable: false
+                    },
+                ],
+                columnDefs: [
+                    {
+                        "render": function(data, type, row) {
+                            if (row.assigned_date === null) {
+                                return '';
+                            } else {
+                                var dateObject = new Date(row.assigned_date);
+
+                                // Format the date as "MMM DD, YYYY"
+                                var formattedDate = dateObject.toLocaleDateString("my-MM", {
+                                    month: "short",
+                                    day: "numeric",
+                                    year: "numeric"
+                                });
+
+                                return formattedDate;
+                            }
+                        },
+                        "targets": 3
                     },
                 ]
             });

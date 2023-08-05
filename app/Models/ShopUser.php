@@ -12,7 +12,7 @@ class ShopUser extends Authenticatable
     use HasFactory, HasApiTokens, SoftDeletes;
     protected $guarded = [];
     protected $fillable = [
-        'name', 'phone_number', 'email', 'email_verified_at', 'password', 'device_id','token', 'refresh_token'
+        'name', 'phone_number', 'email', 'email_verified_at', 'password', 'device_id','token', 'refresh_token', 'branch_id'
     ];
 
     public function shop()

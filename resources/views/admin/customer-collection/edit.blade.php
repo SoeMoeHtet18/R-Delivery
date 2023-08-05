@@ -63,6 +63,57 @@
                 </div>
             </div>
             <div class="row m-0 mb-3">
+                <label for="shop_id" class="col-2">
+                    <h4>Shop <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <select name="shop_id" id="shop_id" class="form-control">
+                        <option value="" selected disabled>Select Shop For This Customer Exchange</option>
+                        @foreach($shops as $shop)
+                        <option value="{{$shop->id}}" @if($shop->id == $customer_collection->shop_id) selected @endif>{{$shop->name}}</option>
+                        @endforeach
+                    </select>
+                    @if ($errors->has('shop_id'))
+                    <span class="text-danger"><strong>{{ $errors->first('shop_id') }}</strong></span>
+                    @endif
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <label for="rider_id" class="col-2">
+                    <h4>Rider Name <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <select name="rider_id" id="rider_id" class="form-control">
+                        <option value="" selected disabled>Select Rider for This Customer Exchange</option>
+                        @foreach ( $riders as $rider)
+                        <option value="{{$rider->id}}" @if($rider->id == $customer_collection->rider_id) {{'selected'}} @endif>{{$rider->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <label for="customer_name" class="col-2">
+                    <h4>Customer Name<b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <input type="text" id="customer_name" name="customer_name" value="{{$customer_collection->customer_name}}" class="form-control" />
+                    @if ($errors->has('customer_name'))
+                    <span class="text-danger"><strong>{{ $errors->first('customer_name') }}</strong></span>
+                    @endif
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <label for="phone_number" class="col-2">
+                    <h4>Customer Phone Number<b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <input type="text" id="phone_number" name="phone_number" value="{{$customer_collection->customer_phone_number}}" class="form-control" />
+                    @if ($errors->has('phone_number'))
+                    <span class="text-danger"><strong>{{ $errors->first('phone_number') }}</strong></span>
+                    @endif
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
                 <label for="items" class="col-2">
                     <h4>Item<b>:</b></h4>
                 </label>
@@ -130,6 +181,48 @@
     $('#status_id').select2();
     $('#collection_group_id').select2();
     $('#order_id').select2();
+    $("#shop_id").select2();
+    $("#rider_id").select2();
+
+    $("#order_id").on('change', function() {
+        $.ajax({
+            url: '/api/get-data-by-order-for-customer-collection',
+            method: 'POST',
+            data: {
+                order_id: $('#order_id').val()
+            },
+            success: function(response) {
+                console.log(response);
+                if (response.status === 'success') {
+                    var data = response.data;
+                    $('#shop_id').val(data.shop_id);
+                    $('#shop_id').trigger('change');
+                    $('#rider_id').val(data.rider_id);
+                    $('#rider_id').trigger('change');
+                    $('#customer_name').val(data.customer_name);
+                    $('#phone_number').val(data.customer_phone_number);
+                }
+            }
+        });
+    })
+
+    $("#shop_id").on('change', function() {
+        $.ajax({
+            url: '/api/change-customer-collection-code',
+            method: 'POST',
+            data: {
+                shop_id: $('#shop_id').val()
+            },
+            success: function(response) {
+                console.log(response);
+                if (response.status === 'success') {
+                    var data = response.data;
+                    console.log(data);
+                    $('#customer_collection_code').val(data);
+                }
+            }
+        });
+    });
 
     var isWayFeesPayable = $('#is_way_fees_payable').val();
     if (isWayFeesPayable) {

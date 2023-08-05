@@ -24,7 +24,8 @@ class User extends Authenticatable
         'password',
         'phone_number',
         'email',
-        'device_id'
+        'device_id', 
+        'branch_id'
     ];
 
     public function payments_from_company()

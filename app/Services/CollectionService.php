@@ -82,4 +82,32 @@ class CollectionService
     {
         Collection::destroy($id);
     }
+
+    public function saveCollectionFromGroup($data, $rider_id = null, $collection_group_id = null) 
+    {        
+        $shop_id = $data['shop_id'];
+        $collection_code = Helper::nomenclature('collections', 'P', 'id', $shop_id, 'S');
+        $user = auth()->user();
+        $total_amount = empty($data['total_amount']) ? null : $data['total_amount'];
+
+        $description = empty($data['description']) ? null : $data['description'];
+
+        $collection = new Collection();
+        $collection->collection_code =  $collection_code;
+        $collection->total_quantity =  $data['total_quantity'] ?? null;
+        $collection->total_amount =  $total_amount;
+        $collection->paid_amount =  $data['paid_amount'] ?? null;
+        $collection->collection_group_id =  $collection_group_id;
+        $collection->rider_id =  $rider_id;
+        $collection->shop_id =  $data['shop_id'];
+        $collection->assigned_at =  $data['assigned_at'] ?? null;
+        $collection->collected_at =  $data['collected_at'] ?? null;
+        $collection->note =  $description;
+        $collection->status =  'pending';
+        $collection->is_payable =  false;
+        $collection->branch_id =  $user->branch_id;
+        $collection->save();
+        return $collection;
+
+    }
 }

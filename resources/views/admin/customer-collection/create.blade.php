@@ -27,14 +27,6 @@
         </h2>
         <form action="{{route('customer-collections.store')}}" method="POST" class="action-form" enctype="multipart/form-data">
             @csrf
-            <div class="row m-0 mb-3">
-                <label for="customer_collection_code" class="col-2">
-                    <h4>Customer Collection Code<b>:</b></h4>
-                </label>
-                <div class="col-10">
-                    <input type="text" id="customer_collection_code" name="customer_collection_code" class="form-control" readonly />
-                </div>
-            </div>
             @if(isset($order))
             <input type="hidden" name="order_id" value="{{$order->id}}">
             <input type="hidden" id="shop_id" value="{{$order->shop_id}}">
@@ -52,6 +44,65 @@
                     </select>
                     @if ($errors->has('order_id'))
                     <span class="text-danger"><strong>{{ $errors->first('order_id') }}</strong></span>
+                    @endif
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <label for="shop" class="col-2">
+                    <h4>Shop <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <select name="shop_id" id="shop" class="form-control">
+                        <option value="" selected disabled>Select Shop For This Customer Exchange</option>
+                        @foreach($shops as $shop)
+                        <option value="{{$shop->id}}" @if($shop->id == old('shop_id')) selected @endif>{{$shop->name}}</option>
+                        @endforeach
+                    </select>
+                    @if ($errors->has('shop_id'))
+                    <span class="text-danger"><strong>{{ $errors->first('shop_id') }}</strong></span>
+                    @endif
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <label for="customer_collection_code" class="col-2">
+                    <h4>Customer Exchange Code<b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <input type="text" id="customer_collection_code" name="customer_collection_code" class="form-control" readonly />
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <label for="rider_id" class="col-2">
+                    <h4>Rider Name <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <select name="rider_id" id="rider_id" class="form-control">
+                        <option value="" selected disabled>Select Rider for This Customer Exchange</option>
+                        @foreach ( $riders as $rider)
+                        <option value="{{$rider->id}}" @if($rider->id == old('rider_id')) {{'selected'}} @endif>{{$rider->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <label for="customer_name" class="col-2">
+                    <h4>Customer Name<b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <input type="text" id="customer_name" name="customer_name" value="{{old('customer_name')}}" class="form-control" />
+                    @if ($errors->has('customer_name'))
+                    <span class="text-danger"><strong>{{ $errors->first('customer_name') }}</strong></span>
+                    @endif
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <label for="phone_number" class="col-2">
+                    <h4>Customer Phone Number<b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <input type="text" id="phone_number" name="phone_number" value="{{old('phone_number')}}" class="form-control" />
+                    @if ($errors->has('phone_number'))
+                    <span class="text-danger"><strong>{{ $errors->first('phone_number') }}</strong></span>
                     @endif
                 </div>
             </div>
@@ -109,22 +160,48 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $('#order_id').select2();
+        $("#shop").select2();
+        $("#rider_id").select2();
 
-        $.ajax({
-            url: '/api/get-customer-collection-code',
-            method: 'POST',
-            data: {
-                shop_id: $('#shop_id').val()
-            },
-            success: function(response) {
-                console.log(response);
-                if (response.status === 'success') {
-                    var data = response.data;
-                    console.log(data);
-                    $('#customer_collection_code').val(data);
+        $("#order_id").on('change', function() {
+            $.ajax({
+                url: '/api/get-data-by-order-for-customer-collection',
+                method: 'POST',
+                data: {
+                    order_id: $('#order_id').val()
+                },
+                success: function(response) {
+                    console.log(response);
+                    if (response.status === 'success') {
+                        var data = response.data;
+                        $('#shop').val(data.shop_id);
+                        $('#shop').trigger('change');
+                        $('#rider_id').val(data.rider_id);
+                        $('#rider_id').trigger('change');
+                        $('#customer_name').val(data.customer_name);
+                        $('#phone_number').val(data.customer_phone_number);
+                    }
                 }
-            }
-        });
+            });
+        })
+
+        $("#shop").on('change', function() {
+            $.ajax({
+                url: '/api/get-customer-collection-code',
+                method: 'POST',
+                data: {
+                    shop_id: $('#shop').val()
+                },
+                success: function(response) {
+                    console.log(response);
+                    if (response.status === 'success') {
+                        var data = response.data;
+                        console.log(data);
+                        $('#customer_collection_code').val(data);
+                    }
+                }
+            });
+        })
 
         // Attach the click event to the parent container
         $('#tabs-container').on('click', '.tabs', function() {

@@ -51,7 +51,15 @@
                     <h4>Customer Name<b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    {{ $customer_collection->order->customer_name }}
+                    {{ $customer_collection->customer_name }}
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <div class="col-2">
+                    <h4>Customer Phone Number<b>:</b></h4>
+                </div>
+                <div class="col-10">
+                    {{ $customer_collection->customer_phone_number }}
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -59,7 +67,7 @@
                     <h4>Shop<b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    {{ $customer_collection->order->shop->name }}
+                    {{ $customer_collection->shop->name }}
                 </div>
             </div>
             <div class="row m-0 mb-3">
