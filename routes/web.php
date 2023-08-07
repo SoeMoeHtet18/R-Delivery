@@ -11,6 +11,7 @@ use App\Http\Controllers\CustomerCollectionController;
 use App\Http\Controllers\CustomerPaymentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeliveryTypeController;
+use App\Http\Controllers\GateController;
 use App\Http\Controllers\ItemTypeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderImportController;
@@ -135,6 +136,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('ajax-get-customer-collections-data-by-group', [CustomerCollectionController::class, 'getCustomerCollectionsByGroup']);
     Route::get('get-rider-by-type', [RiderController::class, 'getRiderByType']);
     Route::get('get-rider-total-salary-by-date', [RiderController::class, 'getRiderTotalSalaryByDate']);
+    Route::resource('/gates', GateController::class);
+    Route::get('/ajax-get-gate-data', [GateController::class, 'getAjaxGateData']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
