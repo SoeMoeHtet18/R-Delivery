@@ -8,7 +8,8 @@ class ShopUserRepository
 {
     public function getAllShopUsersQuery()
     {
-        $query = ShopUser::select('*');
+        $branch_id = auth()->user()->branch_id;
+        $query = ShopUser::select('*')->where('branch_id', $branch_id);
         return $query;
     }
 

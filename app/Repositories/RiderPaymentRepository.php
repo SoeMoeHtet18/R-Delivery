@@ -8,7 +8,8 @@ class RiderPaymentRepository
 {
     public function getAllRiderPaymentQuery()
     {
-        $query = RiderPayment::leftJoin('riders', 'riders.id','rider_payments.rider_id')->select('rider_payments.*','riders.name as rider_name');
+        $branch_id = auth()->user()->branch_id;
+        $query = RiderPayment::leftJoin('riders', 'riders.id','rider_payments.rider_id')->where('rider_payments.branch_id', $branch_id)->select('rider_payments.*','riders.name as rider_name');
         return $query;
     }
 

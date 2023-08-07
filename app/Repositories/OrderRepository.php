@@ -15,11 +15,13 @@ class OrderRepository
     }
     public function getAllOrders()
     {
-        $order = Order::all();
+        $branch_id = auth()->user()->branch_id;
+        $order = Order::where('branch_id', $branch_id)->get();
         return $order;
     }
     public function getAllOrdersQuery()
     {
+        $branch_id = auth()->user()->branch_id;
         $query = Order::leftJoin('townships', 'townships.id', 'orders.township_id')
             ->leftJoin('riders', 'riders.id', 'orders.rider_id')
             ->leftJoin('shops', 'shops.id', 'orders.shop_id')
@@ -28,6 +30,7 @@ class OrderRepository
             ->leftJoin('item_types', 'item_types.id', 'orders.item_type_id')
             ->leftJoin('delivery_types', 'delivery_types.id', 'orders.delivery_type_id')
             ->leftJoin('branches', 'branches.id', 'orders.branch_id')
+            ->where('orders.branch_id', $branch_id)
             ->select('orders.*', 'townships.name as township_name', 
                 'shops.name as shop_name', 
                 'riders.name as rider_name', 
@@ -301,10 +304,12 @@ class OrderRepository
 
     public function getCancelRequestOrdersQuery()
     {
+        $branch_id = auth()->user()->branch_id;
         $query = Order::where('orders.status', 'cancel_request')
             ->leftJoin('riders', 'riders.id', 'orders.rider_id')
             ->leftJoin('shops', 'shops.id', 'orders.shop_id')
             ->leftJoin('branches', 'branches.id', 'orders.branch_id')
+            ->where('orders.branch_id', $branch_id)
             ->select('orders.*',  'shops.name as shop_name', 'riders.name as rider_name',
                 'branches.name as branch_name');
         return $query;
@@ -312,10 +317,12 @@ class OrderRepository
     
     public function getCancelOrdersQuery()
     {
+        $branch_id = auth()->user()->branch_id;
         $query = Order::where('orders.status', 'cancel')
             ->leftJoin('riders', 'riders.id', 'orders.rider_id')
             ->leftJoin('shops', 'shops.id', 'orders.shop_id')
             ->leftJoin('branches', 'branches.id', 'orders.branch_id')
+            ->where('orders.branch_id', $branch_id)
             ->select('orders.*',  'shops.name as shop_name', 'riders.name as rider_name',
                 'branches.name as branch_name');
         return $query;
@@ -323,10 +330,12 @@ class OrderRepository
     
     public function getWarehouseOrderListQuery()
     {
+        $branch_id = auth()->user()->branch_id;
         $query = Order::where('orders.status', 'in-warehouse')
             ->leftJoin('riders', 'riders.id', 'orders.rider_id')
             ->leftJoin('shops', 'shops.id', 'orders.shop_id')
             ->leftJoin('branches', 'branches.id', 'orders.branch_id')
+            ->where('orders.branch_id', $branch_id)
             ->select('orders.*',  'shops.name as shop_name', 'riders.name as rider_name',
                 'branches.name as branch_name');
         return $query;
@@ -354,6 +363,7 @@ class OrderRepository
 
     public function getAllUnpaidOrderList()
     {
+        $branch_id = auth()->user()->branch_id;
         $query = Order::leftJoin('townships', 'townships.id', 'orders.township_id')
             ->leftJoin('riders', 'riders.id', 'orders.rider_id')
             ->leftJoin('shops', 'shops.id', 'orders.shop_id')
@@ -363,6 +373,7 @@ class OrderRepository
             ->leftJoin('delivery_types', 'delivery_types.id', 'orders.delivery_type_id')
             ->where('orders.payment_flag',0)
             ->where('orders.status','success')
+            ->where('orders.branch_id', $branch_id)
             ->select('orders.*', 'townships.name as township_name', 'shops.name as shop_name', 'riders.name as rider_name', 'users.name as last_updated_by_name', 'cities.name as city_name', 'item_types.name as item_type_name', 'delivery_types.name as delivery_type_name', 'delivery_types.notified_on as notified_on');
         return $query;
     }

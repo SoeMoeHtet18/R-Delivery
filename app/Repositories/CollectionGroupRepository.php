@@ -20,7 +20,10 @@ class CollectionGroupRepository
 
     public function getAllCollectionGroupData()
     {
-        $collectionGroups = CollectionGroup::select('collection_groups.*', 'riders.name as rider_name')->leftJoin('riders', 'riders.id', 'collection_groups.rider_id');
+        $branch_id = auth()->user()->branch_id;
+        $collectionGroups = CollectionGroup::select('collection_groups.*', 'riders.name as rider_name')
+                ->leftJoin('riders', 'riders.id', 'collection_groups.rider_id')
+                ->where('collection_groups.branch_id', $branch_id);
         return $collectionGroups;
     }
 

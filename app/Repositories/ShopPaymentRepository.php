@@ -8,7 +8,8 @@ class ShopPaymentRepository
 {
     public function getAllShopPaymentsQuery()
     {
-        $query = ShopPayment::leftJoin('shops','shops.id','shop_payments.shop_id')->select('shop_payments.*','shops.name as shop_name');
+        $branch_id = auth()->user()->branch_id;
+        $query = ShopPayment::leftJoin('shops','shops.id','shop_payments.shop_id')->where('shop_payments.branch_id', $branch_id)->select('shop_payments.*','shops.name as shop_name');
         return $query;
     }
 

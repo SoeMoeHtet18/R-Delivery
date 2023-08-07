@@ -75,9 +75,11 @@ class CollectionRepository
 
     public function getAllCollectionsQuery()
     {
+        $branch_id = auth()->user()->branch_id;
         $query = Collection::leftJoin('riders', 'riders.id', 'collections.rider_id')
             ->leftJoin('shops', 'shops.id', 'collections.shop_id')
             ->leftJoin('collection_groups', 'collection_groups.id', 'collections.collection_group_id')
+            ->where('collections.branch_id', $branch_id)
             ->select('collections.*', 'riders.name as rider_name', 'shops.name as shop_name', 'collection_groups.collection_group_code as collection_group_code');
         return $query;
     }

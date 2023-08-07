@@ -18,6 +18,7 @@ class CustomerCollectionRepository
         $shop = $data['shop'];
         $rider = $data['rider'];
         $status = $data['status'];
+        $branch_id = auth()->user()->branch_id;
 
         $customer_collections = CustomerCollection::leftJoin('orders', 'customer_collections.order_id', '=', 'orders.id')
             ->leftJoin('riders', 'customer_collections.rider_id', '=', 'riders.id')
@@ -33,6 +34,7 @@ class CustomerCollectionRepository
                     ->orWhere('customer_collections.customer_collection_code', 'like', '%' . $search . '%')
                     ->orWhere('customer_collections.collection_group_id', 'like', '%' . $search . '%');
             })
+            ->where('customer_collections.branch_id', $branch_id)
             ->select(
                 'customer_collections.*',
                 'orders.order_code as order_code',
@@ -72,6 +74,7 @@ class CustomerCollectionRepository
         $search = $data['search'];
         $shop = $data['shop'];
         $rider = $data['rider'];
+        $branch_id = auth()->user()->branch_id;
 
         $customer_collections = CustomerCollection::leftJoin('orders', 'customer_collections.order_id', 'orders.id')
             ->leftJoin('riders', 'customer_collections.rider_id', 'riders.id')
@@ -88,6 +91,7 @@ class CustomerCollectionRepository
                     ->orWhere('customer_collections.customer_collection_code', 'like', '%' . $search . '%')
                     ->orWhere('customer_collections.collection_group_id', 'like', '%' . $search . '%');
             })
+            ->where('customer_collections.branch_id', $branch_id)
             ->select(
                 'customer_collections.*',
                 'orders.order_code as order_code',

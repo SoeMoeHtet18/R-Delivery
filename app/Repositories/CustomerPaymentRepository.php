@@ -9,7 +9,8 @@ class CustomerPaymentRepository
 {
     public function getAllCustomerPaymentsQuery()
     {
-        $query = CustomerPayment::leftJoin('orders','orders.id','customer_payments.order_id')->select('customer_payments.*','orders.order_code');
+        $branch_id = auth()->user()->branch_id;
+        $query = CustomerPayment::leftJoin('orders','orders.id','customer_payments.order_id')->where('customer_payments.branch_id', $branch_id)->select('customer_payments.*','orders.order_code');
         return $query;
     }
     public function getCustomerPaymentByID($id)

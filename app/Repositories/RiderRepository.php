@@ -15,13 +15,15 @@ class RiderRepository
 {
     public function getAllRidersQuery()
     {
-        $query = Rider::select('*');
+        $branch_id = auth()->user()->branch_id;
+        $query = Rider::select('*')->where('branch_id', $branch_id);
         return $query;
     }
 
     public function getAllRiders()
     {
-        $riders = Rider::all();
+        $branch_id = auth()->user()->branch_id;
+        $riders = Rider::where('branch_id', $branch_id)->get();
         return $riders;
     }
 
@@ -83,7 +85,8 @@ class RiderRepository
 
     public function getRiderBySalaryType($type)
     {
-        $riders = Rider::where('salary_type',$type)->get();
+        $branch_id = auth()->user()->branch_id;
+        $riders = Rider::where('salary_type',$type)->where('branch_id', $branch_id)->get();
         return $riders;
     }
     
@@ -130,8 +133,15 @@ class RiderRepository
 
     public function getRiderByTownship($township_id)
     {
+        $branch_id = auth()->user()->branch_id;
         $township = Township::findOrFail($township_id);
         $riders = $township->riders;
-        return $riders;
+        $data = [];
+        foreach($riders as $rider) {
+            if($rider->branch_id == $branch_id){
+                $data[] = $rider;
+            }
+        }
+        return $data;
     }
 }

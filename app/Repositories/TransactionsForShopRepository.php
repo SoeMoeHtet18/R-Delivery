@@ -8,7 +8,11 @@ class TransactionsForShopRepository
 {
     public function getAllTransactionsForShopQuery()
     {
-        $query = TransactionsForShop::leftJoin('shops', 'shops.id','transactions_for_shops.shop_id')->leftJoin('users','users.id','transactions_for_shops.paid_by')->select('transactions_for_shops.*','shops.name as shop_name','users.name as paid_by');
+        $branch_id = auth()->user()->branch_id;
+        $query = TransactionsForShop::leftJoin('shops', 'shops.id','transactions_for_shops.shop_id')
+            ->leftJoin('users','users.id','transactions_for_shops.paid_by')
+            ->where('transactions_for_shops.branch_id', $branch_id)
+            ->select('transactions_for_shops.*','shops.name as shop_name','users.name as paid_by');
         return $query;
     }
 

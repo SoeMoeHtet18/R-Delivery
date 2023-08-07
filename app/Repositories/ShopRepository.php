@@ -11,13 +11,15 @@ class ShopRepository
 {
     public function getAllShops()
     {
-        $shops = Shop::all();
+        $branch_id = auth()->user()->branch_id;
+        $shops = Shop::where('branch_id', $branch_id)->get();
         return $shops;
     }
 
     public function getAllShopsQuery()
     {
-        $query = Shop::select('*');
+        $branch_id = auth()->user()->branch_id;
+        $query = Shop::select('*')->where('branch_id', $branch_id);
         return $query;
     }
 
