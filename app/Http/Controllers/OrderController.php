@@ -422,7 +422,7 @@ class OrderController extends Controller
         $status = $request->status;
         $order = $this->orderRepository->getOrderByID($id);
         $this->orderService->changeStatus($order, $status);
-        return redirect(url('/orders#cancel-request-orders-display'));
+        return redirect()->back();
     }
 
     public function generatePDF(Request $request)

@@ -37,6 +37,14 @@
                 <a href="{{url('/orders/'.$order->id.'/assign-rider')}}" class="btn btn-secondary me-3">Assign Rider</a>
             </div>
             @endif
+            @if($order->status == 'pending' || $order->status == 'picking-up')
+            <form action="{{url('/orders/' . $order->id . '/change-status')}}" method="post">
+                @csrf
+                @method('POST')
+                <input type="hidden" value="warehouse" name="status">
+                <input type="submit" value="Assign To Warehouse" class="btn btn-dark me-2">
+            </form>
+            @endif
             <div class="create-button">
                 <a href="{{route('orders.edit' , $order->id)}}" class="btn btn-light">Edit</a>
             </div>
