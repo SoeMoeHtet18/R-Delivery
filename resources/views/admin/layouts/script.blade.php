@@ -38,6 +38,7 @@
         });
     });
 
+    //for expanding side-bar
     $(function() {
         var pathName = window.location.pathname;
 
@@ -45,12 +46,12 @@
         var endPart = endParts[1];
 
         // for payments
-        if (['shoppayments', 'customer-payments', 'transactions-for-shop'].includes(endPart)) {
+        if (['shoppayments', 'customer-payments', 'transactions-for-shop', 'rider-payments'].includes(endPart)) {
             $("#paymentBoxCollapse").attr('aria-expanded', 'true');
             $("#paymentBox.customize-collapse").toggleClass('show');
         }
         //fpr admin tools
-        if (['users', 'cities', 'townships', 'itemtypes', 'payment-types'].includes(endPart)) {
+        if (['users', 'cities', 'townships', 'itemtypes', 'payment-types', 'delivery-types', 'branches', 'gates'].includes(endPart)) {
             $("#adminToolsCollapse").attr('aria-expanded', 'true');
             $("#adminTools.customize-collapse").toggleClass('show');
         }
