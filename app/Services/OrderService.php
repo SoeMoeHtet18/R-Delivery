@@ -55,6 +55,7 @@ class OrderService
         $order->is_confirm = 0;
         $order->extra_charges = $data['extra_charges'] ?? 0;
         $order->branch_id = $user->branch_id;
+        $order->pay_later = $data['total_amount'] > 100000 ? true : false;
         $order->save();
         return $order;
     }
@@ -91,6 +92,7 @@ class OrderService
         $order->is_confirm = 0;
         $order->extra_charges = $data['extra_charges'] ?? 0;
         $order->branch_id = $shop->branch_id;
+        $order->pay_later = $data['total_amount'] > 100000 ? true : false;
         $order->save();
         $this->notificationService->orderCreateNotificationForShopUser($shop_id);
         return $order;
@@ -140,6 +142,7 @@ class OrderService
         $order->last_updated_by = auth()->user()->id;
         $order->extra_charges = $data['extra_charges'] ?? 0;
         $order->delivery_type_id = $data['delivery_type_id'];
+        $order->pay_later = $data['total_amount'] > 100000 ? true : false;
         $order->save();
         return $order;
     }

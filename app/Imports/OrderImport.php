@@ -6,13 +6,16 @@ use App\Helpers\Helper;
 use App\Models\City;
 use App\Models\DeliveryType;
 use App\Models\ItemType;
+use App\Models\Notification;
 use App\Models\Order;
 use App\Models\Rider;
 use App\Models\Shop;
 use App\Models\Township;
+use App\Services\OrderService;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Maatwebsite\Excel\Concerns\Importable;
@@ -37,6 +40,8 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
      */
     private $rows = 0;
     use Importable, RegistersEventListeners, SkipsFailures;
+
+    protected $orderService;
 
     private function convertData($string)
     {
@@ -84,11 +89,11 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
         } else {
             $date = Carbon::tomorrow();
         }
-        
+
         $formattedDate = $date->format('Y-m-d H:i:s');
-        
+
         Log::debug($formattedDate);
-        return Order::create([
+        $order = Order::create([
             'order_code' => Helper::nomenclature('orders', 'OD', 'id', $shop_id, 'S'),
             'customer_name' => $row['customer_name'],
             'customer_phone_number' => $row['customer_phone_number'],
@@ -113,6 +118,28 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
             'branch_id' => auth()->user()->branch_id,
             'pay_later' => $row['total_amount'] > 100000 ? true : false,
         ]);
+
+        if ($township_id && $rider_id) {
+            $notification = Notification::create([
+                'title' => 'create',
+                'message' => 'You have got a new order.'
+            ]);
+            $rider = Rider::find($rider_id);
+            $rider->notifications()->attach($notification->id);
+            $orders = [];
+            if (Storage::exists('order_data.txt')) {
+                $orderDataJson = Storage::get('order_data.txt');
+                $orders = json_decode($orderDataJson, true);
+            }
+
+            $orderId = $order->order_code;
+            $orders[$orderId]['picked_at'] = $order->updated_at;
+
+            $orderDataJson = json_encode($orders);
+            Storage::put('order_data.txt', $orderDataJson);
+        }
+
+        return $order;
     }
 
     /**

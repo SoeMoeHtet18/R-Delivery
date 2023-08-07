@@ -187,6 +187,18 @@
                     </select>
                 </div>
             </div>
+            <div class="mb-3 p-3 col-4">
+                <label for="pay_later">
+                    <strong>Pay Later</strong>
+                </label>
+                <div class="col-10">
+                    <select name="pay_later" id="pay_later" class="form-control">
+                        <option value="" selected disabled>Select</option>
+                        <option value="{{true}}">Yes</option>
+                        <option value="false">No</option>
+                    </select>
+                </div>
+            </div>
         </div>
     </div>
     <div class="d-flex flex-row-reverse pb-3">
@@ -358,6 +370,7 @@
                         <th>Type</th>
                         <th>Collection Method</th>
                         <th>Last Updated By</th>
+                        <th>Branch</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -387,6 +400,7 @@
                         <th>Customer Name</th>
                         <th>Customer Phone Number</th>
                         <th>Paid</th>
+                        <th>Branch</th>
                     </tr>
                 </thead>
 
@@ -414,6 +428,7 @@
                         <th>Customer Name</th>
                         <th>Customer Phone Number</th>
                         <th>Paid</th>
+                        <th>Branch</th>
                     </tr>
                 </thead>
 
@@ -442,6 +457,7 @@
                         <th>Customer Name</th>
                         <th>Customer Phone Number</th>
                         <th>Paid</th>
+                        <th>Branch</th>
                     </tr>
                 </thead>
 
@@ -463,7 +479,7 @@
         $('#township').select2();
         $('#rider').select2();
         $('#shop').select2();
-        $('#template').select2();
+        $('#pay_later').select2();
 
         $('#bulk-discount-update').click(function() {
             var order_ids = Array.from(new Set(
@@ -538,13 +554,9 @@
             }
         });
 
-
         $('#qr-pop-up-close-btn').click(function() {
             hidePopupQrCard();
         });
-
-
-
 
         $('#pop-up-close-btn').click(function() {
             hidePopupCard();
@@ -646,9 +658,9 @@
             $(this).tab('show');
         });
 
-        get_ajax_dynamic_data(search = '', city = '', rider = '', shop = '', status = '', township = '');
+        get_ajax_dynamic_data(search = '', city = '', rider = '', shop = '', status = '', township = '', pay_later='');
 
-        function get_ajax_dynamic_data(search, city, rider, shop, status, township) {
+        function get_ajax_dynamic_data(search, city, rider, shop, status, township, pay_later) {
             var visible_column = [];
             var table = $('#all-orders-datatable').DataTable({
                 processing: true,
@@ -680,6 +692,7 @@
                         r.shop = shop;
                         r.status = status;
                         r.township = township;
+                        r.pay_later = pay_later;
                     }
                 },
                 columns: [{
@@ -769,6 +782,10 @@
                         name: 'last_updated_by'
                     },
                     {
+                        data: 'branch_name',
+                        name: 'branch'
+                    },
+                    {
                         data: 'action',
                         name: 'action',
                         orderable: false,
@@ -852,8 +869,11 @@
                 var rider = $('#rider').val();
                 var city = $('#city').val();
                 var shop = $('#shop').val();
+                var pay_later = $('#pay_later').val();
+                console.log($('#pay_later').val());
+
                 table.destroy();
-                get_ajax_dynamic_data(search, city, rider, shop, status, township);
+                get_ajax_dynamic_data(search, city, rider, shop, status, township, pay_later);
             });
             $("#reset").click(function() {
                 $("#status").val("").trigger("change");
@@ -862,14 +882,16 @@
                 $("#rider").val("").trigger("change");
                 $("#city").val("").trigger("change");
                 $("#shop").val("").trigger("change");
+                $("#pay_later").val("").trigger("change");
                 var status = $("#status").val();
                 var township = $('#township').val();
                 var search = $('#search').val();
                 var rider = $('#rider').val();
                 var city = $('#city').val();
                 var shop = $('#shop').val();
+                var pay_later = $('#pay_later').val();
                 table.destroy();
-                get_ajax_dynamic_data(search, city, rider, shop, status, township);
+                get_ajax_dynamic_data(search, city, rider, shop, status, township, pay_later);
             });
 
             $('#search').keypress(function(e) {
@@ -946,6 +968,10 @@
                     {
                         data: 'customer_phone_number',
                         name: 'customer_phone_number'
+                    },
+                    {
+                        data: 'branch_name',
+                        name: 'branch'
                     },
                 ],
                 columnDefs: [{
@@ -1024,6 +1050,10 @@
                     {
                         data: 'customer_phone_number',
                         name: 'customer_phone_number'
+                    },
+                    {
+                        data: 'branch_name',
+                        name: 'branch'
                     },
                 ],
                 columnDefs: [
@@ -1153,6 +1183,10 @@
                     {
                         data: 'customer_phone_number',
                         name: 'customer_phone_number'
+                    },
+                    {
+                        data: 'branch_name',
+                        name: 'branch'
                     },
                 ],
                 columnDefs: [

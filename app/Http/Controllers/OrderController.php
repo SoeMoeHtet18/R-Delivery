@@ -232,6 +232,7 @@ class OrderController extends Controller
         $city = $request->city;
         $rider = $request->rider;
         $shop  = $request->shop;
+        $pay_later  = $request->pay_later;
         $data = $this->orderRepository->getAllOrdersQuery();
 
         if ($status != null) {
@@ -252,7 +253,9 @@ class OrderController extends Controller
         if ($shop != null) {
             $data = $data->where('orders.shop_id', $shop);
         }
-
+        if ($pay_later != null) {
+            $data = $data->where('orders.pay_later', $pay_later);
+        }
         return DataTables::of($data)
             ->addIndexColumn()
             ->addColumn('order_code', function ($data) {

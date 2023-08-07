@@ -52,7 +52,7 @@
                 <td>{{ $order->customer_name }}</td>
                 <td>{{ $order->township->name }}</td>
                 <td>{{ $order->shop->name }}</td>
-                <td>{{ $order->rider->name }}</td>
+                <td>@if($order->rider != null){{ $order->rider->name }}@endif</td>
                 @php
                 $quantityArray = explode(',', $order->quantity);
                 $totalQuantity = array_sum($quantityArray);

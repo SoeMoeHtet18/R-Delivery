@@ -45,4 +45,9 @@ class Order extends Model
     {
         return $this->belongsTo(DeliveryType::class, 'delivery_type_id', 'id')->withTrashed();
     }
+
+    public function branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id', 'id')->withTrashed();
+    }
 }
