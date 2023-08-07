@@ -9,6 +9,7 @@ use App\Http\Requests\OrderCreateRequest;
 use App\Http\Requests\OrderUpdateRequest;
 use App\Http\Requests\RiderAssignRequest;
 use App\Repositories\CityRepository;
+use App\Repositories\CollectionGroupRepository;
 use App\Repositories\DeliveryTypesRepository;
 use App\Repositories\ItemTypeRepository;
 use App\Repositories\OrderRepository;
@@ -33,6 +34,7 @@ class OrderController extends Controller
     protected $townshipRepository;
     protected $orderService;
     protected $deliveryTypeRepository;
+    protected $collectionGroupRepository;
 
     public function __construct(
         ShopRepository $shopRepository,
@@ -43,6 +45,7 @@ class OrderController extends Controller
         OrderRepository $orderRepository,
         OrderService $orderService,
         DeliveryTypesRepository $deliveryTypeRepository,
+        CollectionGroupRepository $collectionGroupRepository,
     ) {
         $this->shopRepository = $shopRepository;
         $this->riderRepository = $riderRepository;
@@ -52,6 +55,7 @@ class OrderController extends Controller
         $this->orderRepository = $orderRepository;
         $this->orderService = $orderService;
         $this->deliveryTypeRepository = $deliveryTypeRepository;
+        $this->collectionGroupRepository = $collectionGroupRepository;
     }
     /**
      * Display a listing of the resource.
@@ -101,7 +105,9 @@ class OrderController extends Controller
     public function show(string $id)
     {
         $order = $this->orderRepository->getOrderByID($id);
-        return view('admin.order.detail', compact('order'));
+        $collection_groups = $this->collectionGroupRepository->getAllCollectionGroups();
+        $collection_groups = $collection_groups->sortByDesc('id');
+        return view('admin.order.detail', compact('order', 'collection_groups'));
     }
 
     /**
@@ -622,7 +628,7 @@ class OrderController extends Controller
     {
         $data = $request->all();
         $this->orderService->bulkDiscountUpdate($data);
-        return redirect()->route('orders.index');
+        return redirect()->back();
     }
 
     public function getAjaxUnpaidOrderList(Request $request)
@@ -669,5 +675,12 @@ class OrderController extends Controller
             })
             ->rawColumns(['action', 'order_code', 'first_column'])
             ->make(true);
+    }
+
+    public function assignCollectionGroupToOrder(Request $request, $id)
+    {
+        $collection_group_id = $request->collection_group_id;
+        $this->orderService->assignCollectionGroupToOrder($id, $collection_group_id);
+        return redirect()->back();
     }
 }
