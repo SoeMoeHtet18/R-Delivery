@@ -308,4 +308,12 @@ class OrderService
             }
         }
     }
+
+    public function assignCollectionGroupToOrder($id, $collection_group_id)
+    {
+        $order = Order::where('id',$id)->firstOrFail();
+        $order->collection_group_id = $collection_group_id;
+        $order->save();
+        return $order;
+    }
 }

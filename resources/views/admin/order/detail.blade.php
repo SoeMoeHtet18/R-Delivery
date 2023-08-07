@@ -12,6 +12,10 @@
         background-color: red;
         color: white;
     }
+    
+    .dropdown-menu li a {
+        color: black;
+    }
 </style>
 <div class="card card-container detail-card">
     <div class="card-body">
@@ -19,64 +23,111 @@
             <strong>Order Detail</strong>
         </h2>
         <div class="card-toolbar">
-            <div>
-                <a href="{{url('/customer-collections/create?order_id='.$order->id)}}" class="btn portlet green me-3">Create Customer Collection</a>
+            <div class="dropdown">
+                <button class="btn btn-secondary green dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Actions
+                </button>
+                <ul class="dropdown-menu">
+                    @if($order->status == 'pending')
+                    <li>
+                        <a class="dropdown-item" id="assign-collection-group">Assign To Pick Up Group</a>
+                    </li>
+                    @endif
+                    @if($order->status == 'delay')
+                    <li>
+                        <form action="{{url('/orders/' . $order->id . '/change-status')}}" method="post">
+                            @csrf
+                            @method('POST')
+                            <input type="hidden" value="success" name="status">
+                            <input type="submit" value="Delivered" class="btn btn-dark dropdown-item">
+                        </form>
+                    </li>
+                    <li>
+                        <form action="{{url('/orders/' . $order->id . '/change-status')}}" method="post">
+                            @csrf
+                            @method('POST')
+                            <input type="hidden" value="warehouse" name="status">
+                            <input type="submit" value="Assign To Warehouse" class="btn btn-secondary dropdown-item">
+                        </form>
+                    </li>               
+                    @endif
+                    @if($order->status == 'warehouse' || $order->status == 'success')
+                    <li>
+                        <a href="{{url('/customer-collections/create?order_id='.$order->id)}}" class="btn dropdown-item green me-3">Create Customer Collection</a>
+                    </li>
+                    @endif
+                    @if($order->status == 'delivering' && $order->payment_channel == 'shop_online_payment' && $order->is_payment_channel_confirm == false)
+                    <li>
+                        <a href="{{url('/payment-channel-confirm/'.$order->id)}}" class="btn btn-secondary dropdown-item">Confirm Shop Payment</a>
+                    </li>
+                    @endif
+                    @if($order->status == 'delivering' && $order->payment_channel == 'company_online_payment' && $order->is_payment_channel_confirm == false)
+                    <li>
+                        <a href="{{url('/payment-channel-confirm/'.$order->id)}}" class="btn btn-secondary dropdown-item">Confirm Company Payment</a>
+                    </li>
+                    @endif
+                    @if($order->status == 'pending' || $order->status == 'picking-up' || $order->status == 'cancel')
+                    <li>
+                    <form action="{{url('/orders/' . $order->id . '/change-status')}}" method="post">
+                            @csrf
+                            @method('POST')
+                            <input type="hidden" value="warehouse" name="status">
+                            <input type="submit" value="Assign To Warehouse" class="btn btn-dark dropdown-item">
+                        </form>
+                    </li>
+                    @endif
+                    @if($order->status == 'pending' || $order->status == 'warehouse')
+                    <li>
+                        <a href="{{url('/orders/'.$order->id.'/assign-rider')}}" class="btn btn-secondary dropdown-item">Assign Rider</a>
+                    </li>
+                    @endif
+                    <li><a href="{{route('orders.edit' , $order->id)}}" class="btn btn-light dropdown-item">Edit</a></li>
+                    <li> 
+                        <form action="{{route('orders.destroy', $order->id)}}" method="post" onclick="return confirm(`Are you sure you want to Delete this order?`);">
+                            @csrf
+                            @method('DELETE')
+                            <input type="submit" value="Delete" class="btn btn-danger dropdown-item">
+                        </form>
+                    </li>
+            
+                </ul>
             </div>
-            @if($order->status == 'delivering' && $order->payment_channel == 'shop_online_payment' && $order->is_payment_channel_confirm == false)
-            <div>
-                <a href="{{url('/payment-channel-confirm/'.$order->id)}}" class="btn btn-secondary me-3">Confirm Shop Payment</a>
-            </div>
-            @endif
-            @if($order->status == 'delivering' && $order->payment_channel == 'company_online_payment' && $order->is_payment_channel_confirm == false)
-            <div>
-                <a href="{{url('/payment-channel-confirm/'.$order->id)}}" class="btn btn-secondary me-3">Confirm Company Payment</a>
-            </div>
-            @endif
-            @if($order->status == 'pending' || $order->status == 'warehouse')
-            <div>
-                <a href="{{url('/orders/'.$order->id.'/assign-rider')}}" class="btn btn-secondary me-3">Assign Rider</a>
-            </div>
-            @endif
-            @if($order->status == 'pending' || $order->status == 'picking-up')
-            <form action="{{url('/orders/' . $order->id . '/change-status')}}" method="post">
-                @csrf
-                @method('POST')
-                <input type="hidden" value="warehouse" name="status">
-                <input type="submit" value="Assign To Warehouse" class="btn btn-dark me-2">
-            </form>
-            @endif
-            <div class="create-button">
-                <a href="{{route('orders.edit' , $order->id)}}" class="btn btn-light">Edit</a>
-            </div>
-            <form action="{{route('orders.destroy', $order->id)}}" method="post" onclick="return confirm(`Are you sure you want to Delete this order?`);">
-                @csrf
-                @method('DELETE')
-                <input type="submit" value="Delete" class="btn btn-danger float-end">
-            </form>
+               
         </div>
-        <div class="d-flex justify-content-end">
-            @if($order->status == 'delay' || $order->status == 'cancel_request')
-            <form action="{{url('/orders/' . $order->id . '/change-status')}}" method="post">
-                @csrf
-                @method('POST')
-                <input type="hidden" value="success" name="status">
-                <input type="submit" value="Delivered" class="btn btn-dark me-2">
-            </form>
-            <form action="{{url('/orders/' . $order->id . '/change-status')}}" method="post" onclick="return confirm(`Are you sure you want to cancel this order?`);">
-                @csrf
-                @method('POST')
-                <input type="hidden" value="cancel" name="status">
-                <input type="submit" value="{{ $order->status == 'cancel_request' ? 'Approve Cancel' : 'Cancel' }}" class="btn btn-success">
-            </form>
-                @if($order->status == 'cancel_request')
-                <form action="{{url('/orders/' . $order->id . '/change-status')}}" method="post">
-                    @csrf
-                    @method('POST')
-                    <input type="hidden" value="warehouse" name="status">
-                    <input type="submit" value="Reject Cancel" class="btn btn-danger ms-2">
-                </form>
-                @endif
-            @endif
+        <div id="popupCard" class="modal mt-5">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header text-center">
+                        <h5 class="modal-title text-center text-bold">Assign To Pick Up Group</h5>
+                    </div>
+                    <form action="{{url('/orders/'. $order->id . '/assign-collection-group')}}" method="post">
+                        <!-- Modal Body -->
+                        <div class="modal-body">
+
+                            @csrf
+                            @method('POST')
+                            <div class="row m-0 mb-3">
+                                <div>
+                                    <h4>Pick Up Group</h4>
+                                </div>
+                                <div>
+                                    <select name="collection_group_id" id="collection_group_id" class="form-control">
+                                        <option value="" selected disabled>Select Pick Up Group</option>
+                                        @foreach($collection_groups as $collection_group)
+                                    <option value="{{$collection_group->id}}">{{$collection_group->collection_group_code}}</option>
+                                    @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" id="pop-up-close-btn" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <input type="submit" id="assign-collection-group-btn" class="btn green" data-dismiss="modal" value="Assign">
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
         <div class="detail-infos">
             <div class="row m-0 mb-3">
@@ -302,4 +353,20 @@
         </div>
     </div>
 </div>
+@endsection
+@section('javascript')
+<script>
+   
+    $('#assign-collection-group').click(function() {
+        var popupCard = document.getElementById('popupCard');
+            popupCard.style.display = 'block';
+            $('#collection_group_id').select2();
+    });
+
+    $('#pop-up-close-btn').click(function() {
+        var popupCard = document.getElementById('popupCard');
+            popupCard.style.display = 'none';
+        });
+</script>
+
 @endsection
