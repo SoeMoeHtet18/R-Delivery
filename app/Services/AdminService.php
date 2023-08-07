@@ -15,6 +15,12 @@ class AdminService
         $user->email = $data['email'] ?? null;
         $user->password = $data['password'] ? bcrypt($data['password']): null;
         $user->device_id = $data['device_id'] ?? null;
+        $branch_id = auth()->user()->branch_id;
+        if(auth()->user()->id == 1){
+            $user->branch_id = $data['branch_id'] ?? null;
+        } else {
+            $user->branch_id = $branch_id;
+        }
         $user->save();
     }
 
@@ -27,6 +33,12 @@ class AdminService
             $user->password = bcrypt($data['password']);
         }
         $user->device_id = $data['device_id'] ?? $user->device_id;
+        $branch_id = auth()->user()->branch_id;
+        if(auth()->user()->id == 1){
+            $user->branch_id = $data['branch_id'] ?? null;
+        } else {
+            $user->branch_id = $branch_id;
+        }
         $user->save();
     }
 

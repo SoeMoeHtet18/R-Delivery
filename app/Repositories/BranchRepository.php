@@ -18,4 +18,9 @@ class BranchRepository
         return $data;
     }
     
+    public function getAllData()
+    {
+        $data = Branch::orderBy('id','desc')->get();
+        return $data;
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Order;
+use App\Models\Township;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -282,6 +283,11 @@ class OrderRepository
             ->leftJoin('delivery_types', 'delivery_types.id', 'orders.delivery_type_id')
             ->select('orders.*', 'shops.name as shop_name', 'cities.name as city_name', 'townships.name as township_name', 'item_types.name as item_type_name', 'delivery_types.name as delivery_type_name')
             ->first();
+        $township = Township::where('id',$order->township_id)->first();
+        $gate = $township->gates;
+        if(count($gate) > 0) {
+            $order['full_address'] = $gate->first()->address;
+        }
 
         return $order;
     }

@@ -9,7 +9,12 @@ class AdminRepository
     public function getAllUsersQuery()
     {
         $branch_id = auth()->user()->branch_id;
-        $query = User::select('*')->where('users.branch_id', $branch_id);
+        if(auth()->user()->id == 1) {
+            $query = User::select('*');
+        } else {
+            $query = User::select('*')->where('users.branch_id', $branch_id);
+        }
+        
         return $query;
     }
 

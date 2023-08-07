@@ -21,6 +21,24 @@
                     @endif
                 </div>
             </div>
+            @if(auth()->user()->id == 1)
+            <div class="row m-0 mb-3">
+                <label for="branch_id" class="col-2">
+                    <h4>Branch Name <b>:</b></h4>
+                </label>
+                <div class=" col-10">
+                    <select name="branch_id" id="branch_id" class="form-control">
+                        <option value="" selected disabled>Select the City for This Order</option>
+                        @foreach ( $branches as $branch)
+                        <option value="{{$branch->id}}" @if($branch->id == $user->branch_id) selected @endif>{{$branch->name}}</option>
+                        @endforeach
+                    </select>
+                    @if ($errors->has('branch_id'))
+                    <span class="text-danger"><strong>{{ $errors->first('branch_id') }}</strong></span>
+                    @endif
+                </div>
+            </div>
+            @endif
             <div class="row m-0 mb-3">
                 <label for="phone_number" class="col-2">
                     <h4>Phone Number <b>:</b></h4>
@@ -76,4 +94,11 @@
     </div>
 </div>
 
+@endsection
+@section('javascript')
+<script>
+    $(document).ready(function() {
+        $('#branch_id').select2();
+    });
+</script>
 @endsection

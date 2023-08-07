@@ -6,6 +6,7 @@ use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Models\User;
 use App\Repositories\AdminRepository;
+use App\Repositories\BranchRepository;
 use App\Services\AdminService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -16,11 +17,13 @@ class AdminController extends Controller
 {
     protected $adminService;
     protected $adminRepository;
+    protected $branchRepository;
 
-    public function __construct(AdminService $adminService, AdminRepository $adminRepository)
+    public function __construct(AdminService $adminService, AdminRepository $adminRepository, BranchRepository $branchRepository)
     {
         $this->adminService = $adminService;
         $this->adminRepository = $adminRepository;
+        $this->branchRepository = $branchRepository;
     }
     /**
      * Display a listing of the resource.
@@ -35,7 +38,8 @@ class AdminController extends Controller
      */
     public function create()
     {
-        return view('admin.user.create');
+        $branches = $this->branchRepository->getAllData();
+        return view('admin.user.create',compact('branches'));
     }
 
     /**
@@ -65,7 +69,8 @@ class AdminController extends Controller
     public function edit(string $id)
     {
         $user = $this->adminRepository->getUserById($id);
-        return view('admin.user.edit',compact('user'));
+        $branches = $this->branchRepository->getAllData();
+        return view('admin.user.edit',compact('user','branches'));
     }
 
     /**
