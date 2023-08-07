@@ -133,6 +133,12 @@
                             <span class="title">Branch</span>
                         </a>
                     </li>
+                    <li class="@if(request()->is('gates*')) {{'active'}} @endif">
+                        <a href="{{route('gates.index')}}">
+                            <!-- <i class="fa fa-users"></i> -->
+                            <span class="title">Gate</span>
+                        </a>
+                    </li>
                     <li class="@if(request()->is('third-party-vendor*')) {{'active'}} @endif">
                         <a href="/third-party-vendor">
                             <!-- <i class="fa fa-users"></i> -->
