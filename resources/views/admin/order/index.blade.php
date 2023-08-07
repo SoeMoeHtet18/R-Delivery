@@ -148,8 +148,12 @@
                     <select name="status" id="status" class="form-control">
                         <option value="" selected disabled>Select</option>
                         <option value="pending">Pending</option>
-                        <option value="success">Success</option>
+                        <option value="picking-up">Picking Up</option>
+                        <option value="warehouse">In Warehouse</option>
+                        <option value="delivering">Delivering</option>
                         <option value="delay">Delay</option>
+                        <option value="cancel_request">Cancel Request</option>
+                        <option value="success">Delivered</option>
                         <option value="cancel">Cancel</option>
                     </select>
                 </div>
