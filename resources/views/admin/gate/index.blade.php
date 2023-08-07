@@ -1,0 +1,148 @@
+@extends('admin.layouts.master')
+@section('title','Admin Tools')
+@section('sub-title','Gate')
+@section('content')
+
+
+<div class="create-button" style="margin-bottom: 50px;">
+    <a href="{{route('gates.create')}}" class="btn create-btn">Add New Gate</a>
+</div>
+
+<div class="card m-3">
+    <div class="row tdFilter">
+        <div class="col-md-12 col-sm-12 m-3">
+            <h2>Filter</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="filter-box">
+            <div class="mb-3 p-3 col-4">
+                <label for="city_id">
+                    <strong>City</strong>
+                </label>
+                <div class="col-10">
+                    <select name="city_id" id="city_id" class="form-control">
+                        <option value="" selected disabled>Select</option>
+                        @foreach($cities as $city)
+                        <option value="{{$city->id}}">{{$city->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            
+        </div>
+        
+
+    </div>
+    <div class="d-flex flex-row-reverse pb-3">
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 btncenter margin-btn">
+            <button class="btn btn-primary search_filter">Filter</button>
+
+            <button class="btn btn-secondary" id="reset">Reset</button>
+        </div>
+    </div>
+</div>
+
+<div class="portlet box green">
+    <div class="portlet-title">
+        <div class="caption">Gate Lists</div>
+    </div>
+    <div class="portlet-body">
+        <table id="datatable" class="table table-striped table-hover table-responsive datatable">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>City Name</th>
+                    <th>Townships</th>
+                    <th>address</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@endsection
+@section('javascript')
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#city_id').select2();
+
+        get_ajax_dynamic_data(city_id = '');
+
+        function get_ajax_dynamic_data(city_id) {
+            var table = $('.datatable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    "url": '/ajax-get-gate-data',
+                    "type": "GET",
+                    "data": function(r) {
+                        r.city_name = city_id;
+                    }
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'id'
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'city_name',
+                        name: 'city_name'
+                    },
+                    {
+                        data: 'townships',
+                        name: 'townships'
+                    },
+                    {
+                        data: 'address',
+                        name: 'address'
+                    },
+                    
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
+                ],
+                columnDefs: [
+                    {
+                        "render": function(data, type, row) {
+                            console.log(row);
+                            var gateAssignedTownships = '';
+                            if(row.townships.length > 0 ){
+                            for(var i = 0; i < row.townships.length; i++){
+                                gateAssignedTownships += row.townships[i].name+', ';
+                            }
+                            
+                            } else {
+                            return "{{ __('n_a') }}"
+                            }
+                            return gateAssignedTownships.replace(/,\s*$/, "");
+                        },
+                        "targets": 3
+                    },
+                ]
+            });
+            $('.search_filter').click(function() {
+                var city_id = $('#city_id').val();
+                table.destroy();
+                get_ajax_dynamic_data(city_id);
+            });
+            $("#reset").click(function() {
+                $("#city_id").val("").trigger("change");
+                var city_id = $('#city_id').val();
+                table.destroy();
+                get_ajax_dynamic_data(city_id);
+            });
+        }
+    })
+</script>
+@endsection

@@ -11,6 +11,7 @@ use App\Http\Controllers\CustomerCollectionController;
 use App\Http\Controllers\CustomerPaymentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DeliveryTypeController;
+use App\Http\Controllers\GateController;
 use App\Http\Controllers\ItemTypeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderImportController;
@@ -137,6 +138,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('get-rider-total-salary-by-date', [RiderController::class, 'getRiderTotalSalaryByDate']);
     Route::get('get-riders-by-township', [RiderController::class, 'getRidersByTownship']);
     Route::get('generate-shop-pdf', [ShopController::class, 'generateShopPdf']);
+    Route::resource('/gates', GateController::class);
+    Route::get('/ajax-get-gate-data', [GateController::class, 'getAjaxGateData']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
