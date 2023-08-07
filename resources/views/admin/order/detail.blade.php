@@ -92,7 +92,6 @@
             
                 </ul>
             </div>
-               
         </div>
         <div id="popupCard" class="modal mt-5">
             <div class="modal-dialog">
