@@ -26,4 +26,9 @@ class Township extends Model
     {
         return $this->belongsToMany(Gate::class, 'gate_township', 'township_id', 'gate_id');
     }
+
+    public function associable()
+    {
+        return $this->morphTo();
+    }
 }

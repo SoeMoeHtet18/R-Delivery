@@ -132,7 +132,7 @@
                             }
                             
                             } else {
-                            return "{{ __('n_a') }}"
+                            return "N/A"
                             }
                             return gateAssignedTownships.replace(/,\s*$/, "");
                         },

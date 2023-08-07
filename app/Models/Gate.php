@@ -15,7 +15,7 @@ class Gate extends Model
 
     public function townships()
     {
-        return $this->belongsToMany(Township::class, 'gate_township','gate_id','township_id')->withTrashed();
+        return $this->morphMany(Township::class, 'associable');
     }
 
     public function city()

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Gate;
+use App\Models\Township;
 
 class GateService
 {
@@ -13,7 +14,12 @@ class GateService
         $gate->address = $data['address'];
         $gate->save();
         $township_id = $data['township_id'];
-        $gate->townships()->sync($township_id);
+        $townships = Township::whereIn('id',$township_id)->get();
+        foreach($townships as $township) {
+            $township->associable()->associate($gate);
+            $township->save();
+        }
+        
         return $gate;
     }
     
