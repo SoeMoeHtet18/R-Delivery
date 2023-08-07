@@ -402,12 +402,12 @@ class OrderController extends Controller
                     <form action="' . url("/orders/" . $row->id . "/change-status?status=cancel") . '" method="post" class="d-inline"">
                             <input type="hidden" name="_token" value="' . csrf_token() . '">
                             <input type="hidden" name="_method" value="POST">
-                            <input type="submit" value="Confirm" class="btn btn-sm btn-dark"/>
+                            <input type="submit" value="Approve" class="btn btn-sm btn-success"/>
                         </form>
-                    <form action="' . url("/orders/" . $row->id . "/change-status?status=pending") . '" method="post" class="d-inline"">
+                    <form action="' . url("/orders/" . $row->id . "/change-status?status=warehouse") . '" method="post" class="d-inline"">
                             <input type="hidden" name="_token" value="' . csrf_token() . '">
                             <input type="hidden" name="_method" value="POST">
-                            <input type="submit" value="Cancel" class="btn btn-sm btn-secondary"/>
+                            <input type="submit" value="Reject" class="btn btn-sm btn-danger"/>
                         </form>';
                     return $actionBtn;
                 })

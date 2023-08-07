@@ -97,7 +97,7 @@
                 </div>
             </div>
             <div class="footer-button float-end">
-                <a href="{{route('transactions-for-shop.index')}}" class="btn btn-light">Cancel</a>
+                <a href="{{url()->previous()}}" class="btn btn-light">Cancel</a>
                 <input type="submit" class="btn btn-success ">
             </div>
         </form>

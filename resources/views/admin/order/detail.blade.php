@@ -3,11 +3,12 @@
 @section('sub-title','Order Detail')
 @section('content')
 <style>
-    .yes-btn{
+    .yes-btn {
         background-color: green;
         color: white;
     }
-    .no-btn{
+
+    .no-btn {
         background-color: red;
         color: white;
     }
@@ -21,9 +22,21 @@
             <div>
                 <a href="{{url('/customer-collections/create?order_id='.$order->id)}}" class="btn portlet green me-3">Create Customer Collection</a>
             </div>
+            @if($order->status == 'delivering' && $order->payment_channel == 'shop_online_payment' && $order->is_payment_channel_confirm == false)
+            <div>
+                <a href="{{url('/payment-channel-confirm/'.$order->id)}}" class="btn btn-secondary me-3">Confirm Shop Payment</a>
+            </div>
+            @endif
+            @if($order->status == 'delivering' && $order->payment_channel == 'company_online_payment' && $order->is_payment_channel_confirm == false)
+            <div>
+                <a href="{{url('/payment-channel-confirm/'.$order->id)}}" class="btn btn-secondary me-3">Confirm Company Payment</a>
+            </div>
+            @endif
+            @if($order->status == 'pending' || $order->status == 'warehouse')
             <div>
                 <a href="{{url('/orders/'.$order->id.'/assign-rider')}}" class="btn btn-secondary me-3">Assign Rider</a>
             </div>
+            @endif
             <div class="create-button">
                 <a href="{{route('orders.edit' , $order->id)}}" class="btn btn-light">Edit</a>
             </div>
@@ -32,6 +45,30 @@
                 @method('DELETE')
                 <input type="submit" value="Delete" class="btn btn-danger float-end">
             </form>
+        </div>
+        <div class="d-flex justify-content-end">
+            @if($order->status == 'delay' || $order->status == 'cancel_request')
+            <form action="{{url('/orders/' . $order->id . '/change-status')}}" method="post">
+                @csrf
+                @method('POST')
+                <input type="hidden" value="success" name="status">
+                <input type="submit" value="Delivered" class="btn btn-dark me-2">
+            </form>
+            <form action="{{url('/orders/' . $order->id . '/change-status')}}" method="post" onclick="return confirm(`Are you sure you want to cancel this order?`);">
+                @csrf
+                @method('POST')
+                <input type="hidden" value="cancel" name="status">
+                <input type="submit" value="{{ $order->status == 'cancel_request' ? 'Approve Cancel' : 'Cancel' }}" class="btn btn-success">
+            </form>
+                @if($order->status == 'cancel_request')
+                <form action="{{url('/orders/' . $order->id . '/change-status')}}" method="post">
+                    @csrf
+                    @method('POST')
+                    <input type="hidden" value="warehouse" name="status">
+                    <input type="submit" value="Reject Cancel" class="btn btn-danger ms-2">
+                </form>
+                @endif
+            @endif
         </div>
         <div class="detail-infos">
             <div class="row m-0 mb-3">
@@ -87,7 +124,7 @@
                     <h4>Rider Name <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                @if($order->rider != null) {{$order->rider->name}} @else {{'N/A'}}  @endif
+                    @if($order->rider != null) {{$order->rider->name}} @else {{'N/A'}} @endif
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -119,7 +156,7 @@
                     <h4>Extra Charges <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                @if($order->delivery_fees != null) {{$order->delivery_fees}} @else {{'N/A'}}  @endif
+                    @if($order->delivery_fees != null) {{$order->delivery_fees}} @else {{'N/A'}} @endif
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -127,7 +164,7 @@
                     <h4>Remark <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                @if($order->remark != null) {{$order->remark}} @else {{'N/A'}}  @endif
+                    @if($order->remark != null) {{$order->remark}} @else {{'N/A'}} @endif
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -137,12 +174,20 @@
                 <div class="col-10">
                     @if($order->status == 'pending')
                     Pending
+                    @elseif($order->status == 'picking-up')
+                    Picking Up
+                    @elseif($order->status == 'warehouse')
+                    In Warehouse
+                    @elseif($order->status == 'delivering')
+                    Delivering
                     @elseif($order->status == 'success')
-                    Success
+                    Delivered
                     @elseif($order->status == 'delay')
                     Delay
-                    @else
+                    @elseif($order->status == 'cancel')
                     Cancel
+                    @else
+                    Cancel Request
                     @endif
                 </div>
             </div>
@@ -151,7 +196,7 @@
                     <h4>Item Type <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                @if($order->itemType != null) {{$order->itemType->name}} @else {{'N/A'}}  @endif
+                    @if($order->itemType != null) {{$order->itemType->name}} @else {{'N/A'}} @endif
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -159,7 +204,7 @@
                     <h4>Address <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    {{ $order->full_address }}
+                    @if($order->full_address != null) {{$order->full_address}} @else {{'N/A'}} @endif
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -202,9 +247,11 @@
                     <h4>Proof of Payment <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                @if($order->itemType != null)
+                    @if($order->proof_of_payment != null)
                     <img src="{{asset('/storage/customer payment/' . $order->proof_of_payment)}}" alt="" style="width: 200px;">
-                @else {{'N/A'}}  @endif
+                    @else
+                    {{' N/A '}}
+                    @endif
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -212,7 +259,7 @@
                     <h4>Payment Method <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                @if($order->payment_method == 'cash_on_delivery')
+                    @if($order->payment_method == 'cash_on_delivery')
                     Cash On Delivery
                     @elseif($order->payment_method == 'item_prepaid')
                     Item Prepaid
@@ -228,31 +275,19 @@
                 <div class="col-10">
                     @if($order->note)
                     {{ $order->note }}
-                    @else {{'N/A'}}  @endif
+                    @else {{'N/A'}} @endif
                 </div>
             </div>
-            @if($order->payment_channel != null && $order->payment_channel == 'online_payment' && $order->is_payment_channel_confirm == false)
-            <div class="row m-0 mb-3">
-                <div class="col-2">
-                    <h4>Payment Channel Confirm <b>:</b></h4>
-                </div>
-                <div class="col-10">
-                    <div class="create-button">
-                        <a href="/payment-channel-confirm/{{$order->id}}" class="btn create-btn" style="width: 100px;">Confirm</a>
-                    </div>
-                </div>
-            </div>
-            @endif
             @if($order->status == 'cancel' && $order->payable_or_not == 'pending')
             <div class="row m-0 mb-3">
                 <div class="col-2">
-                    <h4>Remaining Amount Substraction <b>:</b></h4> 
+                    <h4>Remaining Amount Substraction <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                <div class="create-button">
-                    <a href="{{route('orders.show' , $order->id)}}" class="btn btn-light yes-btn ">Yes</a>
-                    <a href="{{route('orders.show' , $order->id)}}" class="btn btn-light no-btn">No</a>
-                </div>
+                    <div class="create-button">
+                        <a href="{{url('/remaining-amount-confirm/'.$order->id)}}" class="btn btn-dark yes-btn ">Yes</a>
+                        <a href="{{url('/remaining-amount-cancel/'.$order->id)}}" class="btn btn-light no-btn">No</a>
+                    </div>
                 </div>
             </div>
             @endif
