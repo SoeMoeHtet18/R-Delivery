@@ -327,4 +327,13 @@ class OrderService
         }
         return $orders;
     }
+
+    public function cancelPaymentChannel($order_id)
+    {
+        $order = Order::where('id', $order_id)->first();
+        $order->payment_channel = null;
+        $order->is_payment_channel_confirm = false;
+        $order->save();
+        return $order;
+    }
 }
