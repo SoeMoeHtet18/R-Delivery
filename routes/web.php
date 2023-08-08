@@ -23,6 +23,7 @@ use App\Http\Controllers\RiderPaymentController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\ShopPaymentController;
 use App\Http\Controllers\ShopUserController;
+use App\Http\Controllers\ThirdPartyVendorController;
 use App\Http\Controllers\TownshipController;
 use App\Http\Controllers\TransactionsForShopController;
 use App\Models\Collection;
@@ -127,7 +128,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/rider-payments', RiderPaymentController::class);
     Route::get('/ajax-get-rider-payment-data', [RiderPaymentController::class, 'getAjaxRiderPaymentData']);
     Route::resource('/branches', BranchController::class);
-    Route::get('/third-party-vendor', [AdminController::class, 'thirdPartyVendor']);
+    // Route::get('/third-party-vendor', [AdminController::class, 'thirdPartyVendor']);
     Route::get('/ajax-get-branch-data', [BranchController::class, 'getAjaxBranchData']);
     Route::get('get-collection-group-code', [CollectionGroupController::class, 'getCollectionGroupCode']);
     Route::get('get-collection-code', [CollectionApiController::class, 'getCollectionCode']);
@@ -143,7 +144,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/orders/{id}/assign-collection-group', [OrderController::class, 'assignCollectionGroupToOrder']);
     Route::get('/branches/{id}/assign-township', [BranchController::class, 'assignTownship']);
     Route::post('/branches/{id}/assign-township', [BranchController::class, 'saveAssignTownship']);
+<<<<<<< HEAD
     Route::post('/assign-collection-group-to-orders', [OrderController::class, 'assignCollectionGroupToOrders']);
+=======
+    Route::resource('/third-party-vendor', ThirdPartyVendorController::class);
+    Route::get('/third-party-vendor/{id}/assign-township', [ThirdPartyVendorController::class, 'assignTownship']);
+    Route::post('/third-party-vendor/{id}/assign-township', [ThirdPartyVendorController::class, 'saveAssignTownship']);
+    Route::get('/ajax-get-third-party-vendor-data', [ThirdPartyVendorController::class, 'getAjaxThirdPartyVendorData']);
+>>>>>>> feature/third-party-vendor-crud
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
