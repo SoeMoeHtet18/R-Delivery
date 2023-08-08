@@ -60,6 +60,7 @@
                     <th>#</th>
                     <th>Branch Name</th>
                     <th>City Name</th>
+                    <th>Townships</th>
                     <th>Phone Number</th>
                     <th>Address</th>
                     <th>Action</th>
@@ -107,6 +108,10 @@
                         name: 'city_name'
                     },
                     {
+                        data: 'townships',
+                        name: 'townships'
+                    },
+                    {
                         data: 'phone_number',
                         name: 'phone_number'
                     },
@@ -122,7 +127,23 @@
                         searchable: false
                     },
                 ],
-                
+                columnDefs: [
+                    {
+                        "render": function(data, type, row) {
+                            var assignedTownships = '';
+                            if(row.townships.length > 0 ){
+                            for(var i = 0; i < row.townships.length; i++){
+                                assignedTownships += row.townships[i].name+', ';
+                            }
+                            
+                            } else {
+                            return "N/A"
+                            }
+                            return assignedTownships.replace(/,\s*$/, "");
+                        },
+                        "targets": 3
+                    },
+                ]
             });
             $('.search_filter').click(function() {
                 var city = $('#city').val();
