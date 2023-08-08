@@ -144,14 +144,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/orders/{id}/assign-collection-group', [OrderController::class, 'assignCollectionGroupToOrder']);
     Route::get('/branches/{id}/assign-township', [BranchController::class, 'assignTownship']);
     Route::post('/branches/{id}/assign-township', [BranchController::class, 'saveAssignTownship']);
-<<<<<<< HEAD
     Route::post('/assign-collection-group-to-orders', [OrderController::class, 'assignCollectionGroupToOrders']);
-=======
     Route::resource('/third-party-vendor', ThirdPartyVendorController::class);
     Route::get('/third-party-vendor/{id}/assign-township', [ThirdPartyVendorController::class, 'assignTownship']);
     Route::post('/third-party-vendor/{id}/assign-township', [ThirdPartyVendorController::class, 'saveAssignTownship']);
     Route::get('/ajax-get-third-party-vendor-data', [ThirdPartyVendorController::class, 'getAjaxThirdPartyVendorData']);
->>>>>>> feature/third-party-vendor-crud
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
