@@ -288,7 +288,7 @@ class OrderRepository
             ->first();
         $township = Township::where('id',$order->township_id)->first();
         $gate = $township->gates;
-        if(count($gate) > 0) {
+        if($gate != null) {
             $order['full_address'] = $gate->first()->address;
         }
 
