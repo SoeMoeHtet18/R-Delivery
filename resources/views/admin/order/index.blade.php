@@ -76,10 +76,13 @@
     }
 
     .tabs {
-        width: 150px;
-        height: 40px;
+        padding: 7px 0;
         border: 1px solid #64C5B1;
         cursor: pointer;
+    }
+
+    .flex-grow-1 {
+        flex-grow: 1;
     }
 
     .text-green {
@@ -277,7 +280,7 @@
             </div>
             <form action="{{url('/bulk-discount-update')}}" method="POST" class="action-form">
                 <!-- Modal Body -->
-                <div class="modal-body">
+                <div class="modal-body p-0 py-3">
 
                     @csrf
                     <input type="hidden" name="order_ids" id="discounted_order_ids">
@@ -285,10 +288,11 @@
                         <label class="col-sm-12">
                             <h5>Discount Type</h5>
                         </label>
-                        <div id="tabs-container" class="col-sm-12 d-flex mt-2">
-                            <div id="tab-one" class="tabs tab-one d-flex justify-content-center align-items-center text-green">Fixed Fees Discount</div>
-                            <div id="tab-two" class="tabs tab-two d-flex justify-content-center align-items-center text-green">Normal Discount</div>
+                        <div id="tabs-container" class="col-sm-12 d-flex mt-2 w-100">
+                            <div id="tab-one" class="tabs tab-one d-flex justify-content-center align-items-center text-green flex-grow-1">Fixed Fees Discount</div>
+                            <div id="tab-two" class="tabs tab-two d-flex justify-content-center align-items-center text-green flex-grow-1">Normal Discount</div>
                         </div>
+
                     </div>
                     <input type="hidden" id="bulk-discount-type" name="bulk-discount-type">
                     <div class="row m-0 mb-3">

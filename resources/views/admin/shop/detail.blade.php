@@ -36,6 +36,21 @@
     .pdf-ul li a:first-child {
         border-right: 1px solid #dfe2ea;
     }
+
+    /* Adjust border width and color for input elements */
+    input[type="date"] {
+        border: 1px solid #75827f;
+    }
+
+    :focus {
+        outline: none; /* Remove default focus outline */
+    }
+
+    /* Style focus-visible for improved accessibility */
+    :focus-visible {
+        outline: 1px solid grey; /* Customize focus outline */
+    }
+    
 </style>
 <div class="card card-container detail-card">
     <div class="card-body">
@@ -117,14 +132,16 @@
         <input type="hidden" id="current_screen" value="shop-user-display">
         <div class="d-flex justify-content-between">
             
+            <div>
                 <label for="start_date">Start Date:</label>
                 <input type="date" name="start_date" id="start_date">
 
                 <label for="end_date">End Date:</label>
                 <input type="date" name="end_date" id="end_date">
 
-                <button id='filter'>Filter</button>
-                <button id="clear">Clear</button>
+                <button id='filter' class="btn green ms-2 me-0">Filter</button>
+                <button id="clear" class="btn btn-secondary mx-0">Clear</button>
+            </div>
             
             <div class="d-inline-block">
                 <ul class="pdf-ul">
