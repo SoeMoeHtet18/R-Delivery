@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Http\Requests;
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Foundation\Http\FormRequest;
 
-class CollectionGroupCreateRequest extends FormRequest
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+
+class CustomerCollectionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,18 +23,20 @@ class CollectionGroupCreateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'rider_id'            => 'required',
-            'total_amount'        => 'required',
-            'assigned_date'       => 'required',
+            'shop_id' => 'required',
+            'customer_name' => 'required',
+            'customer_phone_number' => 'required',
+            'paid_amount' => 'required'
         ];
     }
 
     public function messages(): array
     {
         return [
-            'rider_id.required'               => 'Rider field is required',
-            'total_amount.required'               => 'Total Amount field is required',
-            'assigned_date.required'               => 'Assigned Date field is required',
+            'shop_id.required'                  => 'Shop field is required',
+            'customer_name.required'            => 'Customer Name field is required',
+            'customer_phone_number.required'    => 'Customer Phone Number field is required',
+            'paid_amount.required'              => 'Paid Amount field is required',
         ];
     }
 

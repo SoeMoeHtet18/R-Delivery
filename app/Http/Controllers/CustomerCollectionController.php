@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CustomerCollectionRequest;
 use App\Models\CustomerCollection;
 use App\Repositories\CollectionGroupRepository;
 use App\Repositories\CustomerCollectionRepository;
@@ -53,15 +54,16 @@ class CustomerCollectionController extends Controller
     {
         $order_id = $request->order_id;
         $shops = $this->shopRepository->getAllShops();
-        $shops = $shops->sortByDesc('id');
+        $shops = $shops->sortByDesc('name');
         $riders = $this->riderRepository->getAllRiders();
-        $riders = $riders->sortByDesc('id');
+        $riders = $riders->sortByDesc('name');
         
         if ($order_id) {
             $order = $this->orderRepository->getOrderByID($order_id);
             return view('admin.customer-collection.create', compact('order'));
         } else {
             $orders = $this->orderRepository->getAllOrders();
+            $orders = $orders->sortByDesc('id');
             return view('admin.customer-collection.create', compact('orders', 'shops', 'riders'));
         }
     }
@@ -69,7 +71,7 @@ class CustomerCollectionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CustomerCollectionRequest $request)
     {
         $data = $request->all();
         $this->customerCollectionService->createCustomerCollection($data);
@@ -107,7 +109,7 @@ class CustomerCollectionController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(CustomerCollectionRequest $request, $id)
     {
         $data = $request->all();
         $this->customerCollectionService->updateCustomerCollection($data, $id);

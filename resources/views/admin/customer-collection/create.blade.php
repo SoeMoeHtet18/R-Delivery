@@ -42,9 +42,6 @@
                         <option value="{{$order->id}}" @if($order->id == old('order_id')) selected @endif>{{$order->order_code}}</option>
                         @endforeach
                     </select>
-                    @if ($errors->has('order_id'))
-                    <span class="text-danger"><strong>{{ $errors->first('order_id') }}</strong></span>
-                    @endif
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -113,9 +110,6 @@
                 </label>
                 <div class="col-10">
                     <input type="text" id="items" name="items" value="{{old('items')}}" class="form-control" />
-                    @if ($errors->has('items'))
-                    <span class="text-danger"><strong>{{ $errors->first('items') }}</strong></span>
-                    @endif
                 </div>
             </div>
             <div class="row m-0 mb-3">
