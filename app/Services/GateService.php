@@ -29,8 +29,17 @@ class GateService
         $gate->address = $data['address'];
         $gate->save();
         $township_id = $data['township_id'];
-        $gate->townships()->wherePivot('gate_id','=',$gate->id)->detach();
-        $gate->townships()->sync($township_id);
+        $assignedTownships = $gate->townships;
+        if($assignedTownships != null){
+            foreach($assignedTownships as $assignedTownship) {
+                $assignedTownship = $assignedTownship->update(['associable_id'=>null,'associable_type'=>null]);
+            }
+        }
+        $townships = Township::whereIn('id',$data['township_id'])->get();
+        foreach($townships as $township) {
+            $township->associable()->associate($gate);
+            $township->save();
+        }
         return $gate;
     }
 
