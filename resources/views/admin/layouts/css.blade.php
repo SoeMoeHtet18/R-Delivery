@@ -255,4 +255,12 @@
     .datatable {
         width: 100% !important;
     }
+
+    .dropdown-menu li input {
+        color: black;
+    }
+
+    .dropdown-menu li a {
+        color: black;
+    }
 </style>

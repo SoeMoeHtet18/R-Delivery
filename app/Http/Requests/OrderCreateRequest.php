@@ -33,6 +33,7 @@ class OrderCreateRequest extends FormRequest
             'delivery_fees'         => 'required',
             'delivery_type_id'      => 'required',
             'collection_method'     => 'required',
+            'payment_method'        => 'required',
             'proof_of_payment'    => 'mimes:jpg,jpeg,webp,png,bmp'
         ];
     }
@@ -56,6 +57,7 @@ class OrderCreateRequest extends FormRequest
             'delivery_fees.required'            => 'Delivery Fees is required',
             'delivery_type_id.required'         => 'Type field is required',
             'collection_method.required'        => 'Collection Method field is required',
+            'payment_method.required'           => 'Payment Method field is required',
             'proof_of_payment.mimes'     => 'The proof of payment must be in JPG, JPEG, WEBP, PNG or BMP format'
         ];
     }

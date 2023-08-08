@@ -316,4 +316,15 @@ class OrderService
         $order->save();
         return $order;
     }
+
+    public function assignCollectionGroupToOrders($order_ids, $collection_group_id)
+    {
+        $order_ids = explode(',', $order_ids);
+        $orders = Order::whereIn('id',$order_ids)->get();
+        foreach($orders as $order) {
+            $order->collection_group_id = $collection_group_id;
+            $order->save();
+        }
+        return $orders;
+    }
 }

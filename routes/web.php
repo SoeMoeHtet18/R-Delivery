@@ -141,6 +141,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('/gates', GateController::class);
     Route::get('/ajax-get-gate-data', [GateController::class, 'getAjaxGateData']);
     Route::post('/orders/{id}/assign-collection-group', [OrderController::class, 'assignCollectionGroupToOrder']);
+    Route::post('/assign-collection-group-to-orders', [OrderController::class, 'assignCollectionGroupToOrders']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
