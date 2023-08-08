@@ -126,7 +126,7 @@ class CustomerCollectionController extends Controller
     public function getAjaxCustomerCollections(Request $request)
     {
         $request = $request->all();
-        $data = $this->customerCollectionRepository->getAllCustomerCollections($request);
+        $data = $this->customerCollectionRepository->getAllCustomerCollectionsQueryForTable($request);
 
         return DataTables::of($data)
             ->addColumn('action', function ($row) {

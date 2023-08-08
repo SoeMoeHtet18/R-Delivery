@@ -12,7 +12,7 @@ class CustomerCollectionRepository
         return $customer_collection;
     }
 
-    public function getAllCustomerCollections($data)
+    public function getAllCustomerCollectionsQueryForTable($data)
     {
         $search = $data['search'];
         $shop = $data['shop'];
@@ -130,6 +130,12 @@ class CustomerCollectionRepository
                 'orders.order_code as order_code',
                 'shops.name as shop_name',
             );
+        return $customer_collections;
+    }
+
+    public function getAllCustomerCollections()
+    {
+        $customer_collections = CustomerCollection::all();
         return $customer_collections;
     }
 }

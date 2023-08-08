@@ -54,7 +54,7 @@ class CollectionGroupService
         }
         if (isset($data['checkedCustomerCollections'])) {
             $shopCollections = $data['checkedCustomerCollections'];
-            CustomerCollection::whereIn('id', $shopCollections)->update(['collection_group_id' => $collectionGroup->id]);
+            CustomerCollection::whereIn('id', $shopCollections)->update(['collection_group_id' => $collectionGroup->id,'rider_id' => $data['rider_id']]);
         }
         return $collectionGroup;
     }

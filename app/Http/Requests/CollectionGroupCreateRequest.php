@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
-class CollectionCreateRequest extends FormRequest
+class CollectionGroupCreateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +23,8 @@ class CollectionCreateRequest extends FormRequest
     {
         return [
             'rider_id'            => 'required',
-            'total_amount'        => 'required'
+            'total_amount'        => 'required',
+            'assigned_date'       => 'required',
         ];
     }
 
@@ -32,6 +33,7 @@ class CollectionCreateRequest extends FormRequest
         return [
             'rider_id.required'               => 'Rider Id field is required',
             'total_amount.required'               => 'Total Amount field is required',
+            'assigned_date.required'               => 'Assigned Date field is required',
         ];
     }
 
