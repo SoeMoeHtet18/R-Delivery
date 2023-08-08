@@ -143,6 +143,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/orders/{id}/assign-collection-group', [OrderController::class, 'assignCollectionGroupToOrder']);
     Route::get('/branches/{id}/assign-township', [BranchController::class, 'assignTownship']);
     Route::post('/branches/{id}/assign-township', [BranchController::class, 'saveAssignTownship']);
+    Route::post('/assign-collection-group-to-orders', [OrderController::class, 'assignCollectionGroupToOrders']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

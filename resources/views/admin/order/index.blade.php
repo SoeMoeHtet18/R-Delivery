@@ -237,16 +237,17 @@
 </div>
 
 <div class="d-flex justify-content-between mb-3">
-    <div class="d-flex">
-        <div class="create-button">
-            <a class="btn create-btn" id="create-transaction">Add Transaction</a>
-        </div>
-        <div class="create-button">
-            <a class="btn create-btn" id="bulk-discount-update">Bulk Discount Update</a>
-        </div>
-        <div class="create-button">
-            <a class="btn create-btn" id="qr-code-generate">Print QrCode</a>
-        </div>
+    <div class="dropdown">
+        <a class="btn green dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Actions
+        </a>
+
+        <ul class="dropdown-menu">
+            <li><a class="dropdown-item" id="create-transaction">Add Transaction</a></li>
+            <li><a class="dropdown-item" id="bulk-discount-update">Bulk Discount Update</a></li>
+            <li><a class="dropdown-item" id="qr-code-generate">Print QrCode</a></li>
+            <li><a class="dropdown-item" id="assign-pick-up-gp">Assign To Pick Up Group</a></li>
+        </ul>
     </div>
     <div>
         <div class="create-button d-inline-block">
@@ -310,15 +311,50 @@
         </div>
     </div>
 </div>
-<div id="popupQrCard" class="modal">
+<div id="collectionPopupCard" class="modal mt-5">
     <div class="modal-dialog">
         <div class="modal-content">
             <!-- Modal Header -->
+            <div class="modal-header text-center">
+                <h5 class="modal-title text-center text-bold">Assign To Pick Up Group</h5>
+            </div>
+            <form action="{{url('/assign-collection-group-to-orders')}}" method="post">
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <input type="hidden" name="collection_order_ids" id="collection-order-ids">
+                    @csrf
+                    @method('POST')
+                    <div class="row m-0 mb-3">
+                        <div>
+                            <h4>Pick Up Group</h4>
+                        </div>
+                        <div>
+                            <select name="collection_group_id" id="collection_group_id" class="form-control">
+                                <option value="" selected disabled>Select Pick Up Group</option>
+                                @foreach($collection_groups as $collection_group)
+                                <option value="{{$collection_group->id}}">{{$collection_group->collection_group_code}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="collection-pop-up-close-btn" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <input type="submit" id="assign-collection-group-btn" class="btn green" data-dismiss="modal" value="Assign">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- <div id="popupQrCard" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+           
             <div class="modal-header">
                 <h5 class="modal-title text-center">Print Qr</h5>
             </div>
             <form action="">
-                <!-- Modal Body -->
+                
                 <div class="modal-body">
 
                     @csrf
@@ -348,8 +384,7 @@
             </form>
         </div>
     </div>
-</div>
-</div>
+</div> -->
 <ul class="nav nav-tabs mb-4">
     <li class="nav-item">
         <a href="#all-orders-display" id="all-orders-tab" class="nav-link active" data-toggle="tab">All Orders</a>
@@ -510,6 +545,39 @@
             $('#rider').select2();
             $('#shop').select2();
             $('#pay_later').select2();
+        });
+
+        $('#assign-pick-up-gp').click(function() {
+            var process_data = [];
+            var order_ids = [];
+
+            $('.order-payment:checked').each(function() {
+                var push_data = {
+                    id: $(this).data('id'),
+                    collection_group_id: $(this).data('collection_group_id'),
+                    payment_flag: $(this).data('payment_flag')
+                };
+                process_data.push(push_data);
+                order_ids.push(push_data.id);
+            });
+
+            if (process_data.length === 0) {
+                showErrorToast("Please select at least one order.");
+            } else if (process_data.some(order => order.collection_group_id != null)) {
+                showErrorToast("Please select only orders that are not assigned.");
+            } else if (process_data.some(order => order.payment_flag === 1)) {
+                showErrorToast("Please select only orders that are unpaid.");
+            } else {
+                var popupCard = document.getElementById('collectionPopupCard');
+                popupCard.style.display = 'block';
+                $('#collection-order-ids').val(order_ids);
+                $('#collection_group_id').select2();
+            }
+        });
+
+        $('#pop-up-close-btn').click(function() {
+            var popupCard = document.getElementById('collectionPopupCard');
+            popupCard.style.display = 'none';
         });
 
         $('#bulk-discount-update').click(function() {

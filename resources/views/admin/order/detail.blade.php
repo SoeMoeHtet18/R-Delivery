@@ -12,9 +12,14 @@
         background-color: red;
         color: white;
     }
-    
-    .dropdown-menu li a {
-        color: black;
+
+    .dropdown > .dropdown-menu:before {
+        border-bottom: none;
+        border-left: none;
+    }
+
+    .dropdown > .dropdown-menu:after {
+        border-bottom: none;
     }
 </style>
 <div class="card card-container detail-card">
@@ -27,7 +32,7 @@
                 <button class="btn btn-secondary green dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Actions
                 </button>
-                <ul class="dropdown-menu">
+                <ul class="dropdown-menu ">
                     @if($order->status == 'pending')
                     <li>
                         <a class="dropdown-item" id="assign-collection-group">Assign To Pick Up Group</a>
@@ -53,7 +58,7 @@
                     @endif
                     @if($order->status == 'warehouse' || $order->status == 'success')
                     <li>
-                        <a href="{{url('/customer-collections/create?order_id='.$order->id)}}" class="btn dropdown-item green me-3">Create Customer Collection</a>
+                        <a href="{{url('/customer-collections/create?order_id='.$order->id)}}" class="dropdown-item">Create Customer Collection</a>
                     </li>
                     @endif
                     @if($order->status == 'delivering' && $order->payment_channel == 'shop_online_payment' && $order->is_payment_channel_confirm == false)

@@ -66,8 +66,10 @@ class OrderController extends Controller
         $townships = $this->townshipRepository->getAllTownships();
         $riders = $this->riderRepository->getAllRiders();
         $shops  = $this->shopRepository->getAllShops();
+        $collection_groups = $this->collectionGroupRepository->getAllCollectionGroups();
+        $collection_groups = $collection_groups->sortByDesc('id');
 
-        return view('admin.order.index', compact('cities', 'townships', 'riders', 'shops'));
+        return view('admin.order.index', compact('cities', 'townships', 'riders', 'shops', 'collection_groups'));
     }
 
     /**
@@ -156,7 +158,7 @@ class OrderController extends Controller
     public function destroy(string $id)
     {
         $this->orderService->deleteOrderByID($id);
-        return redirect()->route('orders.index');
+        return redirect()->back();
     }
 
     public function getPendingOrdersTableByRiderID(Request $request, $id)
@@ -287,7 +289,8 @@ class OrderController extends Controller
                 data-id="' . $row->id . '" data-shop_id="' . $row->shop_id . '"
                 data-total_amount="' . $row->total_amount . '" 
                 data-markup_delivery_fees="' . $row->markup_delivery_fees . '" 
-                data-payment_flag="' . $row->payment_flag . '">';
+                data-payment_flag="' . $row->payment_flag . '"
+                data-collection-group-id="' . $row->collection_group_id . '">';
                 return $checkbox;
             })
             ->rawColumns(['action', 'order_code', 'first_column'])
@@ -686,6 +689,14 @@ class OrderController extends Controller
     {
         $collection_group_id = $request->collection_group_id;
         $this->orderService->assignCollectionGroupToOrder($id, $collection_group_id);
+        return redirect()->back();
+    }
+
+    public function assignCollectionGroupToOrders(Request $request)
+    {
+        $collection_group_id = $request->collection_group_id;
+        $order_ids = $request->collection_order_ids;
+        $this->orderService->assignCollectionGroupToOrders($order_ids, $collection_group_id);
         return redirect()->back();
     }
 }

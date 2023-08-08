@@ -236,9 +236,9 @@
                 <div class="col-10">
                     <select name="payment_method" id="payment_method" class="form-control">
                         <option value="" selected disabled>Select the Payment Method for This Order</option>
-                        <option value="cash-on-delivery" @if($order->payment_method == "cash_on_delivery") {{'selected'}} @endif>Cash On Delivery</option>
-                        <option value="item-prepaid" @if($order->payment_method == "item_prepaid") {{'selected'}} @endif>Item Prepaid</option>
-                        <option value="all-prepaid" @if($order->payment_method == "all_prepaid") {{'selected'}} @endif>All Prepaid</option>
+                        <option value="cash_on_delivery" @if($order->payment_method == "cash_on_delivery") {{'selected'}} @endif>Cash On Delivery</option>
+                        <option value="item_prepaid" @if($order->payment_method == "item_prepaid") {{'selected'}} @endif>Item Prepaid</option>
+                        <option value="all_prepaid" @if($order->payment_method == "all_prepaid") {{'selected'}} @endif>All Prepaid</option>
                     </select>
                 </div>
             </div>
