@@ -50,6 +50,7 @@
             <thead>
                 <tr>
                     <th>#</th>
+                    <th>Pick Up Group Code</th>
                     <th>Total Amount</th>
                     <th>Rider Name</th>
                     <th>Assigned Date</th>
@@ -87,6 +88,10 @@
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'id'
+                    },
+                    {
+                        data: 'collection_group_code',
+                        name: 'pick_up_group_code'
                     },
                     {
                         data: 'total_amount',

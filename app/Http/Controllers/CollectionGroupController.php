@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Helper;
-use App\Http\Requests\CollectionCreateRequest;
+use App\Http\Requests\CollectionGroupCreateRequest;
 use App\Repositories\CollectionGroupRepository;
 use App\Repositories\CollectionRepository;
 use App\Repositories\CustomerCollectionRepository;
@@ -61,20 +61,22 @@ class CollectionGroupController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CollectionCreateRequest $request)
+    public function store(CollectionGroupCreateRequest $request)
     {
         $data = $request->all();
         $rider_id = $data['rider_id'];
+        $checkedShopCollections = json_decode($request->input('checked_shop_collections'));
+        $checkedCustomerCollections = json_decode($request->input('checked_customer_collections'));
+        $data['checkedShopCollections'] = $checkedShopCollections;
+        $data['checkedCustomerCollections'] = $checkedCustomerCollections;
+        
         $collection_group = $this->collectionGroupService->saveCollectionGroup($data);
 
         $data_for_collections = json_decode($data['create-collections-data'], true);
         foreach($data_for_collections as $data_for_collection) {
             $this->collectionService->saveCollectionFromGroup($data_for_collection, $rider_id, $collection_group->id);
         } 
-        $checkedShopCollections = json_decode($request->input('checked_shop_collections'));
-        $checkedCustomerCollections = json_decode($request->input('checked_customer_collections'));
-        $data['checkedShopCollections'] = $checkedShopCollections;
-        $data['checkedCustomerCollections'] = $checkedCustomerCollections;
+       
         // $this->collectionGroupService->saveCollectionGroupByAdmin($data);
         return redirect()->route('collection-groups.index');
     }
@@ -100,12 +102,15 @@ class CollectionGroupController extends Controller
         $riders = $riders->sortByDesc('id');
         $collections = $this->collectionRepository->getAllCollections();
         $collections = $collections->sortByDesc('id');
-        $collectionGroupIds = $this->collectionRepository->getAllCollectionByCollectionGroupId($id);
-
+        $collection_ids_by_group = $this->collectionRepository->getAllCollectionByCollectionGroupId($id);
+        $customer_collections = $this->customerCollectionRepository->getAllCustomerCollections();
+        $customer_collections = $customer_collections->sortByDesc('id');
+        
         $date = new Carbon($collectionGroup->assigned_date);
         $assigndate = $date->format('Y-m-d');
 
-        return view('admin.collection-groups.edit', compact('riders', 'collectionGroup', 'collections', 'collectionGroupIds', 'assigndate'));
+        return view('admin.collection-groups.edit', compact('riders', 'collectionGroup', 'collections', 
+            'collection_ids_by_group', 'assigndate', 'customer_collections'));
     }
 
     /**

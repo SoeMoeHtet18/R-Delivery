@@ -353,17 +353,18 @@ class OrderController extends Controller
     {
         $shop_id = $request->input('shop_id'); // Retrieve shop_id from the request
         $shops = $this->shopRepository->getAllShops();
-        $shops = $shops->sortByDesc('id');
+        $shops = $shops->sortByDesc('name');
         $riders = $this->riderRepository->getAllRiders();
-        $riders = $riders->sortByDesc('id');
+        $riders = $riders->sortByDesc('name');
         $cities = $this->cityRepository->getAllCities();
-        $cities = $cities->sortByDesc('id');
+        $cities = $cities->sortByDesc('name');
         $townships = $this->townshipRepository->getAllTownships();
-        $townships = $townships->sortByDesc('id');
+        $townships = $townships->sortByDesc('name');
         $item_types = $this->itemTypeRepository->getAllItemTypes();
-        $item_types = $item_types->sortByDesc('id');
+        $item_types = $item_types->sortByDesc('name');
+        $delivery_types = $this->deliveryTypeRepository->getAllDeliveryTypes();
 
-        return view('admin.order.create', compact('shop_id', 'shops', 'riders', 'cities', 'item_types', 'townships'));
+        return view('admin.order.create', compact('shop_id', 'shops', 'riders', 'cities', 'item_types', 'townships', 'delivery_types'));
     }
 
     public function showTracking(Request $request)
