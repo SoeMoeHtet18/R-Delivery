@@ -25,6 +25,19 @@
     .footer-button {
         display: block;
     }
+
+    #add-card-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 24px;
+        border: none;
+        cursor: pointer;
+    }
 </style>
 <div class="card card-container action-form-card">
     <div class="card-body">
@@ -46,7 +59,7 @@
                     <h4>Total Amount <b>:</b></h4>
                 </label>
                 <div class="col-10">
-                    <input type="text" id="total_amount" name="total_amount" class="form-control" />
+                    <input type="text" id="total_amount" name="total_amount" class="form-control" value="{{old('total_amount')}}"/>
                     @if ($errors->has('total_amount'))
                     <span class="text-danger"><strong>{{ $errors->first('total_amount') }}</strong></span>
                     @endif
@@ -75,7 +88,13 @@
                     <h4>Assigned Date <b>:</b></h4>
                 </label>
                 <div class="col-10">
-                    <input type="date" id="assigned_date" name="assigned_date" class="form-control" />
+                    <?php
+                        // Get tomorrow's date
+                        $today = date('Y-m-d');
+                        // Set the default value to tomorrow's date
+                        $defaultDate = old('schedule_date') ?? $today;
+                        ?>
+                        <input type="date" id="assigned_date" name="assigned_date" value="<?php echo $defaultDate; ?>" class="form-control" />
                     @if ($errors->has('assigned_date'))
                     <span class="text-danger"><strong>{{ $errors->first('assigned_date') }}</strong></span>
                     @endif
@@ -97,8 +116,12 @@
                             <select name="shop_id[]" id="shop_id" class="form-control shop-dropdown">
                                 <option value="" selected disabled>Select Shop</option>
                                 @foreach($shops as $shop)
-                                <option value="{{$shop->id}}">{{$shop->name}}</option>
+                                <option value="{{$shop->id}}" @if($shop->id == old('shop_id')) selected
+                                @endif>{{$shop->name}}</option>
                                 @endforeach
+                                @if ($errors->has('shop_id'))
+                                <span class="text-danger"><strong>{{ $errors->first('shop_id') }}</strong></span>
+                                @endif
                             </select>
                         </div>
                     </div>
@@ -108,6 +131,9 @@
                         </label>
                         <div>
                             <input type="text" name="total_amount[]" id="total_amount" class="form-control">
+                            @if ($errors->has('total_amount'))
+                            <span class="text-danger"><strong>{{ $errors->first('total_amount') }}</strong></span>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -203,8 +229,12 @@
                             <select name="shop_id[]" id="shop_id_${newIndex}" class="form-control shop-dropdown">
                                 <option value="" selected disabled>Select Shop</option>
                                 @foreach($shops as $shop)
-                                <option value="{{$shop->id}}">{{$shop->name}}</option>
+                                <option value="{{$shop->id}}" @if($shop->id == old('shop_id')) selected
+                                @endif>{{$shop->name}}</option>
                                 @endforeach
+                                @if ($errors->has('shop_id'))
+                                <span class="text-danger"><strong>{{ $errors->first('shop_id') }}</strong></span>
+                                @endif
                             </select>
                         </div>
                     </div>
@@ -214,6 +244,9 @@
                         </label>
                         <div>
                             <input type="text" name="total_amount[]" id="total_amount_${newIndex}" class="form-control">
+                            @if ($errors->has('total_amount'))
+                            <span class="text-danger"><strong>{{ $errors->first('total_amount') }}</strong></span>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -223,7 +256,7 @@
                             <h4>Description</h4>
                         </label>
                         <div>
-                            <textarea name="description" id="description_${newIndex}" class="form-control" style="height: 200px;"></textarea>
+                            <textarea name="description[]" id="description_${newIndex}" class="form-control" style="height: 200px;"></textarea>
                         </div>
                     </div>
                 </div>
@@ -264,13 +297,14 @@
             shop_id_to_check = $(`#collections-for-${collectionIndexForCheck} #check-shop-id`).val();
 
             if (shop_id_to_check != selectedValue) {
-                $(`#collections-for-${collectionIndexForCheck}`).remove();
+                $(`#collections-for-${collectionIndexForCheck}`).empty();
             }
+            
             data = {
                 shop_id: selectedValue,
                 new_index: index
             };
-            console.log(data);
+            
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -282,7 +316,14 @@
                 data: data,
                 success: function(datas) {
                     if (datas) {
-                        $("#assign-container").append(datas);
+                        if (shop_id_to_check == null) {
+                            $("#assign-container").append(datas);
+                        }                    
+                        else if (shop_id_to_check != selectedValue) {
+                            $(`#collections-for-${collectionIndexForCheck}`).append(datas);
+                        } else {
+                            $("#assign-container").append(datas);
+                        }
                     } else {
                         $("#assign-container").html("");
                     }
@@ -317,15 +358,16 @@
         $('.shop-card-container').each(function(index, card) {
             var shop_id = $(card).find('select.shop-dropdown').val();
             var total_amount = $(card).find('input[name="total_amount[]"]').val();
-            var description = $(card).find('textarea[name="description"]').val();
+            var description = $(card).find('textarea[name="description[]"]').val();
 
-            var cardData = {
-                shop_id: shop_id,
-                total_amount: total_amount,
-                description: description
-            };
-
-            assignContainerData.push(cardData);
+            if(shop_id) {
+                var cardData = {
+                    shop_id: shop_id,
+                    total_amount: total_amount,
+                    description: description
+                };
+                assignContainerData.push(cardData);
+            }
         });
 
         return assignContainerData;

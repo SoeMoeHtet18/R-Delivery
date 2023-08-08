@@ -5,7 +5,7 @@
 <div class="card card-container action-form-card">
     <div class="card-body">
         <h2 class="ps-1 card-header-title">
-            <strong>Update Collection Group</strong>
+            <strong>Update Pick Up Group</strong>
         </h2>
         <form action="{{route('collection-groups.update', $collectionGroup->id)}}" method="POST" class="action-form" enctype="multipart/form-data">
             @csrf
@@ -32,25 +32,39 @@
                 </div>
             </div>
             <div class="row m-0 mb-3">
+                <label for="assigned_date" class="col-2">
+                    <h4>Assigned Date <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <input type="date" id="assigned_date" name="assigned_date" value="{{$assigndate}}" class="form-control" />
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
                 <label for="collection_id" class="col-2">
-                    <h4>Collection <b>:</b></h4>
+                    <h4>Pick Ups <b>:</b></h4>
                 </label>
                 <div class="col-10">
                     <select name="collection_id[]" id="collection_id" class="form-control" multiple>
                         @foreach($collections as $collection)
-                        <option value="{{$collection->id}}" @foreach($collectionGroupIds as $collectionGroupId)
-                            @if($collectionGroupId->id == $collection->id) {{'selected'}} @endif
+                        <option value="{{$collection->id}}" @foreach($collection_ids_by_group as $collection_id_by_group)
+                            @if($collection_id_by_group->id == $collection->id) {{'selected'}} @endif
                             @endforeach>{{$collection->collection_code}}</option>
                         @endforeach
                     </select>
                 </div>
             </div>
             <div class="row m-0 mb-3">
-                <label for="assigned_date" class="col-2">
-                    <h4>Assigned Date <b>:</b></h4>
+                <label for="collection_id" class="col-2">
+                    <h4>Customer Exchange <b>:</b></h4>
                 </label>
                 <div class="col-10">
-                    <input type="date" id="assigned_date" name="assigned_date" value="{{$assigndate}}" class="form-control" />
+                    <select name="customer_collection_id[]" id="customer_collection_id" class="form-control" multiple>
+                        @foreach($customer_collections as $customer_collection)
+                        <option value="{{$customer_collection->id}}" 
+                            @if($customer_collection->collection_group_id == $collectionGroup->id) {{'selected'}} @endif
+                            >{{$customer_collection->customer_collection_code}}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
             <div class="footer-button float-end">
@@ -67,9 +81,14 @@
     $(function() {
         $('#rider_id').select2();
         $('#collection_id').select2({
-            placeholder: 'Select Collections',
+            placeholder: 'Select Pick Up',
             allowClear: true
         });
+        $('#customer_collection_id').select2({
+            placeholder: 'Select',
+            allowClear: true
+        });
+
     });
 </script>
 @endsection
