@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Gate;
 use App\Models\Order;
 use App\Models\Township;
 use Carbon\Carbon;
@@ -186,7 +187,7 @@ class OrderRepository
     {
         $today = Carbon::today();
         $orders = Order::where('orders.rider_id', $rider_id)
-            ->whereIn('orders.status', ['pending', 'delay'])
+            // ->whereIn('orders.status', ['pending', 'delay'])
             ->whereDate('orders.schedule_date', $today)
             ->leftJoin('shops', 'shops.id', 'orders.shop_id')
             ->select('orders.*', 'shops.name as shop_name')
@@ -201,7 +202,7 @@ class OrderRepository
         $limit = 10; 
         $offset = ($page - 1) * $limit; 
         $orders = Order::where('orders.rider_id', $rider_id)
-            ->whereIn('orders.status', ['pending', 'delay'])
+            ->whereIn('orders.status', ['pending', 'delay', 'picking-up', 'warehouse'])
             ->leftJoin('shops', 'shops.id', 'orders.shop_id')
             ->select('orders.*', 'shops.name as shop_name');
             
@@ -241,13 +242,12 @@ class OrderRepository
 
         $one_day = Order::where('rider_id', $rider_id)
             ->whereDate('schedule_date', $today)
-            ->whereIn('orders.status', ['pending', 'delay'])
             ->select('status')
             ->count();
 
         $upcoming = Order::where('rider_id', $rider_id)
             ->whereDate('schedule_date', '>', $today)
-            ->whereIn('orders.status', ['pending', 'delay'])
+            ->whereIn('orders.status', ['pending', 'delay', 'picking-up', 'warehouse'])
             ->select('status')
             ->count();
 
@@ -287,9 +287,10 @@ class OrderRepository
             ->select('orders.*', 'shops.name as shop_name', 'cities.name as city_name', 'townships.name as township_name', 'item_types.name as item_type_name', 'delivery_types.name as delivery_type_name')
             ->first();
         $township = Township::where('id',$order->township_id)->first();
-        $gate = $township->gates;
-        if($gate != null) {
-            $order['full_address'] = $gate->first()->address;
+        if($township->associable_type == Gate::class) {
+            $gate = $township->associable;
+            // dd($gate);
+            $order['full_address'] = $gate->address;
         }
 
         return $order;
