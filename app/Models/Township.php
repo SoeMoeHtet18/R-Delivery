@@ -10,7 +10,7 @@ class Township extends Model
 {
     use HasFactory, SoftDeletes;
     protected $fillable = [
-        'name', 'city_id'
+        'name', 'city_id', 'associable_id', 'associable_type', 'delivery_fees'
     ];
 
     public function city() {
@@ -20,11 +20,6 @@ class Township extends Model
     public function riders()
     {
         return $this->belongsToMany(Rider::class, 'rider_township', 'township_id', 'rider_id');
-    }
-    
-    public function gates()
-    {
-        return $this->belongsToMany(Gate::class, 'gate_township', 'township_id', 'gate_id');
     }
 
     public function associable()

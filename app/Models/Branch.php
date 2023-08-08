@@ -16,4 +16,9 @@ class Branch extends Model
     public function city() {
         return $this->belongsTo(City::class);
     }
+
+    public function townships()
+    {
+        return $this->morphMany(Township::class, 'associable');
+    }
 }

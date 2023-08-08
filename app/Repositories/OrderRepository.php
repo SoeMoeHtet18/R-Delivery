@@ -31,6 +31,7 @@ class OrderRepository
             ->leftJoin('item_types', 'item_types.id', 'orders.item_type_id')
             ->leftJoin('delivery_types', 'delivery_types.id', 'orders.delivery_type_id')
             ->leftJoin('branches', 'branches.id', 'orders.branch_id')
+            ->leftJoin('collection_groups', 'collection_groups.id', 'orders.collection_group_id')
             ->where('orders.branch_id', $branch_id)
             ->select('orders.*', 'townships.name as township_name', 
                 'shops.name as shop_name', 
@@ -39,7 +40,9 @@ class OrderRepository
                 'cities.name as city_name', 
                 'item_types.name as item_type_name',
                 'delivery_types.name as delivery_type_name',
-                'branches.name as branch_name'
+                'branches.name as branch_name',
+                'collection_groups.collection_group_code as collection_group_code',
+                'collection_groups.assigned_date as pick_up_date',
             );
         return $query;
     }

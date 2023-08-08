@@ -215,6 +215,18 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="filter-box">
+            <div class="mb-3 p-3 col-4">
+                <label for="pick_up_date">
+                    <strong>Pick Up Date</strong>
+                </label>
+                <div class="col-10">
+                    <input type="date" id="pick_up_date" name="pick_up_date" class="form-control" />
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="d-flex flex-row-reverse pb-3">
         <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 btncenter margin-btn">
             <button class="btn btn-primary search_filter">Filter</button>
@@ -385,6 +397,7 @@
                         <th>Collection Method</th>
                         <th>Last Updated By</th>
                         <th>Branch</th>
+                        <th>Pick Up Group Code</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -676,9 +689,9 @@
             $(this).tab('show');
         });
 
-        get_ajax_dynamic_data(search = '', city = '', rider = '', shop = '', status = '', township = '', pay_later = '');
+        get_ajax_dynamic_data(search = '', city = '', rider = '', shop = '', status = '', township = '', pay_later = '', pick_up_date = '');
 
-        function get_ajax_dynamic_data(search, city, rider, shop, status, township, pay_later) {
+        function get_ajax_dynamic_data(search, city, rider, shop, status, township, pay_later, pick_up_date) {
             var visible_column = [];
             var table = $('#all-orders-datatable').DataTable({
                 processing: true,
@@ -711,6 +724,7 @@
                         r.status = status;
                         r.township = township;
                         r.pay_later = pay_later;
+                        r.pick_up_date = pick_up_date;
                     }
                 },
                 columns: [{
@@ -804,6 +818,10 @@
                         name: 'branch'
                     },
                     {
+                        data: 'collection_group_code',
+                        name: 'pick_up_group_code'
+                    },
+                    {
                         data: 'action',
                         name: 'action',
                         orderable: false,
@@ -888,10 +906,11 @@
                 var city = $('#city').val();
                 var shop = $('#shop').val();
                 var pay_later = $('#pay_later').val();
-                console.log($('#pay_later').val());
+                var pick_up_date = $('#pick_up_date').val();
+                console.log(pick_up_date);
 
                 table.destroy();
-                get_ajax_dynamic_data(search, city, rider, shop, status, township, pay_later);
+                get_ajax_dynamic_data(search, city, rider, shop, status, township, pay_later, pick_up_date);
             });
             $("#reset").click(function() {
                 $("#status").val("").trigger("change");
@@ -901,6 +920,7 @@
                 $("#city").val("").trigger("change");
                 $("#shop").val("").trigger("change");
                 $("#pay_later").val("").trigger("change");
+                $("#pick_up_date").val("").trigger("change");
                 var status = $("#status").val();
                 var township = $('#township').val();
                 var search = $('#search').val();
@@ -908,8 +928,9 @@
                 var city = $('#city').val();
                 var shop = $('#shop').val();
                 var pay_later = $('#pay_later').val();
+                var pick_up_date = $('#pick_up_date').val();
                 table.destroy();
-                get_ajax_dynamic_data(search, city, rider, shop, status, township, pay_later);
+                get_ajax_dynamic_data(search, city, rider, shop, status, township, pay_later, pick_up_date);
             });
 
             $('#search').keypress(function(e) {
@@ -918,7 +939,7 @@
                     e.preventDefault();
                     var search = $('#search').val();
                     table.destroy();
-                    get_ajax_dynamic_data(search, city = '', rider = '', shop = '', status = '', township = '');
+                    get_ajax_dynamic_data(search, city = '', rider = '', shop = '', status = '', township = '', pay_later = '', pick_up_date = '');
                 }
             });
         };

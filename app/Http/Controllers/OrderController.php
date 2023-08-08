@@ -239,6 +239,7 @@ class OrderController extends Controller
         $rider = $request->rider;
         $shop  = $request->shop;
         $pay_later  = $request->pay_later;
+        $pick_up_date = $request->pick_up_date;
         $data = $this->orderRepository->getAllOrdersQuery();
 
         if ($status != null) {
@@ -261,6 +262,9 @@ class OrderController extends Controller
         }
         if ($pay_later != null) {
             $data = $data->where('orders.pay_later', $pay_later);
+        }
+        if ($pick_up_date != null) {
+            $data = $data->whereDate('collection_groups.assigned_date', $pick_up_date);
         }
         return DataTables::of($data)
             ->addIndexColumn()

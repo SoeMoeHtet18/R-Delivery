@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TownshipAssignRequest;
 use App\Models\Branch;
+use App\Models\Township;
 use App\Repositories\BranchRepository;
 use App\Repositories\CityRepository;
 use App\Services\BranchService;
@@ -57,7 +59,8 @@ class BranchController extends Controller
     public function show($id)
     {
         $branch = $this->branchRepository->show($id);
-        return view('admin.branches.detail', compact('branch'));
+        $townships = $branch->townships;
+        return view('admin.branches.detail', compact('branch', 'townships'));
     }
 
     /**
@@ -116,5 +119,38 @@ class BranchController extends Controller
             ->rawColumns(['action'])
             ->orderColumn('id', '-branches.id')
             ->make(true);
+    }
+
+    public function assignTownship($id)
+    {
+        $branch = $this->branchRepository->show($id);
+        $townships = Township::where(['associable_id' => null, 'associable_type' => null])->get();
+        $assignedTownships = $branch->townships;
+        $townships = $townships->merge($assignedTownships)->unique();
+        $assignedTownshipID = [];
+        foreach($assignedTownships as $assignedTownship) {
+            $assignedTownshipID[] = $assignedTownship->id;
+        }
+        // $riders = $township->riders;
+        return view('admin.branches.assign_township', compact('branch', 'townships', 'assignedTownshipID'));
+    }
+    
+    public function saveAssignTownship(TownshipAssignRequest $request,$id)
+    {
+        $branch = $this->branchRepository->show($id);
+        $data = $request->all();
+        $assignedTownships = $branch->townships;
+        if(count($assignedTownships) > 0){
+            foreach($assignedTownships as $assignedTownship) {
+                $assignedTownship = $assignedTownship->update(['associable_id'=>null,'associable_type'=>null]);
+            }
+        }
+        $townships = Township::whereIn('id',$data['township_id'])->get();
+        foreach($townships as $township) {
+            $township->associable()->associate($branch);
+            $township->save();
+        }
+        // $riders = $township->riders;
+        return redirect()->route('branches.show', $id);
     }
 }

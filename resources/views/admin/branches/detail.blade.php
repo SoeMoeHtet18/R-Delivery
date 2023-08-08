@@ -8,6 +8,7 @@
             <strong>Branch Detail</strong>
         </h2>
         <div class="card-toolbar">
+            <a href="{{url('/branches/'.$branch->id.'/assign-township')}}" class="btn btn-secondary me-3">Assign Township</a>
             <div class="create-button">
                 <a href="{{route('branches.edit' , $branch->id)}}" class="btn btn-light">Edit</a>
             </div>
@@ -48,6 +49,25 @@
                 </div>
                 <div class="col-10">
                     {{ $branch->address}}
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <div class="col-2">
+                    <h4>Township <b>:</b></h4>
+                </div>
+                <div class="col-10">
+                    @if(count($townships) > 0)
+                        @php
+                            $branchAssignedTownships = [];
+                            foreach($townships as $township){
+                                $branchAssignedTownships[] = $township->name;
+                            }
+                            $townshipName = implode(', ',$branchAssignedTownships);
+                        @endphp
+                        {{$townshipName}}
+                    @else
+                        N/A
+                    @endif
                 </div>
             </div>
             
