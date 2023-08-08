@@ -55,17 +55,18 @@
 
         .content {
             font-weight: bold;
-            font-size: 1em;
+            font-size: 2em;
         }
         .phone_number {
-            font-weight: normal;
+            font-weight: bold;
             font-size: 2em;
         }
 
 
         .font {
             font-family: Arial, sans-serif;
-            font-size: 2em;
+            font-size: 2.3em;
+            font-weight: bold;
         }
         .mr-3{
             margin-right:30px;
@@ -101,8 +102,6 @@
                         </table>
                     </td>
                     <td class="maincontent">
-                        
-                        
                         <table>
                             <tr>
                                 <td><span class="font"> {{ $order->shop->name }}</span></td>
@@ -124,9 +123,6 @@
                             <tr>
                                 <td><span class="font"> {{ $order->customer_name }} ({{ $order->customer_phone_number }})</span></td>
                             </tr>
-                            
-                            
-                            
                             
                             <tr>
                                 <td><span class="font"> {{ $order->remark }}</span></td>
