@@ -124,7 +124,7 @@
                 </div>
                 <div class="col-10">
                     @if($customer_collection->item_image != null)
-                    <img src="{{asset('/storage/customer payment/' . $order->proof_of_payment)}}" alt="" style="width: 200px;">
+                    <img src="{{asset('/storage/customer_collection/' . $customer_collection->item_image)}}" alt="" style="width: 200px;">
                     @else N/A
                     @endif
                 </div>
