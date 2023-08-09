@@ -15,12 +15,23 @@
                     <h4>Rider Name <b>:</b></h4>
                 </label>
                 <div class="col-10">
-                    <select name="rider_id" id="rider_id" class="form-control">
+                    <select name="rider_id" id="rider_id" class="form-control" disabled>
                         <option value="" selected disabled>Select the Shop for This Payment</option>
                         @foreach ( $riders as $rider)
                         <option value="{{$rider->id}}" @if($rider_payment->rider_id == $rider->id) {{'selected'}} @endif>{{$rider->name}}</option>
                         @endforeach
                     </select>
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <label for="total_routine" class="col-2">
+                    <h4>Total Routine <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <input type="text" id="total_routine" name="total_routine" value="{{$rider_payment->total_routine}}" class="form-control" readonly/>
+                    @if ($errors->has('total_routine'))
+                    <span class="text-danger"><strong>{{ $errors->first('total_routine') }}</strong></span>
+                    @endif
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -34,17 +45,7 @@
                     @endif
                 </div>
             </div>
-            <div class="row m-0 mb-3">
-                <label for="total_routine" class="col-2">
-                    <h4>Total Routine <b>:</b></h4>
-                </label>
-                <div class="col-10">
-                    <input type="text" id="total_routine" name="total_routine" value="{{$rider_payment->total_routine}}" class="form-control" />
-                    @if ($errors->has('total_routine'))
-                    <span class="text-danger"><strong>{{ $errors->first('total_routine') }}</strong></span>
-                    @endif
-                </div>
-            </div>
+            
             
             
             <div class="footer-button float-end">
