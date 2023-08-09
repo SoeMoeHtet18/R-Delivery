@@ -422,4 +422,13 @@ class OrderRepository
             ->with('township','shop','rider');
         return $query;
     }
+
+    public function getAllPendingOrdersByRider($id)
+    {
+        $orders = Order::where('rider_id',$id)
+            ->where('status','pending')
+            ->with('township','shop','rider')
+            ->get();
+        return $orders;
+    }
 }

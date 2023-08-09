@@ -25,8 +25,10 @@ class CollectionService
     public function createCollectionByShopUser($data, $shop_id)
     {
         $shop_user = auth()->guard('shop-user-api')->user();
+        $collection_code = Helper::nomenclature('collections', 'P', 'id', $shop_id, 'S');
 
         $collection = new Collection();
+        $collection->collection_code    = $collection_code;
         $collection->total_quantity     = $data['total_quantity'];
         $collection->total_amount       = $data['total_amount'];
         $collection->assigned_at        = $data['assigned_at'];

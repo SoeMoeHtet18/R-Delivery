@@ -8,6 +8,34 @@
         padding: 0;
         line-height: 2rem;
     }
+
+    .pdf-ul {
+        padding-left: 0;
+        padding-right: 0;
+        border-radius: 3px;
+        display: flex;
+        list-style-type: none;
+        padding-left: 0;
+        margin-left: auto;
+        margin-bottom: 0;
+    }
+
+    .pdf-ul li {
+        background: #f4f5f8;
+        margin: 0;
+    }
+
+    .pdf-ul li a {
+        padding: 0;
+        padding-right: 6px;
+        padding-left: 2px;
+        font-size: 13px;
+        text-decoration: none;
+    }
+
+    .pdf-ul li a:first-child {
+        border-right: 1px solid #dfe2ea;
+    }
 </style>
 <div id="popupCard" class="modal mt-5">
     <div class="modal-dialog">
@@ -148,6 +176,20 @@
             </li>
         </ul>
         <input type="hidden" id="current_screen" value="pending-order-tab">
+       <div class="d-flex justify-content-end mb-3">
+            <div class="d-inline-block">
+                <ul class="pdf-ul">
+                    <li>
+                        <form id="pdf_form" action="{{ url('/generate-pdf') }}" method="GET" style="display: inline;">
+                            <meta name="csrf-token" content="{{ csrf_token() }}">
+                            <button type="submit" id="pdf_button" class="btn border">
+                                <i class="fa-regular fa-file-pdf"></i>&nbsp;<span>PDF</span>
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+       </div>
         <div class="tab-content">
             <div id="pending-order-display" class="portlet box green tab-pane active">
                 <div class="portlet-title">
@@ -299,6 +341,16 @@
         $('#pending-order-datatable').DataTable({
             processing: true,
             serverSide: true,
+            buttons: [
+                    {
+                        extend: 'pdf',
+                        title: 'Orders',
+                        filename: 'orders',
+                        pageSize: 'LEGAL',
+                        charset: 'UTF-8',
+                        orientation: 'landscape',
+                    },
+            ],
             ajax: "/riders/get-pending-orders-by-rider-id/" + rider_id,
             columns: [{
                     data: 'DT_RowIndex',
@@ -576,6 +628,23 @@
                 },
             ],
         });
+
+        const form = $('#pdf_form');
+
+        // Add event listener to the form submit event
+        form.submit(function(event) {
+            // Prevent the default form submission behavior
+            event.preventDefault();
+            var rider_id = document.getElementById('rider-id').getAttribute('data-rider-id');            
+            generatePDF(rider_id);
+        });
+
+        function generatePDF(rider_id) {
+            // Create the download URL with query parameters
+            const downloadUrl = `/generate-rider-pdf?rider_id=${encodeURIComponent(rider_id)}`;
+            // Navigate to the download URL
+            window.location.href = downloadUrl;
+        }
     });
 </script>
 <script>

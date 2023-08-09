@@ -7,12 +7,15 @@ use App\Http\Requests\RiderUpdateRequest;
 use App\Http\Requests\TownshipAssignRequest;
 use App\Models\Rider;
 use App\Repositories\DeficitRepository;
+use App\Repositories\OrderRepository;
 use App\Repositories\RiderRepository;
 use App\Repositories\TownshipRepository;
 use App\Services\DeficitService;
 use App\Services\RiderService;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Mpdf\Mpdf;
 use Yajra\DataTables\Facades\DataTables;
 
 class RiderController extends Controller
@@ -22,14 +25,18 @@ class RiderController extends Controller
     protected $townshipRepository;
     protected $deficitRepository;
     protected $deficitService;
+    protected $orderRepository;
 
-    public function __construct(RiderRepository $riderRepository, RiderService $riderService, TownshipRepository $townshipRepository, DeficitRepository $deficitRepository, DeficitService $deficitService)
+    public function __construct(RiderRepository $riderRepository, RiderService $riderService, 
+        TownshipRepository $townshipRepository, DeficitRepository $deficitRepository, 
+        DeficitService $deficitService, OrderRepository $orderRepository)
     {
         $this->riderRepository = $riderRepository;
         $this->riderService = $riderService;
         $this->townshipRepository = $townshipRepository;
         $this->deficitRepository = $deficitRepository;
         $this->deficitService = $deficitService;
+        $this->orderRepository = $orderRepository;
     }
     /**
      * Display a listing of the resource.
@@ -189,5 +196,32 @@ class RiderController extends Controller
         
         return response()->json(['data' => $data, 'message' => 'Successfully Get Total Salary for Rider', 'status' => 'success'], 200);
        
+    }
+
+    public function generateRiderPdf(Request $request)
+    {
+        try {
+            $mpdf = new Mpdf();
+
+            // Enable Myanmar language support
+            $mpdf->autoScriptToLang = true;
+            $mpdf->autoLangToFont = true;
+
+            // Set the font for Myanmar language
+            $mpdf->SetFont('myanmar3');
+
+            //retrieve data
+            $rider_id = $request->rider_id;
+            
+            $orders = $this->orderRepository->getAllPendingOrdersByRider($rider_id);
+            
+            // Add HTML content with Myanmar text
+            $mpdf->WriteHTML(view('admin.rider.pdf_export', compact('orders')));
+
+            // Output the PDF for download
+            $mpdf->Output('rider.pdf', 'D');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', "Can't generate pdf");
+        }
     }
 }
