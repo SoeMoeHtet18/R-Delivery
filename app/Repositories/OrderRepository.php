@@ -226,9 +226,9 @@ class OrderRepository
             ->select('orders.*', 'shops.name as shop_name');
         
         if($start_date != 'null' && $end_date != 'null') {
-            $orders = $orders->whereBetween('orders.created_at', [$start_date, $end_date]);
+            $orders = $orders->whereBetween('orders.schedule_date', [$start_date, $end_date]);
         } else {
-            $orders = $orders->whereDate('orders.created_at', $currentDate);
+            $orders = $orders->whereDate('orders.schedule_date', $currentDate);
         }
         $orders = $orders->offset($offset)->limit($limit)->orderBy('orders.id','DESC')->get();
         return $orders;
@@ -253,6 +253,7 @@ class OrderRepository
 
         $history = Order::where('rider_id', $rider_id)
             ->where('status', 'success')
+            ->whereDate('schedule_date', $today)
             ->select('status')
             ->count();
 

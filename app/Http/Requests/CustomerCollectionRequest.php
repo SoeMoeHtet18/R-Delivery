@@ -25,7 +25,7 @@ class CustomerCollectionRequest extends FormRequest
         return [
             'shop_id' => 'required',
             'customer_name' => 'required',
-            'customer_phone_number' => 'required',
+            'phone_number' => 'required',
             'paid_amount' => 'required'
         ];
     }
@@ -35,14 +35,10 @@ class CustomerCollectionRequest extends FormRequest
         return [
             'shop_id.required'                  => 'Shop field is required',
             'customer_name.required'            => 'Customer Name field is required',
-            'customer_phone_number.required'    => 'Customer Phone Number field is required',
+            'phone_number.required'    => 'Customer Phone Number field is required',
             'paid_amount.required'              => 'Paid Amount field is required',
         ];
     }
 
-    protected function failedValidation(Validator $validator)
-    {
-        $this->flash($this->all());
-        parent::failedValidation($validator);
-    }
+    
 }
