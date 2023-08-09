@@ -95,7 +95,7 @@
             </div>
             <div class="row m-0 mb-3">
                 <div class="col-2">
-                    <h4>Payable Amuount <b>:</b></h4>
+                    <h4>Payable Amount <b>:</b></h4>
                 </div>
                 <div class="col-10">
                     {{ $shop->payable_amount }}
@@ -103,7 +103,7 @@
             </div>
             <div class="row m-0 mb-3">
                 <div class="col-2">
-                    <h4>Remaining Amuount <b>:</b></h4>
+                    <h4>Remaining Amount <b>:</b></h4>
                 </div>
                 <div class="col-10">
                     {{ $remainig_amount }}
@@ -514,7 +514,7 @@
                                 return "Pending";
                             }
                             if (row.status == 'success') {
-                                return "Success";
+                                return "Delivered";
                             }
                             if (row.status == 'delay') {
                                 return "Delay";
@@ -525,8 +525,14 @@
                             if (row.status == 'cancel_request') {
                                 return 'Cancel Request';
                             }
-                            if (row.status == 'in-warehouse') {
+                            if (row.status == 'warehouse') {
                                 return "In Warehouse";
+                            }
+                            if (row.status == 'picking-up') {
+                                return "Picking Up";
+                            }
+                            if (row.status == 'delivering') {
+                                return "Delivering";
                             }
                         },
                         "targets": 12

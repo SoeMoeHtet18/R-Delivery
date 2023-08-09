@@ -54,6 +54,7 @@ class TransactionsForShopService
     {
         $raw_total_amount = Order::whereIn('id', $order_ids)
             ->where('payment_flag', 0)
+            ->where('payment_method', 'cash_on_delivery')
             ->selectRaw('SUM(total_amount + markup_delivery_fees) AS total_amount')
             ->first();
         $total_amount = $raw_total_amount->total_amount;
