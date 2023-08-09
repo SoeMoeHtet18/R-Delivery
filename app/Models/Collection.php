@@ -13,6 +13,7 @@ class Collection extends Model
         'total_quantity', 'total_amount', 'paid_amount', 'collection_group_id', 'rider_id', 'shop_id', 
         'assigned_at', 'collected_at', 'note', 'status', 'is_payable', 'branch_id', 'collection_code'
     ];
+    protected $dates = ['collected_at'];
 
     public function collection_group() {
         return $this->belongsTo(CollectionGroup::class, 'collection_group_id', 'id')->withTrashed();

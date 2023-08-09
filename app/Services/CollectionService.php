@@ -6,6 +6,7 @@ use App\Helpers\Helper;
 use App\Models\Collection;
 use App\Models\CollectionGroup;
 use App\Models\Shop;
+use Carbon\Carbon;
 
 class CollectionService
 {
@@ -15,7 +16,8 @@ class CollectionService
         $collection->total_quantity     = $data['total_quantity'];
         $collection->total_amount       = $data['total_amount'];
         $collection->paid_amount        = $data['paid_amount'];
-        $collection->collected_at       = $data['collected_at'];
+        // $collection->collected_at       = $data['collected_at'];
+        $collection->collected_at       = Carbon::now();
         $collection->status             = 'complete';
         $collection->note             = $data['note'];
         $collection->save();
