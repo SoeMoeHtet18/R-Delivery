@@ -105,7 +105,7 @@ class CollectionService
         $collection->assigned_at =  $data['assigned_at'] ?? null;
         $collection->collected_at =  $data['collected_at'] ?? null;
         $collection->note =  $description;
-        $collection->status =  'pending';
+        $collection->status =  'picking-up';
         $collection->is_payable =  false;
         $collection->branch_id =  $user->branch_id;
         $collection->save();
