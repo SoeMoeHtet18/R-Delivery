@@ -67,10 +67,10 @@ class ShopController extends Controller
         $order_ids = $this->orderRepository->getAllOrderIdsByShopID($id);
         $payable_amount = $this->transactionsForShopService->getActualAmount($order_ids,$shop->id);
         $shop->payable_amount = $payable_amount;
-        $collection_total_amount = Collection::where('shop_id',$id)->where('status','success')->sum('total_amount');
-        $collection_paid_amount = Collection::where('shop_id',$id)->where('status','success')->sum('paid_amount');
-        $remainig_amount  = $collection_total_amount - $collection_paid_amount; 
-        return view('admin.shop.detail', compact('shop','remainig_amount'));
+        // $collection_total_amount = Collection::where('shop_id',$id)->where('status','success')->sum('total_amount');
+        // $collection_paid_amount = Collection::where('shop_id',$id)->where('status','success')->sum('paid_amount');
+        // $remainig_amount  = $collection_total_amount - $collection_paid_amount; 
+        return view('admin.shop.detail', compact('shop'));
     }
 
     /**

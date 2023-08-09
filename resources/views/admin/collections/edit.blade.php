@@ -68,7 +68,7 @@
                     <select name="status" id="status" class="form-control">
                         <option value="" selected disabled>Select the Status for This Order</option>
                         <option value="pending" @if($collection->status == "pending") {{'selected'}} @endif>Pending</option>
-                        <option value="in-warehouse" @if($collection->status == "in-warehouse") {{'selected'}} @endif>In Warehouse</option>
+                        <option value="picking-up" @if($collection->status == "picking-up") {{'selected'}} @endif>Picking Up</option>
                         <option value="complete" @if($collection->status == "complete") {{'selected'}} @endif>Complete</option>
                     </select>
                 </div>

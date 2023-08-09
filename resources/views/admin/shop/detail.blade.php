@@ -101,14 +101,6 @@
                     {{ $shop->payable_amount }} MMK
                 </div>
             </div>
-            <div class="row m-0 mb-3">
-                <div class="col-2">
-                    <h4>Remaining Amount <b>:</b></h4>
-                </div>
-                <div class="col-10">
-                    {{ $remainig_amount }} MMK
-                </div>
-            </div>
         </div>
 
         <hr>
@@ -413,8 +405,8 @@
                     "url": "/shops/get-shop-orders-by-shop-id/" + shop_id,
                     "type": "GET",
                     "data": function(r) {
-                        r.start = start;
-                        r.end = end;
+                        r.from_date = start;
+                        r.to_date = end;
                     }
                 },
                 columns: [{
@@ -635,8 +627,8 @@
                     'url' : "/shops/" + shop_id + "/get-transactions-for-shop-by-shop-id",
                     'method' : 'GET',
                     'data': function(r) {
-                        r.start = start;
-                        r.end = end;
+                        r.from_date = start;
+                        r.to_date = end;
                     },
                 },
                 columns: [{

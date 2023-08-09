@@ -190,8 +190,9 @@ class OrderController extends Controller
     public function getShopOrdersTable(Request $request, $id)
     {
         $data = $this->shopRepository->getShopOrdersByShopID($id);
-        $start = $request->start;
-        $end = $request->end;
+        $start = $request->from_date;
+        $end = $request->to_date . ' 23:59:00';
+        // dd($request->all());
         if ($start && $end) {
             $data = $data->whereBetween('orders.created_at', [$start, $end]);
         }
