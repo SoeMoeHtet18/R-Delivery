@@ -53,7 +53,6 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
 
     public function model(array $row)
     {
-        Log::debug('reach');
         ++$this->rows;
         $shop = trim($row['shop']);
         $shop = Shop::where('name', $shop)->first();
@@ -73,26 +72,38 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
         $township = Township::where('name', $township)->first();
         $township_id = $township ? $township->id : null;
 
-        $item_type = trim($row['item_type']);
-        $item_type = ItemType::where('name', $item_type)->first();
-        $item_type_id = $item_type ? $item_type->id : null;
+        // $item_type = trim($row['item_type']);
+        // $item_type = ItemType::where('name', $item_type)->first();
+        // $item_type_id = $item_type ? $item_type->id : null;
 
         $delivery_type = trim($row['delivery_type']);
         $delivery_type = DeliveryType::where('name', $delivery_type)->first();
         $delivery_type_id = $delivery_type ? $delivery_type->id : null;
 
-        $payment_flag = $this->convertData($row['payment_flag']);
-        $payment_flag = ($payment_flag === 'paid') ? 1 : 0;
+        // $payment_flag = $this->convertData($row['payment_flag']);
+        // $payment_flag = ($payment_flag === 'paid') ? 1 : 0;
 
-        if ($row['schedule_date']) {
+        if ($row['schedule_date'] != null) {
             $date = Carbon::parse($row['schedule_date']);
         } else {
             $date = Carbon::tomorrow();
         }
+        Log::debug($row['schedule_date']);
+        // Log::debug($date);
+
+        if($row['payment_method'] == 'Cash On Delivery') {
+            $payment_method = 'cash_on_delivery';
+        } else if($row['payment_method'] == 'All Prepaid') {
+            $payment_method = 'all_prepaid';
+        } else {
+            $payment_method = 'item_prepaid';
+        }
 
         $formattedDate = $date->format('Y-m-d H:i:s');
 
-        Log::debug($formattedDate);
+        $status = $rider_id == null ? 'warehouse' : 'delivering';
+
+        // Log::debug($formattedDate);
         $order = Order::create([
             'order_code' => Helper::nomenclature('orders', 'OD', 'id', $shop_id, 'S'),
             'customer_name' => $row['customer_name'],
@@ -105,18 +116,19 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
             'delivery_fees' => $row['delivery_fees'],
             'markup_delivery_fees' =>  $row['markup_delivery_fees'] ?? null,
             'remark' => $row['remark'] ?? null,
-            'status' => $row['status'] == 'In Warehouse' ? 'warehouse' : $this->convertData($row['status']),
+            'status' => $status,
             'item_type_id' => $item_type_id ?? null,
             'full_address' => $row['full_address'] ?? null,
             'schedule_date' => $formattedDate ?? null,
             'delivery_type_id' => $delivery_type_id,
-            'collection_method' => $this->convertData($row['collection_method']),
-            'payment_flag' => $payment_flag,
+            'collection_method' => 'pickup',
+            'payment_flag' => 0,
             'is_confirm' => false,
             'is_payment_channel_confirm' => false,
             'payable_or_not' => 'pending',
             'branch_id' => auth()->user()->branch_id,
             'pay_later' => $row['total_amount'] > 100000 ? true : false,
+            'payment_method' => $payment_method,
         ]);
 
         if ($township_id && $rider_id) {

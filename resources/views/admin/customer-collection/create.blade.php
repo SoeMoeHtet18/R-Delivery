@@ -65,7 +65,8 @@
                     <h4>Customer Exchange Code<b>:</b></h4>
                 </label>
                 <div class="col-10">
-                    <input type="text" id="customer_collection_code" name="customer_collection_code" class="form-control" readonly />
+                    <input type="text" id="customer_collection_code" name="customer_collection_code" class="form-control" 
+                        value="{{old('customer_collection_code')}}" readonly/>
                 </div>
             </div>
             <div class="row m-0 mb-3">
