@@ -83,6 +83,7 @@ class CustomerCollectionService
         $customer_collection =  CustomerCollection::where('id',$data['id'])->first();
         $customer_collection->paid_amount  = $data['amount'];
         $customer_collection->note   = $data['reason'];
+        $customer_collection->status   = $data['complete'];
         $file_name = null;
         if ($reuploadPhoto) {
             $photo = $data['photo'];
