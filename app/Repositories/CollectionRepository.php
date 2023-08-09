@@ -45,6 +45,7 @@ class CollectionRepository
             ->whereNotNull('total_quantity')
             ->leftJoin('riders', 'riders.id', 'collections.rider_id')
             ->select('collections.*', 'riders.name as rider_name')
+            ->orderBy('id','desc')
             ->get();
         return $collections;
     }

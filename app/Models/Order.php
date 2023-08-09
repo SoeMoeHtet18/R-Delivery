@@ -41,7 +41,7 @@ class Order extends Model
         return $this->belongsTo(ItemType::class, 'item_type_id', 'id')->withTrashed();
     }
 
-    public function deliver_type()
+    public function delivery_type()
     {
         return $this->belongsTo(DeliveryType::class, 'delivery_type_id', 'id')->withTrashed();
     }
