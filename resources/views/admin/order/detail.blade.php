@@ -29,10 +29,29 @@
         </h2>
         <div class="card-toolbar">
             <div class="dropdown">
+              
                 <button class="btn btn-secondary green dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Actions
                 </button>
                 <ul class="dropdown-menu ">
+                @if($order->status == 'cancel_request')
+                <li>
+                <form action="{{url('/orders/' . $order->id . '/change-status')}}" method="post" onclick="return confirm(`Are you sure you want to cancel this order?`);">
+                    @csrf
+                    @method('POST')
+                    <input type="hidden" value="cancel" name="status">
+                    <input type="submit" value="Approve Cancel" class="dropdown-item">
+                    </form>
+                </li>
+                <li>
+                    <form action="{{url('/orders/' . $order->id . '/change-status')}}" method="post">
+                        @csrf
+                        @method('POST')
+                        <input type="hidden" value="delay" name="status">
+                        <input type="submit" value="Reject Cancel" class="dropdown-item">
+                    </form>
+                </li>
+                @endif
                     @if($order->status == 'pending')
                     <li>
                         <a class="dropdown-item" id="assign-collection-group">Assign To Pick Up Group</a>
