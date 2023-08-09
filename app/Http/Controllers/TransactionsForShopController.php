@@ -153,11 +153,13 @@ class TransactionsForShopController extends Controller
     {
         $data = $this->transactionsForShopRepository->getTransactionsQueryByShopID($id);
 
-        $start = $request->start;
-        $end = $request->end;
+        $start = $request->from_date;
+        $end =  $request->to_date . ' 23:59:00';
         if($start && $end) {
             $data = $data->whereBetween('transactions_for_shops.created_at',[$start,$end]);
         }
+
+        // dd($start,$end,$data->toSql());
 
         return DataTables::of($data)
             ->addIndexColumn()

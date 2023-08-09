@@ -413,8 +413,8 @@
                     "url": "/shops/get-shop-orders-by-shop-id/" + shop_id,
                     "type": "GET",
                     "data": function(r) {
-                        r.start = start;
-                        r.end = end;
+                        r.from_date = start;
+                        r.to_date = end;
                     }
                 },
                 columns: [{
@@ -635,8 +635,8 @@
                     'url' : "/shops/" + shop_id + "/get-transactions-for-shop-by-shop-id",
                     'method' : 'GET',
                     'data': function(r) {
-                        r.start = start;
-                        r.end = end;
+                        r.from_date = start;
+                        r.to_date = end;
                     },
                 },
                 columns: [{
