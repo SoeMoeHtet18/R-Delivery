@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\Township;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class OrderRepository
 {
@@ -295,6 +296,19 @@ class OrderRepository
             // dd($gate);
             $order['full_address'] = $gate->address;
         }
+        if (Storage::exists('order_data.txt')) {
+            $orderDataJson = Storage::get('order_data.txt');
+            $orders = json_decode($orderDataJson, true);
+        }
+        $order_code = $order->order_code;
+        $order['delivered_at'] = null;
+        if (isset($orders[$order_code])) {
+            $orderData = $orders[$order_code];
+            if(isset($orderData['delivered_at'])){
+                $order['delivered_at'] = $orderData['delivered_at'];
+            }
+        }
+        // dd($order);
 
         return $order;
     }
