@@ -57,8 +57,8 @@ class CustomerCollectionService
     {
         $customer_collection = new CustomerCollection();
         $customer_collection->order_id = $data['order_id'];
-        $shop_id = Order::where('id',$data['order_id'])->first()->shop_id;
-        $customer_collection_code = Helper::nomenclature('customer_collections', 'CE', 'id', $shop_id, 'S');
+        $order = Order::where('id',$data['order_id'])->first();
+        $customer_collection_code = Helper::nomenclature('customer_collections', 'CE', 'id', $order->shop_id, 'S');
         $customer_collection->customer_collection_code  = $customer_collection_code;
         $customer_collection->paid_amount  = $data['amount'];
         $customer_collection->note   = $data['reason'];
@@ -71,6 +71,9 @@ class CustomerCollectionService
         }
         $customer_collection->item_image = $file_name;
         $customer_collection->branch_id = $rider->branch_id;
+        $customer_collection->customer_name = $order->customer_name;
+        $customer_collection->customer_phone_number = $order->customer_phone_number;
+        $customer_collection->shop_id = $order->shop_id;
         $customer_collection->save();
         return $customer_collection;
     }
