@@ -99,6 +99,9 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
             $payment_method = 'item_prepaid';
         }
 
+        Log::debug($row['payment_method']);
+        Log::debug($payment_method);
+
         $formattedDate = $date->format('Y-m-d H:i:s');
 
         $status = $rider_id == null ? 'warehouse' : 'delivering';

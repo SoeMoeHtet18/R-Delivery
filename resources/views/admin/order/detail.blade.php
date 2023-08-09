@@ -281,16 +281,10 @@
             </div>
             <div class="row m-0 mb-3">
                 <div class="col-2">
-                    <h4>Type <b>:</b></h4>
+                    <h4>Delivery Type <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    @if($order->type == 'standard')
-                    Standard
-                    @elseif($order->type == 'express')
-                    Express
-                    @else
-                    Door To Door
-                    @endif
+                @if($order->delivery_type != null) {{$order->delivery_type->name}} @else {{'N/A'}} @endif
                 </div>
             </div>
             <div class="row m-0 mb-3">
