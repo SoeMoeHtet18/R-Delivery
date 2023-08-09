@@ -36,7 +36,7 @@ class RiderService
             $rider->password =  bcrypt($data['password']);
         }
         $rider->device_id = $data['device_id'] ?? $rider->device_id;
-        $rider->salary_type = $data['salary_type'];
+        $rider->salary_type = $data['salary_type'] ?? null;
         $rider->save();
         return $rider;
     }
