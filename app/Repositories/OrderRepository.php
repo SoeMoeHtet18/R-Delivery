@@ -61,18 +61,18 @@ class OrderRepository
         $limit = 10; 
         $offset = ($page - 1) * $limit;
         if ($status == 'success') {
-            $order = Order::where('shop_id', $id)
+            $orders = Order::where('shop_id', $id)
                 ->where('status', 'success');
         } else if ($status == 'canceled') {
-            $order = Order::where('shop_id', $id)
+            $orders = Order::where('shop_id', $id)
                 ->where('status', 'cancel');
         } else {
-            $order = Order::where('shop_id', $id)
+            $orders = Order::where('shop_id', $id)
                 ->whereNot('status', 'success')
                 ->whereNot('status', 'cancel');
         }
         
-        $order->leftJoin('cities', 'cities.id', 'orders.city_id')
+        $orders->leftJoin('cities', 'cities.id', 'orders.city_id')
             ->leftJoin('townships', 'townships.id', 'orders.township_id')
             ->leftJoin('item_types', 'item_types.id', 'orders.item_type_id')
             ->leftJoin('delivery_types', 'delivery_types.id', 'orders.delivery_type_id')
@@ -82,11 +82,11 @@ class OrderRepository
                 'delivery_types.name as delivery_type_name');
 
         if($start_date != 'null' && $end_date != 'null') {
-            $order = $order->whereBetween('orders.schedule_date', [$start_date, $end_date]);
+            $orders = $orders->whereBetween('orders.schedule_date', [$start_date, $end_date]);
         }
 
-        $order = $order->offset($offset)->limit($limit)->orderBy('id','DESC')->get();
-        return $order;
+        $orders = $orders->offset($offset)->limit($limit)->orderBy('id','DESC')->get();
+        return $orders;
     }
 
     public function getAllOrdersCount()
@@ -447,5 +447,34 @@ class OrderRepository
             ->with('township','shop','rider')
             ->get();
         return $orders;
+    }
+
+    public function getOrderDetailByShop($id)
+    {
+        $order = Order::where('orders.id', $id)
+            ->leftJoin('cities', 'cities.id', 'orders.city_id')
+            ->leftJoin('townships', 'townships.id', 'orders.township_id')
+            ->leftJoin('item_types', 'item_types.id', 'orders.item_type_id')
+            ->leftJoin('delivery_types', 'delivery_types.id', 'orders.delivery_type_id')
+            ->select('orders.*', 'cities.name as city_name', 
+                'townships.name as township_name', 
+                'item_types.name as item_type_name', 
+                'delivery_types.name as delivery_type_name')->first();
+
+        $orders = [];
+        if (Storage::exists('order_data.txt')) {
+            $orderDataJson = Storage::get('order_data.txt');
+            $orders = json_decode($orderDataJson, true);
+        }
+        $order['delivered_at'] = null;
+
+        if (isset($orders[$order->order_code])) {
+            $orderData = $orders[$order->order_code];
+            if(isset($orderData['delivered_at'])) {
+                $order['delivered_at'] = $orderData['delivered_at'];
+            }
+        }
+
+        return $order;
     }
 }
