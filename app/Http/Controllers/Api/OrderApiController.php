@@ -176,4 +176,11 @@ class OrderApiController extends Controller
         $order    = $this->orderService->cancelPaymentChannel($order_id);
         return response()->json(['data' => $order, 'message' => 'Successfully Update Payment Channel', 'status' => 'success'], 200);
     }
+
+    public function getOrderDetailByShop(Request $request)
+    {
+        $order_id = $request->order_id;
+        $order = $this->orderRepository->getOrderDetailByShop($order_id);
+        return response()->json(['data' => $order, 'message' => 'Successfully Get Order Detail', 'status' => 'success'], 200);
+    }
 }

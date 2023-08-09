@@ -63,6 +63,7 @@ Route::middleware('auth:shop-user-api')->group( function () {
     Route::get('get-payment-credits-by-shop-user', [ShopApiController::class, 'getPaymentCreditForShop']);
     Route::get('get-payment-history-by-shop-user', [ShopApiController::class, 'getPaymentHistoryForShop']);
     Route::get('delete-order/{id}', [OrderApiController::class, 'deleteOrderByShopUser']);
+    Route::get('get-order-detail-by-shop', [OrderApiController::class, 'getOrderDetailByShop']);
 });
 Route::post('rider-login', [RiderApiController::class, 'riderLoginApi']);
 Route::post('rider/create', [RiderApiController::class, 'create']);
