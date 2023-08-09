@@ -12,7 +12,7 @@ class Order extends Model
     protected $fillable = [
         'order_code', 'customer_name', 'customer_phone_number', 'township_id', 'rider_id', 'shop_id', 'quantity', 'total_amount', 'delivery_fees', 'markup_delivery_fees',
         'remark', 'status', 'item_type_id', 'full_address', 'schedule_date', 'delivery_type_id', 'collection_method', 'proof_of_payment', 'last_updated_by', 'city_id', 'items', 'payment_flag',
-        'is_payment_channel_confirm', 'branch_id', 'is_confirm', 'payable_or_not', 'pay_later'
+        'is_payment_channel_confirm', 'branch_id', 'is_confirm', 'payable_or_not', 'pay_later', 'payment_method'
     ];
 
     public function rider() {

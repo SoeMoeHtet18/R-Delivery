@@ -21,6 +21,7 @@ class OrderRepository
         $order = Order::where('branch_id', $branch_id)->get();
         return $order;
     }
+    
     public function getAllOrdersQuery()
     {
         $branch_id = auth()->user()->branch_id;
