@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Gate;
 use App\Models\Township;
 
 class TownshipRepository
@@ -47,5 +48,15 @@ class TownshipRepository
         $township = Township::where('id',$township_id)->first();
         $delivery_fees = $township->delivery_fees;
         return $delivery_fees;
+    }
+
+    public function getTownshipListByAssociable($city_id, $associable_id)
+    {
+        $townships = Township::where('city_id',$city_id)->where(['associable_id' => null, 'associable_type' => null])->get();
+        if($associable_id != null) {
+            $assignedTownships = Township::where(['associable_id' => $associable_id, 'associable_type' => Gate::class])->get();
+            $townships = $townships->merge($assignedTownships)->unique();
+        }
+        return $townships;
     }
 }

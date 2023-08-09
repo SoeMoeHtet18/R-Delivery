@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\ShopPaymentApiController;
 use App\Http\Controllers\Api\ShopUserApiController;
 use App\Http\Controllers\Api\TownshipApiController;
 use App\Http\Controllers\Api\TransactionForShopApiController;
+use App\Http\Controllers\TownshipController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -121,3 +122,4 @@ Route::get('get-delivery-type-list', [DeliveryTypeApiController::class, 'getAllD
 Route::post('get-customer-collection-code',[CustomerCollectionApiController::class, 'getCustomerCollectionCode']);
 Route::post('change-customer-collection-code',[CustomerCollectionApiController::class, 'changeCustomerCollectionCode']);
 Route::post('get-data-by-order-for-customer-collection',[OrderApiController::class, 'getDataByOrderForCustomerCollection']);
+Route::post('get-township-by-associable', [TownshipController::class, 'getTownshipListByAssociable']);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\GateCreateRequest;
 use App\Models\Gate;
+use App\Models\Township;
 use App\Repositories\CityRepository;
 use App\Repositories\GateRepository;
 use App\Repositories\TownshipRepository;
@@ -80,15 +81,17 @@ class GateController extends Controller
         $gate = $this->gateRepository->show($id);
         $cities = $this->cityRepository->getAllCities();
         $cities = $cities->sortByDesc('id');
-        $townships = $this->townshipRepository->getAllTownships();
-        $townships = $townships->sortByDesc('id');
-        $assignedTownship = array();   
+        $townships = Township::where(['associable_id' => null, 'associable_type' => null, 'city_id' => $gate->city_id])->get();
+        $assignedTownships = $gate->townships;
+        $townships = $townships->merge($assignedTownships)->unique();
+        $assignedTownshipID = [];
         if(count($gate->townships) > 0) {            
-            foreach ($gate->townships as $key => $value) {
-                $assignedTownship[] = $value->id;
+            foreach($assignedTownships as $assignedTownship) {
+                $assignedTownshipID[] = $assignedTownship->id;
             }
-        }
-        return view('admin.gate.edit', compact('gate', 'cities', 'assignedTownship','townships'));
+        } 
+        
+        return view('admin.gate.edit', compact('gate', 'cities', 'assignedTownshipID','townships'));
     }
 
     /**

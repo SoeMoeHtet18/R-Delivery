@@ -10,6 +10,7 @@
         <form action="{{route('gates.update', $gate->id)}}" method="POST" class="action-form" enctype="multipart/form-data">
             @csrf
             @method('PUT')
+            <input type="hidden" id="gate_id" name="gate_id" value="{{$gate->id}}" class="form-control" />
             <div class="row m-0 mb-3">
                 <label for="name" class="col-2">
                     <h4>Name <b>:</b></h4>
@@ -44,7 +45,7 @@
                 <div class="col-10">
                     <select name="township_id[]" id="township_id" class="form-control" multiple="">
                         @foreach ( $townships as $township)
-                        <option value="{{$township->id}}" @if(in_array($township->id, $assignedTownship)) selected @endif>{{$township->name}}</option>
+                        <option value="{{$township->id}}" @if(in_array($township->id, $assignedTownshipID)) selected @endif>{{$township->name}}</option>
                         @endforeach
                     </select>
                     @if ($errors->has('township_id'))
@@ -82,12 +83,14 @@
         $('#township_id').select2();
         $('#city_id').change(function() {
             var city_id = $('#city_id').val();
+            var gate_id = $('#gate_id').val();
             $.ajax({
-                url: '/api/townships-get-by-city',
+                url: '/api/get-township-by-associable',
                 type: 'POST',
                 dataType: 'json',
                 data: {
-                    city_id: city_id
+                    city_id: city_id,
+                    associable_id: gate_id,
                 },
                 success: function(response) {
                     var township_id = $('#township_id').val();
