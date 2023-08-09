@@ -42,7 +42,7 @@ class CollectionRepository
     public function getAllCollectionsByShopUser($shop_id)
     {
         $collections = Collection::where('shop_id', $shop_id)
-            ->whereNotNull('total_quantity')
+            ->whereNotNull('total_amount')
             ->leftJoin('riders', 'riders.id', 'collections.rider_id')
             ->select('collections.*', 'riders.name as rider_name')
             ->orderBy('id','desc')
