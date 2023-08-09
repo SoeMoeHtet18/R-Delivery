@@ -209,6 +209,7 @@ class OrderService
     {
         $order->rider_id = $data['rider_id'];
         $order->township_id = $data['township_id'];
+        $order->status = 'delivering';
         $order->save();
         $notification = $this->notificationService->orderCreateNotificationForRider($order->rider_id);
         $orders = [];

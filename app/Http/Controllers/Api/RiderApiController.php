@@ -7,6 +7,7 @@ use App\Http\Requests\RiderCreateApiRequest;
 use App\Http\Requests\RiderLoginApiRequest;
 use App\Http\Requests\RiderUpdateApiRequest;
 use App\Models\Collection;
+use App\Models\CollectionGroup;
 use App\Models\CustomerCollection;
 use App\Models\Deficit;
 use App\Models\Order;
@@ -211,22 +212,38 @@ class RiderApiController extends Controller
         if($rider->salary_type == 'daily') {
             $currentDate = Carbon::now()->format('Y-m-d');
             $order_count = Order::where('rider_id',$rider->id)->where('status','success')->whereDate('schedule_date', $currentDate)->count();
-            $collection_count = Collection::where('rider_id',$rider->id)->whereDate('collected_at', $currentDate)->count();
+            $collection_groups = CollectionGroup::where('rider_id',$rider->id)->whereDate('assigned_date', $currentDate)->get();
+            $collection_count = 0;
+            $customer_collection_count = 0;
+            foreach($collection_groups as $collection_group){
+                $collection_count += Collection::where('collection_group_id',$collection_group->id)->where('status','complete')->count(); 
+                $customer_collection_count += CustomerCollection::where('collection_group_id',$collection_group->id)->where('status','complete')->count(); 
+            }
+            $total_pick_up_count = $collection_count + $customer_collection_count;
+            
             $deficit_fees = Deficit::where('rider_id',$rider->id)->whereDate('created_at',$currentDate)->sum('total_amount'); 
         } else {
             $startDate = Carbon::now()->startOfMonth()->format('Y-m-d');
             $endDate = Carbon::now()->endOfMonth()->format('Y-m-d');
             $order_count = Order::where('rider_id', $rider->id)->where('status','success')->whereBetween('schedule_date', [$startDate, $endDate])->count();
-            $collection_count = Collection::where('rider_id', $rider->id)->whereBetween('collected_at', [$startDate, $endDate])->count();
+            $collection_groups = CollectionGroup::where('rider_id',$rider->id)->whereBetween('assigned_date', [$startDate, $endDate])->get();
+            $collection_count = 0;
+            $customer_collection_count = 0;
+            foreach($collection_groups as $collection_group){
+                $collection_count += Collection::where('collection_group_id',$collection_group->id)->where('status','complete')->count(); 
+                $customer_collection_count += CustomerCollection::where('collection_group_id',$collection_group->id)->where('status','complete')->count(); 
+            }
+            $total_pick_up_count = $collection_count + $customer_collection_count;
+            
             $deficit_fees = Deficit::where('rider_id',$rider->id)->whereBetween('created_at',[$startDate, $endDate])->sum('total_amount');
         }
-        $total_collection_fees = $rider_fees * $collection_count;
+        $total_collection_fees = $rider_fees * $total_pick_up_count;
         $total_deli_fees = $rider_fees * $order_count;
         $total_salary    = ($total_collection_fees + $total_deli_fees + $rider->base_salary) - $deficit_fees;
         $data = [];
         $data['total_salary'] = $total_salary;
         $data['deficit_fees'] = $deficit_fees;
-        $data['collection_count'] = $collection_count;
+        $data['collection_count'] = $total_pick_up_count;
         $data['order_count'] = $order_count;
         return response()->json(['data' => $data, 'message' => 'Successfully Get Total Salary for Rider', 'status' => 'success'], 200);
     }
