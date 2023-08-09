@@ -311,7 +311,7 @@ class OrderController extends Controller
                 })
                 ->addIndexColumn()
                 ->rawColumns(['order_code'])
-                ->orderColumn('orders.id', '-id $1')
+                ->orderColumn('id', '-orders.id')
                 ->make(true);
         }
     }
@@ -329,7 +329,7 @@ class OrderController extends Controller
                 })
                 ->addIndexColumn()
                 ->rawColumns(['order_code'])
-                ->orderColumn('orders.id', '-id $1')
+                ->orderColumn('id', '-orders.id')
                 ->make(true);
         }
     }
@@ -347,7 +347,7 @@ class OrderController extends Controller
                 })
                 ->addIndexColumn()
                 ->rawColumns(['order_code'])
-                ->orderColumn('orders.id', '-id $1')
+                ->orderColumn('id', '-orders.id')
                 ->make(true);
         }
     }

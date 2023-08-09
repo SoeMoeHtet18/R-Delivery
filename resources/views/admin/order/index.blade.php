@@ -437,6 +437,8 @@
                         <th>Last Updated By</th>
                         <th>Branch</th>
                         <th>Pick Up Group Code</th>
+                        <th>Extra Charges</th>
+                        <th>Discount</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -467,6 +469,8 @@
                         <th>Customer Phone Number</th>
                         <th>Paid</th>
                         <th>Branch</th>
+                        <th>Extra Charges</th>
+                        <th>Discount</th>
                     </tr>
                 </thead>
 
@@ -495,6 +499,8 @@
                         <th>Customer Phone Number</th>
                         <th>Paid</th>
                         <th>Branch</th>
+                        <th>Extra Charges</th>
+                        <th>Discount</th>
                     </tr>
                 </thead>
 
@@ -524,6 +530,8 @@
                         <th>Customer Phone Number</th>
                         <th>Paid</th>
                         <th>Branch</th>
+                        <th>Extra Charges</th>
+                        <th>Discount</th>
                     </tr>
                 </thead>
 
@@ -894,6 +902,14 @@
                         name: 'pick_up_group_code'
                     },
                     {
+                        data: 'extra_charges',
+                        name: 'extra_charges'
+                    },
+                    {
+                        data: 'discount',
+                        name: 'discount'
+                    },
+                    {
                         data: 'action',
                         name: 'action',
                         orderable: false,
@@ -1084,6 +1100,14 @@
                         data: 'branch_name',
                         name: 'branch'
                     },
+                    {
+                        data: 'extra_charges',
+                        name: 'extra_charges'
+                    },
+                    {
+                        data: 'discount',
+                        name: 'discount'
+                    },
                 ],
                 columnDefs: [{
                         "render": function(data, type, row) {
@@ -1164,6 +1188,14 @@
                     {
                         data: 'branch_name',
                         name: 'branch'
+                    },
+                    {
+                        data: 'extra_charges',
+                        name: 'extra_charges'
+                    },
+                    {
+                        data: 'discount',
+                        name: 'discount'
                     },
                 ],
                 columnDefs: [{
@@ -1296,6 +1328,14 @@
                     {
                         data: 'branch_name',
                         name: 'branch'
+                    },
+                    {
+                        data: 'extra_charges',
+                        name: 'extra_charges'
+                    },
+                    {
+                        data: 'discount',
+                        name: 'discount'
                     },
                 ],
                 columnDefs: [{

@@ -74,12 +74,9 @@
                                     <th>Customer Name</th>
                                     <th>Customer Phone Number</th>
                                     <th>Delivery Fees</th>
-                                    <th>Markup Delivery Fees</th>
                                     <th>Remark</th>
-                                    <th>Item Type</th>
                                     <th>Full Address</th>
                                     <th>Schedule Date</th>
-                                    <th>Type</th>
                                     <th>Collection Method</th>
                                     <th>Last Updated By</th>
                                 </tr>
@@ -93,7 +90,7 @@
                 </div>
                 <div id="completed-order-display" class="portlet box green tab-pane">
                     <div class="portlet-title">
-                        <div class="caption">ShopOrder Lists</div>
+                        <div class="caption">Completed Orders</div>
                     </div>
                     <div class="portlet-body">
                         <table id="completed-order-datatable" class="table table-striped table-hover table-responsive datatable">
@@ -107,12 +104,9 @@
                                     <th>Customer Name</th>
                                     <th>Customer Phone Number</th>
                                     <th>Delivery Fees</th>
-                                    <th>Markup Delivery Fees</th>
                                     <th>Remark</th>
-                                    <th>Item Type</th>
                                     <th>Full Address</th>
                                     <th>Schedule Date</th>
-                                    <th>Type</th>
                                     <th>Collection Method</th>
                                     <th>Last Updated By</th>
                                 </tr>
@@ -126,7 +120,7 @@
                 </div>
                 <div id="canceled-order-display" class="portlet box green tab-pane">
                     <div class="portlet-title">
-                        <div class="caption">ShopOrder Lists</div>
+                        <div class="caption">Canceled Lists</div>
                     </div>
                     <div class="portlet-body">
                         <table id="canceled-order-datatable" class="table table-striped table-hover table-responsive datatable">
@@ -140,12 +134,9 @@
                                     <th>Customer Name</th>
                                     <th>Customer Phone Number</th>
                                     <th>Delivery Fees</th>
-                                    <th>Markup Delivery Fees</th>
                                     <th>Remark</th>
-                                    <th>Item Type</th>
                                     <th>Full Address</th>
                                     <th>Schedule Date</th>
-                                    <th>Type</th>
                                     <th>Collection Method</th>
                                     <th>Last Updated By</th>
                                 </tr>
@@ -202,16 +193,8 @@
                         name: 'delivery_fees'
                     },
                     {
-                        data: 'markup_delivery_fees',
-                        name: 'markup_delivery_fees'
-                    },
-                    {
                         data: 'remark',
                         name: 'remark'
-                    },
-                    {
-                        data: 'item_type',
-                        name: 'item_type'
                     },
                     {
                         data: 'full_address',
@@ -220,10 +203,6 @@
                     {
                         data: 'schedule_date',
                         name: 'schedule_date'
-                    },
-                    {
-                        data: 'type',
-                        name: 'type'
                     },
                     {
                         data: 'collection_method',
@@ -247,21 +226,7 @@
                             });
                             return formattedDate;
                         },
-                        "targets": 12
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            if (row.type == 'standard') {
-                                return "Standard";
-                            }
-                            if (row.type == 'express') {
-                                return "Express";
-                            }
-                            if (row.type == 'doortodoor') {
-                                return "Door To Door";
-                            }
-                        },
-                        "targets": 13
+                        "targets": 10
                     },
                     {
                         "render": function(data, type, row) {
@@ -272,7 +237,7 @@
                                 return "Pick Up";
                             }
                         },
-                        "targets": 14
+                        "targets": 11
                     },
                 ]
             });
@@ -313,16 +278,8 @@
                         name: 'delivery_fees'
                     },
                     {
-                        data: 'markup_delivery_fees',
-                        name: 'markup_delivery_fees'
-                    },
-                    {
                         data: 'remark',
                         name: 'remark'
-                    },
-                    {
-                        data: 'item_type',
-                        name: 'item_type'
                     },
                     {
                         data: 'full_address',
@@ -331,10 +288,6 @@
                     {
                         data: 'schedule_date',
                         name: 'schedule_date'
-                    },
-                    {
-                        data: 'type',
-                        name: 'type'
                     },
                     {
                         data: 'collection_method',
@@ -358,21 +311,7 @@
                             });
                             return formattedDate;
                         },
-                        "targets": 12
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            if (row.type == 'standard') {
-                                return "Standard";
-                            }
-                            if (row.type == 'express') {
-                                return "Express";
-                            }
-                            if (row.type == 'doortodoor') {
-                                return "Door To Door";
-                            }
-                        },
-                        "targets": 13
+                        "targets": 10
                     },
                     {
                         "render": function(data, type, row) {
@@ -383,7 +322,7 @@
                                 return "Pick Up";
                             }
                         },
-                        "targets": 14
+                        "targets": 11
                     },
                 ]
             });
@@ -424,16 +363,8 @@
                         name: 'delivery_fees'
                     },
                     {
-                        data: 'markup_delivery_fees',
-                        name: 'markup_delivery_fees'
-                    },
-                    {
                         data: 'remark',
                         name: 'remark'
-                    },
-                    {
-                        data: 'item_type',
-                        name: 'item_type'
                     },
                     {
                         data: 'full_address',
@@ -442,10 +373,6 @@
                     {
                         data: 'schedule_date',
                         name: 'schedule_date'
-                    },
-                    {
-                        data: 'type',
-                        name: 'type'
                     },
                     {
                         data: 'collection_method',
@@ -469,21 +396,7 @@
                             });
                             return formattedDate;
                         },
-                        "targets": 12
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            if (row.type == 'standard') {
-                                return "Standard";
-                            }
-                            if (row.type == 'express') {
-                                return "Express";
-                            }
-                            if (row.type == 'doortodoor') {
-                                return "Door To Door";
-                            }
-                        },
-                        "targets": 13
+                        "targets": 10
                     },
                     {
                         "render": function(data, type, row) {
@@ -494,7 +407,7 @@
                                 return "Pick Up";
                             }
                         },
-                        "targets": 14
+                        "targets": 11
                     },
                 ]
             });

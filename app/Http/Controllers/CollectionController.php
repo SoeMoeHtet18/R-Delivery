@@ -150,7 +150,7 @@ class CollectionController extends Controller
             })
             ->rawColumns(['action'])
             ->addIndexColumn()
-            ->orderColumn('collections.id', '-id $1')
+            ->orderColumn('id', '-collections.id')
             ->make(true);
     }
 
