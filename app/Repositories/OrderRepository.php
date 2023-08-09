@@ -188,7 +188,7 @@ class OrderRepository
     {
         $today = Carbon::today();
         $orders = Order::where('orders.rider_id', $rider_id)
-            // ->whereIn('orders.status', ['pending', 'delay'])
+            ->whereIn('orders.status', ['delivering', 'delay', 'cancel_request'])
             ->whereDate('orders.schedule_date', $today)
             ->leftJoin('shops', 'shops.id', 'orders.shop_id')
             ->select('orders.*', 'shops.name as shop_name')
@@ -242,6 +242,7 @@ class OrderRepository
         $today = Carbon::today();
 
         $one_day = Order::where('rider_id', $rider_id)
+            ->whereIn('orders.status', ['delivering', 'delay', 'cancel_request'])
             ->whereDate('schedule_date', $today)
             ->select('status')
             ->count();
