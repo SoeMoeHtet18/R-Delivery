@@ -263,4 +263,13 @@
     .dropdown-menu li a {
         color: black;
     }
+
+    .page-sidebar {
+        height: 100vh;
+        position: fixed;
+    }
+
+    .page-content {
+        height: 100vh;
+    }
 </style>
