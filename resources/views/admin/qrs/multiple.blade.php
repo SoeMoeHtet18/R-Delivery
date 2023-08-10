@@ -28,8 +28,9 @@
         .maincontent{
             position: relative;
             /* padding:20px; */
-            width:435px;
+            /* width:435px; */
             height: 87%;
+            width: 100%;
             padding-left: 20px;
             padding-right:40px;
         }
@@ -65,7 +66,14 @@
 
         .font {
             font-family: Arial, sans-serif;
-            font-size: 2.3em;
+            font-size: 2em;
+            font-weight: bold;
+            padding-left: 0.5em;
+            width: 100%;
+        }
+        .label {
+            font-family: Arial, sans-serif;
+            font-size: 2em;
             font-weight: bold;
         }
         .mr-3{
@@ -104,12 +112,24 @@
                     <td class="maincontent">
                         <table>
                             <tr>
-                                <td><span class="font"> {{ $order->shop->name }}</span></td>
+                                <td><span class="label"> Customer Name </span></td>
+                                <td><span class="label"> - </span></td>
+                                <td><span class="font"> {{ $order->customer_name }} </span></td>
                             </tr>
                             <tr>
+                                <td><span class="label"> Ph No. </span></td>
+                                <td><span class="label"> - </span></td>
+                                <td><span class="font"> {{ $order->customer_phone_number }}</span></td>
+                            </tr>
+                            
+                            <tr>
+                                <td><span class="label"> Township </span></td>
+                                <td><span class="label"> - </span></td>
                                 <td><span class="font"> {{ $order->township->name }}</span></td>
                             </tr>
                             <tr>
+                                <td><span class="label"> Cash To Collect </span></td>
+                                <td><span class="label"> - </span></td>
                                 <td><span class="font">
                                         @if ($order->payment_method === 'cash_on_delivery')
                                             {{ $order->total_amount + ($order->delivery_fees + $order->extra_charges) - $order->discount }}
@@ -121,10 +141,14 @@
                                     MMK </span></td>
                             </tr>
                             <tr>
-                                <td><span class="font"> {{ $order->customer_name }} ({{ $order->customer_phone_number }})</span></td>
+                                <td><span class="label"> Shop </span></td>
+                                <td><span class="label"> - </span></td>
+                                <td><span class="font"> {{ $order->shop->name }}</span></td>
                             </tr>
                             
                             <tr>
+                                <td><span class="label"> Remark </span></td>
+                                <td><span class="label"> - </span></td>
                                 <td><span class="font"> {{ $order->remark }}</span></td>
                             </tr>     
                         </table>
