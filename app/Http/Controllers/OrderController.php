@@ -478,13 +478,14 @@ class OrderController extends Controller
             $data = $data->where('orders.shop_id', $shop);
         }
         
+        $orders = $data->get();
+        
         $total_amount = $data->sum('orders.total_amount');
         $total_way = $data->count();
         $total_delivery_fees = $data
             ->selectRaw('(SELECT SUM(delivery_fees) FROM orders) + (SELECT SUM(extra_charges) FROM orders) - (SELECT SUM(discount) FROM orders) AS total_fees')
             ->value('total_fees');
 
-        $orders = $data->get();
 
        
 
