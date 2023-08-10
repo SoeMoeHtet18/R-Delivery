@@ -137,4 +137,14 @@ class TownshipController extends Controller
             ->orderColumn('id', '-townships.id $1')
             ->make(true);
     }
+
+    public function getTownshipListByAssociable(Request $request)
+    {
+        $city_id = $request->city_id;
+        $associable_type = $request->associable_type;
+        $associable_id = $request->associable_id;
+        $townships = $this->townshipRepository->getTownshipListByAssociable($city_id, $associable_id, $associable_type);
+        // $townships = $townships->sortByDesc('id');
+        return response()->json(['data' => $townships, 'message' => 'Successfully Get Townships List', 'status' => 'success'], 200);
+    }
 }

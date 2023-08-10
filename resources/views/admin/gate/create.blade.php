@@ -79,7 +79,7 @@
         $('#city_id').change(function() {
             var city_id = $('#city_id').val();
             $.ajax({
-                url: '/api/townships-get-by-city',
+                url: '/api/get-township-by-associable',
                 type: 'POST',
                 dataType: 'json',
                 data: {
