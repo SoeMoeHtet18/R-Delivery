@@ -14,8 +14,15 @@ class CustomerCollectionService
     public function createCustomerCollection($data)
     {
         $user = auth()->user();
+        if(isset($data['customer_collection_code'])) {
+            $customer_collection_code = $data['customer_collection_code'];
+        } else {
+            $customer_collection_code =  Helper::nomenclature('customer_collections', 'CE', 'id', $data['shop_id'], 'S');
+        }
+       
+       
         $customer_collection = new CustomerCollection();
-        $customer_collection->customer_collection_code = $data['customer_collection_code'];
+        $customer_collection->customer_collection_code = $customer_collection_code;
         $customer_collection->order_id = $data['order_id'] ?? null;
         $customer_collection->items = $data['items'] ?? null;
         $customer_collection->paid_amount = $data['paid_amount'];
@@ -26,7 +33,7 @@ class CustomerCollectionService
         $customer_collection->customer_name = $data['customer_name'];
         $customer_collection->customer_phone_number = $data['phone_number'];
         $customer_collection->shop_id = $data['shop_id'];
-        $customer_collection->rider_id = $data['rider_id'];
+        $customer_collection->rider_id = $data['rider_id'] ?? null;
         $customer_collection->save();
     }
 

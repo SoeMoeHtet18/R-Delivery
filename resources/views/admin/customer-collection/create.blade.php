@@ -29,7 +29,9 @@
             @csrf
             @if(isset($order))
             <input type="hidden" name="order_id" value="{{$order->id}}">
-            <input type="hidden" id="shop_id" value="{{$order->shop_id}}">
+            <input type="hidden" name="shop_id" value="{{$order->shop_id}}">
+            <input type="hidden" name="customer_name" value="{{$order->customer_name}}">
+            <input type="hidden" name="phone_number" value="{{$order->customer_phone_number}}">
             @else
             <div class="row m-0 mb-3">
                 <label for="order_id" class="col-2">

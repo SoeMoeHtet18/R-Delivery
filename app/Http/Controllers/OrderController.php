@@ -442,62 +442,65 @@ class OrderController extends Controller
 
     public function generatePDF(Request $request)
     {
+        $mpdf = new Mpdf();
+    
+        // Enable Myanmar language support
+        $mpdf->autoScriptToLang = true;
+        $mpdf->autoLangToFont = true;
+
+        // Set the font for Myanmar language
+        $mpdf->SetFont('myanmar3');
+
+        //retrieve data
+        $status = $request->status;
+        $township = $request->township;
+        $search = $request->search;
+        $city = $request->city;
+        $rider = $request->rider;
+        $shop  = $request->shop;
+        $data = $this->orderRepository->getAllOrdersQuery();
+        if ($status != 'null') {
+            $data = $data->where('orders.status', $status);
+        }
+        if ($township != 'null') {
+            $data = $data->where('orders.township_id', $township);
+        }
+        if ($search) {
+            $data = $data->where('orders.order_code', 'like', '%' . $search . '%')->orWhere('orders.customer_name', 'like', '%' . $search . '%')->orWhere('orders.customer_phone_number', 'like', '%' . $search . '%')->orWhere('orders.item_type', 'like', '%' . $search . '%')->orWhere('orders.full_address', 'like', '%' . $search . '%');
+        }
+        if ($city != 'null') {
+            $data = $data->where('orders.city_id', $city);
+        }
+        if ($rider != 'null') {
+            $data = $data->where('orders.rider_id', $rider);
+        }
+        if ($shop != 'null') {
+            $data = $data->where('orders.shop_id', $shop);
+        }
+        
+        $total_amount = $data->sum('orders.total_amount');
+        $total_way = $data->count();
+        $total_delivery_fees = $data
+            ->selectRaw('(SELECT SUM(delivery_fees) FROM orders) + (SELECT SUM(extra_charges) FROM orders) - (SELECT SUM(discount) FROM orders) AS total_fees')
+            ->value('total_fees');
+
+        $orders = $data->get();
+
+       
+
+        // Add HTML content with Myanmar text
+        $mpdf->WriteHTML(view('admin.order.pdf_export', compact(
+            'orders',
+            'total_amount',
+            'total_way',
+            'total_delivery_fees'
+        )));
+
+        // Output the PDF for download
+        $mpdf->Output('order.pdf', 'D');
         try {
 
-            $mpdf = new Mpdf();
-    
-            // Enable Myanmar language support
-            $mpdf->autoScriptToLang = true;
-            $mpdf->autoLangToFont = true;
-    
-            // Set the font for Myanmar language
-            $mpdf->SetFont('myanmar3');
-    
-            //retrieve data
-            $status = $request->status;
-            $township = $request->township;
-            $search = $request->search;
-            $city = $request->city;
-            $rider = $request->rider;
-            $shop  = $request->shop;
-            $data = $this->orderRepository->getAllOrdersQuery();
-            if ($status != 'null') {
-                $data = $data->where('orders.status', $status);
-            }
-            if ($township != 'null') {
-                $data = $data->where('orders.township_id', $township);
-            }
-            if ($search) {
-                $data = $data->where('orders.order_code', 'like', '%' . $search . '%')->orWhere('orders.customer_name', 'like', '%' . $search . '%')->orWhere('orders.customer_phone_number', 'like', '%' . $search . '%')->orWhere('orders.item_type', 'like', '%' . $search . '%')->orWhere('orders.full_address', 'like', '%' . $search . '%');
-            }
-            if ($city != 'null') {
-                $data = $data->where('orders.city_id', $city);
-            }
-            if ($rider != 'null') {
-                $data = $data->where('orders.rider_id', $rider);
-            }
-            if ($shop != 'null') {
-                $data = $data->where('orders.shop_id', $shop);
-            }
-    
-            $orders = $data->get();
-    
-            $total_amount = $data->sum('total_amount');
-            $total_way = $data->count();
-            $total_delivery_fees = $data
-                ->selectRaw('(SELECT SUM(delivery_fees) FROM orders) + (SELECT SUM(extra_charges) FROM orders) - (SELECT SUM(discount) FROM orders) AS total_fees')
-                ->value('total_fees');
-    
-            // Add HTML content with Myanmar text
-            $mpdf->WriteHTML(view('admin.order.pdf_export', compact(
-                'orders',
-                'total_amount',
-                'total_way',
-                'total_delivery_fees'
-            )));
-    
-            // Output the PDF for download
-            $mpdf->Output('order.pdf', 'D');
+          
         } catch (Exception $e) {
             return redirect()->back()->with('error', "Can't generate pdf");
         }

@@ -267,6 +267,7 @@
     .page-sidebar {
         height: 100vh;
         position: fixed;
+        overflow: auto;
     }
 
     .page-content {
