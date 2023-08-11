@@ -2,7 +2,13 @@
 
 namespace App\Services;
 
+use App\Models\Collection;
+use App\Models\Order;
 use App\Models\Shop;
+use App\Models\ShopPayment;
+use App\Models\TransactionsForShop;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class ShopService
 {

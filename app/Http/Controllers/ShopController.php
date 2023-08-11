@@ -64,8 +64,9 @@ class ShopController extends Controller
     public function show(string $id)
     {
         $shop = $this->shopRepository->getShopByID($id);
-        $order_ids = $this->orderRepository->getAllOrderIdsByShopID($id);
-        $payable_amount = $this->transactionsForShopService->getActualAmount($order_ids,$shop->id);
+        // $order_ids = $this->orderRepository->getAllOrderIdsByShopID($id);
+        // $payable_amount = $this->shopService->getPayableAmount($order_ids,$shop->id);
+        $payable_amount = $this->shopRepository->getPayableAmount($shop->id);
         $shop->payable_amount = $payable_amount;
         // $collection_total_amount = Collection::where('shop_id',$id)->where('status','success')->sum('total_amount');
         // $collection_paid_amount = Collection::where('shop_id',$id)->where('status','success')->sum('paid_amount');

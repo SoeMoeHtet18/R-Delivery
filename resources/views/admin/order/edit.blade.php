@@ -125,7 +125,7 @@
                     @endif
                 </div>
             </div>
-            <!-- <div class="row m-0 mb-3">
+            <div class="row m-0 mb-3">
                 <label for="markup_delivery_fees" class="col-2">
                     <h4>Markup Delivery Fees <b>:</b></h4>
                 </label>
@@ -135,7 +135,7 @@
                     <span class="text-danger"><strong>{{ $errors->first('markup_delivery_fees') }}</strong></span>
                     @endif
                 </div>
-            </div> -->
+            </div>
             <div class="row m-0 mb-3">
                 <label for="remark" class="col-2">
                     <h4>Remark <b>:</b></h4>

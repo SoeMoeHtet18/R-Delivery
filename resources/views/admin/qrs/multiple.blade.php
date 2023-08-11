@@ -133,9 +133,9 @@
                                 <td><span class="label"> - </span></td>
                                 <td><span class="font">
                                         @if ($order->payment_method === 'cash_on_delivery')
-                                            {{ $order->total_amount + ($order->delivery_fees + $order->extra_charges) - $order->discount }}
+                                            {{ $order->total_amount + ($order->delivery_fees + $order->markup_delivery_fees + $order->extra_charges) - $order->discount }}
                                         @elseif ($order->payment_method === 'item_prepaid')
-                                            {{ ($order->delivery_fees + $order->extra_charges) - $order->discount }}
+                                            {{ ($order->delivery_fees + $order->markup_delivery_fees + $order->extra_charges) - $order->discount }}
                                         @else
                                             0
                                         @endif

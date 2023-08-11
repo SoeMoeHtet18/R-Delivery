@@ -5,7 +5,9 @@ namespace App\Services;
 use App\Helpers\Helper;
 use App\Http\Traits\FileUploadTrait;
 use App\Models\ItemType;
+use App\Models\Notification;
 use App\Models\Order;
+use App\Models\Rider;
 use App\Models\Shop;
 use App\Models\Township;
 use App\Models\User;
@@ -66,7 +68,7 @@ class OrderService
         $delivery_fees = Township::where('id', $data['township_id'])->first()->delivery_fees;
 
         $order = new Order();
-        $orderCode = Helper::nomenclature('orders', 'OD', 'id', $shop_id, 'S');
+        $orderCode = Helper::nomenclature('orders', 'TCP', 'id', $shop_id, 'S');
         $order->order_code =  $orderCode;
         $order->shop_id =  $shop_id;
         $order->customer_name =  $data['customer_name'];
@@ -111,7 +113,7 @@ class OrderService
         $order->quantity =  $data['quantity'] ?? null;
         $order->delivery_fees =  $data['delivery_fees'];
         $order->total_amount = $data['total_amount'];
-        $order->markup_delivery_fees =  $data['markup_delivery_fees'] ?? null;
+        $order->markup_delivery_fees =  $data['markup_delivery_fees'] ?? 0.00;
         $order->remark =  $data['remark'] ?? null;
         $this->changeStatus($order, $data['status']);
         // if ($data['status'] == 'cancel') {

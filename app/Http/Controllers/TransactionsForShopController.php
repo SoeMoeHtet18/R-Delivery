@@ -196,7 +196,7 @@ class TransactionsForShopController extends Controller
 
         $shop_id = $request->shop_id;
 
-        $actual_amount = $this->transactionsForShopService->getActualAmount($order_ids, $shop_id);
+        $actual_amount = $this->transactionsForShopRepository->getActualAmount($order_ids, $shop_id);
 
         $shops = $this->shopRepository->getAllShops();
         $shops = $shops->sortByDesc('id');

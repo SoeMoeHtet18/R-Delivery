@@ -109,28 +109,38 @@ class ShopApiController extends Controller
         $receivables = Order::where('shop_id', $shop_id)
             ->where('payment_flag', '0')
             ->where('payment_method', 'all_prepaid')
-            ->where('payment_channel', 'shop_online_payment')
+            // ->where('payment_channel', 'shop_online_payment')
             ->selectRaw('DATE(created_at) as date, SUM(delivery_fees + extra_charges - discount) as total_receivable')
             ->groupBy('date')
             ->get();
 
         // Payable
-        $payables = Order::where('shop_id', $shop_id)
-            ->where('payment_flag', '0')
-            ->where('payment_method', 'cash_on_delivery')
-            ->selectRaw('DATE(created_at) as date, SUM(total_amount) as total_payable')
-            ->groupBy('date')
-            ->get();
+        $cod_payables = Order::where('shop_id', $shop_id)
+        ->where('payment_flag', 0)
+        ->where('payment_method', 'cash_on_delivery')
+        ->selectRaw('DATE(created_at) as date, SUM(total_amount + markup_delivery_fees) as total_payable')
+        ->groupBy('date');
+    
+        $prepaid_payables = Order::where('shop_id', $shop_id)
+            ->where('payment_flag', 0)
+            ->whereIn('payment_method', ['item_prepaid', 'all_prepaid'])
+            ->selectRaw('DATE(created_at) as date, SUM(markup_delivery_fees) as total_payable')
+            ->groupBy('date');
+        
+        $payables = $cod_payables->union($prepaid_payables)->get();
 
         // Generate the text report
+        
         $textReport = "";
 
         if ($payables->isNotEmpty()) {
             $textReport .= "Payable Amounts\n\n";
             foreach ($payables as $record) {
-                $date = $record->date;
-                $totalPayable = $record->total_payable;
-                $textReport .= "$date   $totalPayable MMK\n\n";
+                if($record->total_payable > 0) {
+                    $date = $record->date;
+                    $totalPayable = $record->total_payable;
+                    $textReport .= "$date   $totalPayable MMK\n\n";
+                }
             }
             $textReport .= "_________________________________\n";
             $textReport .= "Total Payable   ";
@@ -140,9 +150,11 @@ class ShopApiController extends Controller
         if ($receivables->isNotEmpty()) {
             $textReport .= "Receivable Amounts\n\n";
             foreach ($receivables as $record) {
-                $date = $record->date;
-                $totalReceivable = $record->total_receivable;
-                $textReport .= "$date   $totalReceivable MMK\n\n";
+                if($record->total_receivable > 0) {
+                    $date = $record->date;
+                    $totalReceivable = $record->total_receivable;
+                    $textReport .= "$date   $totalReceivable MMK\n\n";
+                }
             }
             $textReport .= "_________________________________\n";
             $textReport .= "Total Receivable    ";

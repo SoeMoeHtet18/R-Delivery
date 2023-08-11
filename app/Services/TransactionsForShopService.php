@@ -50,21 +50,21 @@ class TransactionsForShopService
         TransactionsForShop::destroy($id);
     }
 
-    public function getActualAmount($order_ids, $shop_id)
-    {
-        $raw_total_amount = Order::whereIn('id', $order_ids)
-            ->where('payment_flag', 0)
-            ->where('payment_method', 'cash_on_delivery')
-            ->selectRaw('SUM(total_amount + markup_delivery_fees) AS total_amount')
-            ->first();
-        $total_amount = $raw_total_amount->total_amount;
+    // public function getActualAmount($order_ids, $shop_id)
+    // {
+    //     $raw_total_amount = Order::whereIn('id', $order_ids)
+    //         // ->where('payment_flag', 0)
+    //         // ->where('payment_method', 'cash_on_delivery')
+    //         ->selectRaw('SUM(total_amount + markup_delivery_fees) AS total_amount')
+    //         ->first();
+    //     $total_amount = $raw_total_amount->total_amount;
 
-        $existing_amount = TransactionsForShop::where('shop_id', $shop_id)
-            ->where('type', 'loan_payment')
-            ->sum('amount');
-        $actual_amount = $total_amount - $existing_amount;
-        return $actual_amount;
-    }
+    //     $existing_amount = TransactionsForShop::where('shop_id', $shop_id)
+    //         ->where('type', 'loan_payment')
+    //         ->sum('amount');
+    //     $actual_amount = $total_amount - $existing_amount;
+    //     return $actual_amount;
+    // }
 
     public function updateDataIfOrderIdsExist($data)
     {

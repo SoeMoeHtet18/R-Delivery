@@ -2,6 +2,9 @@
 
 namespace App\Repositories;
 
+use App\Models\Collection;
+use App\Models\Order;
+use App\Models\ShopPayment;
 use App\Models\TransactionsForShop;
 
 class TransactionsForShopRepository
@@ -62,5 +65,32 @@ class TransactionsForShopRepository
             $payment_history->type = 'company';
         }
         return $payment_histories;
+    }
+
+    public function getActualAmount($order_ids, $shop_id)
+    {
+        $shop_payments = ShopPayment::where('shop_id', $shop_id)->sum('amount');
+
+        $orders = Order::whereIn('id', $order_ids)->get();
+
+        $orders_amount = 0;
+
+        foreach ($orders as $order) {
+            if ($order->payment_method === 'cash_on_delivery') {
+                $orders_amount += $order->total_amount + $order->markup_delivery_fees;
+            } elseif (in_array($order->payment_method, ['item_prepaid', 'all_prepaid'])) {
+                $orders_amount += $order->markup_delivery_fees;
+            }
+        }
+
+        $transaction_amount = TransactionsForShop::where('shop_id', $shop_id)
+            ->sum('amount');
+
+        $collection_amount = Collection::where('shop_id', $shop_id)->sum('paid_amount');
+        
+        $total_amount = $shop_payments + $orders_amount;
+        $actual_amount = $total_amount - ($transaction_amount + $collection_amount);
+
+        return $actual_amount;
     }
 }

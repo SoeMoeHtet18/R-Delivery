@@ -28,7 +28,7 @@ class OrderApiController extends Controller
     public function getOrderCode(Request $request)
     {
         $shop_id = $request->shop_id;
-        $order_code = Helper::nomenclature('orders', 'OD', 'id', $shop_id, 'S');
+        $order_code = Helper::nomenclature('orders', 'TCP', 'id', $shop_id, 'S');
         return response()->json(['data' => $order_code,  'status' => 'success', 'message' => 'Successfully get order code'], 200);
     }
 

@@ -93,6 +93,19 @@
                     @endif
                 </div>
             </div>
+            <div class="row m-0 mb-3">
+                <label for="rider_id" class="col-2">
+                    <h4>Rider Name <b>:</b></h4>
+                </label>
+                <div class="ps-4 col-10">
+                    <select name="rider_id" id="rider_id" class="form-control">
+                        <option value="" selected disabled>Select the Rider for This Order</option>
+                        @foreach ( $riders as $rider)
+                        <option value="{{$rider->id}}" @if($rider->id == old('rider_id')) {{'selected'}} @endif>{{$rider->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
             <!-- <div class="row m-0 mb-3">
                 <label for="quantity" class="col-2">
                     <h4>Quantity <b>:</b></h4>
@@ -127,6 +140,17 @@
                 </div>
             </div>
             <div class="row m-0 mb-3">
+                <label for="markup_delivery_fees" class="col-2 text-nowrap">
+                    <h4>Markup Delivery Fees <b>:</b></h4>
+                </label>
+                <div class="ps-4 col-10">
+                    <input type="text" id="markup_delivery_fees" name="markup_delivery_fees" value="{{old('markup_delivery_fees')}}" class="form-control" />
+                    @if ($errors->has('markup_delivery_fees'))
+                    <span class="text-danger"><strong>{{ $errors->first('markup_delivery_fees') }}</strong></span>
+                    @endif
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
                 <label for="extra_charges" class="col-2">
                     <h4>Extra Charges <b>:</b></h4>
                 </label>
@@ -137,17 +161,6 @@
                     @endif
                 </div>
             </div>
-            <!-- <div class="row m-0 mb-3">
-                <label for="markup_delivery_fees" class="col-2 text-nowrap">
-                    <h4>Markup Delivery Fees <b>:</b></h4>
-                </label>
-                <div class="ps-4 col-10">
-                    <input type="text" id="markup_delivery_fees" name="markup_delivery_fees" value="{{old('markup_delivery_fees')}}" class="form-control" />
-                    @if ($errors->has('markup_delivery_fees'))
-                    <span class="text-danger"><strong>{{ $errors->first('markup_delivery_fees') }}</strong></span>
-                    @endif
-                </div>
-            </div> -->
             <div class="row m-0 mb-3">
                 <label for="remark" class="col-2">
                     <h4>Remark <b>:</b></h4>
@@ -182,13 +195,13 @@
             </div>
             <div class="row m-0 mb-3">
                 <label for="type" class="col-2">
-                    <h4>Type <b>:</b></h4>
+                    <h4>Delivery Type <b>:</b></h4>
                 </label>
                 <div class="ps-4 col-10">
                     <select name="delivery_type_id" id="delivery_type_id" class="form-control">
-                        <option value="" selected disabled>Select the Type for This Order</option>
+                        <option value="" selected disabled>Select Delivery Type for This Order</option>
                         @foreach($delivery_types as $delivery_type)
-                        <option value="{{$delivery_type->id}}" @if($delivery_type->name == old('type')) selected @endif>{{$delivery_type->name}}</option>
+                        <option value="{{$delivery_type->id}}" @if($delivery_type->id == old('delivery_type_id')) selected @endif>{{$delivery_type->name}}</option>
                         @endforeach
                     </select>
                     @if ($errors->has('type'))
@@ -244,14 +257,14 @@
                     @endif
                 </div>
             </div>
-            <div class="row m-0 mb-3">
+            <!-- <div class="row m-0 mb-3">
                 <label for="note" class="col-2">
                     <h4>Note <b>:</b></h4>
                 </label>
                 <div class="ps-4 col-10">
                     <textarea id="note" name="note" class="form-control" style="height: 100px">{{old('note')}}</textarea>
                 </div>
-            </div>
+            </div> -->
             <div class="footer-button float-end">
                 <a href="{{route('orders.index')}}" class="btn btn-light">Cancel</a>
                 <input type="submit" class="btn btn-success ">
@@ -267,6 +280,7 @@
     $(document).ready(function() {
         $('#city_id').select2();
         $('#township_id').select2();
+        $('#rider_id').select2();
         $('#shop_id').select2();
         $('#status_id').select2();
         $('#item_type_id').select2();
@@ -301,9 +315,37 @@
             });
         }
 
+        function getRidersByTownship(township_id) {
+            $.ajax({
+                url: '/api/riders-get-by-township',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    township_id: township_id
+                },
+                success: function(response) {
+                    var rider_id = $('#rider_id').val();
+                    var riders = '<option value="" selected disabled>Select the Rider for This Order</option>';
+                    if (response.data) {
+                        for (let i = 0; i < response.data.length; i++) {
+                            if(response.data[0]) {
+                                riders += '<option value="' + response.data[i].id + '" selected>' + response.data[i].name + '</option>';
+                            } else if (rider_id == response.data[i].id) {
+                                riders += '<option value="' + response.data[i].id + '" selected>' + response.data[i].name + '</option>';
+                            } else {
+                                riders += '<option value="' + response.data[i].id + '">' + response.data[i].name + '</option>';
+                            }
+                        }
+                    }
+                    $('#rider_id').html(riders);
+                },
+            })
+        }
+
         // Call the function on page load with the initial value of township_id
         var initialTownshipId = $('#township_id').val();
         updateDeliveryFees(initialTownshipId);
+        getRidersByTownship(initialTownshipId);
 
         // Attach event handlers
         $('#city_id').change(function() {
@@ -334,6 +376,7 @@
                     // Update the delivery fees after selecting the township
                     var selectedTownshipId = $('#township_id').val();
                     updateDeliveryFees(selectedTownshipId);
+                    getRidersByTownship(selectedTownshipId);
                 },
             });
         });
@@ -342,6 +385,7 @@
             var township_id = $('#township_id').val();
             // Update the delivery fees after selecting the township
             updateDeliveryFees(township_id);
+            getRidersByTownship(township_id);
         });
 
 

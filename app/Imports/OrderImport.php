@@ -69,8 +69,14 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
         $city_id = $city ? $city->id : null;
 
         $township = trim($row['township']);
+        
         $township = Township::where('name', $township)->first();
         $township_id = $township ? $township->id : null;
+        
+        $delivery_fees = 0.00;
+        if(isset($township_id)) {
+            $delivery_fees = $township->delivery_fees;
+        }
 
         // $item_type = trim($row['item_type']);
         // $item_type = ItemType::where('name', $item_type)->first();
@@ -104,11 +110,9 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
 
         $formattedDate = $date->format('Y-m-d H:i:s');
 
-        $status = $rider_id == null ? 'warehouse' : 'delivering';
-
         // Log::debug($formattedDate);
         $order = Order::create([
-            'order_code' => Helper::nomenclature('orders', 'OD', 'id', $shop_id, 'S'),
+            'order_code' => Helper::nomenclature('orders', 'TCP', 'id', $shop_id, 'S'),
             'customer_name' => $row['customer_name'],
             'customer_phone_number' => $row['customer_phone_number'],
             'city_id' =>  $city_id,
@@ -116,10 +120,10 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
             'rider_id' => $rider_id ?? null,
             'shop_id' => $shop_id,
             'total_amount' => $row['total_amount'],
-            'delivery_fees' => $row['delivery_fees'],
-            'markup_delivery_fees' =>  $row['markup_delivery_fees'] ?? null,
+            'delivery_fees' => $delivery_fees,
+            'markup_delivery_fees' =>  $row['markup_delivery_fees'] ?? 0.00,
             'remark' => $row['remark'] ?? null,
-            'status' => $status,
+            'status' => 'pending',
             'item_type_id' => $item_type_id ?? null,
             'full_address' => $row['full_address'] ?? null,
             'schedule_date' => $formattedDate ?? null,
@@ -132,6 +136,7 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
             'branch_id' => auth()->user()->branch_id,
             'pay_later' => $row['total_amount'] > 100000 ? true : false,
             'payment_method' => $payment_method,
+            'extra_charges' => $row['extra_charges'] ?? null
         ]);
 
         if ($township_id && $rider_id) {
@@ -141,17 +146,6 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
             ]);
             $rider = Rider::find($rider_id);
             $rider->notifications()->attach($notification->id);
-            $orders = [];
-            if (Storage::exists('order_data.txt')) {
-                $orderDataJson = Storage::get('order_data.txt');
-                $orders = json_decode($orderDataJson, true);
-            }
-
-            $orderId = $order->order_code;
-            $orders[$orderId]['picked_at'] = $order->updated_at;
-
-            $orderDataJson = json_encode($orders);
-            Storage::put('order_data.txt', $orderDataJson);
         }
 
         return $order;
@@ -196,7 +190,6 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
                 }
             },
             'total_amount'          => 'required',
-            'delivery_fees'         => 'required',
             'item_type_id' => function ($attribute, $value, $onFailure) {
                 if ($value) {
                     $item_type = ItemType::where('name', trim($value))->first();
