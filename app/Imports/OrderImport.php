@@ -69,6 +69,7 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
         $city_id = $city ? $city->id : null;
 
         $township = trim($row['township']);
+        
         $township = Township::where('name', $township)->first();
         $township_id = $township ? $township->id : null;
         
@@ -109,8 +110,6 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
 
         $formattedDate = $date->format('Y-m-d H:i:s');
 
-        $status = $rider_id == null ? 'warehouse' : 'delivering';
-
         // Log::debug($formattedDate);
         $order = Order::create([
             'order_code' => Helper::nomenclature('orders', 'TCP', 'id', $shop_id, 'S'),
@@ -124,7 +123,7 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
             'delivery_fees' => $delivery_fees,
             'markup_delivery_fees' =>  $row['markup_delivery_fees'] ?? 0.00,
             'remark' => $row['remark'] ?? null,
-            'status' => $status,
+            'status' => 'pending',
             'item_type_id' => $item_type_id ?? null,
             'full_address' => $row['full_address'] ?? null,
             'schedule_date' => $formattedDate ?? null,
