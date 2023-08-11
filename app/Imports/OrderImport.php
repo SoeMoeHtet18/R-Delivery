@@ -71,6 +71,11 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
         $township = trim($row['township']);
         $township = Township::where('name', $township)->first();
         $township_id = $township ? $township->id : null;
+        
+        $delivery_fees = 0.00;
+        if(isset($township_id)) {
+            $delivery_fees = $township->delivery_fees;
+        }
 
         // $item_type = trim($row['item_type']);
         // $item_type = ItemType::where('name', $item_type)->first();
@@ -116,8 +121,8 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
             'rider_id' => $rider_id ?? null,
             'shop_id' => $shop_id,
             'total_amount' => $row['total_amount'],
-            'delivery_fees' => $row['delivery_fees'],
-            'markup_delivery_fees' =>  $row['markup_delivery_fees'] ?? null,
+            'delivery_fees' => $delivery_fees,
+            'markup_delivery_fees' =>  $row['markup_delivery_fees'] ?? 0.00,
             'remark' => $row['remark'] ?? null,
             'status' => $status,
             'item_type_id' => $item_type_id ?? null,
