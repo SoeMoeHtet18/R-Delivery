@@ -323,11 +323,11 @@ class OrderRepository
         return $order;
     }
 
-    public function getAllOrderIdsByShopID($id)
-    {
-        $orders = Order::where('shop_id', $id)->pluck('id')->toArray();
-        return $orders;
-    }
+    // public function getAllOrderIdsByShopID($id)
+    // {
+    //     $orders = Order::where('shop_id', $id)->pluck('id')->toArray();
+    //     return $orders;
+    // }
 
     public function getCancelRequestOrdersQuery()
     {
