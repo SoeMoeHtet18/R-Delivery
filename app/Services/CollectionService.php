@@ -10,6 +10,13 @@ use Carbon\Carbon;
 
 class CollectionService
 {
+    protected $notificationService;
+
+    public function __construct(NotificationService $notificationService)
+    {
+        $this->notificationService = $notificationService;
+    }
+
     public function updateCollectionByRider($data, $collection_id)
     {
         $collection                     = Collection::where('id', $collection_id)->first();
@@ -40,6 +47,8 @@ class CollectionService
         $collection->is_payable         = 0;
         $collection->branch_id         = $shop_user->branch_id;
         $collection->save();
+        $shop = $shop_user->shop;
+        $this->notificationService->collectionCreateByShopNotificationForUser($shop, $collection);
         return $collection;
     }
 

@@ -51,7 +51,8 @@
             /* padding-top: 1rem; */
         }
         .bot img{
-            width: 130px;
+            width: 250px;
+            height: 75px;
         }
 
         .content {

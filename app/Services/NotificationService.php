@@ -7,6 +7,7 @@ use App\Models\Notification;
 use App\Models\Rider;
 use App\Models\Shop;
 use App\Models\ShopUser;
+use App\Models\User;
 
 class NotificationService
 {
@@ -126,6 +127,54 @@ class NotificationService
         $shop_users = ShopUser::where('shop_id', $shop_id)->get();
         foreach ($shop_users as $shop_user) {
             $this->attachNotification($shop_user, $notification);
+        }
+    }
+    
+    public function orderCreateByShopNotificationForUser($shop, $order)
+    {
+        $message = 'An order ' . $order->order_code . ' was created by ' . $shop->name . '; $order_id = ' . $order->id;
+        $notification = $this->createNotification('order create by shop', $message);
+
+        //to notify all user under branch.
+        $users = User::where('branch_id',$shop->branch_id)->get();
+        foreach ($users as $user) {
+            $this->attachNotification($user, $notification);
+        }
+    }
+    
+    public function collectionCreateByShopNotificationForUser($shop, $collection)
+    {
+        $message = 'An collection ' . $collection->collection_code . ' was created by ' . $shop->name . '; $collection_id = ' . $collection->id;
+        $notification = $this->createNotification('collection create by shop', $message);
+
+        //to notify all user under branch.
+        $users = User::where('branch_id',$shop->branch_id)->get();
+        foreach ($users as $user) {
+            $this->attachNotification($user, $notification);
+        }
+    }
+    
+    public function orderDelayStatusNotificationForUser($order)
+    {
+        $message = $order->order_code . ' is delay due to "' . $order->note . '".; $order_id = ' . $order->id;
+        $notification = $this->createNotification('order delay by rider', $message);
+
+        //to notify all user under branch.
+        $users = User::where('branch_id',$order->branch_id)->get();
+        foreach ($users as $user) {
+            $this->attachNotification($user, $notification);
+        }
+    }
+    
+    public function orderCancelRequestStatusNotificationForUser($order)
+    {
+        $message = $order->rider->name . ' is asking cancel request for ' . $order->order_code . '.; $order_id = ' . $order->id;
+        $notification = $this->createNotification('order cancel request by rider', $message);
+
+        //to notify all user under branch.
+        $users = User::where('branch_id',$order->branch_id)->get();
+        foreach ($users as $user) {
+            $this->attachNotification($user, $notification);
         }
     }
 }

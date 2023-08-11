@@ -9,21 +9,7 @@
         </h2>
         <form action="{{route('rider-payments.store')}}" method="POST" class="action-form" enctype="multipart/form-data">
             @csrf
-            <div class="row m-0 mb-3">
-                <label for="type" class="col-2">
-                    <h4>Choose Type <b>:</b></h4>
-                </label>
-                <div class="col-10">
-                    <select name="type" id="type" class="form-control">
-                        <option value="" selected disabled>Select the Type of this Payment</option>
-                        <option value="daily" >Daily</option>
-                        <option value="monthly" >Monthly</option>
-                    </select>
-                    @if($errors->has('type'))
-                    <span class="text-danger"><strong>{{ $errors->first('type') }}</strong></span>
-                    @endif
-                </div>
-            </div>
+            
             <div class="row m-0 mb-3">
                 <label for="rider_id" class="col-2">
                     <h4>Rider Name <b>:</b></h4>
@@ -31,14 +17,9 @@
                 <div class="col-10">
                     <select name="rider_id" id="rider_id" class="form-control">
                         <option value="" selected disabled>Select the Rider of this Payment</option>
-                        {{--@foreach($riders as $rider)
-                        <option value="{{$rider->id}}" @isset($rider_id) @if($rider->id == $rider_id) selected
-                            @endif
-                            @else
-                            @if($rider->id == old('rider_id')) selected
-                            @endif
-                            @endisset>{{$rider->name}}</option>
-                        @endforeach--}}
+                        @foreach($riders as $rider)
+                        <option value="{{$rider->id}}" @if($rider->id == old('rider_id')) selected @endif>{{$rider->name}}</option>
+                        @endforeach
                     </select>
                     @if($errors->has('rider_id'))
                     <span class="text-danger"><strong>{{ $errors->first('rider_id') }}</strong></span>
@@ -97,10 +78,19 @@
                 <label for="deficit" class="col-2">
                     <h4>Deficit <b>:</b></h4>
                 </label>
-                <div class="col-10">
+                <div class="col-4">
                     <input type="text" id="deficit" name="deficit" class="form-control" readonly/>
                     @if($errors->has('deficit'))
                     <span class="text-danger"><strong>{{ $errors->first('deficit') }}</strong></span>
+                    @endif
+                </div>
+                <label for="type" class="col-2">
+                    <h4>Salary Type <b>:</b></h4>
+                </label>
+                <div class="col-4">
+                    <input type="text" id="type" name="type" class="form-control" readonly/>
+                    @if($errors->has('type'))
+                    <span class="text-danger"><strong>{{ $errors->first('type') }}</strong></span>
                     @endif
                 </div>
             </div>
@@ -139,47 +129,47 @@
 @section('javascript')
 <script>
     $(document).ready(function() {
-        $('#type').select2();
+        // $('#type').select2();
+        // $('#type').change(function() {
+        //     console.log('success');
+        //     var type = $('#type').val();
+        //     if(type == 'daily'){
+        //         $('#date_input').show();
+        //         $('#date_input2').hide();
+        //     }
+        //     if(type == 'monthly'){
+        //         $('#date_input2').show();
+        //         $('#date_input').hide();
+        //     }
+        //     $.ajax({
+        //         url: '/get-rider-by-type',
+        //         type: 'GET',
+        //         dataType: 'json',
+        //         data: {
+        //             type: type
+        //         },
+        //         success: function(response) {
+        //             // var township_id = $('#township_id').val();
+        //             var riders = '<option value="" selected disabled>Select the Rider of this Payment</option>';
+        //             if (response.data) {
+        //                 for (var i = 0; i < response.data.length; i++) {
+        //                     riders += '<option value="' + response.data[i].id + '">' + response.data[i].name + '</option>'; 
+        //                 }
+        //             }
+        //             console.log(riders);
+        //             $('#rider_id').html(riders);
+        //         },
+        //     });
+        // });
         $('#rider_id').select2();
-        $('#date_input').hide();
-        $('#date_input2').hide();
-        $('#type').change(function() {
-            console.log('success');
-            var type = $('#type').val();
-            if(type == 'daily'){
-                $('#date_input').show();
-                $('#date_input2').hide();
-            }
-            if(type == 'monthly'){
-                $('#date_input2').show();
-                $('#date_input').hide();
-            }
-            $.ajax({
-                url: '/get-rider-by-type',
-                type: 'GET',
-                dataType: 'json',
-                data: {
-                    type: type
-                },
-                success: function(response) {
-                    // var township_id = $('#township_id').val();
-                    var riders = '<option value="" selected disabled>Select the Rider of this Payment</option>';
-                    if (response.data) {
-                        for (var i = 0; i < response.data.length; i++) {
-                            riders += '<option value="' + response.data[i].id + '">' + response.data[i].name + '</option>'; 
-                        }
-                    }
-                    console.log(riders);
-                    $('#rider_id').html(riders);
-                },
-            });
-        });
-
+        $('#date_input, #date_input2').hide();
+        
         function updateRiderTotalSalaryBaseOnDate() {
             var rider_id = $('#rider_id').val();
             var type = $('#type').val();
             var daily = $('#date').val();
             var monthly = $('#monthly').val();
+
             $.ajax({
                 url: '/get-rider-total-salary-by-date',
                 type: 'GET',
@@ -192,25 +182,32 @@
                 },
                 success: function(response) {
                     console.log(response);
-                    $('#pick_up').val(response.data.total_pick_up_count);
-                    $('#delivery').val(response.data.total_deli_count);
+                    $('#pick_up, #delivery').val(response.data.total_pick_up_count);
                     $('#deficit').val(response.data.deficit_fees);
                     $('#total_amount').val(response.data.total_salary);
-                    var total_routine = response.data.total_pick_up_count + response.data.total_deli_count;
-                    $('#total_routine').val(total_routine);
+                    $('#total_routine').val(response.data.total_pick_up_count + response.data.total_deli_count);
+                    var salary_type = response.data.salary_type;
+                    $('#type').val(salary_type);
+                    if(salary_type == 'daily'){
+                        $('#date_input').show();
+                        $('#date_input2').hide();
+                    } else{
+                        $('#date_input').hide();
+                        $('#date_input2').show();
+                    }
                 },
             });
         }
         
-        $('#rider_id').change(function() {
+        // Initialize values if rider_id is present in the URL
+        var urlParams = new URLSearchParams(window.location.search);
+        var riderId = urlParams.get('rider_id');
+        if (riderId) {
+            $('#rider_id').val(riderId).trigger('change.select2');
             updateRiderTotalSalaryBaseOnDate();
-        });
-        $('#date').change(function() {
-            updateRiderTotalSalaryBaseOnDate();
-        });
-        $('#monthly').change(function() {
-            updateRiderTotalSalaryBaseOnDate();
-        });
+        }
+
+        $('#rider_id, #date, #monthly').change(updateRiderTotalSalaryBaseOnDate);
     });
 </script>
 @endsection

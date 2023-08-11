@@ -62,21 +62,42 @@
 
             if (data.length === 0) {
                 notificationList.append('<a class="dropdown-item" href="#">No notifications</a>');
-            } else {
-                data.forEach(function(notification) {
-                    html = '<a class="dropdown-item" href="#">' + notification.message + '</a>';
-                    if(notification.title == 'payment channel confirm' || notification.title =='payable or not'){
-                        var parts = notification.message.split(';');
-                        var message = parts[0].trim();
-                        var part_two = notification.message.split('=');
-                        var orderId = part_two[1].trim();
-                        var hrefUrl = "/orders/" + orderId;
-                        html = '<a class="dropdown-item" href="' + hrefUrl + '">' + message + '</a>';
-                    }
-                    notificationList.append(html);
-                });
-                
+                return;
             }
+
+            data.forEach(function(notification) {
+                var html = getNotificationHtml(notification);
+                notificationList.append(html);
+            });
+        }
+
+        function getNotificationHtml(notification) {
+            var html = '';
+            var hrefUrl = '';
+
+            if (notification.title == 'payment channel confirm' || 
+                notification.title == 'payable or not' || 
+                notification.title == 'order create by shop' || 
+                notification.title == 'collection create by shop' || 
+                notification.title == 'order delay by rider' ||
+                notification.title == 'order cancel request by rider') {
+                var parts = notification.message.split(';');
+                var message = parts[0].trim();
+                var partTwo = parts[1].split('=');
+                var id = partTwo[1].trim();
+
+                if (partTwo[0].trim() == '$order_id') {
+                    hrefUrl = "/orders/" + id;
+                } else if (partTwo[0].trim() == '$collection_id') {
+                    hrefUrl = "/collections/" + id;
+                }
+
+                html = '<a class="dropdown-item" href="' + hrefUrl + '">' + message + '</a>';
+            } else {
+                html = '<a class="dropdown-item" href="#">' + notification.message + '</a>';
+            }
+
+            return html;
         }
 
         function fetchNotifications() {
@@ -116,30 +137,28 @@
         // Function to show the pop-up notification
         function showNotification(notifications) {
             notifications.forEach(function(notification) {
-                // Display the notification message using Toastify
-                if(notification.title == 'payment channel confirm' || notification.title =='payable or not'){
-                    var parts = notification.message.split(';');
-                    var message = parts[0].trim();
-                    Toastify({
-                        text: message,
-                        duration: 10000, // 10 seconds
-                        close: true,
-                        gravity: "top", // Position the notification at the top
-                        className: "toastify-notification",
-                        // You can customize the appearance with additional CSS classes
-                    }).showToast();
-                }else {
-                    Toastify({
-                        text: notification.message,
-                        duration: 10000, // 10 seconds
-                        close: true,
-                        gravity: "top", // Position the notification at the top
-                        className: "toastify-notification",
-                        // You can customize the appearance with additional CSS classes
-                    }).showToast();
-                }
-                
+                var options = {
+                    text: getNotificationText(notification),
+                    duration: 10000, // 10 seconds
+                    close: true,
+                    gravity: "top", // Position the notification at the top
+                    className: "toastify-notification",
+                    // You can customize the appearance with additional CSS classes
+                };
+
+                Toastify(options).showToast();
             });
+        }
+
+        function getNotificationText(notification) {
+            return (notification.title == 'payment channel confirm' || 
+                    notification.title == 'payable or not' || 
+                    notification.title == 'order create by shop' || 
+                    notification.title == 'collection create by shop' || 
+                    notification.title == 'order cancel request by rider' || 
+                    notification.title == 'order delay by rider') ? 
+                    notification.message.split(';')[0].trim() : 
+                    notification.message;
         }
 
         fetchNotifications();

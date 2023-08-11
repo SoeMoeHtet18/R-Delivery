@@ -77,6 +77,9 @@
         </h2>
         <div class="card-toolbar">
             <div class="create-button">
+                <a href="{{url('/rider-payments/create?rider_id='.$rider->id)}}" class="btn create-btn" id="add-rider-payment">Add Rider Payment</a>
+            </div>
+            <div class="create-button">
                 <a class="btn create-btn" id="add-deficit">Add Deficit</a>
             </div>
             <a href="{{url('/riders/'.$rider->id.'/assign-township')}}" class="btn btn-secondary me-3">Assign Township</a>

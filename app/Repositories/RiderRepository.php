@@ -128,6 +128,7 @@ class RiderRepository
         $data['deficit_fees'] = $deficit_fees;
         $data['total_pick_up_count'] = $total_pick_up_count;
         $data['total_deli_count'] = $total_deli_count;
+        $data['salary_type'] = $rider->salary_type;
         return $data;
     }
 
