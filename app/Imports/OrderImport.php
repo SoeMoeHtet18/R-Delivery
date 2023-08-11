@@ -108,7 +108,7 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
 
         // Log::debug($formattedDate);
         $order = Order::create([
-            'order_code' => Helper::nomenclature('orders', 'OD', 'id', $shop_id, 'S'),
+            'order_code' => Helper::nomenclature('orders', 'TCP', 'id', $shop_id, 'S'),
             'customer_name' => $row['customer_name'],
             'customer_phone_number' => $row['customer_phone_number'],
             'city_id' =>  $city_id,
