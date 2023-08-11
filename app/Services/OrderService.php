@@ -43,7 +43,7 @@ class OrderService
         $order->total_amount = $data['total_amount'];
         $order->markup_delivery_fees =  $data['markup_delivery_fees'] ?? 0;
         $order->remark =  $data['remark'] ?? null;
-        $order->status = isset($data['rider_id']) ? "delivering" : "pending";
+        $order->status = "pending";
         $order->item_type_id =  $data['item_type_id'] ?? null;
         $order->full_address =  $data['full_address'] ?? null;
         $order->schedule_date =  $data['schedule_date'] ?? Carbon::tomorrow();;
