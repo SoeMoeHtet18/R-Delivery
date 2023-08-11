@@ -109,7 +109,7 @@ class ShopApiController extends Controller
         $receivables = Order::where('shop_id', $shop_id)
             ->where('payment_flag', '0')
             ->where('payment_method', 'all_prepaid')
-            ->where('payment_channel', 'shop_online_payment')
+            // ->where('payment_channel', 'shop_online_payment')
             ->selectRaw('DATE(created_at) as date, SUM(delivery_fees + extra_charges - discount) as total_receivable')
             ->groupBy('date')
             ->get();
