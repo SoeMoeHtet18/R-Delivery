@@ -5,7 +5,9 @@ namespace App\Services;
 use App\Helpers\Helper;
 use App\Http\Traits\FileUploadTrait;
 use App\Models\ItemType;
+use App\Models\Notification;
 use App\Models\Order;
+use App\Models\Rider;
 use App\Models\Shop;
 use App\Models\Township;
 use App\Models\User;
@@ -41,7 +43,7 @@ class OrderService
         $order->total_amount = $data['total_amount'];
         $order->markup_delivery_fees =  $data['markup_delivery_fees'] ?? 0;
         $order->remark =  $data['remark'] ?? null;
-        $order->status = "pending";
+        $order->status = isset($data['rider_id']) ? "delivering" : "pending";
         $order->item_type_id =  $data['item_type_id'] ?? null;
         $order->full_address =  $data['full_address'] ?? null;
         $order->schedule_date =  $data['schedule_date'] ?? Carbon::tomorrow();;
@@ -95,7 +97,25 @@ class OrderService
         $order->pay_later = $data['total_amount'] > 100000 ? true : false;
         $order->save();
         $this->notificationService->orderCreateNotificationForShopUser($shop_id);
-        return $order;
+        if ($order->township_id && $order->rider_id) {
+            $notification = Notification::create([
+                'title' => 'create',
+                'message' => 'You have got a new order.'
+            ]);
+            $rider = Rider::find($order->rider_id);
+            $rider->notifications()->attach($notification->id);
+            $orders = [];
+            if (Storage::exists('order_data.txt')) {
+                $orderDataJson = Storage::get('order_data.txt');
+                $orders = json_decode($orderDataJson, true);
+            }
+
+            $orderId = $order->order_code;
+            $orders[$orderId]['picked_at'] = $order->updated_at;
+
+            $orderDataJson = json_encode($orders);
+            Storage::put('order_data.txt', $orderDataJson);
+        }        return $order;
     }
 
     public function updateOrderByID($data, $order, $file)
@@ -110,7 +130,7 @@ class OrderService
         $order->quantity =  $data['quantity'] ?? null;
         $order->delivery_fees =  $data['delivery_fees'];
         $order->total_amount = $data['total_amount'];
-        $order->markup_delivery_fees =  $data['markup_delivery_fees'] ?? null;
+        $order->markup_delivery_fees =  $data['markup_delivery_fees'] ?? 0.00;
         $order->remark =  $data['remark'] ?? null;
         $this->changeStatus($order, $data['status']);
         // if ($data['status'] == 'cancel') {
