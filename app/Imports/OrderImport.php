@@ -136,6 +136,7 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
             'branch_id' => auth()->user()->branch_id,
             'pay_later' => $row['total_amount'] > 100000 ? true : false,
             'payment_method' => $payment_method,
+            'extra_charges' => $row['extra_charges'] ?? null
         ]);
 
         if ($township_id && $rider_id) {
@@ -145,17 +146,6 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
             ]);
             $rider = Rider::find($rider_id);
             $rider->notifications()->attach($notification->id);
-            $orders = [];
-            if (Storage::exists('order_data.txt')) {
-                $orderDataJson = Storage::get('order_data.txt');
-                $orders = json_decode($orderDataJson, true);
-            }
-
-            $orderId = $order->order_code;
-            $orders[$orderId]['picked_at'] = $order->updated_at;
-
-            $orderDataJson = json_encode($orders);
-            Storage::put('order_data.txt', $orderDataJson);
         }
 
         return $order;
@@ -200,7 +190,6 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
                 }
             },
             'total_amount'          => 'required',
-            'delivery_fees'         => 'required',
             'item_type_id' => function ($attribute, $value, $onFailure) {
                 if ($value) {
                     $item_type = ItemType::where('name', trim($value))->first();
