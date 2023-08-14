@@ -6,6 +6,7 @@ use App\Http\Requests\ShopCreateRequest;
 use App\Http\Requests\ShopUpdateRequest;
 use App\Models\Collection;
 use App\Models\CustomerCollection;
+use App\Repositories\CollectionRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\ShopRepository;
 use App\Services\ShopService;
@@ -22,13 +23,17 @@ class ShopController extends Controller
     protected $shopService;
     protected $orderRepository;
     protected $transactionsForShopService;
+    protected $collectionRepository;
 
-    public function __construct(ShopRepository $shopRepository, ShopService $shopService, OrderRepository $orderRepository, TransactionsForShopService $transactionsForShopService)
+    public function __construct(ShopRepository $shopRepository, ShopService $shopService, 
+        OrderRepository $orderRepository, TransactionsForShopService $transactionsForShopService, 
+        CollectionRepository $collectionRepository)
     {
         $this->shopRepository = $shopRepository;
         $this->shopService = $shopService;
         $this->orderRepository = $orderRepository;
         $this->transactionsForShopService = $transactionsForShopService;
+        $this->collectionRepository = $collectionRepository;
     }
 
     /**
@@ -160,15 +165,28 @@ class ShopController extends Controller
             $start = $request->start;
             $end = $request->end;
             $shop_id = $request->shop_id;
-            
-            $data = $this->orderRepository->getAllOrdersQueryByShop($shop_id);
-            
-            $orders = $data->get();
-            // Add HTML content with Myanmar text
-            $mpdf->WriteHTML(view('admin.shop.pdf_export', compact('orders')));
+            $type = $request->type;
 
-            // Output the PDF for download
-            $mpdf->Output('shop.pdf', 'D');
+            if($type == 'order') {
+                $data = $this->orderRepository->getAllOrdersQueryByShop($shop_id);
+            
+                $orders = $data->get();
+                // Add HTML content with Myanmar text
+                $mpdf->WriteHTML(view('admin.shop.pdf_export', compact('orders')));
+    
+                // Output the PDF for download
+                $mpdf->Output('shop_order.pdf', 'D');   
+            } else if($type == 'pick_up') {
+                $collections = $this->collectionRepository->getAllCollectionsByShopUser($shop_id);
+                
+                $mpdf->WriteHTML(view('admin.shop.pdf_export_for_pick_up', compact('collections')));
+    
+                // Output the PDF for download
+                $mpdf->Output('shop_pick_up.pdf', 'D');   
+            } else {
+                return redirect()->back()->with('error', "Can't generate pdf");
+            }
+           
         } catch (Exception $e) {
             return redirect()->back()->with('error', "Can't generate pdf");
         }

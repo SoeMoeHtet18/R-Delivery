@@ -419,7 +419,7 @@
                         <th>Paid</th>
                         <th>Total Amount</th>
                         <th>Delivery Fees</th>
-                        <!-- <th>Markup Delivery Fees</th> -->
+                        <th>Markup Delivery Fees</th>
                         <th>Order Code</th>
                         <th>Shop</th>
                         <th>Rider</th>
@@ -461,7 +461,7 @@
                         <th>Action</th>
                         <th>Total Amount</th>
                         <th>Delivery Fees</th>
-                        <!-- <th>Markup Delivery Fees</th> -->
+                        <th>Markup Delivery Fees</th>
                         <th>Order Code</th>
                         <th>Shop</th>
                         <th>Rider</th>
@@ -492,6 +492,7 @@
                         <th>Action</th>
                         <th>Total Amount</th>
                         <th>Delivery Fees</th>
+                        <th>Markup Delivery Fees</th>
                         <th>Order Code</th>
                         <th>Shop</th>
                         <th>Rider</th>
@@ -522,7 +523,7 @@
                         <th>Action</th>
                         <th>Total Amount</th>
                         <th>Delivery Fees</th>
-                        <!-- <th>Markup Delivery Fees</th> -->
+                        <th>Markup Delivery Fees</th>
                         <th>Order Code</th>
                         <th>Shop</th>
                         <th>Rider</th>
@@ -829,10 +830,10 @@
                         data: 'delivery_fees',
                         name: 'delivery_fees'
                     },
-                    // {
-                    //     data: 'markup_delivery_fees',
-                    //     name: 'markup_delivery_fees'
-                    // },
+                    {
+                        data: 'markup_delivery_fees',
+                        name: 'markup_delivery_fees'
+                    },
                     {
                         data: 'order_code',
                         name: 'order_code'
@@ -954,7 +955,7 @@
                                 return "Delivering";
                             }
                         },
-                        "targets": 13
+                        "targets": 14
                     },
                     {
                         "render": function(data, type, row) {
@@ -969,7 +970,7 @@
                             });
                             return formattedDate;
                         },
-                        "targets": 16
+                        "targets": 17
                     },
                     {
                         "render": function(data, type, row) {
@@ -980,7 +981,7 @@
                                 return "Pick Up";
                             }
                         },
-                        "targets": 18
+                        "targets": 19
                     },
                 ]
             });
@@ -1072,10 +1073,10 @@
                         data: 'delivery_fees',
                         name: 'delivery_fees'
                     },
-                    // {
-                    //     data: 'markup_delivery_fees',
-                    //     name: 'markup_delivery_fees'
-                    // },
+                    {
+                        data: 'markup_delivery_fees',
+                        name: 'markup_delivery_fees'
+                    },
                     {
                         data: 'order_code',
                         name: 'order_code'
@@ -1118,7 +1119,7 @@
                                 return "Paid";
                             }
                         },
-                        "targets": 9
+                        "targets": 10
                     },
 
                 ]
@@ -1166,6 +1167,10 @@
                         name: 'delivery_fees'
                     },
                     {
+                        data: 'markup_delivery_fees',
+                        name: 'markup_delivery_fees'
+                    },
+                    {
                         data: 'order_code',
                         name: 'order_code'
                     },
@@ -1207,7 +1212,7 @@
                                 return "Paid";
                             }
                         },
-                        "targets": 9
+                        "targets": 10
                     },
                     // {
                     //     "render": function(data, type, row) {
@@ -1301,10 +1306,10 @@
                         data: 'delivery_fees',
                         name: 'delivery_fees'
                     },
-                    // {
-                    //     data: 'markup_delivery_fees',
-                    //     name: 'markup_delivery_fees'
-                    // },
+                    {
+                        data: 'markup_delivery_fees',
+                        name: 'markup_delivery_fees'
+                    },
                     {
                         data: 'order_code',
                         name: 'order_code'
@@ -1347,7 +1352,7 @@
                                 return "Paid";
                             }
                         },
-                        "targets": 9
+                        "targets": 10
                     },
                     // {
                     //     "render": function(data, type, row) {

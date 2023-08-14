@@ -225,20 +225,28 @@
                     {{ $order->delivery_fees }}
                 </div>
             </div>
-            <!-- <div class="row m-0 mb-3">
+            <div class="row m-0 mb-3">
                 <div class="col-2">
                     <h4>Markup Delivery Fees <b>:</b></h4>
                 </div>
                 <div class="col-10">
                     {{ $order->markup_delivery_fees }}
                 </div>
-            </div> -->
+            </div>
             <div class="row m-0 mb-3">
                 <div class="col-2">
                     <h4>Extra Charges <b>:</b></h4>
                 </div>
                 <div class="col-10">
                     @if($order->delivery_fees != null) {{$order->delivery_fees}} @else {{'N/A'}} @endif
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <div class="col-2">
+                    <h4>Discount <b>:</b></h4>
+                </div>
+                <div class="col-10">
+                    @if($order->discount != null) {{$order->discount}} @else N/A @endif
                 </div>
             </div>
             <div class="row m-0 mb-3">

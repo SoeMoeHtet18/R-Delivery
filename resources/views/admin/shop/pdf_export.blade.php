@@ -23,7 +23,8 @@
             text-align: center;
             font-size: 18;
         }
-        thead tr {
+
+        thead th, .last-row td, .color {
             background-color: #d676fc;
         }
     </style>
@@ -47,6 +48,13 @@
             </tr>
         </thead>
         <tbody>
+            @php
+            $totalAmountSum = 0;
+            $deliveryFeesSum = 0;
+            $markupDeliveryFeesSum = 0;
+            $OSDeliSum = 0;
+            @endphp
+
             @foreach ($orders as $order)
             <tr>
                 <td>{{ $order->customer_name }}</td>
@@ -56,22 +64,66 @@
                 @php
                 $quantityArray = explode(',', $order->quantity);
                 $totalQuantity = array_sum($quantityArray);
+                $totalAmountSum += $order->total_amount;
+                $deliveryFeesSum += $order->delivery_fees;
+                $markupDeliveryFeesSum += $order->markup_delivery_fees;
+                $OSDeliSum += ($order->delivery_fees + $order->markup_delivery_fees);
                 @endphp
                 <td>{{ $totalQuantity }}</td>
                 <td>{{ $order->total_amount }}</td>
                 <td>{{ $order->delivery_fees }}</td>
-                <td>{{ $order->markup_delivery_fees }}</td>
-                @php
-                $difference = $order->markup_delivery_fees - $order->delivery_fees;
-                @endphp
-                @if ($difference > 0)
-                <td>{{ $difference }}</td>
-                @else
+                @if($order->markup_delivery_fees == 0) 
                 <td></td>
+                <td></td>
+                @else
+                <td>{{ $order->delivery_fees + $order->markup_delivery_fees }}</td>
+                <td>{{ $order->markup_delivery_fees }}</td>
                 @endif
                 <td>{{ $order->remark }}</td>
             </tr>
             @endforeach
+
+            <tr class="last-row">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{ $totalAmountSum }}</td>
+                <td>{{ $deliveryFeesSum }}</td>
+                <td>{{ $OSDeliSum }}</td>
+                <td>{{ $markupDeliveryFeesSum }}</td>
+                <td></td>
+            </tr>
+        </tbody>
+
+    </table>
+    <table style="width: 50%; margin: auto; margin-top: 50px;">
+        <tbody>
+            <tr>
+                <td>Way</td>
+                <td>{{$orders->count()}}</td>
+            </tr>
+            <tr class="color">
+                <td>Amount</td>
+                <td>{{ $totalAmountSum }}</td>
+            </tr>
+            <tr>
+                <td>OS Deli</td>
+                <td>{{ $OSDeliSum }}</td>
+            </tr>
+            <tr class="color">
+                <td>Total Amount</td>
+                <td>{{ $totalAmountSum - $OSDeliSum }}</td>
+            </tr>
+            <tr>
+                <td>Deli Add</td>
+                <td>{{ $markupDeliveryFeesSum }}</td>
+            </tr>
+            <tr class="color">
+                <td>Net Amount</td>
+                <td>{{  $totalAmountSum - $OSDeliSum - $markupDeliveryFeesSum }}</td>
+            </tr>
         </tbody>
     </table>
 </body>
