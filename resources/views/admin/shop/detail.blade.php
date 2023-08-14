@@ -267,25 +267,22 @@
                 </div>
                 <div class="portlet-body">
                     <div class="create-button pb-5">
-                        <a href="{{url('/transactions-for-shop-create-by-shop-id')}}?shop_id={{$shop->id}}" class="btn create-btn">Add New Collection</a>
+                        <a href="{{url('/transactions-for-shop-create-by-shop-id')}}?shop_id={{$shop->id}}" class="btn create-btn">Add New Pick Up</a>
                     </div>
                     <table id="collection-for-shop-datatable" class="table table-striped table-hover table-responsive datatable">
                         <thead>
                             <tr>
                                 <th>#</th>
+                                <th>Pick Up Code</th>
                                 <th>Total Quantity</th>
                                 <th>Total Amount</th>
                                 <th>Paid Amount</th>
-                                <th>Collection Group Id</th>
-                                <th>Rider Id</th>
-                                <th>Shop Id</th>
-                                <th>Assigned At</th>
+                                <th>Collection Group</th>
+                                <th>Rider</th>
                                 <th>Collected At</th>
                                 <th>Note</th>
                                 <th>Status</th>
                                 <th>Is payable</th>
-                                <th>Created At</th>
-                                <th>Updated At</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -706,6 +703,10 @@
                     name: 'id'
                 },
                 {
+                    data: 'collection_code',
+                    name: 'pick_up_code'
+                },
+                {
                     data: 'total_quantity',
                     name: 'total_quantity'
                 },
@@ -718,20 +719,12 @@
                     name: 'paid_amount',
                 },
                 {
-                    data: 'collection_group_id',
-                    name: 'collection_group_id',
+                    data: 'collection_group_code',
+                    name: 'collection_group',
                 },
                 {
-                    data: 'rider_id',
-                    name: 'rider_id',
-                },
-                {
-                    data: 'shop_id',
-                    name: 'shop_id',
-                },
-                {
-                    data: 'assigned_at',
-                    name: 'assigned_at',
+                    data: 'rider_name',
+                    name: 'rider',
                 },
                 {
                     data: 'collected_at',
@@ -749,17 +742,34 @@
                     data: 'is_payable',
                     name: 'is_payable',
                 },
-                {
-                    data: 'created_at',
-                    name: 'created_at',
-                },
-                {
-                    data: 'action',
-                    name: 'action',
-                    orderable: false,
-                    searchable: false
-                },
             ],
+            columnDefs: [
+                    {
+                        "render": function(data, type, row) {
+                            if (row.status == 'pending') {
+                                return "Pending";
+                            }
+                            if (row.status == 'complete') {
+                                return "Completed";
+                            }
+                            if (row.status == 'picking-up') {
+                                return "Picking Up";
+                            }
+                        },
+                        "targets": 9 
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            if (row.is_payable == 0) {
+                                return "No";
+                            }
+                            if (row.payment_flag == 1) {
+                                return "Yes";
+                            }
+                        },
+                        "targets": 10
+                    },
+                ],
         });
 
         const form = $('#pdf_form');

@@ -33,9 +33,13 @@ class RiderRepository
         return $rider;
     }
 
-    public function getPendingOrderListByRiderID($id)
+    public function getTodayOrderListByRiderID($id)
     {
-        $query = Order::leftJoin('townships', 'townships.id', 'orders.township_id')
+        $today = Carbon::now();
+        $query = Order::where('orders.rider_id',$id)
+            ->whereDate('orders.schedule_date', $today)
+            ->where('orders.status','delivering')
+            ->leftJoin('townships', 'townships.id', 'orders.township_id')
             ->leftJoin('riders', 'riders.id', 'orders.rider_id')
             ->leftJoin('shops', 'shops.id', 'orders.shop_id')
             ->leftJoin('users', 'users.id', 'orders.last_updated_by')

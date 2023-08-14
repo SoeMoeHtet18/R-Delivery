@@ -477,4 +477,15 @@ class OrderRepository
 
         return $order;
     }
+
+    public function getTodayOrdersByRider($id)
+    {
+        $today = Carbon::now();
+        $orders = Order::where('rider_id',$id)
+            ->whereDate('schedule_date', $today)
+            ->where('status','delivering')
+            ->with('township','shop','rider')
+            ->get();
+        return $orders;
+    }
 }

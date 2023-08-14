@@ -64,13 +64,19 @@
                 @php
                 $quantityArray = explode(',', $order->quantity);
                 $totalQuantity = array_sum($quantityArray);
-                $totalAmountSum += $order->total_amount;
+                if($order->payment_method == 'cash_on_delivery') {
+                    $totalAmountSum += $order->total_amount;
+                }
                 $deliveryFeesSum += $order->delivery_fees;
                 $markupDeliveryFeesSum += $order->markup_delivery_fees;
                 $OSDeliSum += ($order->delivery_fees + $order->markup_delivery_fees);
                 @endphp
                 <td>{{ $totalQuantity }}</td>
-                <td>{{ $order->total_amount }}</td>
+                <td>
+                    @if($order->payment_method == 'cash_on_delivery') 
+                        {{ $order->total_amount }} 
+                    @endif
+                </td>
                 <td>{{ $order->delivery_fees }}</td>
                 @if($order->markup_delivery_fees == 0) 
                 <td></td>

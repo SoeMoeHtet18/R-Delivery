@@ -161,8 +161,8 @@
                             if (row.status == 'complete') {
                                 return "Completed";
                             }
-                            if (row.status == 'in-warehouse') {
-                                return "In Warehouse";
+                            if (row.status == 'picking-up') {
+                                return "Picking Up";
                             }
                         },
                         "targets": 11   

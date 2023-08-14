@@ -213,7 +213,7 @@ class RiderController extends Controller
             //retrieve data
             $rider_id = $request->rider_id;
             
-            $orders = $this->orderRepository->getAllPendingOrdersByRider($rider_id);
+            $orders = $this->orderRepository->getTodayOrdersByRider($rider_id);
             
             // Add HTML content with Myanmar text
             $mpdf->WriteHTML(view('admin.rider.pdf_export', compact('orders')));

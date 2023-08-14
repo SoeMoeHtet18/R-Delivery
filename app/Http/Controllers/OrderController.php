@@ -161,9 +161,9 @@ class OrderController extends Controller
         return redirect()->back();
     }
 
-    public function getPendingOrdersTableByRiderID(Request $request, $id)
+    public function getTodayOrdersTableByRiderID(Request $request, $id)
     {
-        $data = $this->riderRepository->getPendingOrderListByRiderID($id);
+        $data = $this->riderRepository->getTodayOrderListByRiderID($id);
         return DataTables::of($data)
             ->addColumn('order_code', function ($data) {
                 return '<a href="' . route("orders.show", $data->id) . '">' . $data->order_code . '</a>';
