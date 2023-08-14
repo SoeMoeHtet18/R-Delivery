@@ -316,6 +316,12 @@
 @section('javascript')
 <script type="text/javascript">
     $(function() {
+        var tabIndex = 0;
+        $('.nav-tabs a').click(function() {
+            $(this).tab('show');
+            tabIndex = $('.nav-tabs a').index(this);
+        });
+
         var rider_id = document.getElementById('rider-id').getAttribute('data-rider-id');
 
         $('#add-deficit').click(function() {
@@ -650,23 +656,17 @@
         form.submit(function(event) {
             // Prevent the default form submission behavior
             event.preventDefault();
-            var rider_id = document.getElementById('rider-id').getAttribute('data-rider-id');            
-            generatePDF(rider_id);
+            var rider_id = document.getElementById('rider-id').getAttribute('data-rider-id');
+            var type = tabIndex == 0 ? 'order' : tabIndex == 2 ? 'pick_up' : '';            
+            generatePDF(rider_id, type);
         });
 
-        function generatePDF(rider_id) {
+        function generatePDF(rider_id, type) {
             // Create the download URL with query parameters
-            const downloadUrl = `/generate-rider-pdf?rider_id=${encodeURIComponent(rider_id)}`;
+            const downloadUrl = `/generate-rider-pdf?rider_id=${encodeURIComponent(rider_id)}&type=${encodeURIComponent(type)}`;
             // Navigate to the download URL
             window.location.href = downloadUrl;
         }
-    });
-</script>
-<script>
-    $(document).ready(function() {
-        $('.nav-tabs a').click(function() {
-            $(this).tab('show');
-        });
     });
 </script>
 @endsection

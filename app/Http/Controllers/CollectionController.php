@@ -156,8 +156,15 @@ class CollectionController extends Controller
 
     public function getCollectionsTableByShopID(Request $request, $id)
     {
+       
+        $start = $request->from_date;
+        $end = $request->to_date . ' 23:59:00';
         $data = $this->collectionRepository->getCollectionsQueryByShopID($id);
-        return DataTables::of($data)
+        if ($start && $end) {
+            $data = $data->whereBetween('collections.created_at', [$start, $end]);
+        }
+        $collections = $data;
+        return DataTables::of($collections)
             ->addIndexColumn()
             ->addColumn('action', function($row){
                 $actionBtn = '<a href="' . route("collections.show", $row->id) . '" class="info btn btn-info btn-sm">View</a>

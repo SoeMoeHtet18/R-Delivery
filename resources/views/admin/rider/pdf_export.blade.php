@@ -27,6 +27,10 @@
         .content {
             font-size: 12px;
         }
+
+        thead th, .last-row td, .color {
+            background-color: #d676fc;
+        }
     </style>
 </head>
 
@@ -53,7 +57,7 @@
             $totalAmountSum = 0;
             $deliveryFeesSum = 0;
             $markupDeliveryFeesSum = 0;
-            $OSDeliSum = 0;
+            $extraChargesSum = 0;
             @endphp
             @foreach ($orders as $order)
             <tr>
@@ -68,9 +72,9 @@
                 if($order->payment_method == 'cash_on_delivery') {
                     $totalAmountSum += $order->total_amount;
                 }
-                $deliveryFeesSum += $order->delivery_fees;
+                $deliveryFeesSum += ($order->delivery_fees - $order->discount);
                 $markupDeliveryFeesSum += $order->markup_delivery_fees;
-                $OSDeliSum += ($order->delivery_fees + $order->markup_delivery_fees);
+                $extraChargesSum += $order->extra_charges;
                 @endphp
                 <td>{{ $totalQuantity }}</td>
                 <td>
@@ -78,14 +82,9 @@
                         {{ $order->total_amount }} 
                     @endif
                 </td>
-                <td>{{ $order->delivery_fees }}</td>
-                @if($order->markup_delivery_fees == 0) 
-                <td></td>
-                <td></td>
-                @else
-                <td>{{ $order->delivery_fees + $order->markup_delivery_fees }}</td>
+                <td>{{ $order->delivery_fees - $order->discount }}</td>
                 <td>{{ $order->markup_delivery_fees }}</td>
-                @endif
+                <td>{{ $order->extra_charges }}</td>
                 <td>{{ $order->remark }}</td>
             </tr>
            
@@ -99,8 +98,8 @@
                 <td></td>
                 <td>{{ $totalAmountSum }}</td>
                 <td>{{ $deliveryFeesSum }}</td>
-                <td>{{ $OSDeliSum }}</td>
                 <td>{{ $markupDeliveryFeesSum }}</td>
+                <td>{{ $extraChargesSum }}</td>
                 <td></td>
             </tr>
         </tbody>

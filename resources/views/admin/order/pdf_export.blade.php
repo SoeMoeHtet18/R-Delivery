@@ -27,62 +27,85 @@
         .content {
             font-size: 12px;
         }
+
+        thead th, .last-row td, .color {
+            background-color: #d676fc;
+        }
     </style>
 </head>
 
 <body>
     <h1>Orders</h1>
-    <span class="content">Total Amount : {{$total_amount}}</span>
-    <br>
-    <span class="content">Total Way : {{$total_way}}</span>
-    <br>
-    <span class="content">Total Delivery Fees : {{$total_delivery_fees}}</span>
-    <br>
+   
     <table>
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Order Code</th>
                 <th>Customer Name</th>
-                <th>Customer Phone Number</th>
-                <th>City</th>
+                <!-- <th>Customer Phone Number</th>
+                <th>City</th> -->
                 <th>Township</th>
                 <th>Rider</th>
                 <th>Shop</th>
+                <th>R</th>
+                <th>Quantity</th>
                 <th>Total Amount</th>
                 <th>Delivery Fees</th>
                 <th>Markup Delivery Fees</th>
+                <th>Extra Charges</th>
                 <th>Remark</th>
-                <th>Status</th>
+                <!-- <th>Status</th>
                 <th>Item Type</th>
                 <th>Full Address</th>
                 <th>Schedule Date</th>
                 <th>Type</th>
                 <th>Collection Method</th>
                 <th>Payment Flag</th>
-                <th>Extra Charges</th>
-                <th>Discount</th>
+                <th>Discount</th> -->
             </tr>
         </thead>
         <tbody>
+            
             @php
             $id = 1;
+            $totalAmountSum = 0;
+            $deliveryFeesSum = 0;
+            $markupDeliveryFeesSum = 0;
+            $extraChargesSum = 0;
             @endphp
             @foreach ($orders as $order)
             <tr>
                 <td>{{ $id++ }}</td>
                 <td>{{ $order->order_code }}</td>
                 <td>{{ $order->customer_name }}</td>
-                <td>{{ $order->customer_phone_number }}</td>
-                <td>{{ $order->city_name }}</td>
+                <!-- <td>{{ $order->customer_phone_number }}</td>
+                <td>{{ $order->city_name }}</td> -->
                 <td>{{ $order->township_name }}</td>
                 <td>{{ $order->rider_name }}</td>
                 <td>{{ $order->shop_name }}</td>
-                <td>{{ $order->total_amount }}</td>
-                <td>{{ $order->delivery_fees }}</td>
+                <td></td>
+                @php
+                $quantityArray = explode(',', $order->quantity);
+                $totalQuantity = array_sum($quantityArray);
+                if($order->payment_method == 'cash_on_delivery') {
+                    $totalAmountSum += $order->total_amount;
+                }
+                $deliveryFeesSum += ($order->delivery_fees - $order->discount);
+                $markupDeliveryFeesSum += $order->markup_delivery_fees;
+                $extraChargesSum += $order->extra_charges;
+                @endphp
+                <td>{{ $totalQuantity }}</td>
+                <td>
+                    @if($order->payment_method == 'cash_on_delivery') 
+                        {{ $order->total_amount }} 
+                    @endif
+                </td>
+                <td>{{ $order->delivery_fees - $order->discount }}</td>
                 <td>{{ $order->markup_delivery_fees }}</td>
+                <td>{{$order->extra_charges}}</td>
                 <td>{{ $order->remark }}</td>
-                <td> @if($order->status == 'pending')
+                <!-- <td> @if($order->status == 'pending')
                     Pending @elseif($order->status == 'picking-up')
                     Picking Up @elseif($order->status == 'warehouse')
                     In Warehouse @elseif($order->status == 'delivering')
@@ -108,10 +131,42 @@
                     Paid
                     @endif
                 </td>
-                <td>{{$order->extra_charges}}</td>
-                <td>{{$order->discount}}</td>
+              
+                <td>{{$order->discount}}</td> -->
             </tr>
             @endforeach
+            <tr class="last-row">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{ $totalAmountSum }}</td>
+                <td>{{ $deliveryFeesSum }}</td>
+                <td>{{ $markupDeliveryFeesSum }}</td>
+                <td>{{ $extraChargesSum }}</td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table style="width: 50%; margin: auto; margin-top: 50px;">
+        <tbody>
+            <tr>
+                <td>Total Way</td>
+                <td>{{$orders->count()}}</td>
+            </tr>
+            <tr class="color">
+                <td>Total Amount</td>
+                <td>{{ $totalAmountSum }}</td>
+            </tr>
+            <tr>
+                <td>Total Delivery Fees</td>
+                <td>{{ $deliveryFeesSum }}</td>
+            </tr>
         </tbody>
     </table>
 </body>

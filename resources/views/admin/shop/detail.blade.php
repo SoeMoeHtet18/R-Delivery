@@ -694,83 +694,108 @@
             });
         }
         // Initialize collection-for-shop-datatable
-        $("#collection-for-shop-datatable").DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: "/shops/" + shop_id + "/get-collections-for-shop-by-shop-id",
-            columns: [{
-                    data: 'DT_RowIndex',
-                    name: 'id'
+        get_ajax_dynamic_collection_for_shop_table(start = '', end = '');
+        function get_ajax_dynamic_collection_for_shop_table(start, end) {
+            var collection_table =  $("#collection-for-shop-datatable").DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url' : "/shops/" + shop_id + "/get-collections-for-shop-by-shop-id",
+                    'method' : 'GET',
+                    'data': function(r) {
+                        r.from_date = start;
+                        r.to_date = end;
+                    },
                 },
-                {
-                    data: 'collection_code',
-                    name: 'pick_up_code'
-                },
-                {
-                    data: 'total_quantity',
-                    name: 'total_quantity'
-                },
-                {
-                    data: 'total_amount',
-                    name: 'total_amount',
-                },
-                {
-                    data: 'paid_amount',
-                    name: 'paid_amount',
-                },
-                {
-                    data: 'collection_group_code',
-                    name: 'collection_group',
-                },
-                {
-                    data: 'rider_name',
-                    name: 'rider',
-                },
-                {
-                    data: 'collected_at',
-                    name: 'collected_at',
-                },
-                {
-                    data: 'note',
-                    name: 'note',
-                },
-                {
-                    data: 'status',
-                    name: 'status',
-                },
-                {
-                    data: 'is_payable',
-                    name: 'is_payable',
-                },
-            ],
-            columnDefs: [
-                    {
-                        "render": function(data, type, row) {
-                            if (row.status == 'pending') {
-                                return "Pending";
-                            }
-                            if (row.status == 'complete') {
-                                return "Completed";
-                            }
-                            if (row.status == 'picking-up') {
-                                return "Picking Up";
-                            }
-                        },
-                        "targets": 9 
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'id'
                     },
                     {
-                        "render": function(data, type, row) {
-                            if (row.is_payable == 0) {
-                                return "No";
-                            }
-                            if (row.payment_flag == 1) {
-                                return "Yes";
-                            }
-                        },
-                        "targets": 10
+                        data: 'collection_code',
+                        name: 'pick_up_code'
+                    },
+                    {
+                        data: 'total_quantity',
+                        name: 'total_quantity'
+                    },
+                    {
+                        data: 'total_amount',
+                        name: 'total_amount',
+                    },
+                    {
+                        data: 'paid_amount',
+                        name: 'paid_amount',
+                    },
+                    {
+                        data: 'collection_group_code',
+                        name: 'collection_group',
+                    },
+                    {
+                        data: 'rider_name',
+                        name: 'rider',
+                    },
+                    {
+                        data: 'collected_at',
+                        name: 'collected_at',
+                    },
+                    {
+                        data: 'note',
+                        name: 'note',
+                    },
+                    {
+                        data: 'status',
+                        name: 'status',
+                    },
+                    {
+                        data: 'is_payable',
+                        name: 'is_payable',
                     },
                 ],
-        });
+                columnDefs: [
+                        {
+                            "render": function(data, type, row) {
+                                if (row.status == 'pending') {
+                                    return "Pending";
+                                }
+                                if (row.status == 'complete') {
+                                    return "Completed";
+                                }
+                                if (row.status == 'picking-up') {
+                                    return "Picking Up";
+                                }
+                            },
+                            "targets": 9 
+                        },
+                        {
+                            "render": function(data, type, row) {
+                                if (row.is_payable == 0) {
+                                    return "No";
+                                }
+                                if (row.payment_flag == 1) {
+                                    return "Yes";
+                                }
+                            },
+                            "targets": 10
+                        },
+                    ],
+            });
+
+            $('#filter').click(function() {
+                var start = $('#start_date').val();
+                var end = $('#end_date').val();
+                collection_table.destroy();
+                get_ajax_dynamic_collection_for_shop_table(start, end);
+            });
+            $("#clear").click(function() {
+                $("#start_date").val("").trigger("change");
+                $("#end_date").val("").trigger("change");
+                var start = $("#start_date").val();
+                var end = $('#end_date').val();
+                collection_table.destroy();
+                get_ajax_dynamic_collection_for_shop_table(start, end);
+            });
+        }
 
         const form = $('#pdf_form');
 
@@ -789,7 +814,7 @@
 
         function generatePDF(start, end, shop_id, type) {
             // Create the download URL with query parameters
-            const downloadUrl = `/generate-shop-pdf?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}&shop_id=${encodeURIComponent(shop_id)}&type=${encodeURIComponent(type)}`;
+            const downloadUrl = `/generate-shop-pdf?from_date=${encodeURIComponent(start)}&to_date=${encodeURIComponent(end)}&shop_id=${encodeURIComponent(shop_id)}&type=${encodeURIComponent(type)}`;
             // Navigate to the download URL
             window.location.href = downloadUrl;
         }

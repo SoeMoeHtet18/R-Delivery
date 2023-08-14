@@ -6,6 +6,7 @@ use App\Models\Collection;
 use App\Models\CollectionGroup;
 use App\Models\CustomerCollection;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class CollectionRepository
 {   
@@ -164,4 +165,24 @@ class CollectionRepository
             ->select('collections.*', 'shops.name as shop_name');
         return $collections;
     }
+
+    public function getAssignedCollectionByRiderForToday($rider_id)
+    {
+        $today = Carbon::today();
+        $collections = Collection::where('rider_id', $rider_id)
+            ->whereHas('collection_group', function($query) use ($today) {
+                $query->whereDate('assigned_date', $today);
+            })
+            ->leftJoin('shops', 'shops.id', 'collections.shop_id')
+            ->leftJoin('riders', 'riders.id', 'collections.rider_id')
+            ->select('shops.name as shop_name', 'riders.name as rider_name',
+                     DB::raw('MAX(collected_at) as latest_collected_at'), 
+                     DB::raw('SUM(total_amount) as total_amount'), 
+                     DB::raw('SUM(paid_amount) as paid_amount'), 
+                     DB::raw('SUM(total_quantity) as total_quantity'))
+            ->groupBy('shop_id', 'shops.name', 'riders.name')
+            ->get();
+        return $collections;
+        
+    }    
 }

@@ -480,7 +480,7 @@ class OrderRepository
 
     public function getTodayOrdersByRider($id)
     {
-        $today = Carbon::now();
+        $today = Carbon::today();
         $orders = Order::where('rider_id',$id)
             ->whereDate('schedule_date', $today)
             ->where('status','delivering')
