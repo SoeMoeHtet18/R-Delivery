@@ -80,12 +80,12 @@
                         <a href="{{url('/customer-collections/create?order_id='.$order->id)}}" class="dropdown-item">Create Customer Collection</a>
                     </li>
                     @endif
-                    @if($order->status == 'delivering' && $order->payment_channel == 'shop_online_payment' && $order->is_payment_channel_confirm == false)
+                    @if($order->payment_channel == 'shop_online_payment' && $order->is_payment_channel_confirm == false)
                     <li>
                         <a href="{{url('/payment-channel-confirm/'.$order->id)}}" class="btn btn-secondary dropdown-item">Confirm Shop Payment</a>
                     </li>
                     @endif
-                    @if($order->status == 'delivering' && $order->payment_channel == 'company_online_payment' && $order->is_payment_channel_confirm == false)
+                    @if($order->payment_channel == 'company_online_payment' && $order->is_payment_channel_confirm == false)
                     <li>
                         <a href="{{url('/payment-channel-confirm/'.$order->id)}}" class="btn btn-secondary dropdown-item">Confirm Company Payment</a>
                     </li>

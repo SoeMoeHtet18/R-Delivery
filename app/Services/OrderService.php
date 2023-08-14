@@ -97,25 +97,8 @@ class OrderService
         $order->pay_later = $data['total_amount'] > 100000 ? true : false;
         $order->save();
         $this->notificationService->orderCreateNotificationForShopUser($shop_id);
-        if ($order->township_id && $order->rider_id) {
-            $notification = Notification::create([
-                'title' => 'create',
-                'message' => 'You have got a new order.'
-            ]);
-            $rider = Rider::find($order->rider_id);
-            $rider->notifications()->attach($notification->id);
-            $orders = [];
-            if (Storage::exists('order_data.txt')) {
-                $orderDataJson = Storage::get('order_data.txt');
-                $orders = json_decode($orderDataJson, true);
-            }
-
-            $orderId = $order->order_code;
-            $orders[$orderId]['picked_at'] = $order->updated_at;
-
-            $orderDataJson = json_encode($orders);
-            Storage::put('order_data.txt', $orderDataJson);
-        }        return $order;
+        $this->notificationService->orderCreateByShopNotificationForUser($shop, $order);
+        return $order;
     }
 
     public function updateOrderByID($data, $order, $file)
@@ -202,9 +185,12 @@ class OrderService
             } elseif ($order->status == 'warehouse') {
                 $notificationMethod = 'orderInWarehouseNotificationFor';
                 $updateField = 'in_warehouse';
+            } elseif ($order->status == 'cancel_request') {
+                $updateField = 'cancel_request';
+                $this->notificationService->orderCancelRequestStatusNotificationForUser($order);
             }
 
-            if ($notificationMethod != 'orderCancelNotificationFor' && !empty($updateField)) {
+            if ($notificationMethod != 'orderCancelNotificationFor' && !empty($updateField) && $order->status != 'cancel_request') {
                 $this->notificationService->{$notificationMethod . 'ShopUsers'}($order->shop_id, $order->order_code);
             }
 
@@ -262,6 +248,18 @@ class OrderService
         $order->note = $data['remark'];
         $order->status = 'delay';
         $order->save();
+        $this->notificationService->orderDelayStatusNotificationForUser($order);
+        $orders = [];
+        if (Storage::exists('order_data.txt')) {
+            $orderDataJson = Storage::get('order_data.txt');
+            $orders = json_decode($orderDataJson, true);
+        }
+
+        $orderId = $order->order_code;
+        $orders[$orderId]['delayed_at'] = $order->updated_at;
+
+        $orderDataJson = json_encode($orders);
+        Storage::put('order_data.txt', $orderDataJson);
         return $order;
     }
 
