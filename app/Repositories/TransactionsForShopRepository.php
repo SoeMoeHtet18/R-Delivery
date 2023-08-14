@@ -71,6 +71,18 @@ class TransactionsForShopRepository
     {
         $shop_payments = ShopPayment::where('shop_id', $shop_id)->sum('amount');
 
+        $paid_orders = Order::where('payment_flag',1)->get();
+        
+        $paid_orders_amount = 0;
+
+        foreach ($paid_orders as $order) {
+            if ($order->payment_method === 'cash_on_delivery') {
+                $paid_orders_amount += $order->total_amount + $order->markup_delivery_fees;
+            } elseif (in_array($order->payment_method, ['item_prepaid', 'all_prepaid'])) {
+                $paid_orders_amount += $order->markup_delivery_fees;
+            }
+        }
+
         $orders = Order::whereIn('id', $order_ids)->get();
 
         $orders_amount = 0;
@@ -88,7 +100,7 @@ class TransactionsForShopRepository
 
         $collection_amount = Collection::where('shop_id', $shop_id)->sum('paid_amount');
         
-        $total_amount = $shop_payments + $orders_amount;
+        $total_amount = $shop_payments + $orders_amount + $paid_orders_amount;
         $actual_amount = $total_amount - ($transaction_amount + $collection_amount);
 
         return $actual_amount;
