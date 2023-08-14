@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
+use App\Models\Order;
 use App\Repositories\CollectionRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\TransactionsForShopRepository;
 use App\Services\OrderService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class OrderApiController extends Controller
@@ -183,4 +185,25 @@ class OrderApiController extends Controller
         $order = $this->orderRepository->getOrderDetailByShop($order_id);
         return response()->json(['data' => $order, 'message' => 'Successfully Get Order Detail', 'status' => 'success'], 200);
     }
+
+    /**
+     * Return total amount of the delivered order by rider with today date
+     */
+    public function getOrderTotalAmount(Request $request)
+    {
+        $rider_id = auth()->guard('rider-api')->user()->id;
+        $date = Carbon::today();
+        if($request->date){
+            $date = Carbon::parse($request->date)->format('Y-m-d');
+        }
+        $data  = $this->orderRepository->getOrderTotalAmount($rider_id, $date);
+
+        return response()->json([
+            'data' => $data,
+            'message' => 'Successfully Get Order Total Amount',
+            'status' => 'success'
+        ], 200);
+    }
+
+
 }

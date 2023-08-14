@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Deficit;
 use App\Models\Gate;
 use App\Models\Order;
 use App\Models\Township;
@@ -476,5 +477,38 @@ class OrderRepository
         }
 
         return $order;
+    }
+
+    public function getOrderTotalAmount($rider_id, $date) 
+    {
+        
+        $cashTotalAmount = Order::where([
+            'rider_id' => $rider_id,
+            'status' => 'success',
+            'payment_channel' => 'cash'
+        ])
+        ->whereDate('schedule_date', $date)
+        ->selectRaw('SUM(total_amount + delivery_fees + COALESCE(markup_delivery_fees, 0) + extra_charges - COALESCE(discount, 0)) AS total_amount')
+        ->first()
+        ->total_amount;
+
+        $onlinePaymentTotalAmount = Order::where([
+                'rider_id' => $rider_id,
+                'status' => 'success'
+            ])
+            ->whereIn('payment_channel', ['shop_online_payment', 'company_online_payment'])
+            ->whereDate('schedule_date', $date)
+            ->selectRaw('SUM(total_amount + delivery_fees + COALESCE(markup_delivery_fees, 0) + extra_charges - COALESCE(discount, 0)) AS total_amount')
+            ->first()
+            ->total_amount;
+
+            $deficit_fees = Deficit::where('rider_id',$rider_id)->whereDate('created_at',$date)->sum('total_amount');
+
+        $data = [
+            'cash_total_amount' => $cashTotalAmount,
+            'online_payment_total_amount' => $onlinePaymentTotalAmount,
+            'deficit_fees' => $deficit_fees,
+        ];
+        return $data;
     }
 }
