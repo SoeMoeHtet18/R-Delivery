@@ -6,6 +6,7 @@ use App\Http\Requests\RiderCreateRequest;
 use App\Http\Requests\RiderUpdateRequest;
 use App\Http\Requests\TownshipAssignRequest;
 use App\Models\Rider;
+use App\Repositories\CollectionRepository;
 use App\Repositories\DeficitRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\RiderRepository;
@@ -26,10 +27,11 @@ class RiderController extends Controller
     protected $deficitRepository;
     protected $deficitService;
     protected $orderRepository;
+    protected $collectionRepository;
 
     public function __construct(RiderRepository $riderRepository, RiderService $riderService, 
         TownshipRepository $townshipRepository, DeficitRepository $deficitRepository, 
-        DeficitService $deficitService, OrderRepository $orderRepository)
+        DeficitService $deficitService, OrderRepository $orderRepository, CollectionRepository $collectionRepository)
     {
         $this->riderRepository = $riderRepository;
         $this->riderService = $riderService;
@@ -37,6 +39,7 @@ class RiderController extends Controller
         $this->deficitRepository = $deficitRepository;
         $this->deficitService = $deficitService;
         $this->orderRepository = $orderRepository;
+        $this->collectionRepository = $collectionRepository;
     }
     /**
      * Display a listing of the resource.
@@ -212,14 +215,27 @@ class RiderController extends Controller
 
             //retrieve data
             $rider_id = $request->rider_id;
-            
-            $orders = $this->orderRepository->getAllPendingOrdersByRider($rider_id);
-            
-            // Add HTML content with Myanmar text
-            $mpdf->WriteHTML(view('admin.rider.pdf_export', compact('orders')));
+            $type = $request->type;
 
-            // Output the PDF for download
-            $mpdf->Output('rider.pdf', 'D');
+            if($type == 'order') {
+                $orders = $this->orderRepository->getTodayOrdersByRider($rider_id);
+            
+                // Add HTML content with Myanmar text
+                $mpdf->WriteHTML(view('admin.rider.pdf_export', compact('orders')));
+    
+                // Output the PDF for download
+                $mpdf->Output('rider_order.pdf', 'D');
+            } elseif($type == 'pick_up') {
+                $collections = $this->collectionRepository->getAssignedCollectionByRiderForToday($rider_id);
+                
+                // Add HTML content with Myanmar text
+                $mpdf->WriteHTML(view('admin.rider.pdf_export_for_pick_up', compact('collections')));
+    
+                // Output the PDF for download
+                $mpdf->Output('rider_pick_up.pdf', 'D');
+            } else {
+                return redirect()->back()->with('error', "Can't generate pdf");
+            }    
         } catch (Exception $e) {
             return redirect()->back()->with('error', "Can't generate pdf");
         }

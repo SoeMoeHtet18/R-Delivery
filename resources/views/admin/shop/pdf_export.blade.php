@@ -52,7 +52,7 @@
             $totalAmountSum = 0;
             $deliveryFeesSum = 0;
             $markupDeliveryFeesSum = 0;
-            $OSDeliSum = 0;
+            $extraChargesSum = 0;
             @endphp
 
             @foreach ($orders as $order)
@@ -64,21 +64,22 @@
                 @php
                 $quantityArray = explode(',', $order->quantity);
                 $totalQuantity = array_sum($quantityArray);
-                $totalAmountSum += $order->total_amount;
-                $deliveryFeesSum += $order->delivery_fees;
+                if($order->payment_method == 'cash_on_delivery') {
+                    $totalAmountSum += $order->total_amount;
+                }
+                $deliveryFeesSum += ($order->delivery_fees - $order->discount);
                 $markupDeliveryFeesSum += $order->markup_delivery_fees;
-                $OSDeliSum += ($order->delivery_fees + $order->markup_delivery_fees);
+                $extraChargesSum += $order->extra_charges;
                 @endphp
                 <td>{{ $totalQuantity }}</td>
-                <td>{{ $order->total_amount }}</td>
-                <td>{{ $order->delivery_fees }}</td>
-                @if($order->markup_delivery_fees == 0) 
-                <td></td>
-                <td></td>
-                @else
-                <td>{{ $order->delivery_fees + $order->markup_delivery_fees }}</td>
+                <td>
+                    @if($order->payment_method == 'cash_on_delivery') 
+                        {{ $order->total_amount }} 
+                    @endif
+                </td>
+                <td>{{ $order->delivery_fees - $order->discount }}</td>               
                 <td>{{ $order->markup_delivery_fees }}</td>
-                @endif
+                <td>{{ $order->extra_charges }}</td>
                 <td>{{ $order->remark }}</td>
             </tr>
             @endforeach
@@ -91,8 +92,8 @@
                 <td></td>
                 <td>{{ $totalAmountSum }}</td>
                 <td>{{ $deliveryFeesSum }}</td>
-                <td>{{ $OSDeliSum }}</td>
                 <td>{{ $markupDeliveryFeesSum }}</td>
+                <td>{{ $extraChargesSum }}</td>
                 <td></td>
             </tr>
         </tbody>
@@ -110,19 +111,19 @@
             </tr>
             <tr>
                 <td>OS Deli</td>
-                <td>{{ $OSDeliSum }}</td>
-            </tr>
-            <tr class="color">
-                <td>Total Amount</td>
-                <td>{{ $totalAmountSum - $OSDeliSum }}</td>
-            </tr>
-            <tr>
-                <td>Deli Add</td>
                 <td>{{ $markupDeliveryFeesSum }}</td>
             </tr>
             <tr class="color">
+                <td>Total Amount</td>
+                <td>{{ $totalAmountSum - $markupDeliveryFeesSum }}</td>
+            </tr>
+            <tr>
+                <td>Deli Add</td>
+                <td>{{ $extraChargesSum }}</td>
+            </tr>
+            <tr class="color">
                 <td>Net Amount</td>
-                <td>{{  $totalAmountSum - $OSDeliSum - $markupDeliveryFeesSum }}</td>
+                <td>{{  $totalAmountSum - $markupDeliveryFeesSum + $extraChargesSum }}</td>
             </tr>
         </tbody>
     </table>

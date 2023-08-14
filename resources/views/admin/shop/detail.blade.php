@@ -267,25 +267,22 @@
                 </div>
                 <div class="portlet-body">
                     <div class="create-button pb-5">
-                        <a href="{{url('/transactions-for-shop-create-by-shop-id')}}?shop_id={{$shop->id}}" class="btn create-btn">Add New Collection</a>
+                        <a href="{{url('/transactions-for-shop-create-by-shop-id')}}?shop_id={{$shop->id}}" class="btn create-btn">Add New Pick Up</a>
                     </div>
                     <table id="collection-for-shop-datatable" class="table table-striped table-hover table-responsive datatable">
                         <thead>
                             <tr>
                                 <th>#</th>
+                                <th>Pick Up Code</th>
                                 <th>Total Quantity</th>
                                 <th>Total Amount</th>
                                 <th>Paid Amount</th>
-                                <th>Collection Group Id</th>
-                                <th>Rider Id</th>
-                                <th>Shop Id</th>
-                                <th>Assigned At</th>
+                                <th>Collection Group</th>
+                                <th>Rider</th>
                                 <th>Collected At</th>
                                 <th>Note</th>
                                 <th>Status</th>
                                 <th>Is payable</th>
-                                <th>Created At</th>
-                                <th>Updated At</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -697,70 +694,108 @@
             });
         }
         // Initialize collection-for-shop-datatable
-        $("#collection-for-shop-datatable").DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: "/shops/" + shop_id + "/get-collections-for-shop-by-shop-id",
-            columns: [{
-                    data: 'DT_RowIndex',
-                    name: 'id'
+        get_ajax_dynamic_collection_for_shop_table(start = '', end = '');
+        function get_ajax_dynamic_collection_for_shop_table(start, end) {
+            var collection_table =  $("#collection-for-shop-datatable").DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url' : "/shops/" + shop_id + "/get-collections-for-shop-by-shop-id",
+                    'method' : 'GET',
+                    'data': function(r) {
+                        r.from_date = start;
+                        r.to_date = end;
+                    },
                 },
-                {
-                    data: 'total_quantity',
-                    name: 'total_quantity'
-                },
-                {
-                    data: 'total_amount',
-                    name: 'total_amount',
-                },
-                {
-                    data: 'paid_amount',
-                    name: 'paid_amount',
-                },
-                {
-                    data: 'collection_group_id',
-                    name: 'collection_group_id',
-                },
-                {
-                    data: 'rider_id',
-                    name: 'rider_id',
-                },
-                {
-                    data: 'shop_id',
-                    name: 'shop_id',
-                },
-                {
-                    data: 'assigned_at',
-                    name: 'assigned_at',
-                },
-                {
-                    data: 'collected_at',
-                    name: 'collected_at',
-                },
-                {
-                    data: 'note',
-                    name: 'note',
-                },
-                {
-                    data: 'status',
-                    name: 'status',
-                },
-                {
-                    data: 'is_payable',
-                    name: 'is_payable',
-                },
-                {
-                    data: 'created_at',
-                    name: 'created_at',
-                },
-                {
-                    data: 'action',
-                    name: 'action',
-                    orderable: false,
-                    searchable: false
-                },
-            ],
-        });
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'id'
+                    },
+                    {
+                        data: 'collection_code',
+                        name: 'pick_up_code'
+                    },
+                    {
+                        data: 'total_quantity',
+                        name: 'total_quantity'
+                    },
+                    {
+                        data: 'total_amount',
+                        name: 'total_amount',
+                    },
+                    {
+                        data: 'paid_amount',
+                        name: 'paid_amount',
+                    },
+                    {
+                        data: 'collection_group_code',
+                        name: 'collection_group',
+                    },
+                    {
+                        data: 'rider_name',
+                        name: 'rider',
+                    },
+                    {
+                        data: 'collected_at',
+                        name: 'collected_at',
+                    },
+                    {
+                        data: 'note',
+                        name: 'note',
+                    },
+                    {
+                        data: 'status',
+                        name: 'status',
+                    },
+                    {
+                        data: 'is_payable',
+                        name: 'is_payable',
+                    },
+                ],
+                columnDefs: [
+                        {
+                            "render": function(data, type, row) {
+                                if (row.status == 'pending') {
+                                    return "Pending";
+                                }
+                                if (row.status == 'complete') {
+                                    return "Completed";
+                                }
+                                if (row.status == 'picking-up') {
+                                    return "Picking Up";
+                                }
+                            },
+                            "targets": 9 
+                        },
+                        {
+                            "render": function(data, type, row) {
+                                if (row.is_payable == 0) {
+                                    return "No";
+                                }
+                                if (row.payment_flag == 1) {
+                                    return "Yes";
+                                }
+                            },
+                            "targets": 10
+                        },
+                    ],
+            });
+
+            $('#filter').click(function() {
+                var start = $('#start_date').val();
+                var end = $('#end_date').val();
+                collection_table.destroy();
+                get_ajax_dynamic_collection_for_shop_table(start, end);
+            });
+            $("#clear").click(function() {
+                $("#start_date").val("").trigger("change");
+                $("#end_date").val("").trigger("change");
+                var start = $("#start_date").val();
+                var end = $('#end_date').val();
+                collection_table.destroy();
+                get_ajax_dynamic_collection_for_shop_table(start, end);
+            });
+        }
 
         const form = $('#pdf_form');
 
@@ -779,7 +814,7 @@
 
         function generatePDF(start, end, shop_id, type) {
             // Create the download URL with query parameters
-            const downloadUrl = `/generate-shop-pdf?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}&shop_id=${encodeURIComponent(shop_id)}&type=${encodeURIComponent(type)}`;
+            const downloadUrl = `/generate-shop-pdf?from_date=${encodeURIComponent(start)}&to_date=${encodeURIComponent(end)}&shop_id=${encodeURIComponent(shop_id)}&type=${encodeURIComponent(type)}`;
             // Navigate to the download URL
             window.location.href = downloadUrl;
         }

@@ -170,6 +170,12 @@ class ShopController extends Controller
             if($type == 'order') {
                 $data = $this->orderRepository->getAllOrdersQueryByShop($shop_id);
             
+                $start = $request->from_date;
+                $end = $request->to_date . ' 23:59:00';
+                if ($start && $end) {
+                    $data = $data->whereBetween('orders.created_at', [$start, $end]);
+                }
+
                 $orders = $data->get();
                 // Add HTML content with Myanmar text
                 $mpdf->WriteHTML(view('admin.shop.pdf_export', compact('orders')));
@@ -178,7 +184,13 @@ class ShopController extends Controller
                 $mpdf->Output('shop_order.pdf', 'D');   
             } else if($type == 'pick_up') {
                 $collections = $this->collectionRepository->getAllCollectionsByShopUser($shop_id);
-                
+
+                $start = $request->from_date;
+                $end = $request->to_date . ' 23:59:59'; // Adjusted end time to include the entire day
+                if ($start && $end) {
+                    $collections = $collections->whereBetween('created_at', [$start, $end]);
+                }
+
                 $mpdf->WriteHTML(view('admin.shop.pdf_export_for_pick_up', compact('collections')));
     
                 // Output the PDF for download

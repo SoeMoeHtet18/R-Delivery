@@ -166,13 +166,13 @@
         <hr>
         <ul class="nav nav-tabs mb-4">
             <li class="nav-item">
-                <a href="#pending-order-display" id="pending-order-tab" class="nav-link active" data-toggle="tab">Pending Orders</a>
+                <a href="#pending-order-display" id="pending-order-tab" class="nav-link active" data-toggle="tab">Today Orders</a>
             </li>
             <li class="nav-item">
                 <a href="#order-history-display" id="order-history-tab" class="nav-link" data-toggle="tab">Orders History</a>
             </li>
             <li class="nav-item">
-                <a href="#collection-display" id="collection-tab" class="nav-link" data-toggle="tab">Collections</a>
+                <a href="#collection-display" id="collection-tab" class="nav-link" data-toggle="tab">Pick Ups</a>
             </li>
             <li class="nav-item">
                 <a href="#deficit-display" id="deficit-tab" class="nav-link" data-toggle="tab">Deficits</a>
@@ -196,7 +196,7 @@
         <div class="tab-content">
             <div id="pending-order-display" class="portlet box green tab-pane active">
                 <div class="portlet-title">
-                    <div class="caption">Pending Orders</div>
+                    <div class="caption">Today Orders</div>
                 </div>
                 <div class="portlet-body">
                     <table id="pending-order-datatable" class="table table-striped table-hover table-responsive datatable">
@@ -230,7 +230,7 @@
             </div>
             <div id="order-history-display" class="portlet box green tab-pane">
                 <div class="portlet-title">
-                    <div class="caption">Pending Orders</div>
+                    <div class="caption">Order History</div>
                 </div>
                 <div class="portlet-body">
                     <table id="order-history-datatable" class="table table-striped table-hover table-responsive datatable">
@@ -264,26 +264,23 @@
             </div>
             <div id="collection-display" class="portlet box green tab-pane">
                 <div class="portlet-title">
-                    <div class="caption">Collections</div>
+                    <div class="caption">Pick Ups</div>
                 </div>
                 <div class="portlet-body">
                     <table id="collection-datatable" class="table table-striped table-hover table-responsive datatable">
                         <thead>
                             <tr>
                                 <th>#</th>
+                                <th>Pick Up Code</th>
                                 <th>Total Quantity</th>
                                 <th>Total Amount</th>
                                 <th>Paid Amount</th>
-                                <th>Collection Group Id</th>
-                                <th>Rider Id</th>
-                                <th>Shop Id</th>
-                                <th>Assigned At</th>
+                                <th>Collection Group</th>
+                                <th>Shop</th>
                                 <th>Collected At</th>
                                 <th>Note</th>
                                 <th>Status</th>
-                                <th>Is payable</th>
-                                <th>Created At</th>
-                                <th>Updated At</th>
+                                <th>Is Payable</th>
                             </tr>
                         </thead>
 
@@ -319,6 +316,12 @@
 @section('javascript')
 <script type="text/javascript">
     $(function() {
+        var tabIndex = 0;
+        $('.nav-tabs a').click(function() {
+            $(this).tab('show');
+            tabIndex = $('.nav-tabs a').index(this);
+        });
+
         var rider_id = document.getElementById('rider-id').getAttribute('data-rider-id');
 
         $('#add-deficit').click(function() {
@@ -354,7 +357,7 @@
                         orientation: 'landscape',
                     },
             ],
-            ajax: "/riders/get-pending-orders-by-rider-id/" + rider_id,
+            ajax: "/riders/get-today-orders-by-rider-id/" + rider_id,
             columns: [{
                     data: 'DT_RowIndex',
                     name: 'id'
@@ -563,6 +566,10 @@
                     name: 'id'
                 },
                 {
+                    data: 'collection_code',
+                    name: 'pick_up_code'
+                },
+                {
                     data: 'total_quantity',
                     name: 'total_quantity'
                 },
@@ -575,20 +582,12 @@
                     name: 'paid_amount',
                 },
                 {
-                    data: 'collection_group_id',
+                    data: 'collection_group_code',
                     name: 'collection_group_id',
                 },
                 {
-                    data: 'rider_id',
-                    name: 'rider_id',
-                },
-                {
-                    data: 'shop_id',
-                    name: 'shop_id',
-                },
-                {
-                    data: 'assigned_at',
-                    name: 'assigned_at',
+                    data: 'shop_name',
+                    name: 'shop',
                 },
                 {
                     data: 'collected_at',
@@ -606,15 +605,34 @@
                     data: 'is_payable',
                     name: 'is_payable',
                 },
-                {
-                    data: 'created_at',
-                    name: 'created_at',
-                },
-                {
-                    data: 'updated_at',
-                    name: 'updated_at',
-                },
             ],
+            columnDefs: [
+                    {
+                        "render": function(data, type, row) {
+                            if (row.status == 'pending') {
+                                return "Pending";
+                            }
+                            if (row.status == 'complete') {
+                                return "Completed";
+                            }
+                            if (row.status == 'picking-up') {
+                                return "Picking Up";
+                            }
+                        },
+                        "targets": 9 
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            if (row.is_payable == 0) {
+                                return "No";
+                            }
+                            if (row.payment_flag == 1) {
+                                return "Yes";
+                            }
+                        },
+                        "targets": 10
+                    },
+                ],
         });
 
         $('#deficit-datatable').DataTable({
@@ -638,23 +656,17 @@
         form.submit(function(event) {
             // Prevent the default form submission behavior
             event.preventDefault();
-            var rider_id = document.getElementById('rider-id').getAttribute('data-rider-id');            
-            generatePDF(rider_id);
+            var rider_id = document.getElementById('rider-id').getAttribute('data-rider-id');
+            var type = tabIndex == 0 ? 'order' : tabIndex == 2 ? 'pick_up' : '';            
+            generatePDF(rider_id, type);
         });
 
-        function generatePDF(rider_id) {
+        function generatePDF(rider_id, type) {
             // Create the download URL with query parameters
-            const downloadUrl = `/generate-rider-pdf?rider_id=${encodeURIComponent(rider_id)}`;
+            const downloadUrl = `/generate-rider-pdf?rider_id=${encodeURIComponent(rider_id)}&type=${encodeURIComponent(type)}`;
             // Navigate to the download URL
             window.location.href = downloadUrl;
         }
-    });
-</script>
-<script>
-    $(document).ready(function() {
-        $('.nav-tabs a').click(function() {
-            $(this).tab('show');
-        });
     });
 </script>
 @endsection

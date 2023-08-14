@@ -30,7 +30,7 @@
 </head>
 
 <body>
-    <h1>TCP Express Pick Up Received List ({{ \Carbon\Carbon::today()->format('d.m.Y') }})</h1>
+    <h1>TCP Express Pick Up List ({{ \Carbon\Carbon::today()->format('d.m.Y') }})</h1>
     <table>
         <thead>
             <tr>
@@ -48,9 +48,9 @@
                 <td>{{ $collection->total_amount }}</td>
                 <td>{{ $collection->paid_amount }}</td>
                 <td>{{ $collection->total_quantity }}</td>
-                <td>{{ $collection->shop->name }}</td>
-                <td>@if($collection->rider != null){{ $collection->rider->name }}@endif</td>
-                <td>@if($collection->collected_at != null){{ $collection->collected_at->format('d.m.Y') }}@endif</td>
+                <td>{{ $collection->shop_name }}</td>
+                <td>{{ $collection->rider_name }}</td>
+                <td>@if($collection->latest_collected_at != null){{ $collection->latest_collected_at->format('d.m.Y') }}@endif</td>
             </tr>
             @endforeach
         </tbody>
