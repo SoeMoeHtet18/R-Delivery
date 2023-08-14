@@ -118,7 +118,7 @@
                 <a href="#payment-for-shop-display" id="payment-for-shop-tab" class="nav-link" data-toggle="tab">Transactions For Shop</a>
             </li>
             <li>
-                <a href="#collection-for-shop-display" id="collection-for-shop-tab" class="nav-link" data-toggle="tab">Collections For Shop</a>
+                <a href="#collection-for-shop-display" id="collection-for-shop-tab" class="nav-link" data-toggle="tab">Pick Ups For Shop</a>
             </li>
         </ul>
         <input type="hidden" id="current_screen" value="shop-user-display">
@@ -151,7 +151,7 @@
         <div class="tab-content mt-4">
             <div id="shop-user-display" class="portlet box green tab-pane active">
                 <div class="portlet-title">
-                    <div class="caption">ShopUser Lists</div>
+                    <div class="caption">Shop User Lists</div>
                 </div>
                 <div class="portlet-body">
                     <table id="shop-user-datatable" class="table table-striped table-hover table-responsive datatable">
@@ -171,7 +171,7 @@
             </div>
             <div id="shop-order-display" class="portlet box green tab-pane">
                 <div class="portlet-title">
-                    <div class="caption">ShopOrder Lists</div>
+                    <div class="caption">Shop Order Lists</div>
                 </div>
                 <div class="portlet-body">
                     <div class="create-button pb-5 d-inline-block">
@@ -263,7 +263,7 @@
             </div>
             <div id="collection-for-shop-display" class="portlet box green tab-pane">
                 <div class="portlet-title">
-                    <div class="caption">Collections For Shop Lists</div>
+                    <div class="caption">Pick Ups For Shop Lists</div>
                 </div>
                 <div class="portlet-body">
                     <div class="create-button pb-5">
@@ -301,6 +301,12 @@
 @section('javascript')
 <script type="text/javascript">
     $(function() {
+        var tabIndex = 0;
+        $('.nav-tabs a').click(function() {
+            $(this).tab('show');
+            tabIndex = $('.nav-tabs a').index(this);
+        });
+
         var shop_id = document.getElementById('shop-id').getAttribute('data-shop-id');
 
         $("#create-transaction").click(function() {
@@ -577,6 +583,7 @@
             });
         }
         // Initialize shop-payment-datatable
+        
         $("#shop-payment-datatable").DataTable({
             processing: true,
             serverSide: true,
@@ -764,23 +771,18 @@
             var shop_id = document.getElementById('shop-id').getAttribute('data-shop-id');
             var start = $('#start_date').val();
             var end = $('#end_date').val();
+            var type = tabIndex == 1 ? 'order' : tabIndex == 4 ? 'pick_up' : '';
+            console.log(type);
             
-            generatePDF(start, end, shop_id);
+            generatePDF(start, end, shop_id, type);
         });
 
-        function generatePDF(start, end, shop_id) {
+        function generatePDF(start, end, shop_id, type) {
             // Create the download URL with query parameters
-            const downloadUrl = `/generate-shop-pdf?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}&shop_id=${encodeURIComponent(shop_id)}`;
+            const downloadUrl = `/generate-shop-pdf?start=${encodeURIComponent(start)}&end=${encodeURIComponent(end)}&shop_id=${encodeURIComponent(shop_id)}&type=${encodeURIComponent(type)}`;
             // Navigate to the download URL
             window.location.href = downloadUrl;
         }
-    });
-</script>
-<script>
-    $(document).ready(function() {
-        $('.nav-tabs a').click(function() {
-            $(this).tab('show');
-        });
     });
 </script>
 @endsection
