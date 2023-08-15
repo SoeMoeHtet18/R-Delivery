@@ -164,6 +164,7 @@ class OrderController extends Controller
     public function getTodayOrdersTableByRiderID(Request $request, $id)
     {
         $data = $this->riderRepository->getTodayOrderListByRiderID($id);
+        
         return DataTables::of($data)
             ->addColumn('order_code', function ($data) {
                 return '<a href="' . route("orders.show", $data->id) . '">' . $data->order_code . '</a>';
