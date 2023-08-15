@@ -103,7 +103,7 @@
                 </tr>
                 <tr>
                     <td class="left">
-                        <img src="data:image/png;base64, {{ base64_encode(QrCode::size(150)->generate($order->id)) }}">
+                        <img src="data:image/png;base64, {{ base64_encode(QrCode::size(150)->generate($order->order_code)) }}">
                         <table>
                             <tr>
                         <td><span class="font"> {{ $order->order_code }}</span></td>
