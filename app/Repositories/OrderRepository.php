@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\Deficit;
 use App\Models\Gate;
 use App\Models\Order;
+use App\Models\ShopPayment;
 use App\Models\Township;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -382,10 +383,24 @@ class OrderRepository
 
     public function getTotalCreditForShop($shop_id)
     {
-        $total_credit = Order::where('shop_id', $shop_id)
-            ->where('status','success')
-            ->where('payment_method', 'cash_on_delivery')
-            ->sum('total_amount');
+        $shop_payments = ShopPayment::where('shop_id', $shop_id)->sum('amount');
+
+        $cod_orders_amount = 0;
+        $remaining_orders_amount = 0;
+
+        $orders = Order::where('shop_id', $shop_id)
+                    ->where('status', 'success')
+                    ->get();
+
+        foreach ($orders as $order) {
+            if ($order->payment_method === 'cash_on_delivery') {
+                $cod_orders_amount += $order->total_amount + $order->markup_delivery_fees;
+            } elseif (in_array($order->payment_method, ['item_prepaid', 'all_prepaid'])) {
+                $remaining_orders_amount += $order->markup_delivery_fees;
+            }
+        }
+
+        $total_credit = $shop_payments + $cod_orders_amount + $remaining_orders_amount;
         return $total_credit;
     }
 

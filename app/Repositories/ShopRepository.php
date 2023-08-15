@@ -62,14 +62,14 @@ class ShopRepository
         return $shopcount;
     }
 
-    public function getPayableAmount($shop_id)
+    public function getPayableAmountForShop($shop_id, $callable_type = 'web')
     {
         $shop_payments = ShopPayment::where('shop_id', $shop_id)->sum('amount');
 
         $pay_later_cod_amount = Order::where('shop_id', $shop_id)
             ->where('payment_method', 'cash_on_delivery')
             ->where('pay_later', 1)
-            ->where('status', 'delivered')
+            ->where('status', 'success')
             ->sum(DB::raw('total_amount + markup_delivery_fees'));
 
         $todayDate = Carbon::today();
@@ -98,6 +98,49 @@ class ShopRepository
         $collection_amount = Collection::where('shop_id', $shop_id)->sum('paid_amount');
         
         $total_amount = $shop_payments + $pay_later_cod_amount + $cod_orders_amount + $remaining_orders_amount;
+        $actual_amount = $total_amount - ($transaction_amount + $collection_amount);
+
+        return $actual_amount;
+    }
+
+    public function getTotalCreditForShop($shop_id)
+    {
+        $shop_payments = ShopPayment::where('shop_id', $shop_id)->sum('amount');
+
+        $paid_orders = Order::where('payment_flag',1)->get();
+        
+        $paid_orders_amount = 0;
+
+        foreach ($paid_orders as $order) {
+            if ($order->payment_method === 'cash_on_delivery') {
+                $paid_orders_amount += $order->total_amount + $order->markup_delivery_fees;
+            } elseif (in_array($order->payment_method, ['item_prepaid', 'all_prepaid'])) {
+                $paid_orders_amount += $order->markup_delivery_fees;
+            }
+        }
+
+        $cod_orders_amount = 0;
+        $remaining_orders_amount = 0;
+
+        $orders = Order::where('shop_id', $shop_id)
+                    ->where('status', 'success')
+                    ->where('payment_flag', 0)
+                    ->get();
+
+        foreach ($orders as $order) {
+            if ($order->payment_method === 'cash_on_delivery') {
+                $cod_orders_amount += $order->total_amount + $order->markup_delivery_fees;
+            } elseif (in_array($order->payment_method, ['item_prepaid', 'all_prepaid'])) {
+                $remaining_orders_amount += $order->markup_delivery_fees;
+            }
+        }
+
+        $transaction_amount = TransactionsForShop::where('shop_id', $shop_id)
+            ->sum('amount');
+
+        $collection_amount = Collection::where('shop_id', $shop_id)->sum('paid_amount');
+        
+        $total_amount = $shop_payments + $paid_orders_amount + $cod_orders_amount + $remaining_orders_amount;
         $actual_amount = $total_amount - ($transaction_amount + $collection_amount);
 
         return $actual_amount;
