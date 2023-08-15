@@ -293,13 +293,13 @@ class RiderApiController extends Controller
         return response()->json(['data' => $customerCollection, 'message' => 'Successfully Update Customer Collection by Rider', 'status' => 'success'], 200);
     } 
     
-    public function checkOrderRider($id) {
+    public function checkOrderRider($order_code) {
         $rider_id = auth()->guard('rider-api')->user()->id;
-        $order = Order::where('id',$id)->first();
+        $order = Order::where('order_code',$order_code)->first();
         if($order->rider_id == $rider_id) {
-            return response()->json(['data' => true, 'message' => 'this order is assign for current rider.', 'status' => 'success'], 200);
+            return response()->json(['data' => $order->id, 'message' => 'this order is assign for current rider.', 'status' => 'success'], 200);
         } else {
-            return response()->json(['data' => false, 'message' => 'this order is not assign for current rider.', 'status' => 'fail'], 200);
+            return response()->json(['data' => null, 'message' => 'this order is not assign for current rider.', 'status' => 'fail'], 200);
         }
     }
 }

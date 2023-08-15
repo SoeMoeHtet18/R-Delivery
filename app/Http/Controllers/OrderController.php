@@ -699,4 +699,25 @@ class OrderController extends Controller
         $this->orderService->assignCollectionGroupToOrders($order_ids, $collection_group_id);
         return redirect()->back();
     }
+
+    public function setToWarehouse()
+    {
+        return view('admin.order.set_to_warehouse');
+    }
+
+    public function changeOrderStatusToWarehouse(Request $request)
+    {
+        $order_code = $request->search;
+        $order = $this->orderRepository->getOrderByOrderCode($order_code);
+        if($order->status == 'delay'){
+            $order->status = 'warehouse';
+            $order->save();
+            $view = view('admin.order.warehouse_order',compact('order'));
+            $html = $view->render();
+            return response()->json(['data' => $html, 'message' => 'Successfully assign order into warehouse.', 'status' => 'success'], 200);
+            //
+        } else {
+            return response()->json(['data' => null, 'message' => 'The status of this order is not delayed.', 'status' => 'fail'], 200);
+        }
+    }
 }

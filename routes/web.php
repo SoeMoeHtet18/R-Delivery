@@ -150,6 +150,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/third-party-vendor/{id}/assign-township', [ThirdPartyVendorController::class, 'saveAssignTownship']);
     Route::get('/ajax-get-third-party-vendor-data', [ThirdPartyVendorController::class, 'getAjaxThirdPartyVendorData']);
     Route::get('generate-rider-pdf', [RiderController::class, 'generateRiderPdf']);
+    Route::get('/set-to-warehouse', [OrderController::class, 'setToWarehouse']);
+    Route::get('/change-order-status-to-warehouse', [OrderController::class, 'changeOrderStatusToWarehouse']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
