@@ -182,7 +182,8 @@
                 },
                 success: function(response) {
                     console.log(response);
-                    $('#pick_up, #delivery').val(response.data.total_pick_up_count);
+                    $('#pick_up').val(response.data.total_pick_up_count);
+                    $('#delivery').val(response.data.total_deli_count);
                     $('#deficit').val(response.data.deficit_fees);
                     $('#total_amount').val(response.data.total_salary);
                     $('#total_routine').val(response.data.total_pick_up_count + response.data.total_deli_count);

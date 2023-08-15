@@ -537,4 +537,10 @@ class OrderRepository
             ->get();
         return $orders;
     }
+
+    public function getOrderByOrderCode($order_code)
+    {
+        $order = Order::with(['shop','rider'])->where('order_code',$order_code)->firstOrFail();
+        return $order;
+    }
 }

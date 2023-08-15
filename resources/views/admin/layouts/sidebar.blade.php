@@ -91,6 +91,11 @@
                         </a>
                     </li>
             </ul>
+            <li class="@if(request()->is('set-to-warehouse*')) {{'active'}} @endif">
+                <a href="/set-to-warehouse">
+                    <span class="title">Set To Warehouse</span>
+                </a>
+            </li>
             <li>
                 <a id="adminToolsCollapse" data-bs-toggle="collapse" href="#adminTools" role="button" aria-expanded="false" aria-controls="collapseExample">
                     <span class="title">Admin Tools<span class="arrow"></span></span>
