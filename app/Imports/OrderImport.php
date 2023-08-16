@@ -54,6 +54,7 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
     public function model(array $row)
     {
         ++$this->rows;
+        
         $shop = trim($row['shop']);
         $shop = Shop::where('name', $shop)->first();
         $shop_id = $shop ? $shop->id : null;
@@ -61,7 +62,11 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
         $rider_id = null;
         if ($row['rider']) {
             $rider = trim($row['rider']);
-            $rider_id = Rider::where('name', $rider)->first()->id;
+            $rider = Rider::where('name', $rider)->first();
+        }
+        
+        if($rider) {
+            $rider_id = $rider->id;
         }
 
         $city = trim($row['city']);
@@ -74,7 +79,7 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
         $township_id = $township ? $township->id : null;
         
         $delivery_fees = 0.00;
-        if(isset($township_id)) {
+        if($township_id) {
             $delivery_fees = $township->delivery_fees;
         }
 
@@ -110,7 +115,6 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
 
         $formattedDate = $date->format('Y-m-d H:i:s');
 
-        // Log::debug($formattedDate);
         $order = Order::create([
             'order_code' => Helper::nomenclature('orders', 'TCP', 'id', $shop_id, 'S'),
             'customer_name' => $row['customer_name'],
@@ -205,7 +209,7 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
                         $onFailure("Delivery type is invalid.");
                     }
                 } else {
-                    $onFailure("Type is required");
+                    $onFailure("Delivery Type is required");
                 }
             },
             'collection_method' => function ($attribute, $value, $onFailure) {
@@ -218,6 +222,7 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
                     $onFailure("Collection Method is required");
                 }
             },
+            'markup_delivery_fees' => 'required'
         ];
     }
 

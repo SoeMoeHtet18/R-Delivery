@@ -114,7 +114,9 @@
         ajax: {
             "url": '/ajax-get-collection-data-by-group',
             "type": "GET",
-
+            "data": function(r) {
+                r.collection_group_id = collection_group_id;
+            }
         },
         columns: [{
                 data: 'DT_RowIndex',
@@ -154,8 +156,8 @@
             "url": '/ajax-get-customer-collections-data-by-group',
             "type": "GET",
             "data": function(r) {
-                        r.collection_group_id = collection_group_id;
-                    }
+                r.collection_group_id = collection_group_id;
+            }
         },
         columns: [{
                 data: 'DT_RowIndex',
