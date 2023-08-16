@@ -203,8 +203,8 @@ class CollectionController extends Controller
 
     public function getCollectionsByGroup(Request $request)
     {
-        $id = $request['id'];
-        $data = $this->collectionRepository->getCollectionsQueryByGroupID($id);
+        $collection_group_id = $request['collection_group_id'];
+        $data = $this->collectionRepository->getCollectionsQueryByGroupID($collection_group_id);
         return DataTables::of($data)
             ->addIndexColumn()
             ->orderColumn('id', '-collections.id')

@@ -171,8 +171,8 @@ class CustomerCollectionController extends Controller
 
     public function getCustomerCollectionsByGroup(Request $request)
     {
-        $request = $request->all();
-        $data = $this->customerCollectionRepository->getAllCustomerCollectionsByGroupId($request);
+        $collection_group_id = $request['collection_group_id'];
+        $data = $this->customerCollectionRepository->getAllCustomerCollectionsByGroupId($collection_group_id);
 
         return DataTables::of($data)
             ->addColumn('action', function ($row) {
