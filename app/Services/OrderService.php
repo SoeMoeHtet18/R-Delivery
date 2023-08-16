@@ -28,6 +28,7 @@ class OrderService
     public function saveOrderData($data)
     {
         $user = auth()->user();
+        $today = Carbon::today()->format('Y-m-d');
         
         $order = new Order();
         $order->order_code =  $data['order_code'];
@@ -43,7 +44,11 @@ class OrderService
         $order->total_amount = $data['total_amount'];
         $order->markup_delivery_fees =  $data['markup_delivery_fees'] ?? 0;
         $order->remark =  $data['remark'] ?? null;
-        $order->status = "pending";
+        if($today == Carbon::parse($data['schedule_date'])->format('Y-m-d')){
+            $order->status = "delivering";
+        } else {
+            $order->status = "pending";
+        }
         $order->item_type_id =  $data['item_type_id'] ?? null;
         $order->full_address =  $data['full_address'] ?? null;
         $order->schedule_date =  $data['schedule_date'] ?? Carbon::tomorrow();;
