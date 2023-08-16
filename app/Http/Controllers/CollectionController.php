@@ -135,7 +135,7 @@ class CollectionController extends Controller
         $search = $request->search;
         $data = $this->collectionRepository->getAllCollectionsQuery();
         if($search) {
-            $data = $data->where('collections.name','like', '%' . $search . '%');
+            $data = $data->where('collections.collection_code','like', '%' . $search . '%');
         }
         return DataTables::of($data)
             ->addColumn('action', function($row){
