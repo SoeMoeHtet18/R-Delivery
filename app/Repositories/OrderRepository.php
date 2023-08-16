@@ -15,7 +15,7 @@ class OrderRepository
 {
     public function getOrderByID($id)
     {
-        $order = Order::findOrFail($id);
+        $order = Order::with(['shop','rider','city','township','itemType','delivery_type'])->findOrFail($id);
         return $order;
     }
     public function getAllOrders()

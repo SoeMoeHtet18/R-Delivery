@@ -109,7 +109,7 @@ class OrderController extends Controller
         $order = $this->orderRepository->getOrderByID($id);
         $collection_groups = $this->collectionGroupRepository->getAllCollectionGroups();
         $collection_groups = $collection_groups->sortByDesc('id');
-        return view('admin.order.detail', compact('order', 'collection_groups'));
+        return view('admin.order.detail_new', compact('order', 'collection_groups'));
     }
 
     /**

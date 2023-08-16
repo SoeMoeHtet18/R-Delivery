@@ -44,15 +44,19 @@
     .action-button {
         display: flex;
     }
+
+    .warehouse-order-card {
+        padding-right: 0px;
+    }
     
 </style>
     <div class="card card-container action-form-card warehouse_order_card">
-        <div class="card-body">
+        <div class="card-body warehouse-order-card">
             <div class="row">
                 <div class="col">
                     <div class="card-header">
                         <h5 class="mb-3 me-5"><strong>Order ID {{$order->order_code}}</strong></h5>
-                        <div class="action-button ms-5">
+                        <div class="action-button ms-4">
                             <form action="{{url('/orders/' . $order->id . '/change-status')}}" method="post">
                                 @csrf
                                 @method('POST')
