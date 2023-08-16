@@ -95,6 +95,17 @@
                 </div>
             </div>
             <div class="row m-0 mb-3">
+                <label for="base_salary" class="col-2">
+                    <h4>Base Salary <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <input type="text" id="base_salary" name="base_salary" class="form-control" readonly/>
+                    @if($errors->has('base_salary'))
+                    <span class="text-danger"><strong>{{ $errors->first('base_salary') }}</strong></span>
+                    @endif
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
                 <label for="total_amount" class="col-2">
                     <h4>Total Amount <b>:</b></h4>
                 </label>
@@ -186,6 +197,7 @@
                     $('#delivery').val(response.data.total_deli_count);
                     $('#deficit').val(response.data.deficit_fees);
                     $('#total_amount').val(response.data.total_salary);
+                    $('#base_salary').val(response.data.base_salary);
                     $('#total_routine').val(response.data.total_pick_up_count + response.data.total_deli_count);
                     var salary_type = response.data.salary_type;
                     $('#type').val(salary_type);
