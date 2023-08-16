@@ -52,6 +52,7 @@
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
     <script src="https://kit.fontawesome.com/2a8a85ebf9.js" crossorigin="anonymous"></script>
     <script type="text/javascript" src="{{ asset('fonts/vfs_fonts.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     @include('admin.layouts.css')
     @stack('style')
     @yield('style')

@@ -193,9 +193,13 @@ class OrderController extends Controller
         $data = $this->shopRepository->getShopOrdersByShopID($id);
         $start = $request->from_date;
         $end = $request->to_date . ' 23:59:00';
+        $payment_channel = $request->payment_channel;
         // dd($request->all());
         if ($start && $end) {
             $data = $data->whereBetween('orders.created_at', [$start, $end]);
+        }
+        if ($payment_channel) {
+            $data = $data->where('orders.payment_channel', $payment_channel); 
         }
         $order = $data;
 
