@@ -104,7 +104,55 @@
         </div>
 
         <hr>
-        <ul class="nav nav-tabs mb-4">
+        <button class="btn btn-link" id="toggleFilter">
+            <svg width="18" height="20" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M7.87768 20C7.55976 20 7.29308 19.88 7.07765 19.64C6.86222 19.4 6.75487 19.1033 6.75562 18.75V11.25L0.247706 2C-0.0328074 1.58333 -0.0750713 1.14583 0.120914 0.6875C0.3169 0.229167 0.658378 0 1.14535 0H16.8541C17.3403 0 17.6818 0.229167 17.8785 0.6875C18.0753 1.14583 18.033 1.58333 17.7518 2L11.2438 11.25V18.75C11.2438 19.1042 11.1361 19.4012 10.9207 19.6412C10.7053 19.8812 10.439 20.0008 10.1218 20H7.87768Z" fill="black" />
+            </svg>
+        </button>
+        <div class="card m-3 mt-0 filter-content" style="display: none;">
+            <div class="row tdFilter">
+                <div class="col-md-12 col-sm-12 m-3">
+                    <h2>Filter</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="filter-box">
+                    <div class="mb-3 p-3 col-4">
+                        <label for="payment_channel">
+                            <strong>Payment Channel</strong>
+                        </label>
+                        <div class="col-10">
+                            <select name="payment_channel" id="payment_channel" class="form-control">
+                                <option value="" selected disabled>Select</option>
+                                <option value="cash">Cash</option>
+                                <option value="company_online_payment">Company Online Payment</option>
+                                <option value="shop_online_payment">Shop Online Payment</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3 p-3 col-4">
+                        <label for="search">
+                            <strong>Created Between</strong>
+                        </label>
+                        <div class="col-10">
+                            <div style="position: relative;">
+                                <input type="text" name="datefilter" value="" class="form-control"/>
+                                <span class="fa fa-calendar" style="position: absolute; top: 12px; right: 8px;"></span>
+                            </div>
+                            <input type="hidden" name="start_date" id="start_date">
+                            <input type="hidden" name="end_date" id="end_date">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-row-reverse pb-3">
+                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 btncenter margin-btn">
+                    <button id='filter' class="btn green ms-2 me-0">Filter</button>
+                    <button id="clear" class="btn btn-secondary mx-0">Clear</button>
+                </div>
+            </div>
+        </div>
+        <ul class="nav nav-tabs my-4">
             <li class="nav-item">
                 <a href="#shop-user-display" id="shop-user-tab" class="nav-link active" data-toggle="tab">Shop Users</a>
             </li>
@@ -122,18 +170,9 @@
             </li>
         </ul>
         <input type="hidden" id="current_screen" value="shop-user-display">
-        <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-end">
             
-            <div>
-                <label for="start_date">Start Date:</label>
-                <input type="date" name="start_date" id="start_date">
-
-                <label for="end_date">End Date:</label>
-                <input type="date" name="end_date" id="end_date">
-
-                <button id='filter' class="btn green ms-2 me-0">Filter</button>
-                <button id="clear" class="btn btn-secondary mx-0">Clear</button>
-            </div>
+           
             
             <div class="d-inline-block">
                 <ul class="pdf-ul">
@@ -298,6 +337,11 @@
 @section('javascript')
 <script type="text/javascript">
     $(function() {
+        $("#toggleFilter").on("click", function() {
+            $(".filter-content").slideToggle(300);
+            $('#payment_channel').select2();
+        });
+
         var tabIndex = 0;
         $('.nav-tabs a').click(function() {
             $(this).tab('show');
@@ -387,10 +431,10 @@
             ],
         });
 
-        get_ajax_dynamic_shop_order_table(start = '', end = '');
+        get_ajax_dynamic_shop_order_table(start = '', end = '', paymentChannel = '');
 
         // Initialize shop-order-datatable
-        function get_ajax_dynamic_shop_order_table(start, end) {
+        function get_ajax_dynamic_shop_order_table(start, end, paymentChannel) {
             var order_table = $('#shop-order-datatable').DataTable({
                 processing: true,
                 serverSide: true,
@@ -410,6 +454,7 @@
                     "data": function(r) {
                         r.from_date = start;
                         r.to_date = end;
+                        r.payment_channel = paymentChannel
                     }
                 },
                 columns: [{
@@ -564,19 +609,19 @@
             $('#filter').click(function() {
                 var start = $('#start_date').val();
                 var end = $('#end_date').val();
+                var paymentChannel = $('#payment_channel').val();
                 order_table.destroy();
-                get_ajax_dynamic_shop_order_table(start, end);
-                console.log(end);
+                get_ajax_dynamic_shop_order_table(start, end, paymentChannel);
             });
             $("#clear").click(function() {
                 $("#start_date").val("").trigger("change");
                 $("#end_date").val("").trigger("change");
+                $("#payment_channel").val("").trigger("change");
                 var start = $("#start_date").val();
                 var end = $('#end_date').val();
+                var paymentChannel = $('#payment_channel').val();
                 order_table.destroy();
-                get_ajax_dynamic_shop_order_table(start, end);
-                console.log(start);
-
+                get_ajax_dynamic_shop_order_table(start, end, paymentChannel);
             });
         }
         // Initialize shop-payment-datatable
@@ -818,6 +863,28 @@
             // Navigate to the download URL
             window.location.href = downloadUrl;
         }
+
+        // for date range picker
+        $('input[name="datefilter"]').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+                cancelLabel: 'Clear'
+            }
+        });
+
+        $('input[name="datefilter"]').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+            $('#start_date').val(picker.startDate.format('YYYY-MM-DD'));
+            $('#end_date').val(picker.endDate.format('YYYY-MM-DD'));
+        });
+
+        $('input[name="datefilter"]').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
+        });
+
+        $(".fa-calendar").on("click", function() {
+            $('input[name="datefilter"]').trigger("click");
+        });
     });
 </script>
 @endsection
