@@ -50,4 +50,36 @@ class Order extends Model
     {
         return $this->belongsTo(Branch::class, 'branch_id', 'id')->withTrashed();
     }
+
+    public function getStatusLabelAttribute()
+    {
+        $statusLabels = [
+            'pending' => 'Pending',
+            'picking-up' => 'Picking Up',
+            'warehouse' => 'Warehouse',
+            'delivering' => 'Delivering',
+            'success' => 'Delivered',
+            'delay' => 'Delay',
+            'cancel' => 'Cancel',
+            'cancel-request' => 'Cancel Request'
+        ];
+
+        return $statusLabels[$this->status] ?? $this->status;
+    }
+    
+    public function getStatusLabelColorAttribute()
+    {
+        $statusLabels = [
+            'pending' => 'warning',
+            'picking-up' => 'warning',
+            'warehouse' => 'warning',
+            'delivering' => 'warning',
+            'success' => 'success',
+            'delay' => 'warning',
+            'cancel' => 'danger',
+            'cancel-request' => 'warning'
+        ];
+
+        return $statusLabels[$this->status] ?? $this->status;
+    }
 }
