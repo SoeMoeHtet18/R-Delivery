@@ -23,7 +23,7 @@ class RiderRepository
     public function getAllRiders()
     {
         $branch_id = auth()->user()->branch_id;
-        $riders = Rider::where('branch_id', $branch_id)->get();
+        $riders = Rider::where('branch_id', $branch_id)->orderBy('name','asc')->get();
         return $riders;
     }
 

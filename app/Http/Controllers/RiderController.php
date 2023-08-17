@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\RiderCreateRequest;
 use App\Http\Requests\RiderUpdateRequest;
 use App\Http\Requests\TownshipAssignRequest;
+use App\Models\Collection;
+use App\Models\CollectionGroup;
+use App\Models\CustomerCollection;
+use App\Models\Order;
 use App\Models\Rider;
 use App\Repositories\CollectionRepository;
 use App\Repositories\DeficitRepository;
@@ -13,6 +17,7 @@ use App\Repositories\RiderRepository;
 use App\Repositories\TownshipRepository;
 use App\Services\DeficitService;
 use App\Services\RiderService;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -76,8 +81,29 @@ class RiderController extends Controller
     {
         $rider = $this->riderRepository->getRiderByID($id);
         $townships = $this->townshipRepository->getAllTownships();
+        $today = Carbon::today()->format('Y-m-d');
+        $deliveredOrders = Order::where(['status' => 'success', 'schedule_date' => $today, 'rider_id' =>$id])->get();
+        $cashToCollect = 0;
+        foreach ($deliveredOrders as $order) {
+            $deliveryCharges = $order->delivery_fees + $order->markup_delivery_fees + $order->extra_charges;
+            $discount = $order->discount;
+            if ($order->payment_method === 'cash_on_delivery') {
+                $cashToCollect += $order->total_amount + $deliveryCharges - $discount;
+            } elseif ($order->payment_method === 'item_prepaid') {
+                $cashToCollect += $deliveryCharges - $discount;
+            }
+        }
+        $pickUpGroupTotalAmount = CollectionGroup::where('rider_id', $id)->whereDate('assigned_date', $today)->sum('total_amount');
+        $pickUpPaidAmount = Collection::where('rider_id', $id)->whereDate('collected_at', $today)->sum('paid_amount');
+        $customerExchangePaidAmount = CustomerCollection::with('collection_group')
+                    ->whereHas('collection_group', function($q) use ($today){
+                        $q->where('assigned_date',$today);
+                    })
+                    ->where('rider_id', $id)->sum('paid_amount');
+        $paidAmountToRider   = $cashToCollect + $pickUpGroupTotalAmount;
+        $paidAmountFromRider = $pickUpPaidAmount + $customerExchangePaidAmount;
 
-        return view('admin.rider.detail', compact('rider', 'townships'));
+        return view('admin.rider.detail', compact('rider', 'townships', 'paidAmountToRider', 'paidAmountFromRider'));
     }
 
     /**
@@ -87,7 +113,6 @@ class RiderController extends Controller
     {
         $rider = $this->riderRepository->getRiderByID($id);
         $townships = $this->townshipRepository->getAllTownships();
-        $townships = $townships->sortByDesc('id');
         return view('admin.rider.edit', compact('rider', 'townships'));
     }
 

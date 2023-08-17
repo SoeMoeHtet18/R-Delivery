@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Helper;
 use App\Models\Collection;
+use App\Repositories\CityRepository;
 use App\Repositories\CollectionGroupRepository;
 use App\Repositories\CollectionRepository;
 use App\Repositories\RiderRepository;
 use App\Repositories\ShopRepository;
+use App\Repositories\TownshipRepository;
 use App\Services\CollectionService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -21,8 +23,12 @@ class CollectionController extends Controller
     protected $riderRepository;
     protected $collectionGroupRepository;
 
-    public function __construct(CollectionRepository $collectionRepository, CollectionService $collectionService, ShopRepository $shopRepository,
-    RiderRepository $riderRepository,CollectionGroupRepository $collectionGroupRepository)
+    public function __construct(
+        CollectionRepository $collectionRepository,
+        CollectionService $collectionService,
+        ShopRepository $shopRepository,
+        RiderRepository $riderRepository,
+        CollectionGroupRepository $collectionGroupRepository)
     {
         $this->collectionRepository = $collectionRepository;
         $this->collectionService    = $collectionService;
@@ -36,7 +42,9 @@ class CollectionController extends Controller
     public function index()
     {
         $collections = $this->collectionRepository->getAllCollections();
-        return view('admin.collections.index', compact('collections'));
+        $shops = $this->shopRepository->getAllShops();
+        $riders = $this->riderRepository->getAllRiders();
+        return view('admin.collections.index', compact('collections', 'shops', 'riders'));
     }
 
     /**
@@ -132,10 +140,30 @@ class CollectionController extends Controller
 
     public function getAjaxCollections(Request $request)
     {
-        $search = $request->search;
+        $search         = $request->search;
+        $status         = $request->status;
+        $rider          = $request->rider;
+        $shop           = $request->shop;
+        $scheduledAt   = $request->scheduled_at;
+        $collectedAt   = $request->collected_at;
         $data = $this->collectionRepository->getAllCollectionsQuery();
         if($search) {
             $data = $data->where('collections.collection_code','like', '%' . $search . '%');
+        }
+        if($status) {
+            $data = $data->where('collections.status',$status);
+        }
+        if($rider) {
+            $data = $data->where('collections.rider_id',$rider);
+        }
+        if($shop) {
+            $data = $data->where('collections.shop_id',$shop);
+        }
+        if($scheduledAt) {
+            $data = $data->whereDate('collections.assigned_at',$scheduledAt);
+        }
+        if($collectedAt) {
+            $data = $data->whereDate('collections.collected_at',$collectedAt);
         }
         return DataTables::of($data)
             ->addColumn('action', function($row){

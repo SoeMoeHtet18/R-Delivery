@@ -15,8 +15,7 @@ class TownshipRepository
 
     public function getAllTownships()
     {
-        $townships = Township::all();
-        return $townships;
+        return Township::orderBy('name','asc')->get();
     }
 
     public function getAllTownshipsQuery()
