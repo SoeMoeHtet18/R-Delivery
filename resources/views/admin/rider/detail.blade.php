@@ -50,12 +50,29 @@
 
                     @csrf
                     <input type="hidden" name="rider_id" id="rider_id" value="{{$rider->id}}">
+                    <div class="row mb-2 me-3 ms-3">
+                        <h5 class="ps-0 mb-0">Description</h5>
+                        <div class="card order-detail-card" style="border-radius: 10px !important; background: #F1F5F5;">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <b>Paid Amount (To Rider)</b><b>{{$paidAmountToRider}} MMK</b>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <b>Paid Amount (From Rider)</b><b>{{$paidAmountFromRider}} MMK</b>
+                                </div>
+                                <hr>
+                                <div class="d-flex justify-content-between">
+                                    <b>Deficit</b><b>{{$paidAmountToRider - $paidAmountFromRider}} MMK</b>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row m-0 mb-3">
                         <label for="amount">
                             <h5>Amount<b>:</b></h5>
                         </label>
                         <div>
-                            <input type="text" id="amount" name="amount" class="form-control" />
+                            <input type="text" id="amount" name="amount" class="form-control" style="border-radius: 2px !important;"/>
                         </div>
                     </div>
 

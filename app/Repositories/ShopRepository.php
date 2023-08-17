@@ -17,7 +17,7 @@ class ShopRepository
     public function getAllShops()
     {
         $branch_id = auth()->user()->branch_id;
-        $shops = Shop::where('branch_id', $branch_id)->get();
+        $shops = Shop::where('branch_id', $branch_id)->orderBy('name','asc')->get();
         return $shops;
     }
 
