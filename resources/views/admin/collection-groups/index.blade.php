@@ -7,7 +7,8 @@
     <div class="create-button">
         <a class="btn create-btn" href="{{route('collection-groups.create')}}">Add Pick Up Group</a>
     </div>
-    <button class="btn btn-link" id="toggleFilter"><svg width="18" height="20" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <button class="btn btn-link" id="toggleFilter"><svg width="18" height="20" viewBox="0 0 18 20"
+        fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M7.87768 20C7.55976 20 7.29308 19.88 7.07765 19.64C6.86222 19.4 6.75487 19.1033 6.75562 18.75V11.25L0.247706 2C-0.0328074 1.58333 -0.0750713 1.14583 0.120914 0.6875C0.3169 0.229167 0.658378 0 1.14535 0H16.8541C17.3403 0 17.6818 0.229167 17.8785 0.6875C18.0753 1.14583 18.033 1.58333 17.7518 2L11.2438 11.25V18.75C11.2438 19.1042 11.1361 19.4012 10.9207 19.6412C10.7053 19.8812 10.439 20.0008 10.1218 20H7.87768Z" fill="black" />
         </svg>
     </button>
@@ -51,6 +52,8 @@
                 <tr>
                     <th>#</th>
                     <th>Pick Up Group Code</th>
+                    <th>Total Collection</th>
+                    <th>Total Quantity</th>
                     <th>Total Amount</th>
                     <th>Rider Name</th>
                     <th>Assigned Date</th>
@@ -94,6 +97,14 @@
                         name: 'pick_up_group_code'
                     },
                     {
+                        data: 'total_collection',
+                        name: 'total_collection',
+                    },
+                    {
+                        data: 'total_quantity',
+                        name: 'total_quantity',
+                    },
+                    {
                         data: 'total_amount',
                         name: 'total_amount',
                     },
@@ -115,6 +126,12 @@
                 columnDefs: [
                     {
                         "render": function(data, type, row) {
+                            return '<a href="/collection-groups/' + row.id + '">'
+                                + row.collection_group_code + '</a>';                        },
+                        "targets": 1
+                    },
+                    {
+                        "render": function(data, type, row) {
                             if (row.assigned_date === null) {
                                 return '';
                             } else {
@@ -130,7 +147,7 @@
                                 return formattedDate;
                             }
                         },
-                        "targets": 3
+                        "targets": 6
                     },
                 ]
             });

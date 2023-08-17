@@ -41,41 +41,58 @@ class CollectionGroupService
 
         $collectionGroup = CollectionGroup::create([
             'collection_group_code' => $data['collection_group_code'],
-            'total_amount' => $data['total_amount'],
+            'total_amount' => $data['total_amount'] ?? 0,
             'rider_id' => $data['rider_id'],
             'assigned_date' => $data['assigned_date'],
-            'branch_id' => $user->branch_id
+            'branch_id' => $user->branch_id,
+            'total_quantity' => $data['total_quantity'] ?? 0,
+            'total_collection' => $data['total_collection']
         ]);
 
         if (isset($data['checkedShopCollections'])) {
             $shopCollections = $data['checkedShopCollections'];
-            Collection::whereIn('id', $shopCollections)->update(['collection_group_id' => $collectionGroup->id,'rider_id' => $data['rider_id']]);
+            Collection::whereIn('id', $shopCollections)
+                ->update(['collection_group_id' => $collectionGroup->id,'rider_id' => $data['rider_id']]);
             
         }
         if (isset($data['checkedCustomerCollections'])) {
             $shopCollections = $data['checkedCustomerCollections'];
-            CustomerCollection::whereIn('id', $shopCollections)->update(['collection_group_id' => $collectionGroup->id,'rider_id' => $data['rider_id']]);
+            CustomerCollection::whereIn('id', $shopCollections)
+                ->update(['collection_group_id' => $collectionGroup->id,'rider_id' => $data['rider_id']]);
         }
         return $collectionGroup;
     }
 
     public function updateCollectionGroupByAdmin($collectionGroup, $data)
     {
-        $collectionGroup->fill([
+        $collectionIds = [];
+        $customerCollectionIds = [];
+        
+        if (isset($data['collection_id'])) {
+            $collectionIds = $data['collection_id'];
+        
+            Collection::whereIn('id', $collectionIds)
+                ->update(['collection_group_id' => $collectionGroup->id]);
+        }
+
+        if (isset($data['customer_collection_id'])) {
+            $customerCollectionIds = $data['customer_collection_id'];
+        
+            CustomerCollection::whereIn('id', $customerCollectionIds)
+                ->update(['collection_group_id' => $collectionGroup->id]);
+        }
+        
+        $totalCollection = count($collectionIds) + count($customerCollectionIds);
+
+        $collectionGroup->update([
+            'total_collection' => $totalCollection,
+            'total_quantity' => $data['total_quantity'],
             'total_amount' => $data['total_amount'],
             'rider_id' => $data['rider_id'],
             'assigned_date' => $data['assigned_date']
         ]);
-        $collectionGroup->save();
 
-        $collections = [];
-        if (isset($data['collection_id'])) {
-            Collection::where('collection_group_id', $collectionGroup->id)->update(['collection_group_id' => null]);
-            $collectionIds = $data['collection_id'];
-            foreach ($collectionIds as $collectionId) {
-                $collection = Collection::where('id', $collectionId)->update(['collection_group_id' => $collectionGroup->id]);
-            }
-        }
+      
         return $collectionGroup;
     }
 

@@ -10,7 +10,8 @@ class CollectionGroup extends Model
 {
     use HasFactory, SoftDeletes;
     protected $fillable = [
-        'total_amount', 'rider_id', 'assigned_date', 'branch_id', 'collection_group_code'
+        'total_amount', 'rider_id', 'assigned_date', 'branch_id', 'collection_group_code',
+        'total_quantity', 'total_collection'
     ];
 
     public function collections() {

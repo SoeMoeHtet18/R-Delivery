@@ -64,17 +64,20 @@ class CollectionGroupController extends Controller
     public function store(CollectionGroupCreateRequest $request)
     {
         $data = $request->all();
-        $rider_id = $data['rider_id'];
+        $riderId = $data['rider_id'];
         $checkedShopCollections = json_decode($request->input('checked_shop_collections'));
         $checkedCustomerCollections = json_decode($request->input('checked_customer_collections'));
-        $data['checkedShopCollections'] = $checkedShopCollections;
-        $data['checkedCustomerCollections'] = $checkedCustomerCollections;
-        
-        $collection_group = $this->collectionGroupService->saveCollectionGroup($data);
+        $data['checkedShopCollections'] = $checkedShopCollections ?? 0;
+        $data['checkedCustomerCollections'] = $checkedCustomerCollections ?? 0;
 
-        $data_for_collections = json_decode($data['create-collections-data'], true);
-        foreach($data_for_collections as $data_for_collection) {
-            $this->collectionService->saveCollectionFromGroup($data_for_collection, $rider_id, $collection_group->id);
+        $data['total_collection'] = count($data['checkedShopCollections']) +
+            count($data['checkedCustomerCollections']);
+        
+        $collectionGroup = $this->collectionGroupService->saveCollectionGroup($data);
+
+        $dataForCollections = json_decode($data['create-collections-data'], true);
+        foreach($dataForCollections as $dataForCollection) {
+            $this->collectionService->saveCollectionFromGroup($dataForCollection, $riderId, $collectionGroup->id);
         } 
        
         // $this->collectionGroupService->saveCollectionGroupByAdmin($data);
@@ -109,7 +112,7 @@ class CollectionGroupController extends Controller
         $date = new Carbon($collectionGroup->assigned_date);
         $assigndate = $date->format('Y-m-d');
 
-        return view('admin.collection-groups.edit', compact('riders', 'collectionGroup', 'collections', 
+        return view('admin.collection-groups.edit', compact('riders', 'collectionGroup', 'collections',
             'collection_ids_by_group', 'assigndate', 'customer_collections'));
     }
 
@@ -150,9 +153,11 @@ class CollectionGroupController extends Controller
 
         return DataTables::of($data)
             ->addColumn('action', function($row){
-                $actionBtn = '<a href="' . route("collection-groups.show", $row->id) . '" class="info btn btn-info btn-sm">View</a>
-                <a href="' . route("collection-groups.edit", $row->id) . '" class="edit btn btn-light btn-sm">Edit</a>
-                <form action="'.route("collection-groups.destroy", $row->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this city?`);">
+                $actionBtn = '<a href="' . route("collection-groups.show", $row->id) . '"
+                class="info btn btn-info btn-sm">View</a> <a href="' .
+                route("collection-groups.edit", $row->id) . '" class="edit btn btn-light btn-sm">Edit</a>
+                <form action="'.route("collection-groups.destroy", $row->id) .'" method="post"
+                class="d-inline" onclick="return confirm(`Are you sure you want to Delete this city?`);">
                     <input type="hidden" name="_token" value="'. csrf_token() .'">
                     <input type="hidden" name="_method" value="DELETE">
                     <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
@@ -161,7 +166,7 @@ class CollectionGroupController extends Controller
             })
             ->rawColumns(['action'])
             ->addIndexColumn()
-            ->orderColumn('collection_groups.id', '-id $1')
+            ->orderColumn('id', '-collection_groups.id')
             ->make(true);
     }
 

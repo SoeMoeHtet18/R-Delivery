@@ -51,7 +51,20 @@
                     <h4>Pick Up Group Code <b>:</b></h4>
                 </label>
                 <div class="col-10">
-                    <input type="text" id="collection_group_code" name="collection_group_code" class="form-control" readonly />
+                    <input type="text" id="collection_group_code" name="collection_group_code"
+                        class="form-control" readonly />
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <label for="total_quantity" class="col-2">
+                    <h4>Total Quantity <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <input type="text" id="total_quantity" name="total_quantity" class="form-control"
+                        value="{{old('total_quantity')}}"/>
+                    @if ($errors->has('total_quantity'))
+                    <span class="text-danger"><strong>{{ $errors->first('total_quantity') }}</strong></span>
+                    @endif
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -59,7 +72,8 @@
                     <h4>Total Amount <b>:</b></h4>
                 </label>
                 <div class="col-10">
-                    <input type="text" id="total_amount" name="total_amount" class="form-control" value="{{old('total_amount')}}"/>
+                    <input type="text" id="total_amount" name="total_amount" class="form-control"
+                    value="{{old('total_amount')}}"/>
                     @if ($errors->has('total_amount'))
                     <span class="text-danger"><strong>{{ $errors->first('total_amount') }}</strong></span>
                     @endif
@@ -94,7 +108,8 @@
                         // Set the default value to tomorrow's date
                         $defaultDate = old('schedule_date') ?? $today;
                         ?>
-                        <input type="date" id="assigned_date" name="assigned_date" value="<?php echo $defaultDate; ?>" class="form-control" />
+                        <input type="date" id="assigned_date" name="assigned_date"
+                            value="<?php echo $defaultDate; ?>" class="form-control" />
                     @if ($errors->has('assigned_date'))
                     <span class="text-danger"><strong>{{ $errors->first('assigned_date') }}</strong></span>
                     @endif
