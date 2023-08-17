@@ -41,6 +41,7 @@ class UpdateScheduledOrderStatusDelivering extends Command
 
         // Update orders with scheduled date matching today to delivering
         Order::whereDate('schedule_date', $today)
+            ->whereNotIn('status',['success','cancel'])
             ->whereNotNull('rider_id')
             ->update(['status' => 'delivering']);
 
