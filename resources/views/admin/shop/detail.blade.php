@@ -558,6 +558,23 @@
                         },
                         "targets": 2
                     },
+                    // calculate actual delivery fees
+                    {
+                        "render": function(data, type, row) {
+                            var delivery_fees = parseFloat(row.delivery_fees);
+
+                            if (row.extra_charges != null) {
+                                delivery_fees += parseFloat(row.extra_charges);
+                            }
+
+                            if (row.discount != null) {
+                                delivery_fees -= parseFloat(row.discount);
+                            }
+
+                            return delivery_fees;
+                        },
+                        "targets": 10
+                    },
                     {
                         "render": function(data, type, row) {
                             if (row.status == 'pending') {

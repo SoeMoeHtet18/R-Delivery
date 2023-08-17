@@ -928,6 +928,23 @@
                         },
                         "targets": 2
                     },
+                    // calculate the acutual delivery fees
+                    {
+                        "render": function(data, type, row) {
+                            var delivery_fees = parseFloat(row.delivery_fees);
+
+                            if (row.extra_charges != null) {
+                                delivery_fees += parseFloat(row.extra_charges);
+                            }
+
+                            if (row.discount != null) {
+                                delivery_fees -= parseFloat(row.discount);
+                            }
+
+                            return delivery_fees;
+                        },
+                        "targets": 4
+                    },
                     {
                         "render": function(data, type, row) {
                             if (row.status == 'pending') {
@@ -1028,12 +1045,14 @@
                     e.preventDefault();
                     var search = $('#search').val();
                     table.destroy();
-                    get_ajax_dynamic_data(search, city = '', rider = '', shop = '', status = '', township = '', pay_later = '', pick_up_date = '');
+                    get_ajax_dynamic_data(search, city = '', rider = '', shop = '',
+                        status = '', township = '', pay_later = '', pick_up_date = '');
                 }
             });
         };
 
-        get_ajax_dynamic_data_for_cancel_request_table(search = '', city = '', rider = '', shop = '', status = '', township = '');
+        get_ajax_dynamic_data_for_cancel_request_table(search = '', city = '', rider = '', shop = '',
+            status = '', township = '');
 
         function get_ajax_dynamic_data_for_cancel_request_table() {
             var table = $('#cancel-request-orders-datatable').DataTable({
@@ -1110,7 +1129,25 @@
                         name: 'discount'
                     },
                 ],
-                columnDefs: [{
+                columnDefs: [
+                    // calculate actual delivery fees
+                    {
+                        "render": function(data, type, row) {
+                            var delivery_fees = parseFloat(row.delivery_fees);
+
+                            if (row.extra_charges != null) {
+                                delivery_fees += parseFloat(row.extra_charges);
+                            }
+
+                            if (row.discount != null) {
+                                delivery_fees -= parseFloat(row.discount);
+                            }
+
+                            return delivery_fees;
+                        },
+                        "targets": 4
+                    },
+                    {
                         "render": function(data, type, row) {
                             if (row.payment_flag == 0) {
                                 return "Unpaid";
@@ -1126,7 +1163,8 @@
             });
         }
 
-        get_ajax_dynamic_data_for_cancel_table(search = '', city = '', rider = '', shop = '', status = '', township = '');
+        get_ajax_dynamic_data_for_cancel_table(search = '', city = '', rider = '', shop = '',
+            status = '', township = '');
 
         function get_ajax_dynamic_data_for_cancel_table() {
             var table = $('#cancel-orders-datatable').DataTable({
@@ -1203,7 +1241,25 @@
                         name: 'discount'
                     },
                 ],
-                columnDefs: [{
+                columnDefs: [
+                    // calculate actual delivery fees
+                    {
+                        "render": function(data, type, row) {
+                            var delivery_fees = parseFloat(row.delivery_fees);
+
+                            if (row.extra_charges != null) {
+                                delivery_fees += parseFloat(row.extra_charges);
+                            }
+
+                            if (row.discount != null) {
+                                delivery_fees -= parseFloat(row.discount);
+                            }
+
+                            return delivery_fees;
+                        },
+                        "targets": 3
+                    },
+                    {
                         "render": function(data, type, row) {
                             if (row.payment_flag == 0) {
                                 return "Unpaid";
@@ -1266,7 +1322,8 @@
             });
         }
 
-        get_ajax_dynamic_data_for_warehouse_table(search = '', city = '', rider = '', shop = '', status = '', township = '');
+        get_ajax_dynamic_data_for_warehouse_table(search = '', city = '', rider = '', shop = '',
+            status = '', township = '');
 
         function get_ajax_dynamic_data_for_warehouse_table() {
             var table = $('#warehouse-orders-datatable').DataTable({
@@ -1343,7 +1400,25 @@
                         name: 'discount'
                     },
                 ],
-                columnDefs: [{
+                columnDefs: [
+                    // calculate actual delivery fees
+                    {
+                        "render": function(data, type, row) {
+                            var delivery_fees = parseFloat(row.delivery_fees);
+
+                            if (row.extra_charges != null) {
+                                delivery_fees += parseFloat(row.extra_charges);
+                            }
+
+                            if (row.discount != null) {
+                                delivery_fees -= parseFloat(row.discount);
+                            }
+
+                            return delivery_fees;
+                        },
+                        "targets": 4
+                    },
+                    {
                         "render": function(data, type, row) {
                             if (row.payment_flag == 0) {
                                 return "Unpaid";

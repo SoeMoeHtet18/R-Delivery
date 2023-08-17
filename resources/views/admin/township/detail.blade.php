@@ -74,6 +74,7 @@
                                     <th>Customer Name</th>
                                     <th>Customer Phone Number</th>
                                     <th>Delivery Fees</th>
+                                    <th>MarkUp Delivery Fees</th>
                                     <th>Remark</th>
                                     <th>Full Address</th>
                                     <th>Schedule Date</th>
@@ -104,6 +105,7 @@
                                     <th>Customer Name</th>
                                     <th>Customer Phone Number</th>
                                     <th>Delivery Fees</th>
+                                    <th>MarkUp Delivery Fees</th>
                                     <th>Remark</th>
                                     <th>Full Address</th>
                                     <th>Schedule Date</th>
@@ -134,6 +136,7 @@
                                     <th>Customer Name</th>
                                     <th>Customer Phone Number</th>
                                     <th>Delivery Fees</th>
+                                    <th>MarkUp Delivery Fees</th>
                                     <th>Remark</th>
                                     <th>Full Address</th>
                                     <th>Schedule Date</th>
@@ -193,6 +196,10 @@
                         name: 'delivery_fees'
                     },
                     {
+                        data: 'markup_delivery_fees',
+                        name: 'markup_delivery_fees'
+                    },
+                    {
                         data: 'remark',
                         name: 'remark'
                     },
@@ -213,7 +220,25 @@
                         name: 'last_updated_by'
                     },
                 ],
-                columnDefs: [{
+                columnDefs: [
+                    // calculate actual delivery fees
+                    {
+                        "render": function(data, type, row) {
+                            var delivery_fees = parseFloat(row.delivery_fees);
+
+                            if (row.extra_charges != null) {
+                                delivery_fees += parseFloat(row.extra_charges);
+                            }
+
+                            if (row.discount != null) {
+                                delivery_fees -= parseFloat(row.discount);
+                            }
+
+                            return delivery_fees;
+                        },
+                        "targets": 7
+                    },
+                    {
                         "render": function(data, type, row) {
                             if (row.schedule_date === null) {
                                 return '';
@@ -226,7 +251,7 @@
                             });
                             return formattedDate;
                         },
-                        "targets": 10
+                        "targets": 11
                     },
                     {
                         "render": function(data, type, row) {
@@ -237,7 +262,7 @@
                                 return "Pick Up";
                             }
                         },
-                        "targets": 11
+                        "targets": 12
                     },
                 ]
             });
@@ -278,6 +303,10 @@
                         name: 'delivery_fees'
                     },
                     {
+                        data: 'markup_delivery_fees',
+                        name: 'markup_delivery_fees'
+                    },
+                    {
                         data: 'remark',
                         name: 'remark'
                     },
@@ -298,7 +327,25 @@
                         name: 'last_updated_by'
                     },
                 ],
-                columnDefs: [{
+                columnDefs: [
+                    // calculate actual delivery fees
+                    {
+                        "render": function(data, type, row) {
+                            var delivery_fees = parseFloat(row.delivery_fees);
+
+                            if (row.extra_charges != null) {
+                                delivery_fees += parseFloat(row.extra_charges);
+                            }
+
+                            if (row.discount != null) {
+                                delivery_fees -= parseFloat(row.discount);
+                            }
+
+                            return delivery_fees;
+                        },
+                        "targets": 7
+                    },
+                    {
                         "render": function(data, type, row) {
                             if (row.schedule_date === null) {
                                 return '';
@@ -311,7 +358,7 @@
                             });
                             return formattedDate;
                         },
-                        "targets": 10
+                        "targets": 11
                     },
                     {
                         "render": function(data, type, row) {
@@ -322,7 +369,7 @@
                                 return "Pick Up";
                             }
                         },
-                        "targets": 11
+                        "targets": 12
                     },
                 ]
             });
@@ -363,6 +410,10 @@
                         name: 'delivery_fees'
                     },
                     {
+                        data: 'markup_delivery_fees',
+                        name: 'markup_delivery_fees'
+                    },
+                    {
                         data: 'remark',
                         name: 'remark'
                     },
@@ -383,7 +434,25 @@
                         name: 'last_updated_by'
                     },
                 ],
-                columnDefs: [{
+                columnDefs: [
+                    // calculate actual delivery fees
+                    {
+                        "render": function(data, type, row) {
+                            var delivery_fees = parseFloat(row.delivery_fees);
+
+                            if (row.extra_charges != null) {
+                                delivery_fees += parseFloat(row.extra_charges);
+                            }
+
+                            if (row.discount != null) {
+                                delivery_fees -= parseFloat(row.discount);
+                            }
+
+                            return delivery_fees;
+                        },
+                        "targets": 7
+                    },
+                    {
                         "render": function(data, type, row) {
                             if (row.schedule_date === null) {
                                 return '';
@@ -396,7 +465,7 @@
                             });
                             return formattedDate;
                         },
-                        "targets": 10
+                        "targets": 11
                     },
                     {
                         "render": function(data, type, row) {
@@ -407,7 +476,7 @@
                                 return "Pick Up";
                             }
                         },
-                        "targets": 11
+                        "targets": 12
                     },
                 ]
             });
