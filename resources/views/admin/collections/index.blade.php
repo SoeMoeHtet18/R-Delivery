@@ -31,6 +31,71 @@
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="filter-box">
+            <div class="mb-3 p-3 col-4">
+                <label for="status">
+                    <strong>Status</strong>
+                </label>
+                <div class="col-10">
+                    <select name="status" id="status" class="form-control">
+                        <option value="" selected disabled>Select</option>
+                        <option value="pending">Pending</option>
+                        <option value="picking-up">Picking Up</option>
+                        <option value="complete">Complete</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mb-3 p-3 col-4">
+                <label for="city">
+                    <strong>Rider</strong>
+                </label>
+                <div class="col-10">
+                    <select name="rider" id="rider" class="form-control">
+                        <option value="" selected disabled>Select</option>
+                        @foreach($riders as $rider)
+                        <option value="{{$rider->id}}">{{$rider->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="mb-3 p-3 col-4">
+                <label for="township">
+                    <strong>Shop</strong>
+                </label>
+                <div class="col-10">
+                    <select name="shop" id="shop" class="form-control">
+                        <option value="" selected disabled>Select</option>
+                        @foreach($shops as $shop)
+                        <option value="{{$shop->id}}">{{$shop->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="filter-box">
+            <div class="mb-3 p-3 col-4">
+                <label for="scheduled_at">
+                    <strong>Scheduled Date</strong>
+                </label>
+                <div class="col-10">
+                    <input type="date" id="scheduled_at" name="scheduled_at" class="form-control" />
+                </div>
+            </div>
+            <div class="mb-3 p-3 col-4">
+                <label for="collected_at">
+                    <strong>Collected Date</strong>
+                </label>
+                <div class="col-10">
+                    <input type="date" id="collected_at" name="collected_at" class="form-control" />
+                </div>
+            </div>
+        </div>
+    </div>
     
     <div class="d-flex flex-row-reverse pb-3">
         <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 btncenter margin-btn">
@@ -78,11 +143,15 @@
     $(document).ready(function() {
         $("#toggleFilter").on("click", function() {
             $(".filter-content").slideToggle(300);
+            $('#status').select2();
+            $('#rider').select2();
+            $('#shop').select2();
         });
         
-        get_ajax_dynamic_data(search = '');
+        get_ajax_dynamic_data(search = '', status = '', rider = '',shop = '',
+        scheduled_at = '', collected_at = '');
 
-        function get_ajax_dynamic_data(search) {
+        function get_ajax_dynamic_data(search, status, rider, shop, scheduled_at, collected_at) {
             var table = $('.datatable').DataTable({
                 processing: true,
                 serverSide: true,
@@ -90,7 +159,12 @@
                     "url": '/ajax-get-collection-data',
                     "type": "GET",
                     "data": function(r) {
-                        r.search = search;
+                        r.search       = search;
+                        r.status       = status;
+                        r.rider        = rider;
+                        r.shop         = shop;
+                        r.scheduled_at = scheduled_at;
+                        r.collected_at = collected_at;
                     }
                 },
                 columns: [{
@@ -100,11 +174,11 @@
                     {
                         data: 'collection_code',
                         name: "pick_up_code"
-                    }, 
+                    },
                     {
                         data: 'collection_group_code',
                         name: "pick_up_group"
-                    },    
+                    },
                     {
                         data: 'total_quantity',
                         name: 'total_quantity_of_pick_up'
@@ -165,7 +239,7 @@
                                 return "Picking Up";
                             }
                         },
-                        "targets": 11   
+                        "targets": 11
                     },
                     {
                         "render": function(data, type, row) {
@@ -182,18 +256,31 @@
             });
 
             $('.search_filter').click(function() {
-                var search = $('#search').val();
-                var name = $('#name').val();
+                var search       = $('#search').val();
+                var status       = $('#status').val();
+                var rider        = $('#rider').val();
+                var shop         = $('#shop').val();
+                var scheduled_at = $('#scheduled_at').val();
+                var collected_at = $('#collected_at').val();
                 table.destroy();
-                get_ajax_dynamic_data(search, name);
+                get_ajax_dynamic_data(search, status, rider, shop, scheduled_at, collected_at);
             })
             $("#reset").click(function() {
                 $("#search").val("").trigger("change");
-                $("#name").val("").trigger("change");
-                var search = $('#search').val();
-                var name = $('#name').val();
+                $("#status").val("").trigger("change");
+                $("#shop").val("").trigger("change");
+                $("#scheduled_at").val("").trigger("change");
+                $("#rider").val("").trigger("change");
+                $("#collected_at").val("").trigger("change");
+                var search       = $('#search').val();
+                var status       = $('#status').val();
+                var township     = $('#township').val();
+                var rider        = $('#rider').val();
+                var shop         = $('#shop').val();
+                var scheduled_at = $('#scheduled_at').val();
+                var collected_at = $('#collected_at').val();
                 table.destroy();
-                get_ajax_dynamic_data(search, name);
+                get_ajax_dynamic_data(search, status, rider, shop, scheduled_at, collected_at);
             });
         };
     });
