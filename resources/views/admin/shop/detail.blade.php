@@ -15,7 +15,6 @@
         border-radius: 3px;
         display: flex;
         list-style-type: none;
-        padding-left: 0;
         margin-left: auto;
         margin-bottom: 0;
     }
@@ -125,8 +124,8 @@
                             <select name="payment_channel" id="payment_channel" class="form-control">
                                 <option value="" selected disabled>Select</option>
                                 <option value="cash">Cash</option>
-                                <option value="company_online_payment">Company Online Payment</option>
-                                <option value="shop_online_payment">Shop Online Payment</option>
+                                <option value="company_online_payment">Online Payment (Company)</option>
+                                <option value="shop_online_payment">Online Payment (Shop)</option>
                             </select>
                         </div>
                     </div>
@@ -160,20 +159,20 @@
                 <a href="#shop-order-display" id="shop-order-tab" class="nav-link" data-toggle="tab">Shop Orders</a>
             </li>
             <li>
-                <a href="#shop-payment-display" id="shop-payment-tab" class="nav-link" data-toggle="tab">Shop Payments</a>
+                <a href="#shop-payment-display" id="shop-payment-tab" class="nav-link"
+                    data-toggle="tab">Shop Payments</a>
             </li>
             <li>
-                <a href="#payment-for-shop-display" id="payment-for-shop-tab" class="nav-link" data-toggle="tab">Transactions For Shop</a>
+                <a href="#payment-for-shop-display" id="payment-for-shop-tab" class="nav-link"
+                    data-toggle="tab">Transactions For Shop</a>
             </li>
             <li>
-                <a href="#collection-for-shop-display" id="collection-for-shop-tab" class="nav-link" data-toggle="tab">Pick Ups For Shop</a>
+                <a href="#collection-for-shop-display" id="collection-for-shop-tab" class="nav-link"
+                    data-toggle="tab">Pick Ups For Shop</a>
             </li>
         </ul>
         <input type="hidden" id="current_screen" value="shop-user-display">
         <div class="d-flex justify-content-end">
-            
-           
-            
             <div class="d-inline-block">
                 <ul class="pdf-ul">
                     <li>
@@ -214,7 +213,8 @@
                 </div>
                 <div class="portlet-body">
                     <div class="create-button pb-5 d-inline-block">
-                        <a class="btn create-btn" href="{{ url('/order-create-by-shop-id') }}?shop_id={{ $shop->id }}">Add Order</a>
+                        <a class="btn create-btn"
+                            href="{{ url('/order-create-by-shop-id') }}?shop_id={{ $shop->id }}">Add Order</a>
                     </div>
                     <div class="create-button mb-3 d-inline-block">
                         <a class="btn create-btn" id="create-transaction">Add Transaction</a>
@@ -227,22 +227,23 @@
                                 <th id="first_column"><input type="checkbox" name="check_all" id="checkAll"></th>
                                 <th>Paid</th>
                                 <th>Order Code</th>
-                                <th>Customer Name</th>
                                 <th>Customer Phone Number</th>
+                                <th>Customer Address</th>
+                                <th>Customer Name</th>
                                 <th>City</th>
                                 <th>Township</th>
-                                <th>Rider</th>
                                 <th>Total Amount</th>
                                 <th>Delivery Fees</th>
-                                <!-- <th>Markup Delivery Fees</th> -->
-                                <th>Remark</th>
-                                <th>Status</th>
+                                <th>Markup Delivery Fees</th>
                                 <th>Item Type</th>
-                                <th>Full Address</th>
+                                <th>Payment Type</th>
+                                <th>Payment Channel</th>
+                                <th>Collection Method</th>
                                 <th>Schedule Date</th>
                                 <th>Type</th>
-                                <th>Collection Method</th>
-                                <th>Last Updated By</th>
+                                <th>Rider</th>
+                                <th>Remark</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
 
@@ -282,9 +283,11 @@
                 </div>
                 <div class="portlet-body">
                     <div class="create-button pb-5">
-                        <a href="{{url('/transactions-for-shop-create-by-shop-id')}}?shop_id={{$shop->id}}" class="btn create-btn">Add New Transaction</a>
+                        <a href="{{url('/transactions-for-shop-create-by-shop-id')}}?shop_id={{$shop->id}}"
+                            class="btn create-btn">Add New Transaction</a>
                     </div>
-                    <table id="transaction-for-shop-datatable" class="table table-striped table-hover table-responsive datatable">
+                    <table id="transaction-for-shop-datatable"
+                        class="table table-striped table-hover table-responsive datatable">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -476,12 +479,16 @@
                         name: 'order_code'
                     },
                     {
-                        data: 'customer_name',
-                        name: 'customer_name'
-                    },
-                    {
                         data: 'customer_phone_number',
                         name: 'customer_phone_number'
+                    },
+                    {
+                        data: 'full_address',
+                        name: 'full_address'
+                    },
+                    {
+                        data: 'customer_name',
+                        name: 'customer_name'
                     },
                     {
                         data: 'city_name',
@@ -492,10 +499,6 @@
                         name: 'township'
                     },
                     {
-                        data: 'rider_name',
-                        name: 'rider'
-                    },
-                    {
                         data: 'total_amount',
                         name: 'total_amount'
                     },
@@ -503,22 +506,25 @@
                         data: 'delivery_fees',
                         name: 'delivery_fees'
                     },
-                    
                     {
-                        data: 'remark',
-                        name: 'remark'
-                    },
-                    {
-                        data: 'status',
-                        name: 'status'
+                        data: 'markup_delivery_fees',
+                        name: 'markup_delivery_fees'
                     },
                     {
                         data: 'item_type_name',
                         name: 'item_type'
                     },
                     {
-                        data: 'full_address',
-                        name: 'full_address'
+                        data: 'payment_method',
+                        name: 'payment_method'
+                    },
+                    {
+                        data: 'payment_channel',
+                        name: 'payment_channel'
+                    },
+                    {
+                        data: 'collection_method',
+                        name: 'collection_method'
                     },
                     {
                         data: 'schedule_date',
@@ -529,12 +535,16 @@
                         name: 'type'
                     },
                     {
-                        data: 'collection_method',
-                        name: 'collection_method'
+                        data: 'rider_name',
+                        name: 'rider'
                     },
                     {
-                        data: 'last_updated_by_name',
-                        name: 'last_updated_by'
+                        data: 'remark',
+                        name: 'remark'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status'
                     },
                 ],
                 columnDefs: [{
@@ -575,7 +585,46 @@
                                 return "Delivering";
                             }
                         },
-                        "targets": 12
+                        "targets": 20
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            if (row.payment_method == 'cash_on_delivery') {
+                                return "Cash On Delivery";
+                            }
+                            if (row.payment_method == 'all_prepaid') {
+                                return "All Prepaid";
+                            }
+                            if (row.payment_method == 'item_prepaid') {
+                                return "Item Prepaid";
+                            }
+                        },
+                        "targets": 13
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            if (row.payment_channel == 'cash') {
+                                return "Cash";
+                            } else if (row.payment_channel == 'company_online_payment') {
+                                return "Online Payment (Company)";
+                            } else if (row.payment_channel == 'shop_online_payment') {
+                                return "Online Payment (Shop)";
+                            } else {
+                                return '';
+                            }
+                        },
+                        "targets": 14
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            if (row.collection_method == 'dropoff') {
+                                return "Drop Off";
+                            }
+                            if (row.collection_method == 'pickup') {
+                                return "Pick Up";
+                            }
+                        },
+                        "targets": 15
                     },
                     {
                         "render": function(data, type, row) {
@@ -590,19 +639,9 @@
                             });
                             return formattedDate;
                         },
-                        "targets": 15
+                        "targets": 16
                     },
-                    {
-                        "render": function(data, type, row) {
-                            if (row.collection_method == 'dropoff') {
-                                return "Drop Off";
-                            }
-                            if (row.collection_method == 'pickup') {
-                                return "Pick Up";
-                            }
-                        },
-                        "targets": 17
-                    },
+                  
                 ]
             });
 
