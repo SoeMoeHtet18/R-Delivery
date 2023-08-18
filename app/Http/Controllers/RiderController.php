@@ -2,18 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BranchAssignToRiderRequest;
+use App\Http\Requests\GateAssignToRiderRequest;
 use App\Http\Requests\RiderCreateRequest;
 use App\Http\Requests\RiderUpdateRequest;
+use App\Http\Requests\ThirdPartyVendorAssignToRiderRequest;
+use App\Http\Requests\ThirdPartyVendorRequest;
 use App\Http\Requests\TownshipAssignRequest;
 use App\Models\Collection;
 use App\Models\CollectionGroup;
 use App\Models\CustomerCollection;
 use App\Models\Order;
 use App\Models\Rider;
+use App\Repositories\BranchRepository;
 use App\Repositories\CollectionRepository;
 use App\Repositories\DeficitRepository;
+use App\Repositories\GateRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\RiderRepository;
+use App\Repositories\ThirdPartyVendorRepository;
 use App\Repositories\TownshipRepository;
 use App\Services\DeficitService;
 use App\Services\RiderService;
@@ -33,10 +40,15 @@ class RiderController extends Controller
     protected $deficitService;
     protected $orderRepository;
     protected $collectionRepository;
+    protected $branchRepository;
+    protected $gateRepository;
+    protected $thirdPartyVendorRepository;
 
-    public function __construct(RiderRepository $riderRepository, RiderService $riderService, 
-        TownshipRepository $townshipRepository, DeficitRepository $deficitRepository, 
-        DeficitService $deficitService, OrderRepository $orderRepository, CollectionRepository $collectionRepository)
+    public function __construct(RiderRepository $riderRepository, RiderService $riderService,
+        TownshipRepository $townshipRepository, DeficitRepository $deficitRepository,
+        DeficitService $deficitService, OrderRepository $orderRepository,
+        CollectionRepository $collectionRepository, BranchRepository $branchRepository,
+        GateRepository $gateRepository, ThirdPartyVendorRepository $thirdPartyVendorRepository)
     {
         $this->riderRepository = $riderRepository;
         $this->riderService = $riderService;
@@ -45,6 +57,9 @@ class RiderController extends Controller
         $this->deficitService = $deficitService;
         $this->orderRepository = $orderRepository;
         $this->collectionRepository = $collectionRepository;
+        $this->branchRepository = $branchRepository;
+        $this->gateRepository = $gateRepository;
+        $this->thirdPartyVendorRepository = $thirdPartyVendorRepository;
     }
     /**
      * Display a listing of the resource.
@@ -260,9 +275,55 @@ class RiderController extends Controller
                 $mpdf->Output('rider_pick_up.pdf', 'D');
             } else {
                 return redirect()->back()->with('error', "Can't generate pdf");
-            }    
+            }
         } catch (Exception $e) {
             return redirect()->back()->with('error', "Can't generate pdf");
         }
+    }
+
+    public function assignBranch($id)
+    {
+        $branches = $this->branchRepository->getAllData();
+        $rider = $this->riderRepository->getRiderByID($id);
+        return view('admin.rider.assign_branch', compact('rider', 'branches'));
+    }
+
+    public function assignBranchToRider(BranchAssignToRiderRequest $request, $id)
+    {
+        $rider = $this->riderRepository->getRiderByID($id);
+        $data = $request->all();
+        // dd($data);
+        $this->riderService->assignBranch($rider, $data);
+        return redirect(route('riders.show', $id));
+    }
+    
+    public function assignGate($id)
+    {
+        $gates = $this->gateRepository->getAllData();
+        $rider = $this->riderRepository->getRiderByID($id);
+        return view('admin.rider.assign_gate', compact('rider', 'gates'));
+    }
+
+    public function assignGateToRider(GateAssignToRiderRequest $request, $id)
+    {
+        $rider = $this->riderRepository->getRiderByID($id);
+        $data = $request->all();
+        $this->riderService->assignGate($rider, $data);
+        return redirect(route('riders.show', $id));
+    }
+    
+    public function assignThirdPartyVendor($id)
+    {
+        $thirdPartyVendors = $this->thirdPartyVendorRepository->getAllData();
+        $rider = $this->riderRepository->getRiderByID($id);
+        return view('admin.rider.assign_third_party_vendor', compact('rider', 'thirdPartyVendors'));
+    }
+
+    public function assignThirdPartyVendorToRider(ThirdPartyVendorAssignToRiderRequest $request, $id)
+    {
+        $rider = $this->riderRepository->getRiderByID($id);
+        $data = $request->all();
+        $this->riderService->assignThirdPartyVendor($rider, $data);
+        return redirect(route('riders.show', $id));
     }
 }

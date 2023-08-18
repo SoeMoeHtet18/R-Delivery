@@ -152,6 +152,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('generate-rider-pdf', [RiderController::class, 'generateRiderPdf']);
     Route::get('/set-to-warehouse', [OrderController::class, 'setToWarehouse']);
     Route::get('/change-order-status-to-warehouse', [OrderController::class, 'changeOrderStatusToWarehouse']);
+    Route::get('/riders/{id}/assign-branch', [RiderController::class, 'assignBranch']);
+    Route::put('/riders/{id}/assign-branch', [RiderController::class, 'assignBranchToRider']);
+    Route::get('/riders/{id}/assign-gate', [RiderController::class, 'assignGate']);
+    Route::put('/riders/{id}/assign-gate', [RiderController::class, 'assignGateToRider']);
+    Route::get('/riders/{id}/assign-third-party-vendor', [RiderController::class, 'assignThirdPartyVendor']);
+    Route::put('/riders/{id}/assign-third-party-vendor', [RiderController::class, 'assignThirdPartyVendorToRider']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

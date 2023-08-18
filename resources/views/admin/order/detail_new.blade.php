@@ -129,6 +129,9 @@
                     <a href="{{url('/orders/'.$order->id.'/assign-rider')}}" class="btn btn-secondary dropdown-item">Assign Rider</a>
                 </li>
                 @endif
+                <li>
+                    <a href="{{url('/tracking?order_id='.$order->order_code)}}">Tracking</a>
+                </li>
                 <li><a href="{{route('orders.edit' , $order->id)}}" class="btn btn-light dropdown-item">Edit</a></li>
                 <li> 
                     <form action="{{route('orders.destroy', $order->id)}}" method="post" onclick="return confirm(`Are you sure you want to Delete this order?`);">
