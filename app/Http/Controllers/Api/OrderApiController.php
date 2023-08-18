@@ -210,5 +210,18 @@ class OrderApiController extends Controller
         ], 200);
     }
 
+    public function reAssignRider($order_id)
+    {
+        $rider = auth()->guard('rider-api')->user();
+        $order = $this->orderRepository->getOrderByID($order_id);
+        $data = $this->orderService->reAssignRider($order, $rider);
+
+        return response()->json([
+            'data'   => $data,
+            'message'=> 'Successfully change rider for order',
+            'status' => 'success'
+        ], 200);
+    }
+
 
 }

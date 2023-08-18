@@ -177,4 +177,16 @@ class NotificationService
             $this->attachNotification($user, $notification);
         }
     }
+
+    public function riderReassignForOrderNotificationForUser($order, $rider)
+    {
+        $message = $rider->name . ', take over ' . $order->order_code;
+        $notification = $this->createNotification('re-assign rider', $message);
+
+        //to notify all user under branch.
+        $users = User::where('branch_id',$rider->branch_id)->get();
+        foreach ($users as $user) {
+            $this->attachNotification($user, $notification);
+        }
+    }
 }
