@@ -17,4 +17,9 @@ class GateRepository
         $query = Gate::with(['city','townships'])->leftJoin('cities', 'cities.id','gates.city_id')->select('gates.*','cities.name as city_name');
         return $query;
     }
+
+    public function getAllData()
+    {
+        return Gate::with(['city','townships'])->orderBy('name','asc')->get();
+    }
 }

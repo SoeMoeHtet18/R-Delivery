@@ -55,14 +55,14 @@
                         <div class="card order-detail-card" style="border-radius: 10px !important; background: #F1F5F5;">
                             <div class="card-body">
                                 <div class="d-flex justify-content-between">
-                                    <b>Paid Amount (To Rider)</b><b>{{$paidAmountToRider}} MMK</b>
+                                    <b>Advanced Payment</b><b>{{$paidAmountToRider}} MMK</b>
                                 </div>
                                 <div class="d-flex justify-content-between">
-                                    <b>Paid Amount (From Rider)</b><b>{{$paidAmountFromRider}} MMK</b>
+                                    <b>Expense</b><b>{{$paidAmountFromRider}} MMK</b>
                                 </div>
                                 <hr>
                                 <div class="d-flex justify-content-between">
-                                    <b>Deficit</b><b>{{$paidAmountToRider - $paidAmountFromRider}} MMK</b>
+                                    <b>Surplus/ (Deficit)</b><b>{{$paidAmountToRider - $paidAmountFromRider}} MMK</b>
                                 </div>
                             </div>
                         </div>
@@ -99,7 +99,25 @@
             <div class="create-button">
                 <a class="btn create-btn" id="add-deficit">Add Deficit</a>
             </div>
-            <a href="{{url('/riders/'.$rider->id.'/assign-township')}}" class="btn btn-secondary me-3">Assign Township</a>
+            <div class="dropdown me-2">
+                <button class="btn btn-secondary green dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Assign
+                </button>
+                <ul class="dropdown-menu ">
+                    <li>
+                        <a href="{{url('/riders/'.$rider->id.'/assign-township')}}">Township</a>
+                    </li>
+                    <li>
+                        <a href="{{url('/riders/'.$rider->id.'/assign-branch')}}">Branch</a>
+                    </li>
+                    <li>
+                        <a href="{{url('/riders/'.$rider->id.'/assign-gate')}}">Gate</a>
+                    </li>
+                    <li>
+                        <a href="{{url('/riders/'.$rider->id.'/assign-third-party-vendor')}}">Third Party Vendor</a>
+                    </li>
+                </ul>
+            </div>
             <div class="create-button">
                 <a href="{{route('riders.edit' , $rider->id)}}" class="btn btn-light">Edit</a>
             </div>

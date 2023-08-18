@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TownshipAssignRequest extends FormRequest
+class BranchAssignToRiderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,13 +22,13 @@ class TownshipAssignRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'township_id' => 'required'
+            'branch_id' => 'required'
         ];
     }
     public function messages(): array
     {
         return [
-            'township_id.required' => 'Township field is required' 
+            'branch_id.required' => 'Branch field is required'
         ];
     }
 }

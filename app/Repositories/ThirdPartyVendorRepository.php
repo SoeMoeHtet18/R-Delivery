@@ -21,7 +21,6 @@ class ThirdPartyVendorRepository
     
     public function getAllData()
     {
-        $data = ThirdPartyVendor::orderBy('id','desc')->get();
-        return $data;
+        return ThirdPartyVendor::orderBy('name','asc')->get();
     }
 }
