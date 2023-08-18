@@ -147,6 +147,24 @@
                 name: 'note',
             },
         ],
+        columnDefs: [
+            // link with self
+            {
+                "render": function(data, type, row) {
+                    return '<a href="/collections/' + row.id + '">'
+                        + row.collection_code + '</a>';
+                    },
+                "targets": 1
+            },
+            // link with shop
+            {
+                "render": function(data, type, row) {
+                    return '<a href="/shops/' + row.shop_id + '">'
+                            + row.shop_name + '</a>';
+                    },
+                "targets": 5
+            },
+        ]
     });
 
     var customerTable = $('#customer-collection-datatable').DataTable({
@@ -192,6 +210,36 @@
                 name: 'note'
             },
         ],
+        columnDefs: [
+           // link with self
+           {
+                "render": function(data, type, row) {
+                    return '<a href="/customer-collections/' + row.id + '">'
+                        + row.customer_collection_code + '</a>';
+                    },
+                "targets": 1
+            },
+                    // link with order
+                    {
+                        "render": function(data, type, row) {
+                            if(row.order_id != null) {
+                                return '<a href="/orders/' + row.order_id + '">'
+                                    + row.order_code + '</a>';
+                                } else {
+                                    return '';
+                                }
+                            },
+                        "targets": 2
+                    },
+                    // link with shop
+                    {
+                        "render": function(data, type, row) {
+                            return '<a href="/shops/' + row.shop_id + '">'
+                                + row.shop_name + '</a>';
+                            },
+                        "targets": 4
+                    },
+        ]
     });
 
     document.addEventListener('DOMContentLoaded', function() {

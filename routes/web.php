@@ -57,15 +57,21 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('/riders/{id}/assign-township', [RiderController::class, 'assignTownshipToRider']);
     Route::resource('/shopusers', ShopUserController::class);
     Route::resource('/townships',TownshipController::class);
-    Route::get('townships/{id}/get-pending-orders-by-township-id', [OrderController::class, 'getPendingOrderTableByTownshipID']);
-    Route::get('townships/{id}/get-completed-orders-by-township-id', [OrderController::class, 'getCompletedOrderTableByTownshipID']);
-    Route::get('townships/{id}/get-canceled-orders-by-township-id', [OrderController::class, 'getCanceledOrderTableByTownshipID']);
+    Route::get('townships/{id}/get-pending-orders-by-township-id',
+        [OrderController::class, 'getPendingOrderTableByTownshipID']);
+    Route::get('townships/{id}/get-completed-orders-by-township-id',
+        [OrderController::class, 'getCompletedOrderTableByTownshipID']);
+    Route::get('townships/{id}/get-canceled-orders-by-township-id',
+        [OrderController::class, 'getCanceledOrderTableByTownshipID']);
     Route::resource('/shops', ShopController::class);
     Route::get('/shops/get-shop-users-by-shop-id/{id}', [ShopUserController::class, 'getShopUsersTable']);
     Route::get('/shops/get-shop-orders-by-shop-id/{id}', [OrderController::class, 'getShopOrdersTable']);
-    Route::get('/shops/{id}/get-shop-payment-by-shop-id', [ShopPaymentController::class, 'getShopPaymentTableByShopID']);
-    Route::get('/shops/{id}/get-transactions-for-shop-by-shop-id', [TransactionsForShopController::class, 'getTransactionsTableByShopID']);
-    Route::get('/shops/{id}/get-collections-for-shop-by-shop-id', [CollectionController::class, 'getCollectionsTableByShopID']);
+    Route::get('/shops/{id}/get-shop-payment-by-shop-id',
+        [ShopPaymentController::class, 'getShopPaymentTableByShopID']);
+    Route::get('/shops/{id}/get-transactions-for-shop-by-shop-id',
+        [TransactionsForShopController::class, 'getTransactionsTableByShopID']);
+    Route::get('/shops/{id}/get-collections-for-shop-by-shop-id',
+        [CollectionController::class, 'getCollectionsTableByShopID']);
     Route::resource('/orders', OrderController::class);
     Route::get('/order-create-by-shop-id', [OrderController::class, 'createByShopID']);
     Route::get('/orders/{id}/assign-rider', [OrderController::class, 'assignRider']);
@@ -77,7 +83,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/shoppayment-create-by-shop-id', [ShopPaymentController::class, 'createShopPaymentByShopID']);
     Route::resource('/customer-payments', CustomerPaymentController::class);
     Route::resource('/transactions-for-shop', TransactionsForShopController::class);
-    Route::get('/transactions-for-shop-create-by-shop-id', [TransactionsForShopController::class, 'createTransactionForShopByShopID']);
+    Route::get('/transactions-for-shop-create-by-shop-id',
+        [TransactionsForShopController::class, 'createTransactionForShopByShopID']);
     Route::get('/ajax-get-orders-data', [OrderController::class, 'getAjaxOrderData']);
     Route::get('/ajax-get-users-data', [AdminController::class, 'getAjaxUserData']);
     Route::get('/ajax-get-shops-data', [ShopController::class, 'getAjaxShopData']);
@@ -91,7 +98,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/ajax-get-transactions-data', [TransactionsForShopController::class, 'getAjaxTransactionForShopData']);
     Route::get('/ajax-get-payment-type-data', [PaymentTypeController::class, 'getAjaxPaymentTypeData']);
     Route::get('/ajax-warehouse-data', [OrderController::class, 'getWarehouseData']);
-    Route::get('/create-transaction-for-shop-for-selected-orders', [TransactionsForShopController::class, "createTransactionForOrdersByShop"]);
+    Route::get('/create-transaction-for-shop-for-selected-orders',
+        [TransactionsForShopController::class, "createTransactionForOrdersByShop"]);
     Route::resource('/payment-types', PaymentTypeController::class);
     Route::get('/import-orders', [OrderImportController::class, 'index']);
     Route::post('/import-orders', [OrderImportController::class, 'upload']);
@@ -117,14 +125,16 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/payment-notifications', [PaymentNotificationListController::class, 'index']);
     Route::get('/ajax-get-unpaid-order-list', [OrderController::class, 'getAjaxUnpaidOrderList']);
     Route::resource('/customer-collections', CustomerCollectionController::class);
-    Route::get('/ajax-get-customer-collections-data', [CustomerCollectionController::class, 'getAjaxCustomerCollections']);
+    Route::get('/ajax-get-customer-collections-data',
+        [CustomerCollectionController::class, 'getAjaxCustomerCollections']);
     Route::post('/bulk-discount-update', [OrderController::class, 'bulkDiscountUpdate']);
     Route::get('/create-qrcode', [QrCodeController::class, 'index']);
     Route::post('/generate-qrcode', [QrCodeController::class, 'generateQrCode']);
     Route::get('/get-collections-by-shop', [ShopController::class, 'getAllCollectionsByShop']);
     Route::get('/riders/get-deficit-by-rider-id/{id}', [RiderController::class, 'getDeficitByRider']);
     Route::post('/add-deficit-to-rider', [RiderController::class, 'addDeficitToRider']);
-    Route::get('/ajax-get-warehouse-customer-collections-data', [CustomerCollectionController::class, 'getAjaxWarehouseCustomerCollections']);
+    Route::get('/ajax-get-warehouse-customer-collections-data',
+        [CustomerCollectionController::class, 'getAjaxWarehouseCustomerCollections']);
     Route::resource('/rider-payments', RiderPaymentController::class);
     Route::get('/ajax-get-rider-payment-data', [RiderPaymentController::class, 'getAjaxRiderPaymentData']);
     Route::resource('/branches', BranchController::class);
@@ -134,7 +144,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('get-collection-code', [CollectionApiController::class, 'getCollectionCode']);
     Route::get('get-description-for-shop', [ShopApiController::class, 'getDescriptionForShop']);
     Route::get('ajax-get-collection-data-by-group', [CollectionController::class, 'getCollectionsByGroup']);
-    Route::get('ajax-get-customer-collections-data-by-group', [CustomerCollectionController::class, 'getCustomerCollectionsByGroup']);
+    Route::get('ajax-get-customer-collections-data-by-group',
+        [CustomerCollectionController::class, 'getCustomerCollectionsByGroup']);
     Route::get('get-rider-by-type', [RiderController::class, 'getRiderByType']);
     Route::get('get-rider-total-salary-by-date', [RiderController::class, 'getRiderTotalSalaryByDate']);
     Route::get('get-riders-by-township', [RiderController::class, 'getRidersByTownship']);

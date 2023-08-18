@@ -122,6 +122,22 @@
                     },
                 ],
                 columnDefs: [
+                     // link with self
+                     {
+                        "render": function(data, type, row) {
+                            return '<a href="/branches/' + row.id + '">'
+                                + row.name + '</a>';
+                            },
+                        "targets": 1
+                    },
+                     // link with city
+                     {
+                        "render": function(data, type, row) {
+                            return '<a href="/cities/' + row.city_id + '">'
+                                + row.city_name + '</a>';
+                            },
+                        "targets": 2
+                    },
                     {
                         "render": function(data, type, row) {
                             console.log(row);

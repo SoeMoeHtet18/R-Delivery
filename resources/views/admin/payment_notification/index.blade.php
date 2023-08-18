@@ -2,36 +2,6 @@
 @section('title','Dashboard')
 @section('sub-title','Payment Due Order List')
 @section('content')
-<style>
-    .pdf-ul {
-        padding-left: 0;
-        padding-right: 0;
-        border-radius: 3px;
-        display: flex;
-        list-style-type: none;
-        padding-left: 0;
-        margin-left: auto;
-        margin-bottom: 0;
-    }
-
-    .pdf-ul li {
-        background: #f4f5f8;
-        margin: 0;
-    }
-
-    .pdf-ul li a {
-        padding: 0;
-        padding-right: 6px;
-        padding-left: 2px;
-        font-size: 13px;
-        text-decoration: none;
-    }
-
-    .pdf-ul li a:first-child {
-        border-right: 1px solid #dfe2ea;
-    }
-</style>
-
 <div class="d-flex justify-content-end mb-3">
     <button class="btn btn-link" id="toggleFilter">
         <svg width="18" height="20" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -366,7 +336,7 @@
                             });
                             return formattedDate;
                         },
-                        "targets": 17
+                        "targets": 3
                     },
                     {
                         "render": function(data, type, row) {
@@ -378,6 +348,42 @@
                             }
                         },
                         "targets": 19
+                    },
+                      // link with shop
+                      {
+                        "render": function(data, type, row) {
+                            return '<a href="/shops/' + row.shop_id + '">'
+                                + row.shop_name + '</a>';
+                            },
+                        "targets": 5
+                    },
+                    // link with rider
+                    {
+                        "render": function(data, type, row) {
+                            if(row.rider_id != null) {
+                                return '<a href="/riders/' + row.rider_id + '">'
+                                + row.rider_name + '</a>';
+                            } else {
+                                return '';
+                            }
+                        },
+                        "targets": 11
+                    },
+                     // link with city
+                     {
+                        "render": function(data, type, row) {
+                            return '<a href="/cities/' + row.city_id + '">'
+                                + row.city_name + '</a>';
+                            },
+                        "targets": 14
+                    },
+                    // link with township
+                    {
+                        "render": function(data, type, row) {
+                            return '<a href="/townships/' + row.township_id + '">'
+                                + row.township_name + '</a>';
+                            },
+                        "targets": 15
                     },
                 ]
             });

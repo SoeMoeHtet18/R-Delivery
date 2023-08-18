@@ -253,7 +253,52 @@
                         searchable: false
                     },
                 ],
-                columnDefs: [ {
+                columnDefs: [
+                    // link with collection group
+                    {
+                        "render": function(data, type, row) {
+                            if(row.collection_group_id != null) {
+                                return '<a href="/collection-groups/' + row.collection_group_id + '">'
+                                    + row.collection_group_code + '</a>';
+                                } else {
+                                    return '';
+                                }
+                            },
+                        "targets": 2
+                    },
+                    // link with order
+                    {
+                        "render": function(data, type, row) {
+                            if(row.order_id != null) {
+                                return '<a href="/orders/' + row.order_id + '">'
+                                    + row.order_code + '</a>';
+                                } else {
+                                    return '';
+                                }
+                            },
+                        "targets": 3
+                    },
+                    // link with shop
+                    {
+                        "render": function(data, type, row) {
+                            return '<a href="/shops/' + row.shop_id + '">'
+                                + row.shop_name + '</a>';
+                            },
+                        "targets": 6
+                    },
+                    // link with rider
+                    {
+                        "render": function(data, type, row) {
+                            if(row.rider_id != null) {
+                                return '<a href="/riders/' + row.rider_id + '">'
+                                + row.rider_name + '</a>';
+                            } else {
+                                return '';
+                            }
+                        },
+                        "targets": 7
+                    },
+                    {
                         "render": function(data, type, row) {
                             if (row.is_way_fees_payable == 0) {
                                 return "No";
@@ -377,7 +422,52 @@
                         searchable: false
                     },
                 ],
-                columnDefs: [{
+                columnDefs: [
+                    // link with collection group
+                    {
+                        "render": function(data, type, row) {
+                            if(row.collection_group_id != null) {
+                                return '<a href="/collection-groups/' + row.collection_group_id + '">'
+                                    + row.collection_group_code + '</a>';
+                                } else {
+                                    return '';
+                                }
+                            },
+                        "targets": 2
+                    },
+                    // link with order
+                    {
+                        "render": function(data, type, row) {
+                            if(row.order_id != null) {
+                                return '<a href="/orders/' + row.order_id + '">'
+                                    + row.order_code + '</a>';
+                                } else {
+                                    return '';
+                                }
+                            },
+                        "targets": 3
+                    },
+                    // link with shop
+                    {
+                        "render": function(data, type, row) {
+                            return '<a href="/shops/' + row.shop_id + '">'
+                                + row.shop_name + '</a>';
+                            },
+                        "targets": 6
+                    },
+                    // link with rider
+                    {
+                        "render": function(data, type, row) {
+                            if(row.rider_id != null) {
+                                return '<a href="/riders/' + row.rider_id + '">'
+                                + row.rider_name + '</a>';
+                            } else {
+                                return '';
+                            }
+                        },
+                        "targets": 7
+                    },
+                    {
                     "render": function(data, type, row) {
                         if (row.is_way_fees_payable == 0) {
                             return "No";

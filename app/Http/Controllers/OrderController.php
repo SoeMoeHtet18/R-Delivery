@@ -656,11 +656,6 @@ class OrderController extends Controller
                 $data[] = $order;
             }
         }
-        // foreach
-        // if($data->where('delivery_type_name','=', 'Door To Door')){
-        //      $data;
-        // }
-
 
         return DataTables::of($data)
             ->addIndexColumn()

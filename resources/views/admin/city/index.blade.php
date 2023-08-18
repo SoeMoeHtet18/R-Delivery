@@ -97,6 +97,16 @@
                         orderable: false,
                         searchable: false
                     },
+                ],
+                columnDefs: [
+                    // link with self
+                    {
+                        "render": function(data, type, row) {
+                            return '<a href="/cities/' + row.id + '">'
+                                + row.name + '</a>';
+                            },
+                        "targets": 1
+                    },
                 ]
             });
 

@@ -149,7 +149,16 @@
                         searchable: false
                     },
                 ],
-                columnDefs: [{
+                columnDefs: [
+                    // link with order
+                    {
+                        "render": function(data, type, row) {
+                            return '<a href="/orders/' + row.order_id + '">'
+                                + row.order_code + '</a>';
+                            },
+                        "targets": 1
+                    },
+                    {
                         "render": function(data, type, row) {
                             if (row.type == 'fully_paid') {
                                 return "Fully Paid";

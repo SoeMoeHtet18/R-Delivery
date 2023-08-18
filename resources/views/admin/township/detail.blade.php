@@ -11,7 +11,8 @@
             <div class="create-button">
                 <a href="{{route('townships.edit' , $township->id)}}" class="btn btn-light">Edit</a>
             </div>
-            <form action="{{route('townships.destroy', $township->id)}}" method="post" onclick="return confirm(`Are you sure you want to Delete this township?`);">
+            <form action="{{route('townships.destroy', $township->id)}}"
+                method="post" onclick="return confirm(`Are you sure you want to Delete this township?`);">
                 @csrf
                 @method('DELETE')
                 <input type="submit" value="Delete" class="btn btn-danger float-end">
@@ -63,7 +64,8 @@
                         <div class="caption">Pending Orders</div>
                     </div>
                     <div class="portlet-body">
-                        <table id="current-order-datatable" class="table table-striped table-hover table-responsive datatable">
+                        <table id="current-order-datatable"
+                            class="table table-striped table-hover table-responsive datatable">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -94,7 +96,8 @@
                         <div class="caption">Completed Orders</div>
                     </div>
                     <div class="portlet-body">
-                        <table id="completed-order-datatable" class="table table-striped table-hover table-responsive datatable">
+                        <table id="completed-order-datatable"
+                            class="table table-striped table-hover table-responsive datatable">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -125,7 +128,8 @@
                         <div class="caption">Canceled Lists</div>
                     </div>
                     <div class="portlet-body">
-                        <table id="canceled-order-datatable" class="table table-striped table-hover table-responsive datatable">
+                        <table id="canceled-order-datatable"
+                            class="table table-striped table-hover table-responsive datatable">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -264,6 +268,26 @@
                         },
                         "targets": 12
                     },
+                      // link with shop
+                      {
+                        "render": function(data, type, row) {
+                            return '<a href="/shops/' + row.shop_id + '">'
+                                + row.shop_name + '</a>';
+                            },
+                        "targets": 3
+                    },
+                    // link with rider
+                    {
+                        "render": function(data, type, row) {
+                            if(row.rider_id != null) {
+                                return '<a href="/riders/' + row.rider_id + '">'
+                                + row.rider_name + '</a>';
+                            } else {
+                                return '';
+                            }
+                        },
+                        "targets": 4
+                    },
                 ]
             });
             $('#completed-order-datatable').DataTable({
@@ -371,6 +395,26 @@
                         },
                         "targets": 12
                     },
+                      // link with shop
+                      {
+                        "render": function(data, type, row) {
+                            return '<a href="/shops/' + row.shop_id + '">'
+                                + row.shop_name + '</a>';
+                            },
+                        "targets": 3
+                    },
+                    // link with rider
+                    {
+                        "render": function(data, type, row) {
+                            if(row.rider_id != null) {
+                                return '<a href="/riders/' + row.rider_id + '">'
+                                + row.rider_name + '</a>';
+                            } else {
+                                return '';
+                            }
+                        },
+                        "targets": 4
+                    },
                 ]
             });
             $('#canceled-order-datatable').DataTable({
@@ -477,6 +521,26 @@
                             }
                         },
                         "targets": 12
+                    },
+                      // link with shop
+                      {
+                        "render": function(data, type, row) {
+                            return '<a href="/shops/' + row.shop_id + '">'
+                                + row.shop_name + '</a>';
+                            },
+                        "targets": 3
+                    },
+                    // link with rider
+                    {
+                        "render": function(data, type, row) {
+                            if(row.rider_id != null) {
+                                return '<a href="/riders/' + row.rider_id + '">'
+                                + row.rider_name + '</a>';
+                            } else {
+                                return '';
+                            }
+                        },
+                        "targets": 4
                     },
                 ]
             });

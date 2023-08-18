@@ -445,6 +445,38 @@
                 },
             ],
             columnDefs: [
+                    // link with shop
+                    {
+                            "render": function(data, type, row) {
+                            return '<a href="/shops/' + row.shop_id + '">'
+                                + row.shop_name + '</a>';
+                            },
+                        "targets": 6
+                    },
+                    // link with order
+                    {
+                        "render": function(data, type, row) {
+                                return '<a href="/orders/' + row.id + '">'
+                                + row.order_code + '</a>';
+                        },
+                        "targets": 1
+                    },
+                    // link with city
+                    {
+                        "render": function(data, type, row) {
+                            return '<a href="/cities/' + row.city_id + '">'
+                                + row.city_name + '</a>';
+                            },
+                        "targets": 4
+                    },
+                    // link with township
+                    {
+                        "render": function(data, type, row) {
+                            return '<a href="/townships/' + row.township_id + '">'
+                                + row.township_name + '</a>';
+                            },
+                        "targets": 5
+                    },
                     // calculate actual delivery fees
                     {
                         "render": function(data, type, row) {
@@ -565,23 +597,55 @@
                 },
             ],
             columnDefs: [
+                // link with shop
+                {
+                    "render": function(data, type, row) {
+                        return '<a href="/shops/' + row.shop_id + '">'
+                            + row.shop_name + '</a>';
+                        },
+                    "targets": 6
+                },
+                // link with order
+                {
+                    "render": function(data, type, row) {
+                            return '<a href="/orders/' + row.id + '">'
+                            + row.order_code + '</a>';
+                    },
+                    "targets": 1
+                },
+                // link with city
+                {
+                    "render": function(data, type, row) {
+                        return '<a href="/cities/' + row.city_id + '">'
+                            + row.city_name + '</a>';
+                        },
+                    "targets": 4
+                },
+                // link with township
+                {
+                    "render": function(data, type, row) {
+                        return '<a href="/townships/' + row.township_id + '">'
+                            + row.township_name + '</a>';
+                        },
+                    "targets": 5
+                },
                 // calculate actual delivery fees
                 {
-                        "render": function(data, type, row) {
-                            var delivery_fees = parseFloat(row.delivery_fees);
+                    "render": function(data, type, row) {
+                        var delivery_fees = parseFloat(row.delivery_fees);
 
-                            if (row.extra_charges != null) {
-                                delivery_fees += parseFloat(row.extra_charges);
-                            }
+                        if (row.extra_charges != null) {
+                            delivery_fees += parseFloat(row.extra_charges);
+                        }
 
-                            if (row.discount != null) {
-                                delivery_fees -= parseFloat(row.discount);
-                            }
+                        if (row.discount != null) {
+                            delivery_fees -= parseFloat(row.discount);
+                        }
 
-                            return delivery_fees;
-                        },
-                        "targets": 8
+                        return delivery_fees;
                     },
+                        "targets": 8
+                },
                 {
                     "render": function(data, type, row) {
                         if (row.schedule_date === null) {
@@ -660,6 +724,34 @@
                 },
             ],
             columnDefs: [
+                    // link with collection
+                    {
+                        "render": function(data, type, row) {
+                            return '<a href="/collections/' + row.id + '">'
+                                + row.collection_code + '</a>';
+                            },
+                        "targets": 1
+                    },
+                    // link with collection group
+                    {
+                        "render": function(data, type, row) {
+                            if(row.collection_group_id != null) {
+                                return '<a href="/collection-groups/' + row.collection_group_id + '">'
+                                    + row.collection_group_code + '</a>';
+                                } else {
+                                    return '';
+                                }
+                            },
+                        "targets": 5
+                    },
+                    // link with shop
+                    {
+                        "render": function(data, type, row) {
+                            return '<a href="/shops/' + row.shop_id + '">'
+                                + row.shop_name + '</a>';
+                            },
+                        "targets": 6
+                    },
                     {
                         "render": function(data, type, row) {
                             if (row.status == 'pending') {

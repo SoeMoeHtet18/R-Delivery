@@ -350,45 +350,6 @@
         </div>
     </div>
 </div>
-<!-- <div id="popupQrCard" class="modal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-           
-            <div class="modal-header">
-                <h5 class="modal-title text-center">Print Qr</h5>
-            </div>
-            <form action="">
-                
-                <div class="modal-body">
-
-                    @csrf
-                    <input type="hidden" name="qr_order_ids" id="printed_order_ids">
-                    <div class="row m-0 mb-3">
-                        <div>
-                            <h4>Select Template <b>*</b></h4>
-                        </div>
-                        <div>
-                            <select name="template" id="template" class="form-control">
-                                <option value="" selected disabled>Select template </option>
-                                <option value="roll_1x2">1" x 2" (Roll Format)</option>
-                                <option value="roll_2x3">2" x 3" (Roll Format)</option>
-                                <option value="roll_3x5_cm">3cm x 5cm (Roll Format)</option>
-                                <option value="roll_4x6_cm">4cm x 6cm (Roll Format)</option>
-                                <option value="sheet_1x2">1" x 2" (Sheet Format - Portrait)</option>
-                                <option value="sheet_3x5cm_portrait">3cm x 5cm (Sheet Format - Portrait)</option>
-                                <option value="sheet_3x5cm_landscape">3cm x 5cm (Sheet Format - Landscape)</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" id="qr-pop-up-close-btn" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <input type="submit" id="qr-code-generate-btn" class="btn green" data-dismiss="modal" value="Print">
-                </div>
-            </form>
-        </div>
-    </div>
-</div> -->
 <ul class="nav nav-tabs mb-4">
     <li class="nav-item">
         <a href="#all-orders-display" id="all-orders-tab" class="nav-link active" data-toggle="tab">All Orders</a>
@@ -454,7 +415,8 @@
             <div class="caption">Cancel Request Orders Lists</div>
         </div>
         <div class="portlet-body">
-            <table id="cancel-request-orders-datatable" class="table table-striped table-hover table-responsive datatable">
+            <table id="cancel-request-orders-datatable" 
+                class="table table-striped table-hover table-responsive datatable">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -770,7 +732,8 @@
             $(this).tab('show');
         });
 
-        get_ajax_dynamic_data(search = '', city = '', rider = '', shop = '', status = '', township = '', pay_later = '', pick_up_date = '');
+        get_ajax_dynamic_data(search = '', city = '', rider = '', shop = '', status = '',
+            township = '', pay_later = '', pick_up_date = '');
 
         function get_ajax_dynamic_data(search, city, rider, shop, status, township, pay_later, pick_up_date) {
             var visible_column = [];
@@ -928,6 +891,54 @@
                         },
                         "targets": 2
                     },
+                    // link with shop
+                    {
+                        "render": function(data, type, row) {
+                            return '<a href="/shops/' + row.shop_id + '">'
+                                + row.shop_name + '</a>';
+                            },
+                        "targets": 7
+                    },
+                    // link with rider
+                    {
+                        "render": function(data, type, row) {
+                            if(row.rider_id != null) {
+                                return '<a href="/riders/' + row.rider_id + '">'
+                                + row.rider_name + '</a>';
+                            } else {
+                                return '';
+                            }
+                        },
+                        "targets": 8
+                    },
+                    // link with city
+                    {
+                        "render": function(data, type, row) {
+                            return '<a href="/cities/' + row.city_id + '">'
+                                + row.city_name + '</a>';
+                            },
+                        "targets": 12
+                    },
+                    // link with township
+                    {
+                        "render": function(data, type, row) {
+                            return '<a href="/townships/' + row.township_id + '">'
+                                + row.township_name + '</a>';
+                            },
+                        "targets": 13
+                    },
+                    // link with collection group
+                    {
+                        "render": function(data, type, row) {
+                            if(row.collection_group_id != null) {
+                                return '<a href="/collection_groups/' + row.collection_group_id + '">'
+                                    + row.collection_group_code + '</a>';
+                                } else {
+                                    return '';
+                                }
+                            },
+                        "targets": 22
+                    },
                     // calculate the acutual delivery fees
                     {
                         "render": function(data, type, row) {
@@ -1039,6 +1050,7 @@
                 get_ajax_dynamic_data(search, city, rider, shop, status, township, pay_later, pick_up_date);
             });
 
+            // handle when enter search
             $('#search').keypress(function(e) {
                 console.log('keypress');
                 if (e.which === 13) { // Check if the pressed key is Enter (key code 13)
@@ -1081,10 +1093,6 @@
                         searchable: false
                     },
                     {
-                        data: 'payment_flag',
-                        name: 'paid'
-                    },
-                    {
                         data: 'total_amount',
                         name: 'total_amount'
                     },
@@ -1117,6 +1125,10 @@
                         name: 'customer_phone_number'
                     },
                     {
+                        data: 'payment_flag',
+                        name: 'paid'
+                    },
+                    {
                         data: 'branch_name',
                         name: 'branch'
                     },
@@ -1145,7 +1157,27 @@
 
                             return delivery_fees;
                         },
-                        "targets": 4
+                        "targets": 3
+                    },
+                    // link with shop
+                    {
+                        "render": function(data, type, row) {
+                            return '<a href="/shops/' + row.shop_id + '">'
+                                + row.shop_name + '</a>';
+                            },
+                        "targets": 6
+                    },
+                    // link with rider
+                    {
+                        "render": function(data, type, row) {
+                            if(row.rider_id != null) {
+                                return '<a href="/riders/' + row.rider_id + '">'
+                                + row.rider_name + '</a>';
+                            } else {
+                                return '';
+                            }
+                        },
+                        "targets": 7
                     },
                     {
                         "render": function(data, type, row) {
@@ -1193,10 +1225,6 @@
                         searchable: false
                     },
                     {
-                        data: 'payment_flag',
-                        name: 'paid'
-                    },
-                    {
                         data: 'total_amount',
                         name: 'total_amount'
                     },
@@ -1229,6 +1257,10 @@
                         name: 'customer_phone_number'
                     },
                     {
+                        data: 'payment_flag',
+                        name: 'paid'
+                    },
+                    {
                         data: 'branch_name',
                         name: 'branch'
                     },
@@ -1259,6 +1291,26 @@
                         },
                         "targets": 3
                     },
+                    // link with shop
+                    {
+                        "render": function(data, type, row) {
+                            return '<a href="/shops/' + row.shop_id + '">'
+                                + row.shop_name + '</a>';
+                            },
+                        "targets": 6
+                    },
+                    // link with rider
+                    {
+                        "render": function(data, type, row) {
+                            if(row.rider_id != null) {
+                                return '<a href="/riders/' + row.rider_id + '">'
+                                + row.rider_name + '</a>';
+                            } else {
+                                return '';
+                            }
+                        },
+                        "targets": 7
+                    },
                     {
                         "render": function(data, type, row) {
                             if (row.payment_flag == 0) {
@@ -1270,54 +1322,6 @@
                         },
                         "targets": 10
                     },
-                    // {
-                    //     "render": function(data, type, row) {
-                    //         return row.total_amount;
-                    //     },
-                    //     "targets": 2
-                    // },
-                    // {
-                    //     "render": function(data, type, row) {
-                    //         return row.delivery_fees;
-                    //     },
-                    //     "targets": 3
-                    // },
-                    // {
-                    //     "render": function(data, type, row) {
-                    //         return row.markup_delivery_fees;
-                    //     },
-                    //     "targets": 4
-                    // },
-                    // {
-                    //     "render": function(data, type, row) {
-                    //         return row.order_code;
-                    //     },
-                    //     "targets": 5
-                    // },
-                    // {
-                    //     "render": function(data, type, row) {
-                    //         return row.shop_name;
-                    //     },
-                    //     "targets": 6
-                    // },
-                    // {
-                    //     "render": function(data, type, row) {
-                    //         return row.rider_name;
-                    //     },
-                    //     "targets": 7
-                    // },
-                    // {
-                    //     "render": function(data, type, row) {
-                    //         return row.customer_name;
-                    //     },
-                    //     "targets": 8
-                    // },
-                    // {
-                    //     "render": function(data, type, row) {
-                    //         return row.customer_phone_number;
-                    //     },
-                    //     "targets": 9
-                    // },
                 ]
             });
         }
@@ -1352,10 +1356,6 @@
                         searchable: false
                     },
                     {
-                        data: 'payment_flag',
-                        name: 'paid'
-                    },
-                    {
                         data: 'total_amount',
                         name: 'total_amount'
                     },
@@ -1388,6 +1388,10 @@
                         name: 'customer_phone_number'
                     },
                     {
+                        data: 'payment_flag',
+                        name: 'paid'
+                    },
+                    {
                         data: 'branch_name',
                         name: 'branch'
                     },
@@ -1416,7 +1420,27 @@
 
                             return delivery_fees;
                         },
-                        "targets": 4
+                        "targets": 3
+                    },
+                    // link with shop
+                    {
+                        "render": function(data, type, row) {
+                            return '<a href="/shops/' + row.shop_id + '">'
+                                + row.shop_name + '</a>';
+                            },
+                        "targets": 6
+                    },
+                    // link with rider
+                    {
+                        "render": function(data, type, row) {
+                            if(row.rider_id != null) {
+                                return '<a href="/riders/' + row.rider_id + '">'
+                                + row.rider_name + '</a>';
+                            } else {
+                                return '';
+                            }
+                        },
+                        "targets": 7
                     },
                     {
                         "render": function(data, type, row) {

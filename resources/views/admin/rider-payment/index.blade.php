@@ -118,7 +118,16 @@
                         searchable: false
                     },
                 ],
-                
+                columnDefs: [
+                    // link with rider
+                    {
+                        "render": function(data, type, row) {
+                            return '<a href="/riders/' + row.rider_id + '">'
+                                + row.rider_name + '</a>';
+                            },
+                        "targets": 1
+                    },
+                ],
             });
             $('.search_filter').click(function() {
                 var rider_name = $('#rider_name').val();

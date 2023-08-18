@@ -164,7 +164,16 @@
                         searchable: false
                     },
                 ],
-                columnDefs: [{
+                columnDefs: [
+                    // link with shop
+                    {
+                        "render": function(data, type, row) {
+                            return '<a href="/shops/' + row.shop_id + '">'
+                                + row.shop_name + '</a>';
+                            },
+                        "targets": 1
+                    },
+                    {
                     "render": function(data, type, row) {
                         if (row.type == 'loan_payment') {
                             return "Loan Payment";
