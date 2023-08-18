@@ -360,4 +360,23 @@ class OrderService
         $order->save();
         return $order;
     }
+
+    /**
+     * re assign rider and to notify to admin
+     */
+    public function reAssignRider($order, $rider)
+    {
+        $today   = Carbon::today()->format('Y-m-d');
+        $riderId = $rider->id;
+        $order->rider_id      = $riderId;
+        $order->schedule_date = $today;
+        $order->status        = 'delivering';
+        $order->save();
+
+        //to notify to admin about rider takes over order
+        $this->notificationService->riderReassignForOrderNotificationForUser($order, $rider);
+
+        return $order;
+
+    }
 }

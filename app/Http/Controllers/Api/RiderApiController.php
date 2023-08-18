@@ -299,7 +299,7 @@ class RiderApiController extends Controller
         if($order->rider_id == $rider_id) {
             return response()->json(['data' => $order->id, 'message' => 'this order is assign for current rider.', 'status' => 'success'], 200);
         } else {
-            return response()->json(['data' => null, 'message' => 'this order is not assign for current rider.', 'status' => 'fail'], 200);
+            return response()->json(['data' => $order->id, 'message' => 'this order is not assign for current rider.', 'status' => 'fail'], 200);
         }
     }
 }
