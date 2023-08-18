@@ -2,7 +2,7 @@
 @section('title','Dashboard')
 @section('sub-title','Rider')
 @section('more-sub-title')
-<li class="page-sub-title">Assign Township</li>
+<li class="page-sub-title">Assign Branch To Rider</li>
 @endsection
 @section('style')
 <style>
@@ -16,13 +16,13 @@
 </style>
 @endsection
 @section('content')
-<form action="{{url('/riders/'.$rider->id.'/assign-township')}}" method="POST" class="action-form">
+<form action="{{url('/riders/'.$rider->id.'/assign-branch')}}" method="POST" class="action-form">
     @csrf
     @method('PUT')
     <div class="card card-container action-form-card">
         <div class="card-body">
             <h2 class="ps-1 card-header-title">
-                <strong>Assign Township For Rider</strong>
+                <strong>Assign Branch For Rider</strong>
             </h2>
 
             <div class="row m-0 mb-3">
@@ -40,14 +40,14 @@
         <div class="card card-container action-form-card">
             <div class="card-body">
                 <div class="row m-0 mb-3">
-                    <label for="township_id" class="col-2">
-                        <h4>Township Name <b>:</b></h4>
+                    <label for="branch_id" class="col-2">
+                        <h4>Branch Name <b>:</b></h4>
                     </label>
                     <div class="col-10">
-                        <select name="township_id[]" id="township_id" class="form-control township_id">
-                            <option value="" selected disabled>Select the Township for This Rider</option>
-                            @foreach ( $townships as $township)
-                            <option value="{{$township->id}}">{{$township->name}}</option>
+                        <select name="branch_id[]" id="branch_id" class="form-control branch_id">
+                            <option value="" selected disabled>Select the Branch for This Rider</option>
+                            @foreach ( $branches as $branch)
+                            <option value="{{$branch->id}}">{{$branch->name}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -77,7 +77,7 @@
 <script type="text/javascript">
     $(function() {
         // Initialize select2 for the initial card
-        $('#township_id').select2();
+        $('#branch_id').select2();
     });
 
     var clonecard = () => {
@@ -86,14 +86,14 @@
         return `<div class="card card-container action-form-card">
             <div class="card-body">
                 <div class="row m-0 mb-3">
-                    <label for="township_id_${newIndex}" class="col-2">
-                        <h4>Township Name <b>:</b></h4>
+                    <label for="branch_id_${newIndex}" class="col-2">
+                        <h4>Branch Name <b>:</b></h4>
                     </label>
                     <div class="col-10">
-                        <select name="township_id[]" id="township_id_${newIndex}" class="form-control township_id">
-                            <option value="" selected disabled>Select the Township for This Order</option>
-                            @foreach ($townships as $township)
-                                <option value="{{$township->id}}">{{$township->name}}</option>
+                        <select name="branch_id[]" id="branch_id_${newIndex}" class="form-control branch_id">
+                            <option value="" selected disabled>Select the Branch for This Rider</option>
+                            @foreach ($branches as $branch)
+                                <option value="{{$branch->id}}">{{$branch->name}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -117,7 +117,7 @@
             
             // Initialize select2 for the newly cloned card
             const newIndex = $("#assign-container .card-container").length; // Get the index of the last cloned card
-            $(`#township_id_${newIndex}`).select2();
+            $(`#branch_id_${newIndex}`).select2();
         });
     }
 

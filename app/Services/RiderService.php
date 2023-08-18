@@ -2,7 +2,10 @@
 
 namespace App\Services;
 
+use App\Models\Branch;
+use App\Models\Gate;
 use App\Models\Rider;
+use App\Models\ThirdPartyVendor;
 use App\Models\Township;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -53,7 +56,7 @@ class RiderService
         $townships = $data['township_id'];
         $rider_fees = $data['rider_fees'];
         
-        $rider->townships()->sync([]);
+        // $rider->townships()->sync([]);
         
         // Insert the records into the pivot table with rider_fees values
         $records = [];
@@ -77,6 +80,87 @@ class RiderService
             return true;
         } else {
             return false;
+        }
+    }
+
+    public function assignBranch($rider, $data)
+    {
+        $branchIds = $data['branch_id'];
+        $rider_fees = $data['rider_fees'];
+
+        $records = [];
+        foreach ($branchIds as $i => $branchId) {
+            $branch = Branch::with('townships')->find($branchId);
+            if ($branch) {
+                $townships = $branch->townships;
+                foreach ($townships as $township) {
+                    $existingData = [
+                        'rider_id' => $rider->id,
+                        'township_id' => $township->id,
+                    ];
+                    $newData = [
+                        'rider_id' => $rider->id,
+                        'township_id' => $township->id,
+                        'rider_fees' => $rider_fees[$i],
+                    ];
+                    
+                    DB::table('rider_township')->updateOrInsert($existingData, $newData);
+                }
+            }
+        }
+    }
+    
+    public function assignGate($rider, $data)
+    {
+        $gateIds = $data['gate_id'];
+        $rider_fees = $data['rider_fees'];
+
+        $records = [];
+        foreach ($gateIds as $i => $gateId) {
+            $gate = Gate::with('townships')->find($gateId);
+            if ($gate) {
+                $townships = $gate->townships;
+                foreach ($townships as $township) {
+                    $existingData = [
+                        'rider_id' => $rider->id,
+                        'township_id' => $township->id,
+                    ];
+                    $newData = [
+                        'rider_id' => $rider->id,
+                        'township_id' => $township->id,
+                        'rider_fees' => $rider_fees[$i],
+                    ];
+                    
+                    DB::table('rider_township')->updateOrInsert($existingData, $newData);
+                }
+            }
+        }
+    }
+    
+    public function assignThirdPartyVendor($rider, $data)
+    {
+        $thirdPartyVendorIds = $data['third_party_vendor_id'];
+        $rider_fees = $data['rider_fees'];
+
+        $records = [];
+        foreach ($thirdPartyVendorIds as $i => $thirdPartyVendorId) {
+            $thirdPartyVendor = ThirdPartyVendor::with('townships')->find($thirdPartyVendorId);
+            if ($thirdPartyVendor) {
+                $townships = $thirdPartyVendor->townships;
+                foreach ($townships as $township) {
+                    $existingData = [
+                        'rider_id' => $rider->id,
+                        'township_id' => $township->id,
+                    ];
+                    $newData = [
+                        'rider_id' => $rider->id,
+                        'township_id' => $township->id,
+                        'rider_fees' => $rider_fees[$i],
+                    ];
+                    
+                    DB::table('rider_township')->updateOrInsert($existingData, $newData);
+                }
+            }
         }
     }
 }
