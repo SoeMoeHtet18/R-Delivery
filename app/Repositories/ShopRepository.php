@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Collection;
+use App\Models\CustomerCollection;
 use App\Models\Order;
 use App\Models\Shop;
 use App\Models\ShopPayment;
@@ -92,15 +93,14 @@ class ShopRepository
             }
         }
 
-        $transaction_amount = TransactionsForShop::where('shop_id', $shop_id)
-            ->sum('amount');
+        $transactionAmount = TransactionsForShop::where('shop_id', $shop_id)->sum('amount');
 
-        $collection_amount = Collection::where('shop_id', $shop_id)->sum('paid_amount');
+        $collectionAmount = Collection::where('shop_id', $shop_id)->sum('paid_amount');
+
+        $customerCollectionAmount = CustomerCollection::where('shop_id', $shop_id)->sum('paid_amount');
         
-        $total_amount = $shop_payments + $pay_later_cod_amount + $cod_orders_amount + $remaining_orders_amount;
-        $actual_amount = $total_amount - ($transaction_amount + $collection_amount);
-
-        return $actual_amount;
+        $totalAmount = $shop_payments + $pay_later_cod_amount + $cod_orders_amount + $remaining_orders_amount;
+        return $totalAmount - ($transactionAmount + $collectionAmount + $customerCollectionAmount);
     }
 
     public function getTotalCreditForShop($shop_id)
@@ -139,10 +139,10 @@ class ShopRepository
             ->sum('amount');
 
         $collection_amount = Collection::where('shop_id', $shop_id)->sum('paid_amount');
+
+        $customerCollectionAmount = CustomerCollection::where('shop_id', $shop_id)->sum('paid_amount');
         
         $total_amount = $shop_payments + $paid_orders_amount + $cod_orders_amount + $remaining_orders_amount;
-        $actual_amount = $total_amount - ($transaction_amount + $collection_amount);
-
-        return $actual_amount;
+        return $total_amount - ($transaction_amount + $collection_amount + $customerCollectionAmount);
     }
 }

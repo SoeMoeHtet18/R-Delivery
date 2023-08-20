@@ -154,9 +154,18 @@
                 </div>
                 <div class="row m-0 mb-3">
                     <div class="col">
-                        <label for="description">
-                            <h4>Description</h4>
-                        </label>
+                        <div class="d-flex align-items-center mb-3">
+                            <label for="description">
+                                <h4>Description</h4>
+                            </label>
+                            <div style="position: relative; margin-left: 10px;">
+                                <input type="text" name="datefilter" value="" class="form-control
+                                    description-date-filter" id="description_filter_1"/>
+                                <span class="fa fa-calendar calendar_1"
+                                    style="position: absolute; top: 12px; right: 8px;"></span>
+                            </div>
+                        </div>
+                       
                         <div>
                             <textarea name="description[]" id="description" class="form-control" style="height: 200px;"></textarea>
                         </div>
@@ -214,6 +223,18 @@
             placeholder: 'Select Collections',
             allowClear: true
         });
+        $('#description_filter_1').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+                cancelLabel: 'Clear'
+            }
+        });
+        $(".calendar_1").on("click", function() {
+            $('#description_filter_1').trigger("click");
+        });
+        $('#description_filter_1').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
+        });
 
         //get collection group code
         $.ajax({
@@ -267,11 +288,20 @@
                 </div>
                 <div class="row m-0 mb-3">
                     <div class="col">
-                        <label for="description_${newIndex}">
-                            <h4>Description</h4>
-                        </label>
+                    <div class="d-flex align-items-center mb-3">
+                            <label for="description_${newIndex}">
+                                <h4>Description</h4>
+                            </label>
+                            <div style="position: relative; margin-left: 10px;">
+                                <input type="text" name="datefilter" value="" class="form-control
+                                    description-date-filter" id="description_filter_${newIndex}"/>
+                                <span class="fa fa-calendar calendar_${newIndex}"
+                                    style="position: absolute; top: 12px; right: 8px;"></span>
+                            </div>
+                        </div>
                         <div>
-                            <textarea name="description[]" id="description_${newIndex}" class="form-control" style="height: 200px;"></textarea>
+                            <textarea name="description[]" id="description_${newIndex}"
+                                class="form-control" style="height: 200px;"></textarea>
                         </div>
                     </div>
                 </div>
@@ -282,12 +312,25 @@
 
     var addMoreCategory = () => {
         $("#add-card-btn").click(function() {
-            console.log("add more cards");
             $("#assign-container").append(appendCategory());
 
             // Initialize select2 for the newly cloned card
-            const newIndex = $("#assign-container .shop-card-container").length; // Get the index of the last cloned card
+            // Get the index of the last cloned card
+
+            const newIndex = $("#assign-container .shop-card-container").length;
             $(`#shop_id_${newIndex}`).select2();
+            $(`#description_filter_${newIndex}`).daterangepicker({
+                autoUpdateInput: false,
+                locale: {
+                    cancelLabel: 'Clear'
+                }
+            });
+            $(`.calendar_${newIndex}`).on("click", function() {
+                $(`#description_filter_${newIndex}`).trigger("click");
+            });
+            $(`#description_filter_${newIndex}`).on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
+            });
         });
     }
     addMoreCategory();
@@ -298,7 +341,7 @@
         $('body').on('change', '.shop-dropdown', function(e) {
             var selectedValue = $(this).val();
             var dropdownIndex = $('.shop-dropdown').index(this);
-            console.log(`dropdownIndex ${dropdownIndex}`);
+
             if (dropdownIndex == 0) {
                 var shopDiv = $('div#assign-container > div:eq(0)');
                 if (shopDiv.attr('id') == null) {
@@ -306,9 +349,10 @@
                 }
             }
             const index = $("#assign-container .shop-card-container").length;
-            shopDropdownValues[dropdownIndex] = selectedValue;
+            // shopDropdownValues[dropdownIndex] = selectedValue;
 
-            collectionIndexForCheck = dropdownIndex + 1;
+            descriptionIndex = collectionIndexForCheck = dropdownIndex + 1;
+            $(`#description_filter_${descriptionIndex}`).val('');
             shop_id_to_check = $(`#collections-for-${collectionIndexForCheck} #check-shop-id`).val();
 
             if (shop_id_to_check != selectedValue) {
@@ -333,7 +377,7 @@
                     if (datas) {
                         if (shop_id_to_check == null) {
                             $("#assign-container").append(datas);
-                        }                    
+                        }
                         else if (shop_id_to_check != selectedValue) {
                             $(`#collections-for-${collectionIndexForCheck}`).append(datas);
                         } else {
@@ -349,13 +393,24 @@
                 $('#description').attr('id', 'description_1');
             }
 
-            var descriptionIndex = dropdownIndex + 1;
+            // Create a new Date object representing the current date and time
+            const currentDate = new Date();
+
+            // Extract day, month, and year components
+            const day = currentDate.getDate();
+            const month = currentDate.getMonth() + 1; // Add 1 to the month index
+            const year = currentDate.getFullYear();
+
+            // Create a formatted date string
+            const formattedDate = `${day}/${month}/${year}`;
 
             $.ajax({
                 url: '/get-description-for-shop',
                 type: 'GET',
                 data: {
-                    shop_id: selectedValue
+                    shop_id: selectedValue,
+                    from_date: formattedDate,
+                    to_date: formattedDate
                 },
                 success: function(res) {
                     if (res.data != '') {
@@ -436,5 +491,44 @@
         // // Submit the form
         form.submit();
     }
+        // for date range picker
+        $('body').on('click', '.description-date-filter', function(e) {
+            var dropdownIndex = $('.description-date-filter').index(this);
+            var descriptionIndex = dropdownIndex + 1;
+
+            $(`#description_filter_${descriptionIndex}`).on('apply.daterangepicker', function(ev, picker) {
+                if(dropdownIndex == 0) {
+                    var selectedShopValue = $('#shop_id').val();
+                } else {
+                    var selectedShopValue = $(`#shop_id_${descriptionIndex}`).val();
+                }
+
+                $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+               
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    url: '/get-description-for-shop',
+                    type: 'GET',
+                    data: {
+                        shop_id: selectedShopValue,
+                        from_date: picker.startDate.format('DD/MM/YYYY'),
+                        to_date: picker.endDate.format('DD/MM/YYYY')
+                    },
+                    success: function(res) {
+                        console.log(res);
+                        if (res.data != '') {
+                            $(`#description_${descriptionIndex}`).val(res.data);
+                        } else {
+                            $(`#description_${descriptionIndex}`).val('');
+                        }
+                    }
+                })
+            });
+        });
+        
 </script>
 @endsection
