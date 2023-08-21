@@ -12,6 +12,7 @@ use App\Repositories\CityRepository;
 use App\Repositories\CollectionGroupRepository;
 use App\Repositories\DeliveryTypesRepository;
 use App\Repositories\ItemTypeRepository;
+use App\Repositories\LogRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\RiderRepository;
 use App\Repositories\ShopRepository;
@@ -35,6 +36,7 @@ class OrderController extends Controller
     protected $orderService;
     protected $deliveryTypeRepository;
     protected $collectionGroupRepository;
+    protected $logRepository;
 
     public function __construct(
         ShopRepository $shopRepository,
@@ -46,6 +48,7 @@ class OrderController extends Controller
         OrderService $orderService,
         DeliveryTypesRepository $deliveryTypeRepository,
         CollectionGroupRepository $collectionGroupRepository,
+        LogRepository $logRepository,
     ) {
         $this->shopRepository = $shopRepository;
         $this->riderRepository = $riderRepository;
@@ -56,6 +59,7 @@ class OrderController extends Controller
         $this->orderService = $orderService;
         $this->deliveryTypeRepository = $deliveryTypeRepository;
         $this->collectionGroupRepository = $collectionGroupRepository;
+        $this->logRepository = $logRepository;
     }
     /**
      * Display a listing of the resource.
@@ -378,22 +382,24 @@ class OrderController extends Controller
 
     public function showTracking(Request $request)
     {
-        $order_id = $request->order_id;
-        if (strpos($order_id, '#') !== false) {
-            $order_id = str_replace('#', '', $order_id);
+        $orderCode = $request->order_id;
+        if (strpos($orderCode, '#') !== false) {
+            $orderCode = str_replace('#', '', $orderCode);
         }
-        $order = $this->orderRepository->trackOrderByOrderID($order_id);
-        $orderId = $order_id;
-        $orders = [];
-        if (Storage::exists('order_data.txt')) {
-            $orderDataJson = Storage::get('order_data.txt');
-            $orders = json_decode($orderDataJson, true);
-        }
-        if (isset($orders[$orderId])) {
-            $orderData = $orders[$orderId];
-            $order->order_data = $orderData;
-        }
-        return view('tracking', compact('order'));
+        $order = $this->orderRepository->trackOrderByOrderID($orderCode);
+        $orderId = $order->id;
+        $logs = $this->logRepository->getLogByOrderID($orderId);
+        // dd($logs);
+        // $orders = [];
+        // if (Storage::exists('order_data.txt')) {
+        //     $orderDataJson = Storage::get('order_data.txt');
+        //     $orders = json_decode($orderDataJson, true);
+        // }
+        // if (isset($orders[$orderId])) {
+        //     $orderData = $orders[$orderId];
+        //     $order->order_data = $orderData;
+        // }
+        return view('tracking', compact('order', 'logs'));
     }
 
     public function getAjaxCancelRequestOrderData(Request $request)

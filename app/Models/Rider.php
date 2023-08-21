@@ -29,4 +29,9 @@ class Rider extends Authenticatable
     {
         return $this->hasMany(Deficit::class);
     }
+
+    public function loggable()
+    {
+        return $this->morphMany(Log::class, 'loggable');
+    }
 }

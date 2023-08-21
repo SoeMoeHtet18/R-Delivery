@@ -11,6 +11,7 @@ use App\Models\Rider;
 use App\Models\Shop;
 use App\Models\Township;
 use App\Models\User;
+use App\Models\Log;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -20,10 +21,12 @@ class OrderService
     use FileUploadTrait;
 
     protected $notificationService;
+    protected $logService;
 
-    public function __construct(NotificationService $notificationService)
+    public function __construct(NotificationService $notificationService, LogService $logService)
     {
         $this->notificationService = $notificationService;
+        $this->logService = $logService;
     }
     public function saveOrderData($data)
     {
@@ -44,11 +47,7 @@ class OrderService
         $order->total_amount = $data['total_amount'];
         $order->markup_delivery_fees =  $data['markup_delivery_fees'] ?? 0;
         $order->remark =  $data['remark'] ?? null;
-        if($today == Carbon::parse($data['schedule_date'])->format('Y-m-d')){
-            $order->status = "delivering";
-        } else {
-            $order->status = "pending";
-        }
+        $order->status = "pending";
         $order->item_type_id =  $data['item_type_id'] ?? null;
         $order->full_address =  $data['full_address'] ?? null;
         $order->schedule_date =  $data['schedule_date'] ?? Carbon::tomorrow();;
@@ -64,6 +63,9 @@ class OrderService
         $order->branch_id = $user->branch_id;
         $order->pay_later = $data['total_amount'] > 100000 ? true : false;
         $order->save();
+        if($today == Carbon::parse($data['schedule_date'])->format('Y-m-d')) {
+            $this->changeStatus($order, 'delivering', $user, User::class);
+        }
         return $order;
     }
 
@@ -108,6 +110,7 @@ class OrderService
 
     public function updateOrderByID($data, $order, $file)
     {
+        $user = auth()->user();
         $order->shop_id =  $data['shop_id'];
         $order->customer_name =  $data['customer_name'];
         $order->customer_phone_number =  $data['customer_phone_number'];
@@ -120,7 +123,7 @@ class OrderService
         $order->total_amount = $data['total_amount'];
         $order->markup_delivery_fees =  $data['markup_delivery_fees'] ?? 0.00;
         $order->remark =  $data['remark'] ?? null;
-        $this->changeStatus($order, $data['status']);
+        $this->changeStatus($order, $data['status'], $user, User::class);
         // if ($data['status'] == 'cancel') {
         //     $this->notificationService->orderCancelNotificationForRider($order->rider_id, $order->order_code);
         //     $this->notificationService->orderCancelNotificationForShopUsers($order->shop_id, $order->order_code);
@@ -160,12 +163,25 @@ class OrderService
         Order::destroy($id);
     }
 
-    public function changeStatus($order, $status)
+    public function changeStatus($order, $status, $updatedUser, $updatedType)
     {
         if ($order->status != $status) {
-            $order->status = $status;
-            $order->save();
+            // apporach Tracking For Order Status
+            if($order->status == 'pending' && $status == 'warehouse' || $status == 'delivering') {
+                $this->logService->saveLog($order->id, 'pending', 'picking-up', $updatedUser->id, $updatedType);
+                $order->update(['status' => 'picking-up']);
+            }
+            if($order->status == 'pending' || $order->status == 'picking-up' && $status == 'delivering') {
+                $this->logService->saveLog($order->id, 'picking-up', "warehouse", $updatedUser->id, $updatedType);
+                $order->update(['status' => 'warehouse']);
+            }
 
+            $this->logService->saveLog($order->id, $order->status, $status, $updatedUser->id, $updatedType);
+
+            // Assuming $order is an instance of Order model and $status is the new status
+            $order->update(['status' => $status]);
+
+            // make notification
             $notificationMethod = '';
             $updateField = '';
 
@@ -198,18 +214,6 @@ class OrderService
             if ($notificationMethod != 'orderCancelNotificationFor' && !empty($updateField) && $order->status != 'cancel_request') {
                 $this->notificationService->{$notificationMethod . 'ShopUsers'}($order->shop_id, $order->order_code);
             }
-
-            $orders = [];
-            if (Storage::exists('order_data.txt')) {
-                $orderDataJson = Storage::get('order_data.txt');
-                $orders = json_decode($orderDataJson, true);
-            }
-
-            $orderId = $order->order_code;
-            $orders[$orderId][$updateField] = $order->updated_at;
-
-            $orderDataJson = json_encode($orders);
-            Storage::put('order_data.txt', $orderDataJson);
 
             return $order;
         }

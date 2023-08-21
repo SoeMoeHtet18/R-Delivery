@@ -27,13 +27,15 @@ class NotificationService
 
     public function removeNotification($id, $user_id, $userType)
     {
-        $notification = Notifiable::where('notification_id', $id)->where('notifiable_id', $user_id)->where('notifiable_type', $userType)->first();
+        $notification = Notifiable::where('notification_id', $id)
+            ->where('notifiable_id', $user_id)->where('notifiable_type', $userType)->first();
         $notification->delete();
     }
 
     public function markNotificationAsRead($id, $user_id, $userType)
     {
-        $notification = Notifiable::where('notification_id', $id)->where('notifiable_id', $user_id)->where('notifiable_type', $userType)->first();
+        $notification = Notifiable::where('notification_id', $id)
+            ->where('notifiable_id', $user_id)->where('notifiable_type', $userType)->first();
         $notification->is_read = 1;
         $notification->save();
     }

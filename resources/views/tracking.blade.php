@@ -322,7 +322,7 @@
                     <div class="col-md-8 status-monitor d-flex justify-content-center p-0">
                         <div class="d-flex flex-column align-items-center preview-container">
                             <div class="pending-preview preview-box rounded-pill @if($order->status == 'pending' && $order->rider_id == null) bg-black border border-0 @endif">
-                                @if($order->status == 'pending' && $order->rider_id == null)
+                                @if($order->status == 'pending')
                                 <svg class="preview-svg" width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M18.4211 25C16.6009 25 15.0491 24.4194 13.7658 23.2583C12.4825 22.0972 11.8412 20.6937 11.8421 19.0476C11.8421 17.4008 12.4838 15.9968 13.7671 14.8357C15.0504 13.6746 16.6018 13.0944 18.4211 13.0952C20.2412 13.0952 21.793 13.6758 23.0763 14.8369C24.3596 15.998 25.0009 17.4016 25 19.0476C25 20.6944 24.3583 22.0984 23.075 23.2595C21.7917 24.4206 20.2404 25.0008 18.4211 25ZM20.625 21.875L21.5461 21.0417L19.0789 18.8095V15.4762H17.7632V19.2857L20.625 21.875ZM0 23.8095V2.38095H8.125C8.36623 1.68651 8.83772 1.11588 9.53947 0.66905C10.2412 0.222224 11.0088 -0.00079154 11.8421 2.11077e-06C12.7193 2.11077e-06 13.5035 0.223415 14.1947 0.67024C14.886 1.11707 15.3518 1.6873 15.5921 2.38095H23.6842V12.2024C23.2895 11.9444 22.8728 11.7262 22.4342 11.5476C21.9956 11.369 21.5351 11.2103 21.0526 11.0714V4.76191H18.4211V8.33333H5.26316V4.76191H2.63158V21.4286H9.60526C9.75877 21.8651 9.93421 22.2817 10.1316 22.6786C10.3289 23.0754 10.5702 23.4524 10.8553 23.8095H0ZM11.8421 4.76191C12.2149 4.76191 12.5276 4.64762 12.7803 4.41905C13.0329 4.19048 13.1588 3.90794 13.1579 3.57143C13.1579 3.23413 13.0316 2.95119 12.7789 2.72262C12.5263 2.49405 12.214 2.38016 11.8421 2.38095C11.4693 2.38095 11.1566 2.49524 10.9039 2.72381C10.6513 2.95238 10.5254 3.23492 10.5263 3.57143C10.5263 3.90873 10.6526 4.19167 10.9053 4.42024C11.1579 4.64881 11.4702 4.7627 11.8421 4.76191Z" fill="white" />
                                 </svg>
@@ -330,7 +330,6 @@
                                 <svg class="preview-svg" width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M18.4211 25C16.6009 25 15.0491 24.4194 13.7658 23.2583C12.4825 22.0972 11.8412 20.6937 11.8421 19.0476C11.8421 17.4008 12.4838 15.9968 13.7671 14.8357C15.0504 13.6746 16.6018 13.0944 18.4211 13.0952C20.2412 13.0952 21.793 13.6758 23.0763 14.8369C24.3596 15.998 25.0009 17.4016 25 19.0476C25 20.6944 24.3583 22.0984 23.075 23.2595C21.7917 24.4206 20.2404 25.0008 18.4211 25ZM20.625 21.875L21.5461 21.0417L19.0789 18.8095V15.4762H17.7632V19.2857L20.625 21.875ZM0 23.8095V2.38095H8.125C8.36623 1.68651 8.83772 1.11588 9.53947 0.66905C10.2412 0.222224 11.0088 -0.00079154 11.8421 2.11077e-06C12.7193 2.11077e-06 13.5035 0.223415 14.1947 0.67024C14.886 1.11707 15.3518 1.6873 15.5921 2.38095H23.6842V12.2024C23.2895 11.9444 22.8728 11.7262 22.4342 11.5476C21.9956 11.369 21.5351 11.2103 21.0526 11.0714V4.76191H18.4211V8.33333H5.26316V4.76191H2.63158V21.4286H9.60526C9.75877 21.8651 9.93421 22.2817 10.1316 22.6786C10.3289 23.0754 10.5702 23.4524 10.8553 23.8095H0ZM11.8421 4.76191C12.2149 4.76191 12.5276 4.64762 12.7803 4.41905C13.0329 4.19048 13.1588 3.90794 13.1579 3.57143C13.1579 3.23413 13.0316 2.95119 12.7789 2.72262C12.5263 2.49405 12.214 2.38016 11.8421 2.38095C11.4693 2.38095 11.1566 2.49524 10.9039 2.72381C10.6513 2.95238 10.5254 3.23492 10.5263 3.57143C10.5263 3.90873 10.6526 4.19167 10.9053 4.42024C11.1579 4.64881 11.4702 4.7627 11.8421 4.76191Z" fill="#505050" />
                                 </svg>
-
                                 @endif
                             </div>
                             <span class="preview-status pending">Pending</span>
@@ -338,7 +337,7 @@
                         <div class="line"></div>
                         <div class="d-flex flex-column align-items-center preview-container">
                             <div class="shipping-preview preview-box rounded-pill @if($order->status != 'success' && $order->rider_id != null) bg-black border border-0 @endif">
-                                @if($order->status != 'success' && $order->rider_id != null)
+                                @if($order->status = 'delivering')
                                 <svg class="preview-svg" width="27" height="22" viewBox="0 0 27 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M4.94739 18.1428C4.94739 18.9006 5.22464 19.6273 5.71816 20.1632C6.21168 20.699 6.88103 21 7.57897 21C8.2769 21 8.94626 20.699 9.43977 20.1632C9.93329 19.6273 10.2105 18.9006 10.2105 18.1428C10.2105 17.3851 9.93329 16.6584 9.43977 16.1225C8.94626 15.5867 8.2769 15.2857 7.57897 15.2857C6.88103 15.2857 6.21168 15.5867 5.71816 16.1225C5.22464 16.6584 4.94739 17.3851 4.94739 18.1428ZM18.1053 18.1428C18.1053 18.9006 18.3825 19.6273 18.8761 20.1632C19.3696 20.699 20.0389 21 20.7369 21C21.4348 21 22.1042 20.699 22.5977 20.1632C23.0912 19.6273 23.3684 18.9006 23.3684 18.1428C23.3684 17.3851 23.0912 16.6584 22.5977 16.1225C22.1042 15.5867 21.4348 15.2857 20.7369 15.2857C20.0389 15.2857 19.3696 15.5867 18.8761 16.1225C18.3825 16.6584 18.1053 17.3851 18.1053 18.1428Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                     <path d="M4.94737 18.1429H2.31579V12.4286M1 1H15.4737V18.1429M10.2105 18.1429H18.1053M23.3684 18.1429H26V9.57143M26 9.57143H15.4737M26 9.57143L22.0526 2.42857H15.4737M2.31579 6.71429H7.57895" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -373,68 +372,81 @@
                     <div class="col-md-12">
                         <div class="row w-100">
                             <div class="col-2 g-0" style="width: fit-content;">
-                                @if($order->status == 'success')
-                                <span class="delivered-timeline-date-time timeline-date-time d-block">{{$order->order_data['delivered_at']}}</span>
-                                @endif
-                                @if($order->status == 'cancel')
-                                <span class="canceled-timeline-date-time timeline-date-time d-block">{{$order->order_data['canceled_at']}}</span>
-                                @endif
-                                @if(isset($order->order_data['delayed_at']))
-                                <span class="delayed-timeline-date-time timeline-date-time d-block">{{$order->order_data['delayed_at']}}</span>
-                                @endif
-                                @if($order->rider_id != null)
-                                <span class="shipping-timeline-date-time timeline-date-time d-block">{{$order->order_data['picked_at']}}</span>
-                                @endif
-                                @if($order->rider_id != null)
-                                <span class="picked-timeline-date-time timeline-date-time d-block">{{$order->order_data['picked_at']}}</span>
-                                @endif
-                                @if(isset($order->created_at))
-                                <span class="created-timeline-date-time timeline-date-time d-block">{{$order->created_at}}</span>
-                                @endif
+                                @foreach($logs as $log)
+                                    @if($log->to_status == 'success')
+                                    <span class="delivered-timeline-date-time timeline-date-time d-block">{{$log->created_at}}</span>
+                                    @endif
+                                    @if($log->to_status == 'cancel')
+                                    <span class="canceled-timeline-date-time timeline-date-time d-block">{{$log->created_at}}</span>
+                                    @endif
+                                    @if($log->to_status == 'delay')
+                                    <span class="delayed-timeline-date-time timeline-date-time d-block">{{$log->created_at}}</span>
+                                    @endif
+                                    @if($log->to_status == 'delivering')
+                                    <span class="shipping-timeline-date-time timeline-date-time d-block">{{$log->created_at}}</span>
+                                    @endif
+                                    @if($log->to_status == 'warehouse')
+                                    <span class="picked-timeline-date-time timeline-date-time d-block">{{$log->created_at}}</span>
+                                    @endif
+                                @endforeach
+                                    @if(isset($order->created_at))
+                                    <span class="created-timeline-date-time timeline-date-time d-block">{{$order->created_at}}</span>
+                                    @endif
                             </div>
                             <div id="timeline-box-container" class="col-1 g-0">
-                                @if($order->status == 'success')
-                                <div id="delivered-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center" style="background-color: #278AF9;">
-                                    <i class="fa-solid fa-check text-white"></i>
-                                </div>
-                                <div class="vertical-line mx-auto"></div>
-                                @endif
-                                @if($order->status == 'cancel')
-                                <div id="canceled-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center" style="background-color: #278AF9;">
-                                    <i class="fa-solid fa-check text-white"></i>
-                                </div>
-                                <div class="vertical-line mx-auto"></div>
-                                @endif
-                                @if(isset($order->order_data['delayed_at']) && $order->status == 'delay')
-                                <div id="delay-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center" style="background-color: #278AF9;">
-                                    <i class="fa-solid fa-check text-white"></i>
-                                </div>
-                                <div class="vertical-line mx-auto"></div>
-                                @elseif(isset($order->order_data['delayed_at']))
-                                <div id="delay-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center">
-                                </div>
-                                <div class="vertical-line mx-auto"></div>
-                                @else
-                                @endif
-                                @if($order->rider_id != null && $order->status == 'pending')
-                                <div id="shipping-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center" style="background-color: #278AF9;">
-                                    <i class="fa-solid fa-check text-white"></i>
-                                </div>
-                                <div class="vertical-line mx-auto"></div>
-                                <div id="picked-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center" style="background-color: #278AF9;">
-                                    <i class="fa-solid fa-check text-white"></i>
-                                </div>
-                                <div class="vertical-line mx-auto"></div>
-                                @elseif($order->rider_id == null)
-                                @else
-                                <div id="shipping-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center">
-                                </div>
-                                <div class="vertical-line mx-auto"></div>
-                                <div id="picked-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center">
-                                </div>
-                                <div class="vertical-line mx-auto"></div>
-                                @endif
-                                @if(isset($order->created_at) && $order->rider_id == null && $order->status == 'pending')
+                                @foreach($logs as $log)
+                                    @if($log->to_status == 'success' && $order->status == 'success')
+                                    <div id="delivered-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center" style="background-color: #278AF9;">
+                                        <i class="fa-solid fa-check text-white"></i>
+                                    </div>
+                                    <div class="vertical-line mx-auto"></div>
+                                    @elseif($log->to_status == 'success')
+                                    <div id="delivered-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center">
+                                    </div>
+                                    <div class="vertical-line mx-auto"></div>
+                                    @endif
+                                    @if($log->to_status == 'cancel' && $order->status == 'cancel')
+                                    <div id="canceled-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center" style="background-color: #278AF9;">
+                                        <i class="fa-solid fa-check text-white"></i>
+                                    </div>
+                                    <div class="vertical-line mx-auto"></div>
+                                    @elseif($log->to_status == 'cancel')
+                                    <div id="canceled-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center">
+                                    </div>
+                                    <div class="vertical-line mx-auto"></div>
+                                    @endif
+                                    @if($log->to_status == 'delay' && $order->status == 'delay')
+                                    <div id="delay-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center" style="background-color: #278AF9;">
+                                        <i class="fa-solid fa-check text-white"></i>
+                                    </div>
+                                    <div class="vertical-line mx-auto"></div>
+                                    @elseif($log->to_status == 'delay')
+                                    <div id="delay-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center">
+                                    </div>
+                                    <div class="vertical-line mx-auto"></div>
+                                    @endif
+                                    @if($log->to_status == 'delivering' && $order->status == 'delivering')
+                                    <div id="shipping-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center" style="background-color: #278AF9;">
+                                        <i class="fa-solid fa-check text-white"></i>
+                                    </div>
+                                    <div class="vertical-line mx-auto"></div>
+                                    @elseif($log->to_status == 'delivering')
+                                    <div id="shipping-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center">
+                                    </div>
+                                    <div class="vertical-line mx-auto"></div>
+                                    @endif
+                                    @if($log->to_status == 'warehouse' && $order->status == 'warehouse')
+                                    <div id="picked-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center" style="background-color: #278AF9;">
+                                        <i class="fa-solid fa-check text-white"></i>
+                                    </div>
+                                    <div class="vertical-line mx-auto"></div>
+                                    @elseif($log->to_status == 'warehouse')
+                                    <div id="picked-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center">
+                                    </div>
+                                    <div class="vertical-line mx-auto"></div>
+                                    @endif
+                                @endforeach
+                                @if(isset($order->created_at) && $order->status == 'pending')
                                 <div id="created-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center" style="background-color: #278AF9;">
                                     <i class="fa-solid fa-check text-white"></i>
                                 </div>
@@ -444,35 +456,38 @@
                                 @endif
                             </div>
                             <div class="col-9 g-0" style="width: fit-content;">
-                                @if($order->status == 'success')
-                                <div class="timeline-status-box">
-                                    <h5 class="timeline-status">Delivered</h5>
-                                    <span class="delivered-timeline-status sub-status">Your order has been delivered. </span>
-                                </div>
-                                @endif
-                                @if($order->status == 'cancel')
-                                <div class="timeline-status-box">
-                                    <h5 class="timeline-status">Canceled</h5>
-                                    <span class="canceled-timeline-status sub-status">Your order has been canceled. </span>
-                                </div>
-                                @endif
-                                @if(isset($order->order_data['delayed_at']))
-                                <div class="timeline-status-box">
-                                    <h5 class="timeline-status">Delay</h5>
-                                    <span class="delay-timeline-status sub-status">Your order has been delayed due to traffic. We will try to deliver again to you tomorrow. </span>
-                                </div>
-                                @endif
-                                @if($order->rider_id != null)
-                                <div class="timeline-status-box">
-                                    <h5 class="timeline-status">Out For Delivery</h5>
-                                    <span class="shipping-timeline-status sub-status">R-Delivery will attempt to deliver your order today. </span>
-
-                                </div>
-                                <div class="timeline-status-box">
-                                    <h5 class="timeline-status">Order Successfully Picked Up</h5>
-                                    <span class="picked-timeline-status sub-status">Your order has been picked up by R-Delivery. </span>
-                                </div>
-                                @endif
+                                @foreach($logs as $log) 
+                                    @if($log->to_status == 'success')
+                                    <div class="timeline-status-box">
+                                        <h5 class="timeline-status">Delivered</h5>
+                                        <span class="delivered-timeline-status sub-status">Your order has been delivered. </span>
+                                    </div>
+                                    @endif
+                                    @if($log->to_status == 'cancel')
+                                    <div class="timeline-status-box">
+                                        <h5 class="timeline-status">Canceled</h5>
+                                        <span class="canceled-timeline-status sub-status">Your order has been canceled. </span>
+                                    </div>
+                                    @endif
+                                    @if($log->to_status == 'delay')
+                                    <div class="timeline-status-box">
+                                        <h5 class="timeline-status">Delay</h5>
+                                        <span class="delay-timeline-status sub-status">Your order has been delayed due to traffic. We will try to deliver again to you tomorrow. </span>
+                                    </div>
+                                    @endif
+                                    @if($log->to_status == 'delivering')
+                                    <div class="timeline-status-box">
+                                        <h5 class="timeline-status">Out For Delivery</h5>
+                                        <span class="shipping-timeline-status sub-status">R-Delivery will attempt to deliver your order today. </span>
+                                    </div>
+                                    @endif
+                                    @if($log->to_status == 'warehouse')
+                                    <div class="timeline-status-box">
+                                        <h5 class="timeline-status">Order Successfully Picked Up</h5>
+                                        <span class="picked-timeline-status sub-status">Your order has been picked up by R-Delivery. </span>
+                                    </div>
+                                    @endif
+                                @endforeach
                                 @if(isset($order->created_at))
                                 <div class="timeline-status-box">
                                     <h5 class="timeline-status">Packed by Online Shop</h5>
@@ -483,110 +498,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="timeline-container-sm">
-                    <div id="timeline-box-container">
-                        @if($order->status == 'success')
-                        <div id="delivered-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center" style="background-color: #278AF9;">
-                            <i class="fa-solid fa-check text-white"></i>
-                        </div>
-                        <div class="vertical-line mx-auto"></div>
-                        @endif
-                        @if($order->status == 'cancel')
-                        <div id="canceled-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center" style="background-color: #278AF9;">
-                            <i class="fa-solid fa-check text-white"></i>
-                        </div>
-                        <div class="vertical-line mx-auto"></div>
-                        @endif
-                        @if(isset($order->order_data['delayed_at']) && $order->status == 'delay')
-                        <div id="delay-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center" style="background-color: #278AF9;">
-                            <i class="fa-solid fa-check text-white"></i>
-                        </div>
-                        <div class="vertical-line mx-auto"></div>
-                        @elseif(isset($order->order_data['delayed_at']))
-                        <div id="delay-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center">
-                        </div>
-                        <div class="vertical-line mx-auto"></div>
-                        @else
-                        @endif
-                        @if($order->rider_id != null && $order->status == 'pending')
-                        <div id="shipping-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center" style="background-color: #278AF9;">
-                            <i class="fa-solid fa-check text-white"></i>
-                        </div>
-                        <div class="vertical-line mx-auto"></div>
-                        <div id="picked-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center" style="background-color: #278AF9;">
-                            <i class="fa-solid fa-check text-white"></i>
-                        </div>
-                        <div class="vertical-line mx-auto"></div>
-                        @elseif($order->rider_id == null)
-                        @else
-                        <div id="shipping-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center">
-                        </div>
-                        <div class="vertical-line mx-auto"></div>
-                        <div id="picked-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center">
-                        </div>
-                        <div class="vertical-line mx-auto"></div>
-                        @endif
-                        @if(isset($order->created_at) && $order->rider_id == null && $order->status == 'pending')
-                        <div id="created-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center" style="background-color: #278AF9;">
-                            <i class="fa-solid fa-check text-white"></i>
-                        </div>
-                        @else
-                        <div id="created-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center">
-                        </div>
-                        @endif
-                    </div>
-                    <div class="timeline-status-container">
-                        @if($order->status == 'success')
-                        <div class="timeline-status-box">
-                            <span class="timeline-status">Delivered</span>
-
-                            <span class="delivered-timeline-date-time timeline-date-time">{{$order->order_data['delivered_at']}}</span>
-
-                            <span class="delivered-timeline-status sub-status d-block">Your order has been delivered. </span>
-                        </div>
-                        @endif
-                        @if($order->status == 'cancel')
-                        <div class="timeline-status-box">
-                            <span class="timeline-status">Canceled</span>
-
-                            <span class="canceled-timeline-date-time timeline-date-time">{{$order->order_data['canceled_at']}}</span>
-
-                            <span class="canceled-timeline-status sub-status d-block">Your order has been canceled. </span>
-                        </div>
-                        @endif
-                        @if(isset($order->order_data['delayed_at']))
-                        <div class="timeline-status-box">
-                            <span class="timeline-status">Delay</span>
-
-                            <span class="delayed-timeline-date-time timeline-date-time">{{$order->order_data['delayed_at']}}</span>
-
-                            <span class="delay-timeline-status sub-status d-block">Your order has been delayed due to traffic. We will try to deliver again to you tomorrow. </span>
-                        </div>
-                        @endif
-                        @if($order->rider_id != null)
-                        <div class="timeline-status-box">
-                            <span class="timeline-status">Out For Delivery</span>
-
-                            <span class="shipping-timeline-date-time timeline-date-time">{{$order->order_data['picked_at']}}</span>
-
-                            <span class="shipping-timeline-status sub-status d-block">R-Delivery will attempt to deliver your order today. </span>
-
-                        </div>
-                        <div class="timeline-status-box">
-                            <span class="timeline-status">Order Successfully Picked Up</span>
-                            <span class="picked-timeline-date-time timeline-date-time ">{{$order->order_data['picked_at']}}</span>
-                            <span class="picked-timeline-status sub-status d-block">Your order has been picked up by R-Delivery. </span>
-                        </div>
-                        @endif
-                        @if(isset($order->created_at))
-                        <div class="timeline-status-box">
-                            <span class="timeline-status">Packed by Online Shop</span>
-                            <span class="created-timeline-date-time timeline-date-time">{{$order->created_at}}</span>
-                            <span class="picked-timeline-status sub-status d-block">Your order is packed and will be handed over to our delivery partner. </span>
-                        </div>
-                        @endif
-                    </div>
-                </div>
+                
             </div>
         </div>
     </div>
