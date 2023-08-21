@@ -23,7 +23,7 @@ class CollectionGroupCreateRequest extends FormRequest
     {
         return [
             'rider_id'            => 'required',
-            'total_amount'        => 'required',
+            // 'total_amount'        => 'required',
             'assigned_date'       => 'required',
         ];
     }
@@ -32,7 +32,7 @@ class CollectionGroupCreateRequest extends FormRequest
     {
         return [
             'rider_id.required'               => 'Rider field is required',
-            'total_amount.required'               => 'Total Amount field is required',
+            // 'total_amount.required'               => 'Total Amount field is required',
             'assigned_date.required'               => 'Assigned Date field is required',
         ];
     }
