@@ -163,7 +163,7 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
         return [
             'customer_name' => 'required',
             'customer_phone_number' => 'required',
-            'city_id' => function ($attribute, $value, $onFailure) {
+            'city' => function ($attribute, $value, $onFailure) {
                 if ($value) {
                     $city = City::where('name', trim($value))->first();
                     if ($city == null) {
@@ -173,17 +173,17 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
                     $onFailure("City is required");
                 }
             },
-            'township_id' => function ($attribute, $value, $onFailure) {
+            'township' => function ($attribute, $value, $onFailure) {
                 if ($value) {
                     $township = Township::where('name', trim($value))->first();
-                    if ($township == null) {
+                    if ($township) {
                         $onFailure("Township is invalid.");
                     }
                 } else {
                     $onFailure("Township is required");
                 }
             },
-            'shop_id' => function ($attribute, $value, $onFailure) {
+            'shop' => function ($attribute, $value, $onFailure) {
                 if ($value) {
                     $shop = Shop::where('name', trim($value))->first();
                     if ($shop == null) {
@@ -194,15 +194,15 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
                 }
             },
             'total_amount'          => 'required',
-            'item_type_id' => function ($attribute, $value, $onFailure) {
-                if ($value) {
-                    $item_type = ItemType::where('name', trim($value))->first();
-                    if ($item_type == null) {
-                        $onFailure("Item Type is invalid.");
-                    }
-                }
-            },
-            'delivery_type_id' => function ($attribute, $value, $onFailure) {
+            // 'item_type_id' => function ($attribute, $value, $onFailure) {
+            //     if ($value) {
+            //         $item_type = ItemType::where('name', trim($value))->first();
+            //         if ($item_type == null) {
+            //             $onFailure("Item Type is invalid.");
+            //         }
+            //     }
+            // },
+            'delivery_type' => function ($attribute, $value, $onFailure) {
                 if ($value) {
                     $type = DeliveryType::where('name', trim($value))->first();
                     if ($type == null) {
@@ -212,17 +212,17 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
                     $onFailure("Delivery Type is required");
                 }
             },
-            'collection_method' => function ($attribute, $value, $onFailure) {
-                if ($value) {
-                    $collection_methods = array_keys(config('data.collection_method'));
-                    if (!in_array($this->convertData($value), $collection_methods)) {
-                        $onFailure("Collection Method is invalid.");
-                    }
-                } else {
-                    $onFailure("Collection Method is required");
-                }
-            },
-            'markup_delivery_fees' => 'required'
+            // 'collection_method' => function ($attribute, $value, $onFailure) {
+            //     if ($value) {
+            //         $collection_methods = array_keys(config('data.collection_method'));
+            //         if (!in_array($this->convertData($value), $collection_methods)) {
+            //             $onFailure("Collection Method is invalid.");
+            //         }
+            //     } else {
+            //         $onFailure("Collection Method is required");
+            //     }
+            // },
+            // 'markup_delivery_fees' => 'required'
         ];
     }
 

@@ -7,9 +7,11 @@ use App\Jobs\OrderImportJob;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 use Pion\Laravel\ChunkUpload\Exceptions\UploadMissingFileException;
 use Pion\Laravel\ChunkUpload\Handler\HandlerFactory;
 use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
+use Maatwebsite\Excel\Validators\ValidationException;
 
 class OrderImportController extends Controller
 {
@@ -41,8 +43,10 @@ class OrderImportController extends Controller
             $file = storage_path($file_path);
 
             $import = new OrderImport();
-
             OrderImportJob::dispatch($import, $file);
+            $errorMessages = [];
+            // $errorMessages = $job->getErrorMessages();
+            // Log::debug('job' . $job->getErrorMessages()); 
 
             Log::debug('Row count: ' . $import->getRowCount());
 
@@ -93,6 +97,7 @@ class OrderImportController extends Controller
     private function processFailures($import)
     {
         $failures = $import->failures();
+        // Log::debug('failures: ' . $failures);
         $error_msg = [];
 
         foreach ($failures as $failure) {
