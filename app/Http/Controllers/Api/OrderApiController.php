@@ -63,13 +63,13 @@ class OrderApiController extends Controller
     {
         $shop_user = auth()->guard('shop-user-api')->user();
         $shop_id   = $shop_user->shop_id;
-        $total_credit = $this->shopRepository->getTotalCreditForShop($shop_id, 'api');
+        $totalCredit = $this->shopRepository->getTotalCreditForShop($shop_id, 'api');
 
-        $paid_credit_from_collection = $this->collectionRepository->getPaidAmountByShopUser($shop_id);
-        $paid_credit_from_transaction = $this->transactionForShopRepository->getPaidAmountByShopUser($shop_id);
-        $total_amount = strval($total_credit - ($paid_credit_from_collection + $paid_credit_from_transaction));
+        // $paid_credit_from_collection = $this->collectionRepository->getPaidAmountByShopUser($shop_id);
+        // $paid_credit_from_transaction = $this->transactionForShopRepository->getPaidAmountByShopUser($shop_id);
+        // $total_amount = strval($total_credit - ($paid_credit_from_collection + $paid_credit_from_transaction));
         
-        return response()->json(['data' => $total_amount, 'message' => 'Successfully Get Orders Total Amount By Shop ID', 'status' => 'success'], 200);
+        return response()->json(['data' => $totalCredit, 'message' => 'Successfully Get Orders Total Amount By Shop ID', 'status' => 'success'], 200);
     }
 
     public function getOrderCountByRiderID()

@@ -85,7 +85,8 @@ class ShopApiController extends Controller
         $paid_credit_from_transaction = $this->transactionForShopRepository->getPaidAmountByShopUser($shop_id);
         $credits['paid_amount'] = strval($paid_credit_from_collection + $paid_credit_from_transaction);
 
-        return response()->json(['data' => $credits, 'message' => 'Successfully get payment credits by shop user', 'status' => 'success'], 200);
+        return response()->json(['data' => $credits, 'message' =>
+            'Successfully get payment credits by shop user', 'status' => 'success'], 200);
     }
 
     public function getPaymentHistoryForShop()
