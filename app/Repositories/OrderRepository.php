@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\CustomerCollection;
 use App\Models\Deficit;
 use App\Models\Gate;
 use App\Models\Order;
@@ -381,27 +382,19 @@ class OrderRepository
         return $query;
     }
 
-    public function getTotalCreditForShop($shop_id)
+    public function getTotalCreditForShop($shopId)
     {
-        $shop_payments = ShopPayment::where('shop_id', $shop_id)->sum('amount');
+        $codAmount = Order::where('shop_id', $shopId)
+                        ->where('payment_method', 'cash_on_delivery')
+                        ->sum(DB::raw('total_amount + markup_delivery_fees'));
 
-        $cod_orders_amount = 0;
-        $remaining_orders_amount = 0;
+        $remainingAmount = Order::where('shop_id', $shopId)
+                            ->whereNot('payment_method', 'cash_on_delivery')
+                            ->sum('markup_delivery_fees');
 
-        $orders = Order::where('shop_id', $shop_id)
-                    ->where('status', 'success')
-                    ->get();
-
-        foreach ($orders as $order) {
-            if ($order->payment_method === 'cash_on_delivery') {
-                $cod_orders_amount += $order->total_amount + $order->markup_delivery_fees;
-            } elseif (in_array($order->payment_method, ['item_prepaid', 'all_prepaid'])) {
-                $remaining_orders_amount += $order->markup_delivery_fees;
-            }
-        }
-
-        $total_credit = $shop_payments + $cod_orders_amount + $remaining_orders_amount;
-        return $total_credit;
+        $customerCollectionAmount = CustomerCollection::where('shop_id', $shopId)->sum('paid_amount');
+        
+        return $codAmount + $remainingAmount - $customerCollectionAmount;
     }
 
     public function getAllUnpaidOrderList()

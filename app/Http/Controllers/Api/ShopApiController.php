@@ -12,6 +12,7 @@ use App\Repositories\OrderRepository;
 use App\Repositories\ShopRepository;
 use App\Repositories\TransactionsForShopRepository;
 use App\Services\ShopService;
+use DateTime;
 use Illuminate\Support\Facades\DB;
 
 class ShopApiController extends Controller
@@ -84,7 +85,8 @@ class ShopApiController extends Controller
         $paid_credit_from_transaction = $this->transactionForShopRepository->getPaidAmountByShopUser($shop_id);
         $credits['paid_amount'] = strval($paid_credit_from_collection + $paid_credit_from_transaction);
 
-        return response()->json(['data' => $credits, 'message' => 'Successfully get payment credits by shop user', 'status' => 'success'], 200);
+        return response()->json(['data' => $credits, 'message' =>
+            'Successfully get payment credits by shop user', 'status' => 'success'], 200);
     }
 
     public function getPaymentHistoryForShop()
@@ -104,64 +106,64 @@ class ShopApiController extends Controller
 
     public function getDescriptionForShop(Request $request)
     {
-        $shop_id = $request->shop_id;
-        // Receivable
-        $receivables = Order::where('shop_id', $shop_id)
-            ->where('payment_flag', '0')
-            ->where('payment_method', 'all_prepaid')
-            // ->where('payment_channel', 'shop_online_payment')
-            ->selectRaw('DATE(created_at) as date, SUM(delivery_fees + extra_charges - discount) as total_receivable')
-            ->groupBy('date')
-            ->get();
+        $shopId = $request->shop_id;
+        $start = DateTime::createFromFormat('d/m/Y', $request->from_date)->format('Y-m-d 00:00:00');
+        $end = DateTime::createFromFormat('d/m/Y', $request->to_date)->format('Y-m-d 23:59:59');
 
-        // Payable
-        $cod_payables = Order::where('shop_id', $shop_id)
-        ->where('payment_flag', 0)
-        ->where('payment_method', 'cash_on_delivery')
-        ->selectRaw('DATE(created_at) as date, SUM(total_amount + markup_delivery_fees) as total_payable')
-        ->groupBy('date');
-    
-        $prepaid_payables = Order::where('shop_id', $shop_id)
+        $receivables = $this->getAmounts($shopId, $start, $end, 'receivable');
+        $payables = $this->getAmounts($shopId, $start, $end, 'payable');
+
+        $textReport = $this->generateTextReport($receivables, 'Receivable Amounts');
+        $textReport .= $this->generateTextReport($payables, 'Payable Amounts');
+
+        return response()->json([
+            'data' => $textReport,
+            'message' => 'Successfully get description by shop',
+            'status' => 'success'
+        ], 200);
+    }
+
+    private function getAmounts($shopId, $start, $end, $type)
+    {
+        $paymentMethods = $type === 'payable'
+            ? ['cash_on_delivery', 'item_prepaid', 'all_prepaid']
+            : ['all_prepaid'];
+
+        return Order::where('shop_id', $shopId)
             ->where('payment_flag', 0)
-            ->whereIn('payment_method', ['item_prepaid', 'all_prepaid'])
-            ->selectRaw('DATE(created_at) as date, SUM(markup_delivery_fees) as total_payable')
-            ->groupBy('date');
-        
-        $payables = $cod_payables->union($prepaid_payables)->get();
+            ->whereIn('payment_method', $paymentMethods)
+            ->whereBetween('created_at', [$start, $end])
+            ->when($type === 'payable', function ($query) {
+                return $query->selectRaw('DATE(created_at) as date,
+                    SUM(total_amount + markup_delivery_fees) as total_amount');
+            }, function ($query) {
+                return $query->where('payment_channel','shop_online_payment')
+                    ->selectRaw('DATE(created_at) as date,
+                        SUM(delivery_fees + extra_charges- discount) as total_amount');
+            })
+            ->groupBy('date')
+            ->orderBy('date', 'desc')
+            ->get();
+    }
 
-        // Generate the text report
-        
-        $textReport = "";
+    private function generateTextReport($data, $title)
+    {
+        $textReport = '';
 
-        if ($payables->isNotEmpty()) {
-            $textReport .= "Payable Amounts\n\n";
-            foreach ($payables as $record) {
-                if($record->total_payable > 0) {
+        if ($data->isNotEmpty()) {
+            $textReport .= "$title\n\n";
+            foreach ($data as $record) {
+                if ($record->total_amount > 0) {
                     $date = $record->date;
-                    $totalPayable = $record->total_payable;
-                    $textReport .= "$date   $totalPayable MMK\n\n";
+                    $totalAmount = $record->total_amount;
+                    $textReport .= "$date   $totalAmount MMK\n\n";
                 }
             }
             $textReport .= "_________________________________\n";
-            $textReport .= "Total Payable   ";
-            $textReport .= "{$payables->sum('total_payable')} MMK\n\n";
+            $textReport .= "Total $title    ";
+            $textReport .= "{$data->sum('total_amount')} MMK\n\n";
         }
 
-        if ($receivables->isNotEmpty()) {
-            $textReport .= "Receivable Amounts\n\n";
-            foreach ($receivables as $record) {
-                if($record->total_receivable > 0) {
-                    $date = $record->date;
-                    $totalReceivable = $record->total_receivable;
-                    $textReport .= "$date   $totalReceivable MMK\n\n";
-                }
-            }
-            $textReport .= "_________________________________\n";
-            $textReport .= "Total Receivable    ";
-            $textReport .= "{$receivables->sum('total_receivable')} MMK \n";
-        }
-        
-
-        return response()->json(['data' => $textReport, 'message' => 'Successfully get description by shop', 'status' => 'success'], 200);
+        return $textReport;
     }
 }
