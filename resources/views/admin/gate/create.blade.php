@@ -42,7 +42,11 @@
                 </label>
                 <div class="col-10">
                     <select name="township_id[]" id="township_id" class="form-control" multiple="">
-                        
+                        @foreach ($townships as $township)
+                            <option value="{{$township->id}}"
+                                @if($township->id == old('township_id')) selected @endif
+                            >{{$township->name}}</option>
+                        @endforeach
                     </select>
                     @if ($errors->has('township_id'))
                     <span class="text-danger"><strong>{{ $errors->first('township_id') }}</strong></span>
@@ -76,32 +80,32 @@
         $('#city_id').select2();
         $('#township_id').select2();
         
-        $('#city_id').change(function() {
-            var city_id = $('#city_id').val();
-            $.ajax({
-                url: '/api/get-township-by-associable',
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    city_id: city_id
-                },
-                success: function(response) {
-                    var township_id = $('#township_id').val();
-                    var townships = '<option value="" disabled>Select the Township for This Order</option>';
-                    if (response.data) {
-                        for (var i = 0; i < response.data.length; i++) {
-                            if (township_id == response.data[i].id) {
-                                townships += '<option value="' + response.data[i].id + '" selected>' + response.data[i].name + '</option>';
-                            } else {
-                                townships += '<option value="' + response.data[i].id + '">' + response.data[i].name + '</option>';
-                            }
-                        }
-                    }
-                    console.log(townships);
-                    $('#township_id').html(townships);
-                },
-            });
-        });
+        // $('#city_id').change(function() {
+        //     var city_id = $('#city_id').val();
+        //     $.ajax({
+        //         url: '/api/get-township-by-associable',
+        //         type: 'POST',
+        //         dataType: 'json',
+        //         data: {
+        //             city_id: city_id
+        //         },
+        //         success: function(response) {
+        //             var township_id = $('#township_id').val();
+        //             var townships = '<option value="" disabled>Select the Township for This Order</option>';
+        //             if (response.data) {
+        //                 for (var i = 0; i < response.data.length; i++) {
+        //                     if (township_id == response.data[i].id) {
+        //                         townships += '<option value="' + response.data[i].id + '" selected>' + response.data[i].name + '</option>';
+        //                     } else {
+        //                         townships += '<option value="' + response.data[i].id + '">' + response.data[i].name + '</option>';
+        //                     }
+        //                 }
+        //             }
+        //             console.log(townships);
+        //             $('#township_id').html(townships);
+        //         },
+        //     });
+        // });
     });
 </script>
 @endsection

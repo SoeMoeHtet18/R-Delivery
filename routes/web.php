@@ -169,6 +169,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('/riders/{id}/assign-gate', [RiderController::class, 'assignGateToRider']);
     Route::get('/riders/{id}/assign-third-party-vendor', [RiderController::class, 'assignThirdPartyVendor']);
     Route::put('/riders/{id}/assign-third-party-vendor', [RiderController::class, 'assignThirdPartyVendorToRider']);
+    Route::get('/get-assign-townships-by-rider-id/{id}', [RiderController::class, 'getAllAssignTownshipsByRider']);
+    Route::delete('/delete-rider-assign-township-by-id/{id}', [RiderController::class, 'deleteRiderAssignTownship']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

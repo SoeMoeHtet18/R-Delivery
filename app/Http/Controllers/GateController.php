@@ -41,9 +41,7 @@ class GateController extends Controller
     public function create()
     {
         $cities = $this->cityRepository->getAllCities();
-        $cities = $cities->sortByDesc('id');
-        $townships = $this->townshipRepository->getAllTownships();
-        $townships = $townships->sortByDesc('id');
+        $townships = $this->townshipRepository->getTownshipsWithoutAssociable();
         return view('admin.gate.create', compact('cities','townships'));
     }
 
@@ -81,7 +79,7 @@ class GateController extends Controller
         $gate = $this->gateRepository->show($id);
         $cities = $this->cityRepository->getAllCities();
         $cities = $cities->sortByDesc('id');
-        $townships = Township::where(['associable_id' => null, 'associable_type' => null, 'city_id' => $gate->city_id])->get();
+        $townships = Township::where(['associable_id' => null, 'associable_type' => null])->get();
         $assignedTownships = $gate->townships;
         $townships = $townships->merge($assignedTownships)->unique();
         $assignedTownshipID = [];

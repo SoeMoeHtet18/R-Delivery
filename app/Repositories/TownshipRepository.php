@@ -58,4 +58,9 @@ class TownshipRepository
         }
         return $townships;
     }
+
+    public function getTownshipsWithoutAssociable()
+    {
+        return Township::orderBy('name','asc')->where(['associable_id' => null, 'associable_type' => null])->get();
+    }
 }

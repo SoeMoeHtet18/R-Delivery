@@ -27,6 +27,7 @@ use App\Services\RiderService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Mpdf\Mpdf;
 use Yajra\DataTables\Facades\DataTables;
@@ -154,8 +155,8 @@ class RiderController extends Controller
 
     public function assignTownship($id)
     {
-        $townships = $this->townshipRepository->getAllTownships();
-        $townships = $townships->sortByDesc('id');
+        $townships = $this->townshipRepository->getTownshipsWithoutAssociable();
+        // $townships = $townships->sortByDesc('id');
         $rider = $this->riderRepository->getRiderByID($id);
         return view('admin.rider.assign_township', compact('rider', 'townships'));
     }
@@ -325,5 +326,36 @@ class RiderController extends Controller
         $data = $request->all();
         $this->riderService->assignThirdPartyVendor($rider, $data);
         return redirect(route('riders.show', $id));
+    }
+    
+    public function getAllAssignTownshipsByRider($id)
+    {
+        $rider = $this->riderRepository->getRiderByID($id);
+        $data  = DB::table('rider_township')->where('rider_id',$id)
+            ->leftJoin('townships','rider_township.township_id','townships.id')
+            ->select('rider_township.*','townships.name as township_name')
+            ->orderBy('rider_township.id','desc');
+        
+        return DataTables::of($data)
+
+            ->addIndexColumn()
+            ->addColumn('action', function ($data) {
+                $actionBtn = '
+                        <form action="' . url("delete-rider-assign-township-by-id/". $data->id) . '" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to remove this assigned township for rider?`);">
+                            <input type="hidden" name="_token" value="' . csrf_token() . '">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
+                        </form>';
+                return $actionBtn;
+            })
+            ->rawColumns(['action'])
+            ->orderColumn('rider_township.id', '-id $1')
+            ->make(true);
+    }
+
+    public function deleteRiderAssignTownship(string $id)
+    {
+        DB::table('rider_township')->where('id', $id)->delete();
+        return redirect()->back();
     }
 }

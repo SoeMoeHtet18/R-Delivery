@@ -88,7 +88,6 @@ class RiderService
         $branchIds = $data['branch_id'];
         $rider_fees = $data['rider_fees'];
 
-        $records = [];
         foreach ($branchIds as $i => $branchId) {
             $branch = Branch::with('townships')->find($branchId);
             if ($branch) {
@@ -101,7 +100,7 @@ class RiderService
                     $newData = [
                         'rider_id' => $rider->id,
                         'township_id' => $township->id,
-                        'rider_fees' => $rider_fees[$i],
+                        'rider_fees' => $rider_fees[$i] ?? 0,
                     ];
                     
                     DB::table('rider_township')->updateOrInsert($existingData, $newData);

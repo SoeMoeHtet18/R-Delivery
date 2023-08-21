@@ -81,34 +81,34 @@
     $(document).ready(function() {
         $('#city_id').select2();
         $('#township_id').select2();
-        $('#city_id').change(function() {
-            var city_id = $('#city_id').val();
-            var gate_id = $('#gate_id').val();
-            $.ajax({
-                url: '/api/get-township-by-associable',
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    city_id: city_id,
-                    associable_id: gate_id,
-                },
-                success: function(response) {
-                    var township_id = $('#township_id').val();
-                    var townships = '<option value="" disabled>Select the Township for This Order</option>';
-                    if (response.data) {
-                        for (var i = 0; i < response.data.length; i++) {
-                            if (township_id == response.data[i].id) {
-                                townships += '<option value="' + response.data[i].id + '" selected>' + response.data[i].name + '</option>';
-                            } else {
-                                townships += '<option value="' + response.data[i].id + '">' + response.data[i].name + '</option>';
-                            }
-                        }
-                    }
-                    console.log(townships);
-                    $('#township_id').html(townships);
-                },
-            });
-        });
+        // $('#city_id').change(function() {
+        //     var city_id = $('#city_id').val();
+        //     var gate_id = $('#gate_id').val();
+        //     $.ajax({
+        //         url: '/api/get-township-by-associable',
+        //         type: 'POST',
+        //         dataType: 'json',
+        //         data: {
+        //             city_id: city_id,
+        //             associable_id: gate_id,
+        //         },
+        //         success: function(response) {
+        //             var township_id = $('#township_id').val();
+        //             var townships = '<option value="" disabled>Select the Township for This Order</option>';
+        //             if (response.data) {
+        //                 for (var i = 0; i < response.data.length; i++) {
+        //                     if (township_id == response.data[i].id) {
+        //                         townships += '<option value="' + response.data[i].id + '" selected>' + response.data[i].name + '</option>';
+        //                     } else {
+        //                         townships += '<option value="' + response.data[i].id + '">' + response.data[i].name + '</option>';
+        //                     }
+        //                 }
+        //             }
+        //             console.log(townships);
+        //             $('#township_id').html(townships);
+        //         },
+        //     });
+        // });
     });
 </script>
 @endsection

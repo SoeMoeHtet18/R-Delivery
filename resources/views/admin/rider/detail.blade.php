@@ -212,6 +212,9 @@
             <li class="nav-item">
                 <a href="#deficit-display" id="deficit-tab" class="nav-link" data-toggle="tab">Deficits</a>
             </li>
+            <li class="nav-item">
+                <a href="#township-display" id="township-tab" class="nav-link" data-toggle="tab">Townships</a>
+            </li>
         </ul>
         <input type="hidden" id="current_screen" value="pending-order-tab">
        <div class="d-flex justify-content-end mb-3">
@@ -335,6 +338,27 @@
                             <tr>
                                 <th>#</th>
                                 <th>Amount</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="township-display" class="portlet box green tab-pane">
+                <div class="portlet-title">
+                    <div class="caption">Townships</div>
+                </div>
+                <div class="portlet-body">
+                    <table id="township-datatable" class="table table-striped table-hover table-responsive datatable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Township Name</th>
+                                <th>Rider Fees</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
 
@@ -812,6 +836,35 @@
                 },
             ],
         });
+        
+        get_township_ajax_dynamic_data();
+        function get_township_ajax_dynamic_data() {
+            var table = $('#township-datatable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "/get-assign-townships-by-rider-id/" + rider_id,
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'id'
+                    },
+                    {
+                        data: 'township_name',
+                        name: 'township_name',
+                    },
+                    {
+                        data: 'rider_fees',
+                        name: 'rider_fees',
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
+                ],
+            });
+        }
+        
 
         const form = $('#pdf_form');
 
