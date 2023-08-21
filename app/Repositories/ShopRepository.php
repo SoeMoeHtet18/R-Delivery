@@ -114,6 +114,6 @@ class ShopRepository
 
         $customerCollectionAmount = CustomerCollection::where('shop_id', $shopId)->sum('paid_amount');
         
-        return $codAmount + $remainingAmount - $customerCollectionAmount;
+        return strval($codAmount + $remainingAmount - $customerCollectionAmount);
     }
 }
