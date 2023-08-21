@@ -30,4 +30,14 @@ class CustomerCollection extends Model
     public function rider() {
         return $this->belongsTo(Rider::class, 'rider_id', 'id')->withTrashed();
     }
+    
+    public function city()
+    {
+        return $this->belongsTo(City::class, 'city_id', 'id')->withTrashed();
+    }
+
+    public function township()
+    {
+        return $this->belongsTo(Township::class, 'township_id', 'id')->withTrashed();
+    }
 }

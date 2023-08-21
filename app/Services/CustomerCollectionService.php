@@ -7,6 +7,7 @@ use App\Helpers\Helper;
 use App\Http\Traits\FileUploadTrait;
 use App\Models\Order;
 use App\Models\Shop;
+use Carbon\Carbon;
 
 class CustomerCollectionService
 {
@@ -34,6 +35,11 @@ class CustomerCollectionService
         $customer_collection->customer_phone_number = $data['phone_number'];
         $customer_collection->shop_id = $data['shop_id'];
         $customer_collection->rider_id = $data['rider_id'] ?? null;
+        $customer_collection->city_id = $data['city_id'];
+        $customer_collection->township_id = $data['township_id'];
+        $customer_collection->address = $data['address'];
+        $customer_collection->assigned_at = Carbon::parse($data['schedule_date']);
+        $customer_collection->pending_at = Carbon::now();
         $customer_collection->save();
     }
 
@@ -51,6 +57,17 @@ class CustomerCollectionService
         $customer_collection->customer_phone_number = $data['phone_number'];
         $customer_collection->shop_id = $data['shop_id'];
         $customer_collection->rider_id = $data['rider_id'];
+        $customer_collection->city_id = $data['city_id'];
+        $customer_collection->township_id = $data['township_id'];
+        $customer_collection->address = $data['address'];
+        $customer_collection->assigned_at = $data['schedule_date'] ? Carbon::parse($data['schedule_date']) : null;
+        if($data['status'] == 'pending') {
+            $customer_collection->pending_at = Carbon::now();
+        } elseif($data['status'] == 'in-warehouse') {
+            $customer_collection->warehouse_at = Carbon::now();
+        } elseif($data['status'] == 'complete') {
+            $customer_collection->complete_at = Carbon::now();
+        }
         $customer_collection->save();
     }
 

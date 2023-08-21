@@ -8,8 +8,9 @@ class CustomerCollectionRepository
 {
     public function getCustomerCollectionById($id)
     {
-        $customer_collection = CustomerCollection::findOrFail($id);
-        return $customer_collection;
+        return CustomerCollection::with([
+            'city','township','rider','shop','collection_group','order'
+            ])->findOrFail($id);
     }
 
     public function getAllCustomerCollectionsQueryForTable($data)
@@ -23,6 +24,8 @@ class CustomerCollectionRepository
         $customer_collections = CustomerCollection::leftJoin('orders', 'customer_collections.order_id', '=', 'orders.id')
             ->leftJoin('riders', 'customer_collections.rider_id', '=', 'riders.id')
             ->leftJoin('shops', 'customer_collections.shop_id', '=', 'shops.id')
+            ->leftJoin('cities', 'customer_collections.city_id', '=', 'cities.id')
+            ->leftJoin('townships', 'customer_collections.township_id', '=', 'townships.id')
             ->leftJoin('collection_groups', 'customer_collections.collection_group_id', '=', 'collection_groups.id')
             ->where(function ($query) use ($search) {
                 $query->where('orders.order_code', 'like', '%' . $search . '%')
@@ -40,7 +43,9 @@ class CustomerCollectionRepository
                 'orders.order_code as order_code',
                 'riders.name as rider_name',
                 'shops.name as shop_name',
-                'collection_groups.collection_group_code as collection_group_code'
+                'collection_groups.collection_group_code as collection_group_code',
+                'cities.name as city_name',
+                'townships.name as township_name'
             );
 
         if ($shop) {

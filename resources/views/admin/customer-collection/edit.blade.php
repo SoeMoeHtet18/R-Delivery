@@ -79,6 +79,32 @@
                 </div>
             </div>
             <div class="row m-0 mb-3">
+                <label for="city_id" class="col-2">
+                    <h4>City Name <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <select name="city_id" id="city_id" class="form-control">
+                        <option value="" selected disabled>Select City for This Customer Exchange</option>
+                        @foreach ( $cities as $city)
+                        <option value="{{$city->id}}" @if($city->id == $customer_collection->city_id) {{'selected'}} @endif>{{$city->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <label for="township_id" class="col-2">
+                    <h4>Township Name <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <select name="township_id" id="township_id" class="form-control">
+                        <option value="" selected disabled>Select Township for This Customer Exchange</option>
+                        @foreach ( $townships as $township)
+                        <option value="{{$township->id}}" @if($township->id == $customer_collection->township_id) {{'selected'}} @endif>{{$township->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
                 <label for="rider_id" class="col-2">
                     <h4>Rider Name <b>:</b></h4>
                 </label>
@@ -110,6 +136,28 @@
                     <input type="text" id="phone_number" name="phone_number" value="{{$customer_collection->customer_phone_number}}" class="form-control" />
                     @if ($errors->has('phone_number'))
                     <span class="text-danger"><strong>{{ $errors->first('phone_number') }}</strong></span>
+                    @endif
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <label for="address" class="col-2">
+                    <h4>Address <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <textarea id="address" name="address" class="form-control" style="height: 100px">{{$customer_collection->address}}</textarea>
+                </div>
+                @if ($errors->has('address'))
+                <span class="text-danger"><strong>{{ $errors->first('address') }}</strong></span>
+                @endif
+            </div>
+            <div class="row m-0 mb-3">
+                <label for="schedule_date" class="col-2">
+                    <h4>Schedule Date <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <input type="date" id="schedule_date" name="schedule_date" value="{{$scheduledate}}" class="form-control" />
+                    @if ($errors->has('schedule_date'))
+                        <span class="text-danger"><strong>{{ $errors->first('schedule_date') }}</strong></span>
                     @endif
                 </div>
             </div>
@@ -183,6 +231,8 @@
     $('#order_id').select2();
     $("#shop_id").select2();
     $("#rider_id").select2();
+    $("#city_id").select2();
+    $("#township_id").select2();
 
     $("#order_id").on('change', function() {
         $.ajax({
@@ -197,10 +247,15 @@
                     var data = response.data;
                     $('#shop_id').val(data.shop_id);
                     $('#shop_id').trigger('change');
+                    $('#city_id').val(data.city_id);
+                    $('#city_id').trigger('change');
                     $('#rider_id').val(data.rider_id);
                     $('#rider_id').trigger('change');
+                    $('#township_id').val(data.township_id);
+                    $('#township_id').trigger('change');
                     $('#customer_name').val(data.customer_name);
                     $('#phone_number').val(data.customer_phone_number);
+                    $('#address').val(data.full_address);
                 }
             }
         });
@@ -224,8 +279,70 @@
         });
     });
 
+    $('#city_id').change(function() {
+            console.log('success');
+            var city_id = $('#city_id').val();
+            $.ajax({
+                url: '/api/townships-get-by-city',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    city_id: city_id
+                },
+                success: function(response) {
+                    var township_id = $('#township_id').val();
+                    var townships = '<option value="" disabled>Select the Township for This Order</option>';
+                    if (response.data) {
+                        for (var i = 0; i < response.data.length; i++) {
+                            if (township_id == response.data[i].id) {
+                                townships += '<option value="' + response.data[i].id + '" selected>' + response.data[i].name + '</option>';
+                            } else {
+                                townships += '<option value="' + response.data[i].id + '">' + response.data[i].name + '</option>';
+                            }
+                        }
+                    }
+                    console.log(townships);
+                    $('#township_id').html(townships);
+
+                    // Update the delivery fees after selecting the township
+                    var selectedTownshipId = $('#township_id').val();
+                    getRidersByTownship(selectedTownshipId);
+                },
+            });
+        });
+
+        $("#township_id").change(function() {
+            var township_id = $('#township_id').val();
+            getRidersByTownship(township_id);
+        });
+
+        function getRidersByTownship(township_id) {
+            $.ajax({
+                url: '/api/riders-get-by-township',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    township_id: township_id
+                },
+                success: function(response) {
+                    var rider_id = $('#rider_id').val();
+                    var riders = '<option value="" selected disabled>Select the Rider for This Order</option>';
+                    if (response.data) {
+                        for (let i = 0; i < response.data.length; i++) {
+                             if (rider_id == response.data[i].id) {
+                                riders += '<option value="' + response.data[i].id + '" selected>' + response.data[i].name + '</option>';
+                            } else {
+                                riders += '<option value="' + response.data[i].id + '">' + response.data[i].name + '</option>';
+                            }
+                        }
+                    }
+                    $('#rider_id').html(riders);
+                },
+            })
+        }
+
     var isWayFeesPayable = $('#is_way_fees_payable').val();
-    if (isWayFeesPayable) {
+    if (isWayFeesPayable == 1) {
         $('#tab-one').addClass('bg-cyan text-white clicked');
     } else {
         $('#tab-two').addClass('bg-cyan text-white clicked');

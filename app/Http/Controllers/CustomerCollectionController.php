@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CustomerCollectionRequest;
 use App\Models\CustomerCollection;
+use App\Repositories\CityRepository;
 use App\Repositories\CollectionGroupRepository;
 use App\Repositories\CustomerCollectionRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\RiderRepository;
 use App\Repositories\ShopRepository;
+use App\Repositories\TownshipRepository;
 use App\Services\CustomerCollectionService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -21,6 +24,8 @@ class CustomerCollectionController extends Controller
     protected $shopRepository;
     protected $collectionGroupRepository;
     protected $riderRepository;
+    protected $cityRepository;
+    protected $townshipRepository;
 
     public function __construct(
         CustomerCollectionRepository $customerCollectionRepository,
@@ -29,6 +34,8 @@ class CustomerCollectionController extends Controller
         ShopRepository $shopRepository,
         CollectionGroupRepository $collectionGroupRepository,
         RiderRepository $riderRepository,
+        CityRepository $cityRepository,
+        TownshipRepository $townshipRepository
     ) {
         $this->customerCollectionRepository = $customerCollectionRepository;
         $this->customerCollectionService = $customerCollectionService;
@@ -36,6 +43,8 @@ class CustomerCollectionController extends Controller
         $this->shopRepository = $shopRepository;
         $this->collectionGroupRepository = $collectionGroupRepository;
         $this->riderRepository = $riderRepository;
+        $this->cityRepository  = $cityRepository;
+        $this->townshipRepository = $townshipRepository;
     }
     /**
      * Display a listing of the resource.
@@ -54,17 +63,17 @@ class CustomerCollectionController extends Controller
     {
         $order_id = $request->order_id;
         $shops = $this->shopRepository->getAllShops();
-        $shops = $shops->sortByDesc('name');
         $riders = $this->riderRepository->getAllRiders();
-        $riders = $riders->sortByDesc('name');
-        
+        $cities = $this->cityRepository->getAllCities();
+        $townships = $this->townshipRepository->getAllTownships();
+
         if ($order_id) {
             $order = $this->orderRepository->getOrderByID($order_id);
             return view('admin.customer-collection.create', compact('order'));
         } else {
             $orders = $this->orderRepository->getAllOrders();
             $orders = $orders->sortByDesc('id');
-            return view('admin.customer-collection.create', compact('orders', 'shops', 'riders'));
+            return view('admin.customer-collection.create', compact('orders', 'shops', 'riders', 'cities', 'townships'));
         }
     }
 
@@ -99,11 +108,13 @@ class CustomerCollectionController extends Controller
         $orders = $this->orderRepository->getAllOrders();
         $orders = $orders->sortByDesc('id');
         $shops = $this->shopRepository->getAllShops();
-        $shops = $shops->sortByDesc('id');
         $riders = $this->riderRepository->getAllRiders();
-        $riders = $riders->sortByDesc('id');
+        $cities = $this->cityRepository->getAllCities();
+        $townships = $this->townshipRepository->getAllTownships();
+        $date = new Carbon($customer_collection->assigned_at);
+        $scheduledate = $date->format('Y-m-d');
         return view('admin.customer-collection.edit', compact('customer_collection', 'collection_groups', 
-            'orders', 'shops', 'riders'));
+            'orders', 'shops', 'riders', 'cities', 'townships', 'scheduledate'));
     }
 
     /**

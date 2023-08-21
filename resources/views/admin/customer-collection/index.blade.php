@@ -112,6 +112,8 @@
                         <th>Customer Phone Number</th>
                         <th>Shop</th>
                         <th>Rider</th>
+                        <th>City</th>
+                        <th>Township</th>
                         <th>Items</th>
                         <th>Paid Amount To Customer</th>
                         <th>Is Way Fees Payable</th>
@@ -227,6 +229,13 @@
                         name: 'rider'
                     },
                     {
+                        data: 'city_name',
+                        name: 'city'
+                    },{
+                        data: 'township_name',
+                        name: 'township'
+                    },
+                    {
                         data: 'items',
                         name: 'items'
                     },
@@ -300,6 +309,28 @@
                     },
                     {
                         "render": function(data, type, row) {
+                            if(row.city_id != null) {
+                                return '<a href="/cities/' + row.city_id + '">'
+                                + row.city_name + '</a>';
+                            } else {
+                                return '';
+                            }
+                        },
+                        "targets": 8
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            if(row.township_id != null) {
+                                return '<a href="/townships/' + row.township_id + '">'
+                                + row.township_name + '</a>';
+                            } else {
+                                return '';
+                            }
+                        },
+                        "targets": 9
+                    },
+                    {
+                        "render": function(data, type, row) {
                             if (row.is_way_fees_payable == 0) {
                                 return "No";
                             }
@@ -310,7 +341,7 @@
                                 return "Pending";
                             }
                         },
-                        "targets": 10
+                        "targets": 12
                     },
                     {
                         "render": function(data, type, row) {
@@ -324,7 +355,7 @@
                                 return "Completed";
                             }
                         },
-                        "targets": 11
+                        "targets": 13
                     },
 
                 ]

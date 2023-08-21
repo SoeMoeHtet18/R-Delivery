@@ -440,7 +440,7 @@ class OrderRepository
 
     public function getDataByOrder($id) {
         $data = Order::where('id',$id)
-            ->select('shop_id','customer_name', 'customer_phone_number', 'rider_id')
+            ->select('shop_id','customer_name', 'customer_phone_number', 'rider_id', 'city_id', 'township_id', 'full_address')
             ->first();
         return $data;
     }
