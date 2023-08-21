@@ -63,7 +63,7 @@ class OrderApiController extends Controller
     {
         $shop_user = auth()->guard('shop-user-api')->user();
         $shop_id   = $shop_user->shop_id;
-        $totalCredit = $this->shopRepository->getTotalCreditForShop($shop_id, 'api');
+        $totalCredit = $this->shopRepository->getTotalCreditForShop($shop_id);
 
         // $paid_credit_from_collection = $this->collectionRepository->getPaidAmountByShopUser($shop_id);
         // $paid_credit_from_transaction = $this->transactionForShopRepository->getPaidAmountByShopUser($shop_id);
