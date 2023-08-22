@@ -1,15 +1,10 @@
 <div class="page-header navbar navbar-fixed-top">
     <div class="page-header-inner  w-100">
         <div class="page-header-inner">
-
-            <a href="javascript:;"
-               class="menu-toggler responsive-toggler"
-               data-toggle="collapse"
-               data-target=".navbar-collapse">
+            <a id="pageSidebarCollapseBtn" data-bs-toggle="modal" data-bs-target="#sidebarModelCollapse"
+                href="#pageSidebarCollapse" role="button" aria-expanded="false">
+                <i class="fa-solid fa-bars"></i>
             </a>
-
-            
-
             <div class="top-menu" style="display: flex;">
             
                 <div style="display: flex; flex-direction: column;">

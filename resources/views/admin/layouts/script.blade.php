@@ -21,8 +21,28 @@
             urls: ['fonts/notosanfs.css']
         }
     });
+
+    document.addEventListener("click", function(event) {
+        const targetDiv = document.getElementById("pageSidebarCollapse");
+        const clickedElement = event.target;
+
+        // Check if the clicked element is not inside the targetDiv
+        if (!targetDiv.contains(clickedElement)) {
+                $('.page-container').click(function() {
+                    if($('#pageSidebarCollapse').hasClass('toggle-menu')) {
+                        $('#pageSidebarCollapse').toggleClass('toggle-menu');
+                }
+            });
+        }
+    });
     
     $(function() {
+        $('#pageSidebarCollapseBtn').click(function() {
+            console.log('toggled');
+            $('#pageSidebarCollapse').toggleClass('toggle-menu');
+        });
+        
+      
         $('#paymentBoxCollapse').click(function() {
             if ($('#paymentBoxCollapse .arrow').hasClass('up')) {
                 $('#paymentBoxCollapse .arrow').removeClass('up');

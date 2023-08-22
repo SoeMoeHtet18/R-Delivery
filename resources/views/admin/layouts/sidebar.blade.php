@@ -1,5 +1,5 @@
 <div class="page-sidebar-wrapper">
-    <div class="page-sidebar navbar-collapse collapse">
+    <div class="page-sidebar navbar-collapse collapse" id="pageSidebarCollapse">
         <ul class="page-sidebar-menu"
             data-keep-expanded="false"
             data-auto-scroll="true"

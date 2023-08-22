@@ -76,7 +76,6 @@
         margin: 0;
         border: 0px;
         padding: 10px 15px;
-        text-decoration: none;
         font-weight: 300;
     }
 
@@ -175,6 +174,7 @@
         background: #f3f4f3;
         margin: 0;
         z-index: 22;
+        height: 100vh;
     }
     .page-content::before{
         position: absolute;
@@ -186,7 +186,6 @@
         background: #64c5b1;
         content: '';
         border-radius: 0;
-        left: 0;
     }
     .f_s_30 {
         font-size: 30px;
@@ -270,7 +269,24 @@
         overflow: auto;
     }
 
-    .page-content {
+    #pageSidebarCollapseBtn {
+        display: none;
+        float: left;
+    }
+
+    div.page-content {
+        backdrop-filter: blur(5px);
+    }
+    .toggle-menu {
+        display: block !important;
         height: 100vh;
+        z-index: 999;
+        margin: 0;
+    }
+
+    @media (max-width: 1100px) {
+        #pageSidebarCollapseBtn {
+            display: block;
+        }
     }
 </style>

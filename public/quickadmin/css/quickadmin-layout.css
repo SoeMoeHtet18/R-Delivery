@@ -1901,7 +1901,7 @@ Page sidebar
     }
 
     .page-sidebar.navbar-collapse.collapse {
-        display: none !important;
+        display: none;
     }
 
     .page-sidebar.navbar-collapse.in {
@@ -3126,10 +3126,6 @@ table {
 @media (min-width: 1101px) and (max-width: 1300px) {
     .page-header-fixed .page-container {
         display: flex;
-    }
-
-    .page-content-wrapper .page-content {
-        margin-left: 0px;
     }
 
     div.page-sidebar:hover .page-sidebar-menu li span {
