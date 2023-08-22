@@ -65,4 +65,9 @@ class User extends Authenticatable
     {
         return $this->morphToMany(Notification::class, 'notifiable')->wherePivot('is_read',0);
     }
+
+    public function loggable()
+    {
+        return $this->morphMany(Log::class, 'loggable');
+    }
 }

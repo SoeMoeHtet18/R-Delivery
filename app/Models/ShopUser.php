@@ -24,4 +24,9 @@ class ShopUser extends Authenticatable
     {
         return $this->morphToMany(Notification::class, 'notifiable');
     }
+
+    public function loggable()
+    {
+        return $this->morphMany(Log::class, 'loggable');
+    }
 }
