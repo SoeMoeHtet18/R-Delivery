@@ -107,7 +107,6 @@
                 success: function(data) {
                     populateNotifications(data);
                     if(data.length > 0) {
-                       
                         lastNotificationTime = data[data.length - 1].latest_time;
                     }
                 },
