@@ -575,7 +575,7 @@
                                 @endif
                             </div>
                             <div class="col-9 g-0" style="width: fit-content;">
-                                @foreach($logs as $log) 
+                                @foreach($logs as $log)
                                     @if($log->to_status == 'success')
                                     <div class="timeline-status-box">
                                         <h5 class="timeline-status">Delivered</h5>
@@ -617,7 +617,125 @@
                         </div>
                     </div>
                 </div>
-                
+                <div class="timeline-container-sm">
+                    <div id="timeline-box-container">
+                        @foreach($logs as $log)
+                                    @if($log->to_status == 'success' && $order->status == 'success')
+                                    <div id="delivered-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center" style="background-color: #278AF9;">
+                                        <i class="fa-solid fa-check text-white"></i>
+                                    </div>
+                                    <div class="vertical-line mx-auto"></div>
+                                    @elseif($log->to_status == 'success')
+                                    <div id="delivered-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center">
+                                    </div>
+                                    <div class="vertical-line mx-auto"></div>
+                                    @endif
+                                    @if($log->to_status == 'cancel' && $order->status == 'cancel')
+                                    <div id="canceled-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center" style="background-color: #278AF9;">
+                                        <i class="fa-solid fa-check text-white"></i>
+                                    </div>
+                                    <div class="vertical-line mx-auto"></div>
+                                    @elseif($log->to_status == 'cancel')
+                                    <div id="canceled-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center">
+                                    </div>
+                                    <div class="vertical-line mx-auto"></div>
+                                    @endif
+                                    @if($log->to_status == 'delay' && $order->status == 'delay')
+                                    <div id="delay-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center" style="background-color: #278AF9;">
+                                        <i class="fa-solid fa-check text-white"></i>
+                                    </div>
+                                    <div class="vertical-line mx-auto"></div>
+                                    @elseif($log->to_status == 'delay')
+                                    <div id="delay-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center">
+                                    </div>
+                                    <div class="vertical-line mx-auto"></div>
+                                    @endif
+                                    @if($log->to_status == 'delivering' && $order->status == 'delivering')
+                                    <div id="shipping-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center" style="background-color: #278AF9;">
+                                        <i class="fa-solid fa-check text-white"></i>
+                                    </div>
+                                    <div class="vertical-line mx-auto"></div>
+                                    @elseif($log->to_status == 'delivering')
+                                    <div id="shipping-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center">
+                                    </div>
+                                    <div class="vertical-line mx-auto"></div>
+                                    @endif
+                                    @if($log->to_status == 'warehouse' && $order->status == 'warehouse')
+                                    <div id="picked-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center" style="background-color: #278AF9;">
+                                        <i class="fa-solid fa-check text-white"></i>
+                                    </div>
+                                    <div class="vertical-line mx-auto"></div>
+                                    @elseif($log->to_status == 'warehouse')
+                                    <div id="picked-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center">
+                                    </div>
+                                    <div class="vertical-line mx-auto"></div>
+                                    @endif
+                                @endforeach
+                                @if(isset($order->created_at) && $order->status == 'pending')
+                                <div id="created-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center" style="background-color: #278AF9;">
+                                    <i class="fa-solid fa-check text-white"></i>
+                                </div>
+                                @else
+                                <div id="created-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center">
+                                </div>
+                                @endif
+                    </div>
+                    <div class="timeline-status-container">
+                        @foreach($logs as $log)
+                            @if($log->to_status == 'success')
+                            <div class="timeline-status-box">
+                                <span class="timeline-status">Delivered</span>
+
+                                <span class="delivered-timeline-date-time timeline-date-time">{{$log->created_at}}</span>
+
+                                <span class="delivered-timeline-status sub-status d-block">Your order has been delivered. </span>
+                            </div>
+                            @endif
+                            @if($log->to_status == 'cancel')
+                            <div class="timeline-status-box">
+                                <span class="timeline-status">Canceled</span>
+
+                                <span class="canceled-timeline-date-time timeline-date-time">{{$log->created_at}}</span>
+
+                                <span class="canceled-timeline-status sub-status d-block">Your order has been canceled. </span>
+                            </div>
+                            @endif
+                            @if($log->to_status == 'delay')
+                            <div class="timeline-status-box">
+                                <span class="timeline-status">Delay</span>
+
+                                <span class="delayed-timeline-date-time timeline-date-time">{{$log->created_at}}</span>
+
+                                <span class="delay-timeline-status sub-status d-block"> Your order
+                                     has been delayed due to traffic. We will try to deliver again to you tomorrow.
+                                </span>
+                            </div>
+                            @endif
+                            @if($log->to_status == 'delivering')
+                            <div class="timeline-status-box">
+                                <span class="timeline-status">Out For Delivery</span>
+
+                                <span class="shipping-timeline-date-time timeline-date-time">{{$log->created_at}}</span>
+
+                                <span class="shipping-timeline-status sub-status d-block">R-Delivery will attempt to deliver your order today. </span>
+
+                            </div>
+                            <div class="timeline-status-box">
+                                <span class="timeline-status">Order Successfully Picked Up</span>
+                                <span class="picked-timeline-date-time timeline-date-time ">{{$log->created_at}}</span>
+                                <span class="picked-timeline-status sub-status d-block">Your order has been picked up by R-Delivery. </span>
+                            </div>
+                            @endif
+                        @endforeach
+                        @if(isset($order->created_at))
+                        <div class="timeline-status-box">
+                            <span class="timeline-status">Packed by Online Shop</span>
+                            <span class="created-timeline-date-time timeline-date-time">{{$order->created_at}}</span>
+                            <span class="picked-timeline-status sub-status d-block">Your order is packed and will be handed over to our delivery partner. </span>
+                        </div>
+                        @endif
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -626,20 +744,15 @@
 @section('javascript')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const deliveredElements = document.getElementsByClassName('delivered-timeline-date-time');
-        const canceledElements = document.getElementsByClassName('canceled-timeline-date-time');
-        const delayedElements = document.getElementsByClassName('delayed-timeline-date-time');
-        const shippingElements = document.getElementsByClassName('shipping-timeline-date-time');
-        const pickedElements = document.getElementsByClassName('picked-timeline-date-time');
-        const createdElements = document.getElementsByClassName('created-timeline-date-time');
+        const timelineTimestamps = document.getElementsByClassName('timeline-date-time');
 
         const formatAndSetTimestamp = (elements) => {
             for (let i = 0; i < elements.length; i++) {
                 const element = elements[i];
-                const timestamp = element.textContent;
+                var timestamp = element.textContent;
 
                 if (timestamp) {
-                    const dateObj = new Date(timestamp);
+                    const dateObj = new Date(timestamp.trim());
 
                     const dateFormatter = new Intl.DateTimeFormat('my-MM', {
                         day: 'numeric',
@@ -647,8 +760,6 @@
                         year: 'numeric'
                     });
                     var formattedDate = dateFormatter.format(dateObj);
-                    console.log(formattedDate);
-
                     const [month, day, year] = formattedDate.split(' ');
                     const formattedDay = day.replace(',', '');
                     formattedDate = `${formattedDay} ${month} ${year}`;
@@ -666,12 +777,7 @@
             }
         };
 
-        formatAndSetTimestamp(deliveredElements);
-        formatAndSetTimestamp(canceledElements);
-        formatAndSetTimestamp(delayedElements);
-        formatAndSetTimestamp(shippingElements);
-        formatAndSetTimestamp(pickedElements);
-        formatAndSetTimestamp(createdElements);
+        formatAndSetTimestamp(timelineTimestamps);
     })
 </script>
 @endSection
