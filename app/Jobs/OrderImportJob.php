@@ -2,6 +2,8 @@
 
 namespace App\Jobs;
 
+use App\Models\Notification;
+use App\Models\User;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
@@ -57,8 +59,37 @@ class OrderImportJob implements ShouldQueue
             ];
             $this->errorMessages[] = $data;
         }
-        Log::debug($this->errorMessages);
+        
+        $this->handleError();
     }
 
-    
+    public function handleError()
+    {
+        $errorMsg = $this->errorMessages;
+        // Group error messages by row
+        $errorGroups = [];
+        foreach ($errorMsg as $error) {
+            $row = $error['row'];
+            if (!isset($errorGroups[$row])) {
+                $errorGroups[$row] = [];
+            }
+            $errorGroups[$row][] = $error;
+        }
+
+        // Create notifications for each group
+        foreach ($errorGroups as $row => $errors) {
+            $notificationMessage = '';
+            foreach ($errors as $error) {
+                $notificationMessage .= ',' . $error['errmsg'];
+            }
+
+            $notification = Notification::create([
+                'title' => 'csv',
+                'message' => 'At Row No.' . $row . $notificationMessage
+            ]);
+            $userId = auth()->user()->id;
+            $user = User::find($userId);
+            $user->notifications()->attach($notification->id);
+        }
+    }
 }
