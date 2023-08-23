@@ -72,9 +72,11 @@
             </div>
         </div>
         <div class="row">
-            <div class="card col-12">
-                <div class="card-body">
-                    <h5 class="text-center">Customer Exchange</h5>
+        <div class="portlet box green">
+                <div class="portlet-title">
+                    <div class="caption">Customer Exchange List</div>
+                </div>
+                <div class="portlet-body">
                     <table id="customer-collection-datatable" class="table table-striped table-hover table-responsive datatable">
                         <thead>
                             <tr>
@@ -82,9 +84,15 @@
                                 <th>Customer Exchange Code</th>
                                 <th>Order Code</th>
                                 <th>Customer Name</th>
+                                <th>Customer Phone Number</th>
                                 <th>Shop</th>
+                                <th>Rider</th>
+                                <th>City</th>
+                                <th>Township</th>
                                 <th>Items</th>
                                 <th>Paid Amount To Customer</th>
+                                <th>Is Way Fees Payable</th>
+                                <th>Status</th>
                                 <th>Note</th>
                             </tr>
                         </thead>
@@ -93,7 +101,6 @@
 
                         </tbody>
                     </table>
-
                 </div>
             </div>
         </div>
@@ -156,6 +163,24 @@
                     },
                 "targets": 1
             },
+            {
+                "render": function(data, type, row) {
+                    return formatWithNumberingSystem(row.total_quantity);
+                },
+                "targets": 2
+            },
+            {
+                "render": function(data, type, row) {
+                    return formatWithNumberingSystem(row.total_amount);
+                },
+                "targets": 3
+            },
+            {
+                "render": function(data, type, row) {
+                    return formatWithNumberingSystem(row.paid_amount);
+                },
+                "targets": 4
+            },
             // link with shop
             {
                 "render": function(data, type, row) {
@@ -167,6 +192,10 @@
         ]
     });
 
+    function formatWithNumberingSystem(number, decimal_place = 2) {
+        return parseFloat(number).toFixed(decimal_place).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    }
+
     var customerTable = $('#customer-collection-datatable').DataTable({
         processing: true,
         serverSide: true,
@@ -177,7 +206,8 @@
                 r.collection_group_id = collection_group_id;
             }
         },
-        columns: [{
+        columns: [
+            {
                 data: 'DT_RowIndex',
                 name: 'id'
             },
@@ -194,8 +224,23 @@
                 name: 'customer_name'
             },
             {
+                data: 'customer_phone_number',
+                name: 'customer_phone_number'
+            },
+            {
                 data: 'shop_name',
                 name: 'shop'
+            },
+            {
+                data: 'rider_name',
+                name: 'rider'
+            },
+            {
+                data: 'city_name',
+                name: 'city'
+            },{
+                data: 'township_name',
+                name: 'township'
             },
             {
                 data: 'items',
@@ -206,40 +251,118 @@
                 name: 'paid_amount_to_customer'
             },
             {
+                data: 'is_way_fees_payable',
+                name: 'is_way_fees_payable'
+            },
+            {
+                data: 'status',
+                name: 'status'
+            },
+            {
                 data: 'note',
                 name: 'note'
-            },
+            }
+        
         ],
         columnDefs: [
-           // link with self
-           {
+            {
                 "render": function(data, type, row) {
                     return '<a href="/customer-collections/' + row.id + '">'
                         + row.customer_collection_code + '</a>';
                     },
                 "targets": 1
             },
-                    // link with order
-                    {
-                        "render": function(data, type, row) {
-                            if(row.order_id != null) {
-                                return '<a href="/orders/' + row.order_id + '">'
-                                    + row.order_code + '</a>';
-                                } else {
-                                    return '';
-                                }
-                            },
-                        "targets": 2
+            // link with order
+            {
+                "render": function(data, type, row) {
+                    if(row.order_id != null) {
+                        return '<a href="/orders/' + row.order_id + '">'
+                            + row.order_code + '</a>';
+                        } else {
+                            return '';
+                        }
                     },
-                    // link with shop
-                    {
-                        "render": function(data, type, row) {
-                            return '<a href="/shops/' + row.shop_id + '">'
-                                + row.shop_name + '</a>';
-                            },
-                        "targets": 4
+                "targets": 2
+            },
+            // link with shop
+            {
+                "render": function(data, type, row) {
+                    return '<a href="/shops/' + row.shop_id + '">'
+                        + row.shop_name + '</a>';
                     },
+                "targets": 5
+            },
+            // link with rider
+            {
+                "render": function(data, type, row) {
+                    if(row.rider_id != null) {
+                        return '<a href="/riders/' + row.rider_id + '">'
+                        + row.rider_name + '</a>';
+                    } else {
+                        return '';
+                    }
+                },
+                "targets": 6
+            },
+            {
+                "render": function(data, type, row) {
+                    if(row.city_id != null) {
+                        return '<a href="/cities/' + row.city_id + '">'
+                        + row.city_name + '</a>';
+                    } else {
+                        return '';
+                    }
+                },
+                "targets": 7
+            },
+            {
+                "render": function(data, type, row) {
+                    if(row.township_id != null) {
+                        return '<a href="/townships/' + row.township_id + '">'
+                        + row.township_name + '</a>';
+                    } else {
+                        return '';
+                    }
+                },
+                "targets": 8
+            },
+            {
+                "render": function(data, type, row) {
+                    return formatWithNumberingSystem(row.paid_amount);
+                },
+                "targets": 10
+            },
+            {
+                "render": function(data, type, row) {
+                    if (row.is_way_fees_payable == 0) {
+                        return "No";
+                    }
+                    if (row.is_way_fees_payable == 1) {
+                        return "Yes";
+                    }
+                    if (row.is_way_fees_payable == null) {
+                        return "Pending";
+                    }
+                },
+                "targets": 11
+            },
+            {
+                "render": function(data, type, row) {
+                    if (row.status == 'pending') {
+                        return "Pending";
+                    }
+                    if (row.status == 'in-warehouse') {
+                        return "In Warehouse";
+                    }
+                    if (row.status == 'complete') {
+                        return "Completed";
+                    }
+                },
+                "targets": 12
+            },
+
         ]
+        
     });
 
     document.addEventListener('DOMContentLoaded', function() {

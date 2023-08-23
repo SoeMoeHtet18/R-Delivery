@@ -105,6 +105,7 @@ class CollectionController extends Controller
     public function update(Request $request, string $id)
     {
         $collection = $this->collectionRepository->getCollectionById($id);
+        unset($collection->shop_name,$collection->shop_phone_number);
         $data = $request->all();
         $this->collectionService->updateCollectionByID($data, $collection);
 

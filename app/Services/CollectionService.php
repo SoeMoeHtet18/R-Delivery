@@ -74,8 +74,10 @@ class CollectionService
 
     public function updateCollectionByID($data, $collection)
     {
-        $collection_group = CollectionGroup::where('id', $data['collection_group_id'])->first();
-        $rider_id = $collection_group->rider_id; 
+        if(isset($data['collection_group_id'])) {
+            $collection_group = CollectionGroup::where('id', $data['collection_group_id'])->first();
+            $rider_id = $collection_group->rider_id;
+        }
         $collection->total_quantity =  $data['total_quantity'];
         $collection->total_amount =  $data['total_amount'];
         $collection->paid_amount =  $data['paid_amount'];
