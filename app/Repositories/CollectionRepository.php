@@ -32,9 +32,8 @@ class CollectionRepository
             $shop_id = $collection->shop_id;
             $collectionGroupId = $collection->collection_group_id;
             //count customer collection by shop id
-            $customerCollectionCount = CustomerCollection::with(['order', 'collection_group'])->whereHas('order',function($q) use ($shop_id){
-                $q->where('shop_id',$shop_id);
-            })->where('collection_group_id',$collectionGroupId)->count();
+            $customerCollectionCount = CustomerCollection::with(['order', 'collection_group'])
+                ->where(['collection_group_id' => $collectionGroupId, 'shop_id' => $shop_id])->count();
             $collection['customer_collection_count'] = $customerCollectionCount;
         }
         return $collections;
