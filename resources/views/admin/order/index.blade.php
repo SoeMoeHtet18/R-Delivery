@@ -395,6 +395,7 @@
                         <th>Schedule Date</th>
                         <th>Type</th>
                         <th>Collection Method</th>
+                        <th>Payment Method</th>
                         <th>Last Updated By</th>
                         <th>Branch</th>
                         <th>Pick Up Group Code</th>
@@ -852,6 +853,10 @@
                         name: 'collection_method'
                     },
                     {
+                        data: 'payment_method',
+                        name: 'payment_method'
+                    },
+                    {
                         data: 'last_updated_by_name',
                         name: 'last_updated_by'
                     },
@@ -928,7 +933,7 @@
                                     return '';
                                 }
                             },
-                        "targets": 22
+                        "targets": 23
                     },
                     // render with numbering system
                     {
@@ -1018,6 +1023,21 @@
                             }
                         },
                         "targets": 19
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            if (row.payment_method == 'cash_on_delivery') {
+                                return "Cash On Delivery";
+                            } 
+                            if(row.payment_method == 'item_prepaid') {
+                                return "Item Prepaid";
+                            }
+                            if (row.payment_method == 'all_prepaid') {
+                                return "All Prepaid";
+                            }
+                            return '';
+                        },
+                        "targets": 20
                     },
                 ]
             });
