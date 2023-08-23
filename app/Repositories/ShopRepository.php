@@ -92,14 +92,16 @@ class ShopRepository
             }
         }
 
-        $transactionAmount = TransactionsForShop::where('shop_id', $shopId)->sum('amount');
+        // $transactionAmount = TransactionsForShop::where('shop_id', $shopId)->sum('amount');
 
-        $collectionAmount = Collection::where('shop_id', $shopId)->sum('paid_amount');
+        // $collectionAmount = Collection::where('shop_id', $shopId)->sum('paid_amount');
 
-        $customerCollectionAmount = CustomerCollection::where('shop_id', $shopId)->sum('paid_amount');
+        $customerCollectionAmount = CustomerCollection::where('shop_id', $shopId)
+            ->whereDate('schedule_date', $todayDate)
+            ->sum('paid_amount');
         
-        $totalAmount = $payLaterAmount + $remainingOrdersAmount;
-        return $totalAmount - ($transactionAmount + $collectionAmount + $customerCollectionAmount);
+        return $payLaterAmount + $remainingOrdersAmount - $customerCollectionAmount;
+        // return $totalAmount - ($transactionAmount + $collectionAmount + $customerCollectionAmount);
     }
 
     public function getTotalCreditForShop($shopId)
