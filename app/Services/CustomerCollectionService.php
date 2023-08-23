@@ -38,7 +38,7 @@ class CustomerCollectionService
         $customer_collection->city_id = $data['city_id'];
         $customer_collection->township_id = $data['township_id'];
         $customer_collection->address = $data['address'];
-        $customer_collection->assigned_at = Carbon::parse($data['schedule_date']);
+        $customer_collection->schedule_date = Carbon::parse($data['schedule_date']);
         $customer_collection->pending_at = Carbon::now();
         $customer_collection->save();
     }
@@ -60,7 +60,7 @@ class CustomerCollectionService
         $customer_collection->city_id = $data['city_id'];
         $customer_collection->township_id = $data['township_id'];
         $customer_collection->address = $data['address'];
-        $customer_collection->assigned_at = $data['schedule_date'] ? Carbon::parse($data['schedule_date']) : null;
+        $customer_collection->schedule_date = $data['schedule_date'] ? Carbon::parse($data['schedule_date']) : null;
         if($data['status'] == 'pending') {
             $customer_collection->pending_at = Carbon::now();
         } elseif($data['status'] == 'in-warehouse') {
@@ -87,6 +87,7 @@ class CustomerCollectionService
         $customer_collection->paid_amount  = $data['amount'];
         $customer_collection->note   = $data['reason'];
         $customer_collection->status   = 'pending';
+        $customer_collection->pending_at = Carbon::now();
         $file_name = null;
         if ($data['photo']) {
             $photo = $data['photo'];
@@ -98,6 +99,11 @@ class CustomerCollectionService
         $customer_collection->customer_name = $order->customer_name;
         $customer_collection->customer_phone_number = $order->customer_phone_number;
         $customer_collection->shop_id = $order->shop_id;
+        $customer_collection->rider_id = $order->rider_id;
+        $customer_collection->city_id = $order->city_id;
+        $customer_collection->township_id = $order->township_id;
+        $customer_collection->address = $order->full_address;
+        $customer_collection->schedule_date = Carbon::now();
         $customer_collection->save();
         return $customer_collection;
     }
@@ -108,6 +114,7 @@ class CustomerCollectionService
         $customer_collection->paid_amount  = $data['amount'];
         $customer_collection->note   = $data['reason'];
         $customer_collection->status   = 'complete';
+        $customer_collection->complete_at   = Carbon::now();
         $file_name = null;
         if ($reuploadPhoto) {
             $photo = $data['photo'];

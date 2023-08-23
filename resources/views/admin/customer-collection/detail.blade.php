@@ -106,10 +106,10 @@
             </div>
             <div class="row m-0 mb-3">
                 <div class="col-2">
-                    <h4>Assigned At<b>:</b></h4>
+                    <h4>Schedule Date<b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    {{ $customer_collection->assigned_at ? \Carbon\Carbon::parse($customer_collection->assigned_at)->format('j F, Y') : 'N/A'}}
+                    {{ $customer_collection->schedule_date ? \Carbon\Carbon::parse($customer_collection->schedule_date)->format('j F, Y') : 'N/A'}}
                 </div>
             </div>
             <div class="row m-0 mb-3">
