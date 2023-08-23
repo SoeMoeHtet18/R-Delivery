@@ -97,7 +97,11 @@
 @section('javascript')
 
 <script type="text/javascript">
-    $(document).ready(function() { 
+    function formatWithNumberingSystem(number, decimal_place = 2) {
+        return parseFloat(number).toFixed(decimal_place).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    }
+
+    $(document).ready(function() {
         $("#toggleFilter").on("click", function() {
             $(".filter-content").slideToggle(300);
             $('#shop').select2();
@@ -289,7 +293,42 @@
                         searchable: false
                     },
                 ],
-                columnDefs: [{
+                columnDefs: [
+                    // render with numbering system
+                    {
+                        "render": function(data, type, row) {
+                            return formatWithNumberingSystem(row.total_amount);
+                        },
+                        "targets": 7
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            if(row.markup_delivery_fees != null) {
+                                return formatWithNumberingSystem(row.markup_delivery_fees);
+                            } else {
+                                return '';
+                            }
+                        },
+                        "targets": 9
+                    },
+                    // calculate the acutual delivery fees
+                    {
+                        "render": function(data, type, row) {
+                            var delivery_fees = parseFloat(row.delivery_fees);
+
+                            if (row.extra_charges != null) {
+                                delivery_fees += parseFloat(row.extra_charges);
+                            }
+
+                            if (row.discount != null) {
+                                delivery_fees -= parseFloat(row.discount);
+                            }
+
+                            return formatWithNumberingSystem(delivery_fees);
+                        },
+                        "targets": 8
+                    },
+                    {
                         "render": function(data, type, row) {
                             if (row.payment_flag == 0) {
                                 return "Unpaid";

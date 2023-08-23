@@ -70,7 +70,7 @@ class TransactionsForShopRepository
 
     public function getActualAmount($order_ids, $shop_id)
     {
-        $shop_payments = ShopPayment::where('shop_id', $shop_id)->sum('amount');
+        // $shop_payments = ShopPayment::where('shop_id', $shop_id)->sum('amount');
 
         $paid_orders = Order::where('payment_flag', 1)
                             ->where('shop_id', $shop_id)->get();

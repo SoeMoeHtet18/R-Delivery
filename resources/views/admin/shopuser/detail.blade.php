@@ -32,7 +32,7 @@
                 </div>
                 <div class="col-10">
                     @if($shop_user->shop_id)
-                    {{ $shop_user->shop->name }}
+                    <a href="/shops/{{ $shop_user->shop_id }}">{{ $shop_user->shop->name }}</a>
                     @else
                     N/A
                     @endif

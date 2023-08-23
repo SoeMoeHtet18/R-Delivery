@@ -145,6 +145,8 @@
                         <th>Customer Phone Number</th>
                         <th>Shop</th>
                         <th>Rider</th>
+                        <th>City</th>
+                        <th>Township</th>
                         <th>Items</th>
                         <th>Paid Amount To Customer</th>
                         <th>Is Way Fees Payable</th>
@@ -166,6 +168,10 @@
 @endsection
 @section('javascript')
 <script type="text/javascript">
+    function formatWithNumberingSystem(number, decimal_place = 2) {
+        return parseFloat(number).toFixed(decimal_place).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    }
+
     $(document).ready(function() {
         $("#toggleFilter").on("click", function() {
             $(".filter-content").slideToggle(300);
@@ -263,6 +269,14 @@
                     },
                 ],
                 columnDefs: [
+                    // link with self
+                    {
+                        "render": function(data, type, row) {
+                            return '<a href="/customer-collections/' + row.id + '">'
+                                + row.customer_collection_code + '</a>';
+                            },
+                        "targets": 1
+                    },
                     // link with collection group
                     {
                         "render": function(data, type, row) {
@@ -328,6 +342,17 @@
                             }
                         },
                         "targets": 9
+                    },
+                    // render with numbering system
+                    {
+                        "render": function(data, type, row) {
+                            if(row.paid_amount != null) {
+                                return formatWithNumberingSystem(row.paid_amount);
+                            } else {
+                                return '';
+                            }
+                        },
+                        "targets": 11
                     },
                     {
                         "render": function(data, type, row) {
@@ -431,6 +456,13 @@
                         name: 'rider'
                     },
                     {
+                        data: 'city_name',
+                        name: 'city'
+                    },{
+                        data: 'township_name',
+                        name: 'township'
+                    },
+                    {
                         data: 'items',
                         name: 'items'
                     },
@@ -454,6 +486,14 @@
                     },
                 ],
                 columnDefs: [
+                    // link with self
+                    {
+                        "render": function(data, type, row) {
+                            return '<a href="/customer-collections/' + row.id + '">'
+                                + row.customer_collection_code + '</a>';
+                            },
+                        "targets": 1
+                    },
                     // link with collection group
                     {
                         "render": function(data, type, row) {
@@ -497,6 +537,30 @@
                             }
                         },
                         "targets": 7
+                    },
+                    // link with city
+                    {
+                        "render": function(data, type, row) {
+                            if(row.city_id != null) {
+                                return '<a href="/cities/' + row.city_id + '">'
+                                + row.city_name + '</a>';
+                            } else {
+                                return '';
+                            }
+                        },
+                        "targets": 8
+                    },
+                    //link with township
+                    {
+                        "render": function(data, type, row) {
+                            if(row.township_id != null) {
+                                return '<a href="/townships/' + row.township_id + '">'
+                                + row.township_name + '</a>';
+                            } else {
+                                return '';
+                            }
+                        },
+                        "targets": 9
                     },
                     {
                     "render": function(data, type, row) {

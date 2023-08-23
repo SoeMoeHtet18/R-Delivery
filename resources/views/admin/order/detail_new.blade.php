@@ -204,7 +204,12 @@
                     </div>
                     <hr>
                     <div class="d-flex justify-content-around">
-                        <b>Name</b><b>{{ $order->rider ? $order->rider->name : 'N/A'}}</b>
+                        <b>Name</b><b>@if($order->rider)
+                            <a href="/riders/{{ $order->rider_id }}">  {{ $order->rider->name }}</a>
+                            @else
+                            N/A
+                            @endif
+                        </b>
                     </div>
                 </div>
             </div>
@@ -249,9 +254,13 @@
                             <br>
                             <b>{{$order->customer_phone_number}}</b>
                             <br>
-                            <b>{{$order->city->name}}</b>
+                            <b><a href="/cities/{{ $order->city_id }}">  {{$order->city->name}}</a></b>
                             <br>
-                            <b>{{ $order->township ? $order->township->name : 'N/A'}}</b>
+                            <b>@if($order->township)
+                            <a href="/townships/{{ $order->township_id }}">  {{ $order->township->name }}</a>
+                            @else
+                            N/A
+                            @endif</b>
                             <br>
                             <b>{{ $order->full_address}}</b>
                         </div>
@@ -269,7 +278,7 @@
                             <b>NAME</b>
                         </div>
                         <div class="col-md-6">
-                            <b>{{$order->shop->name}}</b>
+                            <b><a href="/shops/{{ $order->shop_id }}">  {{$order->shop->name}}</a></b>
                         </div>
                     </div>
                 </div>

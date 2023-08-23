@@ -25,7 +25,7 @@
                     <h4>Total Amount <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    {{ $collectionGroup->total_amount }}
+                    {{ number_format($collectionGroup->total_amount, 2, '.', ',') }} MMK
                 </div>
             </div>
             <div class="row m-0 mb-3">

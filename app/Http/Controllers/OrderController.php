@@ -652,7 +652,6 @@ class OrderController extends Controller
 
     public function getAjaxUnpaidOrderList(Request $request)
     {
-
         $orders = $this->orderRepository->getAllUnpaidOrderList()->get();
         $data = [];
         foreach ($orders as $order) {

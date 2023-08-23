@@ -375,6 +375,10 @@
 @section('javascript')
 <script type="text/javascript">
     $(function() {
+        function formatWithNumberingSystem(number, decimal_place = 2) {
+            return parseFloat(number).toFixed(decimal_place).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        }
+        
         var tabIndex = 0;
         $('.nav-tabs a').click(function() {
             $(this).tab('show');
@@ -519,6 +523,23 @@
                             },
                         "targets": 5
                     },
+                    // render with numbering system
+                    {
+                        "render": function(data, type, row) {
+                            return formatWithNumberingSystem(row.total_amount);
+                        },
+                        "targets": 7
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            if(row.markup_delivery_fees != null) {
+                                return formatWithNumberingSystem(row.markup_delivery_fees);
+                            } else {
+                                return '';
+                            }
+                        },
+                        "targets": 9
+                    },
                     // calculate actual delivery fees
                     {
                         "render": function(data, type, row) {
@@ -532,7 +553,7 @@
                                 delivery_fees -= parseFloat(row.discount);
                             }
 
-                            return delivery_fees;
+                            return formatWithNumberingSystem(delivery_fees);
                         },
                         "targets": 8
                     },
@@ -671,6 +692,23 @@
                         },
                     "targets": 5
                 },
+                // render with numbering system
+                {
+                    "render": function(data, type, row) {
+                        return formatWithNumberingSystem(row.total_amount);
+                    },
+                    "targets": 7
+                },
+                {
+                    "render": function(data, type, row) {
+                        if(row.markup_delivery_fees != null) {
+                            return formatWithNumberingSystem(row.markup_delivery_fees);
+                        } else {
+                            return '';
+                        }
+                    },
+                        "targets": 9
+                },
                 // calculate actual delivery fees
                 {
                     "render": function(data, type, row) {
@@ -684,7 +722,7 @@
                             delivery_fees -= parseFloat(row.discount);
                         }
 
-                        return delivery_fees;
+                        return formatWithNumberingSystem(delivery_fees);
                     },
                         "targets": 8
                 },
@@ -806,7 +844,7 @@
                                 return "Picking Up";
                             }
                         },
-                        "targets": 9 
+                        "targets": 9
                     },
                     {
                         "render": function(data, type, row) {
@@ -818,6 +856,37 @@
                             }
                         },
                         "targets": 10
+                    },
+                    // render with numbering system
+                    {
+                        "render": function(data, type, row) {
+                            if(row.total_quantity != null) {
+                                return formatWithNumberingSystem(row.total_quantity, 0);
+                            } else {
+                                return '';
+                            }
+                        },
+                        "targets": 2
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            if(row.total_amount != null) {
+                                return formatWithNumberingSystem(row.total_amount);
+                            } else {
+                                return '';
+                            }
+                        },
+                        "targets": 3
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            if(row.paid_amount != null) {
+                                return formatWithNumberingSystem(row.paid_amount);
+                            } else {
+                                return '';
+                            }
+                        },
+                        "targets": 4
                     },
                 ],
         });
@@ -835,6 +904,12 @@
                     name: 'amount',
                 },
             ],
+            columnDefs: [{
+                "render": function(data, type, row) {
+                    return formatWithNumberingSystem(row.total_amount);
+                },
+                "targets": 1
+            },]
         });
         
         get_township_ajax_dynamic_data();
@@ -862,6 +937,19 @@
                         searchable: false
                     },
                 ],
+                columnDefs: [
+                    {
+                        "render": function(data, type, row) {
+                            return '<a href="/townships/' + row.id + '">' + row.name + '</a>';
+                        },
+                        "targets": 1
+                    },
+                    {
+                    "render": function(data, type, row) {
+                        return formatWithNumberingSystem(row.rider_fees);
+                    },
+                    "targets": 2
+                },]
             });
         }
         

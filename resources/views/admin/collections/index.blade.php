@@ -140,6 +140,10 @@
 @endsection
 @section('javascript')
 <script type="text/javascript">
+    function formatWithNumberingSystem(number, decimal_place = 2) {
+        return parseFloat(number).toFixed(decimal_place).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    }
+
     $(document).ready(function() {
         $("#toggleFilter").on("click", function() {
             $(".filter-content").slideToggle(300);
@@ -291,6 +295,37 @@
                             }
                         },
                         "targets": 12
+                    },
+                    // render with numbering system
+                    {
+                        "render": function(data, type, row) {
+                            if(row.total_quantity != null) {
+                                return formatWithNumberingSystem(row.total_quantity, 0);
+                            } else {
+                                return '';
+                            }
+                        },
+                        "targets": 3
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            if(row.total_amount != null) {
+                                return formatWithNumberingSystem(row.total_amount);
+                            } else {
+                                return '';
+                            }
+                        },
+                        "targets": 4
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            if(row.paid_amount != null) {
+                                return formatWithNumberingSystem(row.paid_amount);
+                            } else {
+                                return '';
+                            }
+                        },
+                        "targets": 5
                     },
                 ],
             });

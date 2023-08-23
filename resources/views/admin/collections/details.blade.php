@@ -44,7 +44,7 @@
                     <h4>Total Quantity of Pick Up <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    {{ $collection->total_quantity }}
+                    {{ number_format($collection->total_quantity, 0, '.', ',') }}
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -52,7 +52,7 @@
                     <h4>Total Amount of Pick Up <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    {{ $collection->total_amount }}
+                    {{ number_format($collection->total_amount, 2, '.', ',') }} MMK
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -60,7 +60,7 @@
                     <h4>Paid Amount By Rider <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    {{ $collection->paid_amount }}
+                    {{ number_format($collection->paid_amount, 2, '.', ',') }} MMK
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -69,7 +69,7 @@
                 </div>
                 <div class="col-10">
                     @if($collection->rider_id != null)
-                    {{ $collection->rider->name }}
+                    <a href="/riders/{{ $collection->rider_id }}"> {{$collection->rider->name}}</a>
                     @else
                     N/A
                     @endif
@@ -81,7 +81,7 @@
                 </div>
                 <div class="col-10">
                     @if($collection->shop_id != null)
-                    {{ $collection->shop->name }}
+                    <a href="/shops/{{ $collection->shop_id }}"> {{$collection->shop->name}}</a>
                     @else
                     N/A
                     @endif

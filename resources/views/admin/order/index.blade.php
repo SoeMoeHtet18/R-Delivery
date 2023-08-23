@@ -398,8 +398,6 @@
                         <th>Last Updated By</th>
                         <th>Branch</th>
                         <th>Pick Up Group Code</th>
-                        <th>Extra Charges</th>
-                        <th>Discount</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -431,8 +429,6 @@
                         <th>Customer Phone Number</th>
                         <th>Paid</th>
                         <th>Branch</th>
-                        <th>Extra Charges</th>
-                        <th>Discount</th>
                     </tr>
                 </thead>
 
@@ -462,8 +458,6 @@
                         <th>Customer Phone Number</th>
                         <th>Paid</th>
                         <th>Branch</th>
-                        <th>Extra Charges</th>
-                        <th>Discount</th>
                     </tr>
                 </thead>
 
@@ -511,6 +505,9 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
+        function formatWithNumberingSystem(number, decimal_place = 2) {
+            return parseFloat(number).toFixed(decimal_place).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        }
 
         $("#toggleFilter").on("click", function() {
             $(".filter-content").slideToggle(300);
@@ -867,21 +864,14 @@
                         name: 'pick_up_group_code'
                     },
                     {
-                        data: 'extra_charges',
-                        name: 'extra_charges'
-                    },
-                    {
-                        data: 'discount',
-                        name: 'discount'
-                    },
-                    {
                         data: 'action',
                         name: 'action',
                         orderable: false,
                         searchable: false
                     },
                 ],
-                columnDefs: [{
+                columnDefs: [
+                    {
                         "render": function(data, type, row) {
                             if (row.payment_flag == 0) {
                                 return "Unpaid";
@@ -940,6 +930,23 @@
                             },
                         "targets": 22
                     },
+                    // render with numbering system
+                    {
+                        "render": function(data, type, row) {
+                            return formatWithNumberingSystem(row.total_amount);
+                        },
+                        "targets": 3
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            if(row.markup_delivery_fees != null) {
+                                return formatWithNumberingSystem(row.markup_delivery_fees);
+                            } else {
+                                return '';
+                            }
+                        },
+                        "targets": 5
+                    },
                     // calculate the acutual delivery fees
                     {
                         "render": function(data, type, row) {
@@ -953,7 +960,7 @@
                                 delivery_fees -= parseFloat(row.discount);
                             }
 
-                            return delivery_fees;
+                            return formatWithNumberingSystem(delivery_fees);
                         },
                         "targets": 4
                     },
@@ -1133,17 +1140,26 @@
                         data: 'branch_name',
                         name: 'branch'
                     },
-                    {
-                        data: 'extra_charges',
-                        name: 'extra_charges'
-                    },
-                    {
-                        data: 'discount',
-                        name: 'discount'
-                    },
                 ],
                 columnDefs: [
-                    // calculate actual delivery fees
+                    // render with numbering system
+                    {
+                        "render": function(data, type, row) {
+                            return formatWithNumberingSystem(row.total_amount);
+                        },
+                        "targets": 2
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            if(row.markup_delivery_fees != null) {
+                                return formatWithNumberingSystem(row.markup_delivery_fees);
+                            } else {
+                                return '';
+                            }
+                        },
+                        "targets": 4
+                    },
+                    // calculate the acutual delivery fees
                     {
                         "render": function(data, type, row) {
                             var delivery_fees = parseFloat(row.delivery_fees);
@@ -1156,7 +1172,7 @@
                                 delivery_fees -= parseFloat(row.discount);
                             }
 
-                            return delivery_fees;
+                            return formatWithNumberingSystem(delivery_fees);
                         },
                         "targets": 3
                     },
@@ -1265,17 +1281,26 @@
                         data: 'branch_name',
                         name: 'branch'
                     },
-                    {
-                        data: 'extra_charges',
-                        name: 'extra_charges'
-                    },
-                    {
-                        data: 'discount',
-                        name: 'discount'
-                    },
                 ],
                 columnDefs: [
-                    // calculate actual delivery fees
+                    // render with numbering system
+                    {
+                        "render": function(data, type, row) {
+                            return formatWithNumberingSystem(row.total_amount);
+                        },
+                        "targets": 2
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            if(row.markup_delivery_fees != null) {
+                                return formatWithNumberingSystem(row.markup_delivery_fees);
+                            } else {
+                                return '';
+                            }
+                        },
+                        "targets": 4
+                    },
+                    // calculate the acutual delivery fees
                     {
                         "render": function(data, type, row) {
                             var delivery_fees = parseFloat(row.delivery_fees);
@@ -1288,7 +1313,7 @@
                                 delivery_fees -= parseFloat(row.discount);
                             }
 
-                            return delivery_fees;
+                            return formatWithNumberingSystem(delivery_fees);
                         },
                         "targets": 3
                     },
@@ -1396,17 +1421,26 @@
                         data: 'branch_name',
                         name: 'branch'
                     },
-                    {
-                        data: 'extra_charges',
-                        name: 'extra_charges'
-                    },
-                    {
-                        data: 'discount',
-                        name: 'discount'
-                    },
                 ],
                 columnDefs: [
-                    // calculate actual delivery fees
+                    // render with numbering system
+                    {
+                        "render": function(data, type, row) {
+                            return formatWithNumberingSystem(row.total_amount);
+                        },
+                        "targets": 2
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            if(row.markup_delivery_fees != null) {
+                                return formatWithNumberingSystem(row.markup_delivery_fees);
+                            } else {
+                                return '';
+                            }
+                        },
+                        "targets": 4
+                    },
+                    // calculate the acutual delivery fees
                     {
                         "render": function(data, type, row) {
                             var delivery_fees = parseFloat(row.delivery_fees);
@@ -1419,7 +1453,7 @@
                                 delivery_fees -= parseFloat(row.discount);
                             }
 
-                            return delivery_fees;
+                            return formatWithNumberingSystem(delivery_fees);
                         },
                         "targets": 3
                     },
