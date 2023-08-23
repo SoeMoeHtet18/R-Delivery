@@ -170,6 +170,10 @@
                 <a href="#collection-for-shop-display" id="collection-for-shop-tab" class="nav-link"
                     data-toggle="tab">Pick Ups For Shop</a>
             </li>
+            <li>
+                <a href="#shop-customer-exchange-display" id="shop-customer-exchange-tab" class="nav-link"
+                    data-toggle="tab">Customer Exchanges</a>
+            </li>
         </ul>
         <input type="hidden" id="current_screen" value="shop-user-display">
         <div class="d-flex justify-content-end">
@@ -332,7 +336,38 @@
                     </table>
                 </div>
             </div>
+            <div id="shop-customer-exchange-display" class="portlet box green tab-pane">
+                <div class="portlet-title">
+                    <div class="caption">Customer Exchange Lists</div>
+                </div>
+                <div class="portlet-body">
+                    <table id="shop-customer-exchange-datatable" class="table table-striped table-hover table-responsive datatable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Customer Exchange Code</th>
+                                <th>Pick Up Group</th>
+                                <th>Order Code</th>
+                                <th>Customer Name</th>
+                                <th>Customer Phone Number</th>
+                                <th>Rider</th>
+                                <th>City</th>
+                                <th>Township</th>
+                                <th>Items</th>
+                                <th>Paid Amount To Customer</th>
+                                <th>Is Way Fees Payable</th>
+                                <th>Status</th>
+                                <th>Note</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
 
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -1024,6 +1059,202 @@
                 get_ajax_dynamic_collection_for_shop_table(start, end);
             });
         }
+
+        get_ajax_dynamic_customer_exchanges_data(start = '', end = '');
+
+        function get_ajax_dynamic_customer_exchanges_data(start, end) {
+            var customer_collection_table = $('#shop-customer-exchange-datatable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    "url": '/get-collections-for-shop-by-shop-id/'+ shop_id,
+                    "type": "GET",
+                    "data": function(r) {
+                        r.from_date = start;
+                        r.to_date = end;
+                    }
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'id'
+                    },
+                    {
+                        data: 'customer_collection_code',
+                        name: 'customer_collection_code'
+                    },
+                    {
+                        data: 'collection_group_code',
+                        name: 'collection_group'
+                    },
+                    {
+                        data: 'order_code',
+                        name: 'order_code'
+                    },
+                    {
+                        data: 'customer_name',
+                        name: 'customer_name'
+                    },
+                    {
+                        data: 'customer_phone_number',
+                        name: 'customer_phone_number'
+                    },
+                    
+                    {
+                        data: 'rider_name',
+                        name: 'rider'
+                    },
+                    {
+                        data: 'city_name',
+                        name: 'city'
+                    },{
+                        data: 'township_name',
+                        name: 'township'
+                    },
+                    {
+                        data: 'items',
+                        name: 'items'
+                    },
+                    {
+                        data: 'paid_amount',
+                        name: 'paid_amount_to_customer'
+                    },
+                    {
+                        data: 'is_way_fees_payable',
+                        name: 'is_way_fees_payable'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status'
+                    },
+                    {
+                        data: 'note',
+                        name: 'note'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    },
+                ],
+                columnDefs: [
+                    // link with collection group
+                    {
+                        "render": function(data, type, row) {
+                            if(row.collection_group_id != null) {
+                                return '<a href="/collection-groups/' + row.collection_group_id + '">'
+                                    + row.collection_group_code + '</a>';
+                                } else {
+                                    return '';
+                                }
+                            },
+                        "targets": 2
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            if(row.id != null) {
+                                return '<a href="/customer-collections/' + row.id + '">'
+                                    + row.customer_collection_code + '</a>';
+                                } else {
+                                    return '';
+                                }
+                            },
+                        "targets": 1
+                    },
+                    // link with order
+                    {
+                        "render": function(data, type, row) {
+                            if(row.order_id != null) {
+                                return '<a href="/orders/' + row.order_id + '">'
+                                    + row.order_code + '</a>';
+                                } else {
+                                    return '';
+                                }
+                            },
+                        "targets": 3
+                    },
+                   
+                    // link with rider
+                    {
+                        "render": function(data, type, row) {
+                            if(row.rider_id != null) {
+                                return '<a href="/riders/' + row.rider_id + '">'
+                                + row.rider_name + '</a>';
+                            } else {
+                                return '';
+                            }
+                        },
+                        "targets": 6
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            if(row.city_id != null) {
+                                return '<a href="/cities/' + row.city_id + '">'
+                                + row.city_name + '</a>';
+                            } else {
+                                return '';
+                            }
+                        },
+                        "targets": 7
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            if(row.township_id != null) {
+                                return '<a href="/townships/' + row.township_id + '">'
+                                + row.township_name + '</a>';
+                            } else {
+                                return '';
+                            }
+                        },
+                        "targets": 8
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            if (row.is_way_fees_payable == 0) {
+                                return "No";
+                            }
+                            if (row.is_way_fees_payable == 1) {
+                                return "Yes";
+                            }
+                            if (row.is_way_fees_payable == null) {
+                                return "Pending";
+                            }
+                        },
+                        "targets": 11
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            if (row.status == 'pending') {
+                                return "Pending";
+                            }
+                            if (row.status == 'in-warehouse') {
+                                return "In Warehouse";
+                            }
+                            if (row.status == 'complete') {
+                                return "Completed";
+                            }
+                        },
+                        "targets": 12
+                    },
+
+                ]
+            });
+
+            $('#filter').click(function() {
+                var start = $('#start_date').val();
+                var end = $('#end_date').val();
+                customer_collection_table.destroy();
+                get_ajax_dynamic_customer_exchanges_data(start, end);
+            });
+            $("#clear").click(function() {
+                $("#start_date").val("").trigger("change");
+                $("#end_date").val("").trigger("change");
+                var start = $("#start_date").val();
+                var end = $('#end_date').val();
+                customer_collection_table.destroy();
+                get_ajax_dynamic_customer_exchanges_data(start, end);
+            });
+        };
 
         const form = $('#pdf_form');
 

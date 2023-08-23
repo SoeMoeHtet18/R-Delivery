@@ -171,6 +171,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('/riders/{id}/assign-third-party-vendor', [RiderController::class, 'assignThirdPartyVendorToRider']);
     Route::get('/get-assign-townships-by-rider-id/{id}', [RiderController::class, 'getAllAssignTownshipsByRider']);
     Route::delete('/delete-rider-assign-township-by-id/{id}', [RiderController::class, 'deleteRiderAssignTownship']);
+    Route::get('/get-collections-for-shop-by-shop-id/{id}',
+        [CustomerCollectionController::class, 'getCustomerExchangeByShopID']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

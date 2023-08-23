@@ -201,4 +201,32 @@ class CustomerCollectionController extends Controller
             ->orderColumn('id', '-customer_collections.id')
             ->make(true);
     }
+
+    public function getCustomerExchangeByShopID(Request $request, $id)
+    {
+        $start = $request->from_date;
+        $end = $request->to_date . ' 23:59:00';
+        $data = $this->customerCollectionRepository->getCustomerCollectionByShopID($id);
+        if ($start && $end) {
+            $data = $data->whereBetween('customer_collections.created_at', [$start, $end]);
+        }
+        $customerCollections = $data;
+        
+
+        return DataTables::of($customerCollections)
+            ->addColumn('action', function ($row) {
+                $actionBtn = '<a href="' . route("customer-collections.show", $row->id) . '" class="info btn btn-info btn-sm">View</a>
+                <a href="' . route("customer-collections.edit", $row->id) . '" class="edit btn btn-light btn-sm">Edit</a>
+                <form action="' . route("customer-collections.destroy", $row->id) . '" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this city?`);">
+                    <input type="hidden" name="_token" value="' . csrf_token() . '">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
+                </form>';
+                return $actionBtn;
+            })
+            ->rawColumns(['action'])
+            ->addIndexColumn()
+            ->orderColumn('id', '-customer_collections.id')
+            ->make(true);
+    }
 }
