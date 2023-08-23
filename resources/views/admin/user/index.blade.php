@@ -76,6 +76,10 @@
 
     function get_ajax_dynamic_data(search) {
         var table = $('.datatable').DataTable({
+            "initComplete": function(settings, json) {
+            // Find the search input and hide it
+            $('.dataTables_filter').css('display', 'none');
+            },
             processing: true,
             serverSide: true,
             ajax: {

@@ -2,16 +2,20 @@
     <div class="page-header-inner  w-100">
         <div class="page-header-inner">
             <a id="pageSidebarCollapseBtn" data-bs-toggle="modal" data-bs-target="#sidebarModelCollapse"
-                href="#pageSidebarCollapse" role="button" aria-expanded="false">
+                href="#pageSidebarCollapse" role="button" aria-expanded="false" class="text-white">
                 <i class="fa-solid fa-bars"></i>
             </a>
             <div class="top-menu" style="display: flex;">
             
                 <div style="display: flex; flex-direction: column;">
-                    <a id="notificationCollapse" class="btn btn-secondary" data-bs-toggle="collapse" href="#notification" role="button" aria-expanded="false" aria-controls="collapseExample" style="align-self: flex-end;">
+                
+                    <a id="notificationCollapse" data-bs-toggle="collapse"
+                        href="#notification" role="button" aria-expanded="false"
+                            aria-controls="notification" style="align-self: flex-end;" class="text-white me-2">
                         <i class="fa fa-bell"></i>
                     </a>
-                    <div class="dropdown-menu collapse customize-collapse" aria-labelledby="notificationDropdown" id="notification" style="position: initial;">
+                    <div class="dropdown-menu collapse customize-collapse"
+                        aria-labelledby="notificationDropdown" id="notification" style="position: initial;">
                         <div class="dropdown-header">Notifications</div>
                         <div class="dropdown-divider"></div>
                         <div class="dropdown-body" id="notificationList">

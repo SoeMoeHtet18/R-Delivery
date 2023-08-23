@@ -197,6 +197,8 @@ Page Header
     margin: 0;
     padding: 0;
     float: right;
+    position: absolute;
+    right: 0;
 }
 
 .page-header.navbar .top-menu .navbar-nav {
@@ -947,14 +949,14 @@ Horizontal Menu
         /* Top menu */
     }
 
-    .page-header.navbar .top-menu {
+    /* .page-header.navbar .top-menu {
         display: none;
         clear: both;
-    }
+    } */
 
-    .page-header.navbar .top-menu .navbar-nav {
+    /* .page-header.navbar .top-menu .navbar-nav {
         margin-right: 0;
-    }
+    } */
 
     .page-header.navbar .top-menu .navbar-nav > li.dropdown .dropdown-toggle {
         padding: 17px 6px 9px 6px;

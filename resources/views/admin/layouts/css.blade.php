@@ -289,4 +289,10 @@
             display: block;
         }
     }
+
+    @media (max-width: 767px) {
+        div.page-content {
+            overflow: auto !important;
+        }
+    }
 </style>

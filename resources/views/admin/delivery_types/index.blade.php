@@ -69,8 +69,6 @@
                     <th>#</th>
                     <th>Name</th>
                     <th>Notified On</th>
-                    <th>Created At</th>
-                    <th>Updated At</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -113,14 +111,6 @@
                     {
                         data: 'notified_on',
                         name: 'notified_on',
-                    },
-                    {
-                        data: 'created_at',
-                        name: 'created_at',
-                    },
-                    {
-                        data: 'updated_at',
-                        name: 'updated_at',
                     },
                     {
                         data: 'action',

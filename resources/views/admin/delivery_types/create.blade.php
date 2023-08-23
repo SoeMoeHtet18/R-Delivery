@@ -32,7 +32,7 @@
                 </div>
             </div>
             <div class="footer-button float-end">
-                <a href="{{route('cities.index')}}" class="btn btn-light">Cancel</a>
+                <a href="{{route('delivery-types.index')}}" class="btn btn-light">Cancel</a>
                 <input type="submit" class="btn btn-success ">
             </div>
         </form>

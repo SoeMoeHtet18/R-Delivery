@@ -2,7 +2,13 @@
 @section('title','Dashboard')
 @section('sub-title','Set To Warehouse')
 @section('content')
-
+<style>
+    @media (max-width: 800px) {
+        #search {
+            width: unset;
+        }
+    }
+</style>
 <div>
     <h2 class="ps-1 card-header-title">
         <strong>Set To Warehouse</strong>
@@ -10,10 +16,7 @@
     <div class="row">
         <div class="filter-box">
             <div class="mb-3 p-3 col-4">
-                
-                <div class="col-10">
-                    <input type="text" id="search" name="search" class="form-control" />
-                </div>
+                <input type="text" id="search" name="search" class="form-control" />
             </div>
         </div>
     </div>
