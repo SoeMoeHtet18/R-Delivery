@@ -97,7 +97,7 @@
                     <h4>Payable Amount <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    {{ $shop->payable_amount }} MMK
+                    {{ number_format($shop->payable_amount, 2, '.', ',') }} MMK
                 </div>
             </div>
         </div>
@@ -340,6 +340,10 @@
 @section('javascript')
 <script type="text/javascript">
     $(function() {
+        function formatWithNumberingSystem(number, decimal_place = 2) {
+            return parseFloat(number).toFixed(decimal_place).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        }
+
         $("#toggleFilter").on("click", function() {
             $(".filter-content").slideToggle(300);
             $('#payment_channel').select2();
@@ -559,6 +563,23 @@
                         },
                         "targets": 2
                     },
+                    // render with numbering system
+                    {
+                        "render": function(data, type, row) {
+                            return formatWithNumberingSystem(row.total_amount);
+                        },
+                        "targets": 9
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            if(row.markup_delivery_fees != null) {
+                                return formatWithNumberingSystem(row.markup_delivery_fees);
+                            } else {
+                                return '';
+                            }
+                        },
+                        "targets": 11
+                    },
                     // calculate actual delivery fees
                     {
                         "render": function(data, type, row) {
@@ -571,8 +592,8 @@
                             if (row.discount != null) {
                                 delivery_fees -= parseFloat(row.discount);
                             }
-
-                            return delivery_fees;
+                            
+                            return formatWithNumberingSystem(delivery_fees);
                         },
                         "targets": 10
                     },
@@ -748,7 +769,14 @@
                     }
                 },
                 "targets": 2
-            }, ]
+            },
+            // render with numbering system
+            {
+                "render": function(data, type, row) {
+                    return parseFloat(row.amount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                },
+                "targets": 1
+            },]
         });
 
         // Initialize transaction-for-shop-datatable
@@ -802,7 +830,14 @@
                         }
                     },
                     "targets": 2
-                }, ]
+                },
+                // render with numbering system
+                {
+                "render": function(data, type, row) {
+                    return parseFloat(row.amount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                },
+                "targets": 1
+                }]
             });
 
             $('#filter').click(function() {
@@ -883,6 +918,37 @@
                     },
                 ],
                 columnDefs: [
+                        // render with numbering system
+                        {
+                            "render": function(data, type, row) {
+                                if(row.total_quantity != null) {
+                                    return formatWithNumberingSystem(row.total_quantity, 0);
+                                } else {
+                                    return '';
+                                }
+                            },
+                            "targets": 2
+                        },
+                        {
+                            "render": function(data, type, row) {
+                                if(row.total_amount != null) {
+                                    return formatWithNumberingSystem(row.total_amount);
+                                } else {
+                                    return '';
+                                }
+                            },
+                            "targets": 3
+                        },
+                        {
+                            "render": function(data, type, row) {
+                                if(row.paid_amount != null) {
+                                    return formatWithNumberingSystem(row.paid_amount);
+                                } else {
+                                    return '';
+                                }
+                            },
+                            "targets": 4
+                        },
                         // link with collections
                         {
                             "render": function(data, type, row) {
@@ -927,7 +993,7 @@
                                     return "Picking Up";
                                 }
                             },
-                            "targets": 9 
+                            "targets": 9
                         },
                         {
                             "render": function(data, type, row) {

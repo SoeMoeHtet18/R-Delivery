@@ -45,9 +45,9 @@
         <tbody>
             @foreach ($collections as $collection)
             <tr>
-                <td>{{ $collection->total_amount }}</td>
-                <td>{{ $collection->paid_amount }}</td>
-                <td>{{ $collection->total_quantity }}</td>
+                <td>{{ number_format($collection->total_amount, 2, '.', ',')  }}</td>
+                <td>{{ number_format($collection->paid_amount, 2, '.', ',') }}</td>
+                <td>{{ number_format($collection->total_quantity, 0, '.', ',') }}</td>
                 <td>{{ $collection->shop->name }}</td>
                 <td>@if($collection->rider != null){{ $collection->rider->name }}@endif</td>
                 <td>@if($collection->collected_at != null){{ $collection->collected_at->format('d.m.Y') }}@endif</td>
