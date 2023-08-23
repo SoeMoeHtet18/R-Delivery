@@ -125,7 +125,7 @@
                      // link with self
                      {
                         "render": function(data, type, row) {
-                            return '<a href="/branches/' + row.id + '">'
+                            return '<a href="/gates/' + row.id + '">'
                                 + row.name + '</a>';
                             },
                         "targets": 1
@@ -144,7 +144,8 @@
                             var gateAssignedTownships = '';
                             if(row.townships.length > 0 ){
                             for(var i = 0; i < row.townships.length; i++){
-                                gateAssignedTownships += row.townships[i].name+', ';
+                                gateAssignedTownships += '<a href="/townships/' + row.townships[i].id + '">'
+                                + row.townships[i].name + ', </a>';
                             }
                             
                             } else {

@@ -94,6 +94,9 @@
 @section('javascript')
 <script type="text/javascript">
     $(document).ready(function() {
+        function formatWithNumberingSystem(number, decimal_place = 2) {
+            return parseFloat(number).toFixed(decimal_place).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        }
         $("#toggleFilter").on("click", function() {
             $(".filter-content").slideToggle(300);
             $('#item_type').select2();
@@ -150,6 +153,12 @@
                                 + row.shop_name + '</a>';
                             },
                         "targets": 1
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            return formatWithNumberingSystem(row.amount);
+                        },
+                        "targets": 2
                     },
                     {
                     "render": function(data, type, row) {

@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TownshipRequest;
+use App\Models\Branch;
 use App\Models\City;
+use App\Models\Gate;
+use App\Models\ThirdPartyVendor;
 use App\Models\Township;
 use App\Repositories\CityRepository;
 use App\Repositories\TownshipRepository;
@@ -146,5 +149,27 @@ class TownshipController extends Controller
         $townships = $this->townshipRepository->getTownshipListByAssociable($city_id, $associable_id, $associable_type);
         // $townships = $townships->sortByDesc('id');
         return response()->json(['data' => $townships, 'message' => 'Successfully Get Townships List', 'status' => 'success'], 200);
+    }
+
+    public function getTownshipsWithAssociable(Request $request)
+    {
+        $type = $request->type;
+        $id   = $request->id;
+        if($type == 'branch'){
+            $associableType = Branch::class;
+        } elseif($type == 'gate'){
+            $associableType = Gate::class;
+        } else {
+            $associableType = ThirdPartyVendor::class;
+        }
+        $townships = $this->townshipRepository->getTownshipsWithAssociable($id, $associableType);
+        return DataTables::of($townships)
+            ->addColumn('name', function($townships) {
+                return '<a href="'. route("townships.show",$townships->id) . '">' . $townships->name . '</a>';
+            })
+            ->addIndexColumn()
+            ->rawColumns(['name'])
+            ->orderColumn('id', '-id $1')
+            ->make(true);
     }
 }

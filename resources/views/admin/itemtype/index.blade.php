@@ -97,6 +97,15 @@
                         orderable: false,
                         searchable: false
                     },
+                ],
+                columnDefs: [
+                    {
+                        "render": function(data, type, row) {
+                            return '<a href="/itemtypes/' + row.id + '">' + row.name + '</a>';
+                        },
+                        "targets": 1
+                    },
+                    
                 ]
             });
 

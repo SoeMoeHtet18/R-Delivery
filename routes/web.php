@@ -173,6 +173,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::delete('/delete-rider-assign-township-by-id/{id}', [RiderController::class, 'deleteRiderAssignTownship']);
     Route::get('/get-collections-for-shop-by-shop-id/{id}',
         [CustomerCollectionController::class, 'getCustomerExchangeByShopID']);
+    Route::get('/ajax-get-townships-with-associable',
+        [TownshipController::class, 'getTownshipsWithAssociable']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -33,7 +33,9 @@
                         <h4>City <b>:</b></h4>
                     </div>
                     <div class="col-10">
-                        {{ $township->city->name }}
+                        <a href="/cities/{{ $township->city_id }}">
+                            {{ $township->city->name }}
+                        </a>
                     </div>
                 </div>
                 <div class="row m-0 mb-3">

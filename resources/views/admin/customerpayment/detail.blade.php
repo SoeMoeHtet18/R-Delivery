@@ -23,7 +23,9 @@
                     <h4>Order Code <b>:</b></h4>
                 </div>
                 <div class="col-10">
+                    <a href="/orders/{{ $customer_payment->order_id }}">
                     {{ $customer_payment->order->order_code }}
+                    </a>
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -31,7 +33,7 @@
                     <h4>Amount<b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    {{ $customer_payment->amount }}
+                    {{ number_format($customer_payment->amount, 2, '.', ',') }} MMK
                 </div>
             </div>
             <div class="row m-0 mb-3">

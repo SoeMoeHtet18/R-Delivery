@@ -672,6 +672,7 @@
                             if (row.payment_method == 'item_prepaid') {
                                 return "Item Prepaid";
                             }
+                            return '';
                         },
                         "targets": 13
                     },

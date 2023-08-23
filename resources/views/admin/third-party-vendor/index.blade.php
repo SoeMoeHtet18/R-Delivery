@@ -79,10 +79,18 @@
                 columnDefs: [
                     {
                         "render": function(data, type, row) {
+                            return '<a href="/third-party-vendor/' + row.id + '">'
+                                + row.name + '</a>';
+                            },
+                        "targets": 1
+                    },
+                    {
+                        "render": function(data, type, row) {
                             var assignedTownships = '';
                             if(row.townships.length > 0 ){
                             for(var i = 0; i < row.townships.length; i++){
-                                assignedTownships += row.townships[i].name+', ';
+                                assignedTownships += '<a href="/townships/' + row.townships[i].id + '">'
+                                + row.townships[i].name + ' , </a>';
                             }
                             
                             } else {
