@@ -73,13 +73,13 @@
                 @endphp
                 <td>{{ $totalQuantity }}</td>
                 <td>
-                    @if($order->payment_method == 'cash_on_delivery') 
-                        {{ $order->total_amount }} 
+                    @if($order->payment_method == 'cash_on_delivery')
+                        {{ number_format($order->total_amount, 2, '.', ',') }}
                     @endif
                 </td>
-                <td>{{ $order->delivery_fees - $order->discount }}</td>               
-                <td>{{ $order->markup_delivery_fees }}</td>
-                <td>{{ $order->extra_charges }}</td>
+                <td>{{ number_format($order->delivery_fees - $order->discount, 2, '.', ',') }}</td>
+                <td>{{ number_format($order->markup_delivery_fees, 2, '.', ',') }}</td>
+                <td>{{ number_format($order->extra_charges, 2, '.', ',') }}</td>
                 <td>{{ $order->remark }}</td>
             </tr>
             @endforeach
@@ -90,10 +90,10 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>{{ $totalAmountSum }}</td>
-                <td>{{ $deliveryFeesSum }}</td>
-                <td>{{ $markupDeliveryFeesSum }}</td>
-                <td>{{ $extraChargesSum }}</td>
+                <td>{{ number_format($totalAmountSum, 2, '.', ',') }}</td>
+                <td>{{ number_format($deliveryFeesSum, 2, '.', ',') }}</td>
+                <td>{{ number_format($markupDeliveryFeesSum, 2, '.', ',') }}</td>
+                <td>{{ number_format($extraChargesSum, 2, '.', ',') }}</td>
                 <td></td>
             </tr>
         </tbody>
@@ -107,23 +107,23 @@
             </tr>
             <tr class="color">
                 <td>Amount</td>
-                <td>{{ $totalAmountSum }}</td>
+                <td>{{ number_format($totalAmountSum, 2, '.', ',') }}</td>
             </tr>
             <tr>
                 <td>OS Deli</td>
-                <td>{{ $markupDeliveryFeesSum }}</td>
+                <td>{{ number_format($markupDeliveryFeesSum, 2, '.', ',') }}</td>
             </tr>
             <tr class="color">
                 <td>Total Amount</td>
-                <td>{{ $totalAmountSum - $markupDeliveryFeesSum }}</td>
+                <td>{{ number_format($totalAmountSum - $markupDeliveryFeesSum, 2, '.', ',') }}</td>
             </tr>
             <tr>
                 <td>Deli Add</td>
-                <td>{{ $extraChargesSum }}</td>
+                <td>{{ number_format($extraChargesSum, 2, '.', ',') }}</td>
             </tr>
             <tr class="color">
                 <td>Net Amount</td>
-                <td>{{  $totalAmountSum - $markupDeliveryFeesSum + $extraChargesSum }}</td>
+                <td>{{ number_format($totalAmountSum - $markupDeliveryFeesSum + $extraChargesSum, 2, '.', ',') }}</td>
             </tr>
         </tbody>
     </table>

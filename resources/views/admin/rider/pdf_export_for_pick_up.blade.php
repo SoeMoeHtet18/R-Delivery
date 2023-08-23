@@ -45,12 +45,15 @@
         <tbody>
             @foreach ($collections as $collection)
             <tr>
-                <td>{{ $collection->total_amount }}</td>
-                <td>{{ $collection->paid_amount }}</td>
-                <td>{{ $collection->total_quantity }}</td>
+            <td>{{ number_format($collection->total_amount, 2, '.', ',')  }}</td>
+                <td>{{ number_format($collection->paid_amount, 2, '.', ',') }}</td>
+                <td>{{ number_format($collection->total_quantity, 0, '.', ',') }}</td>
                 <td>{{ $collection->shop_name }}</td>
                 <td>{{ $collection->rider_name }}</td>
-                <td>@if($collection->latest_collected_at != null){{ $collection->latest_collected_at->format('d.m.Y') }}@endif</td>
+                <td>@if($collection->latest_collected_at != null)
+                        {{ $collection->latest_collected_at->format('d.m.Y') }}
+                    @endif
+                </td>
             </tr>
             @endforeach
         </tbody>
