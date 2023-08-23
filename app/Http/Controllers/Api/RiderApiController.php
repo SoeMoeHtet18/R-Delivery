@@ -308,12 +308,13 @@ class RiderApiController extends Controller
         $totalPickUpCount = $collections->count() + $customerExchanges->count();
 
         $deficitFees = $this->getDeficitFees($rider, $startDate, $endDate);
+        // dd($totalCollectionFees + $deliFees + $rider->base_salary);
 
         $totalSalary = ($totalCollectionFees + $deliFees + $rider->base_salary) - $deficitFees;
 
         $data = [
             'total_salary' => $totalSalary,
-            'deficit_fees' => $deliFees,
+            'deficit_fees' => $deficitFees,
             'collection_count' => $totalPickUpCount,
             'order_count' => $orderCount,
         ];

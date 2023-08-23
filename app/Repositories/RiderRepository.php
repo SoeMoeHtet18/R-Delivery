@@ -159,14 +159,8 @@ class RiderRepository
 
         $totalSalary = ($totalCollectionFees + $deliFees + $rider->base_salary) - $deficitFees;
 
-        $data = [
-            'total_salary' => $totalSalary,
-            'deficit_fees' => $deliFees,
-            'collection_count' => $totalPickUpCount,
-            'order_count' => $orderCount,
-        ];
         $data['total_salary'] = $totalSalary;
-        $data['deficit_fees'] = $deliFees;
+        $data['deficit_fees'] = $deficitFees;
         $data['total_pick_up_count'] = $totalPickUpCount;
         $data['total_deli_count'] = $orderCount;
         $data['salary_type'] = $rider->salary_type;
