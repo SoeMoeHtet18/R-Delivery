@@ -701,7 +701,8 @@
             } else if (process_data.some(order => order.payment_flag === 1)) {
                 showErrorToast("Please select only orders that are unpaid.");
             } else {
-                var redirectUrl = '/create-transaction-for-shop-for-selected-orders?order_ids=' + order_ids + '&shop_id=' + shop_ids;
+                var redirectUrl = '/create-transaction-for-shop-for-selected-orders?order_ids='
+                    + encodeURIComponent(order_ids) + '&shop_id=' + encodeURIComponent(shop_ids);
                 window.location = redirectUrl;
             }
         }

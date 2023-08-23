@@ -78,8 +78,8 @@ class ShopApiController extends Controller
         $shop_id = $shop_user->shop_id;
         $credits = [];
 
-        $total_credit = $this->orderRepository->getTotalCreditForShop($shop_id);
-        $credits['total_amount'] = strval($total_credit);
+        $total_credit = $this->shopRepository->getTotalCreditForShop($shop_id);
+        $credits['total_amount'] = $total_credit;
 
         $paid_credit_from_collection = $this->collectionRepository->getPaidAmountByShopUser($shop_id);
         $paid_credit_from_transaction = $this->transactionForShopRepository->getPaidAmountByShopUser($shop_id);

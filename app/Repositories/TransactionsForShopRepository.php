@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Collection;
+use App\Models\CustomerCollection;
 use App\Models\Order;
 use App\Models\ShopPayment;
 use App\Models\TransactionsForShop;
@@ -71,7 +72,8 @@ class TransactionsForShopRepository
     {
         $shop_payments = ShopPayment::where('shop_id', $shop_id)->sum('amount');
 
-        $paid_orders = Order::where('payment_flag',1)->get();
+        $paid_orders = Order::where('payment_flag', 1)
+                            ->where('shop_id', $shop_id)->get();
         
         $paid_orders_amount = 0;
 
@@ -99,9 +101,11 @@ class TransactionsForShopRepository
             ->sum('amount');
 
         $collection_amount = Collection::where('shop_id', $shop_id)->sum('paid_amount');
-        
-        $total_amount = $shop_payments + $orders_amount + $paid_orders_amount;
-        $actual_amount = $total_amount - ($transaction_amount + $collection_amount);
+
+        $customerCollectionAmount = CustomerCollection::where('shop_id', $shop_id)->sum('paid_amount');
+
+        $total_amount = $orders_amount + $paid_orders_amount;
+        $actual_amount = $total_amount - ($transaction_amount + $collection_amount + $customerCollectionAmount);
 
         return $actual_amount;
     }

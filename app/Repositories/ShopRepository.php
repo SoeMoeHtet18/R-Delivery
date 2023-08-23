@@ -63,11 +63,11 @@ class ShopRepository
         return $shopcount;
     }
 
-    public function getPayableAmountForShop($shop_id)
+    public function getPayableAmountForShop($shopId)
     {
-        $shop_payments = ShopPayment::where('shop_id', $shop_id)->sum('amount');
+        // $shop_payments = ShopPayment::where('shop_id', $shop_id)->sum('amount');
 
-        $payLaterAmount = Order::where('shop_id', $shop_id)
+        $payLaterAmount = Order::where('shop_id', $shopId)
             ->where('payment_method', 'cash_on_delivery')
             ->where('pay_later', 1)
             ->where('status', 'success')
@@ -77,13 +77,13 @@ class ShopRepository
 
         $remainingOrdersAmount = 0;
 
-        $orders = Order::where('shop_id', $shop_id)->get();
+        $orders = Order::where('shop_id', $shopId)->get();
 
         foreach ($orders as $order) {
-            $notified_date = $order->delivery_type->notified_on - 1;
-            $calculated_date = $order->created_at->addDays($notified_date);
+            $notifiedDate = $order->delivery_type->notified_on - 1;
+            $calculatedDate = $order->created_at->addDays($notifiedDate);
     
-            if ($todayDate->eq($calculated_date)) {
+            if ($todayDate->eq($calculatedDate)) {
                 if ($order->payment_method === 'cash_on_delivery' && !$order->pay_later) {
                     $remainingOrdersAmount += $order->total_amount + $order->markup_delivery_fees;
                 } elseif (in_array($order->payment_method, ['item_prepaid', 'all_prepaid'])) {
@@ -92,13 +92,13 @@ class ShopRepository
             }
         }
 
-        $transactionAmount = TransactionsForShop::where('shop_id', $shop_id)->sum('amount');
+        $transactionAmount = TransactionsForShop::where('shop_id', $shopId)->sum('amount');
 
-        $collectionAmount = Collection::where('shop_id', $shop_id)->sum('paid_amount');
+        $collectionAmount = Collection::where('shop_id', $shopId)->sum('paid_amount');
 
-        $customerCollectionAmount = CustomerCollection::where('shop_id', $shop_id)->sum('paid_amount');
+        $customerCollectionAmount = CustomerCollection::where('shop_id', $shopId)->sum('paid_amount');
         
-        $totalAmount = $shop_payments + $payLaterAmount + $remainingOrdersAmount;
+        $totalAmount = $payLaterAmount + $remainingOrdersAmount;
         return $totalAmount - ($transactionAmount + $collectionAmount + $customerCollectionAmount);
     }
 

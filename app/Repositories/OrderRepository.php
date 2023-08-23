@@ -383,20 +383,20 @@ class OrderRepository
         return $query;
     }
 
-    public function getTotalCreditForShop($shopId)
-    {
-        $codAmount = Order::where('shop_id', $shopId)
-                        ->where('payment_method', 'cash_on_delivery')
-                        ->sum(DB::raw('total_amount + markup_delivery_fees'));
+    // public function getTotalCreditForShop($shopId)
+    // {
+    //     $codAmount = Order::where('shop_id', $shopId)
+    //                     ->where('payment_method', 'cash_on_delivery')
+    //                     ->sum(DB::raw('total_amount + markup_delivery_fees'));
 
-        $remainingAmount = Order::where('shop_id', $shopId)
-                            ->whereNot('payment_method', 'cash_on_delivery')
-                            ->sum('markup_delivery_fees');
+    //     $remainingAmount = Order::where('shop_id', $shopId)
+    //                         ->whereNot('payment_method', 'cash_on_delivery')
+    //                         ->sum('markup_delivery_fees');
 
-        $customerCollectionAmount = CustomerCollection::where('shop_id', $shopId)->sum('paid_amount');
+    //     $customerCollectionAmount = CustomerCollection::where('shop_id', $shopId)->sum('paid_amount');
         
-        return $codAmount + $remainingAmount - $customerCollectionAmount;
-    }
+    //     return $codAmount + $remainingAmount - $customerCollectionAmount;
+    // }
 
     public function getAllUnpaidOrderList()
     {
