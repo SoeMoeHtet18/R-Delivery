@@ -9,8 +9,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class CollectionRepository
-{   
-    public function getCollectionById($id) 
+{
+    public function getCollectionById($id)
     {
         $collection = Collection::with('shop')->where('id',$id)->first();
         $collection['shop_name'] = $collection->shop->name;
@@ -18,7 +18,7 @@ class CollectionRepository
         return $collection;
     }
     
-    public function getCollectionsByRiderId($rider_id, $page) 
+    public function getCollectionsByRiderId($rider_id, $page)
     {
         $limit = 10; 
         $offset = ($page - 1) * $limit;
@@ -35,7 +35,7 @@ class CollectionRepository
             $customerCollectionCount = CustomerCollection::with(['order', 'collection_group'])->whereHas('order',function($q) use ($shop_id){
                 $q->where('shop_id',$shop_id);
             })->where('collection_group_id',$collectionGroupId)->count();
-            $collection['customer_collection_count'] = $customerCollectionCount;    
+            $collection['customer_collection_count'] = $customerCollectionCount;
         }
         return $collections;
     }

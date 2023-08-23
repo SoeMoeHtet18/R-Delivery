@@ -371,21 +371,26 @@ class RiderApiController extends Controller
 
     public function getCustomerCollectionByRiderId($page = 1) {
         $rider = auth()->guard('rider-api')->user();
-        $limit = 10; 
-        $offset = ($page - 1) * $limit; 
+        $limit = 10;
+        $offset = ($page - 1) * $limit;
         $todayDate = Carbon::now()->format('Y-m-d');
-        $customerCollections = CustomerCollection::with(['order.shop', 'collection_group.rider'])->whereHas('collection_group', function ($q) use($rider,$todayDate) {
-            $q->where('rider_id', $rider->id)->where('assigned_date',$todayDate);
-        })->offset($offset)->limit($limit)->orderBy('id','DESC')->get();
+        $customerCollections = CustomerCollection::with(['order', 'collection_group', 'shop', 'rider', 'city', 'township'])
+            ->where('rider_id', $rider->id)->whereDate('schedule_date',$todayDate)
+            ->offset($offset)->limit($limit)->orderBy('id','DESC')->get();
         foreach($customerCollections as $customerCollection) {
-            $customerCollection['rider_name'] = $customerCollection->collection_group->rider->name;
-            $customerCollection['shop_name'] = $customerCollection->order->shop->name;
-            $customerCollection['customer_name'] = $customerCollection->order->customer_name;
-            $customerCollection['customer_phone_number'] = $customerCollection->order->customer_phone_number;
-            $customerCollection['total_amount'] = $customerCollection->order->total_amount;
-            $customerCollection['order_id'] = $customerCollection->order->order_code;
+            $customerCollection['rider_name'] = $customerCollection->rider ? $customerCollection->rider->name : null;
+            $customerCollection['shop_name'] = $customerCollection->shop ? $customerCollection->shop->name : null;
+            $customerCollection['customer_name'] = $customerCollection->order ? $customerCollection->order->customer_name : null;
+            $customerCollection['customer_phone_number'] = $customerCollection->order ? $customerCollection->order->customer_phone_number : null;
+            $customerCollection['total_amount'] = $customerCollection->order? $customerCollection->order->total_amount : null;
+            $customerCollection['order_id'] = $customerCollection->order ? $customerCollection->order->order_code : null;
+            $customerCollection['city_name'] = $customerCollection->city ? $customerCollection->city->name : null;
+            $customerCollection['township_name'] = $customerCollection->township ? $customerCollection->township->name : null;
         }
-        return response()->json(['data' => $customerCollections, 'message' => 'Successfully Get Customer Collection list by Rider Id', 'status' => 'success'], 200);
+        return response()->json([
+            'data' => $customerCollections,
+            'message' => 'Successfully Get Customer Collection list by Rider Id',
+            'status' => 'success'], 200);
     }
     
     public function createCustomerCollectionByRider(Request $request) {
