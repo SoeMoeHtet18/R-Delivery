@@ -43,7 +43,8 @@
                 </div>
                 <div class="col-10">
                     @if($customer_collection->order)
-                        {{ $customer_collection->order->order_code }}
+                    <a href="/orders/{{ $customer_collection->order_id }}">
+                        {{ $customer_collection->order->order_code }}</a>
                     @else N/A
                     @endif
                 </div>
@@ -69,7 +70,7 @@
                     <h4>Shop<b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    {{ $customer_collection->shop->name }}
+                    <a href="/shops/{{ $customer_collection->shop_id }}"> {{$customer_collection->shop->name }}</a>
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -77,7 +78,12 @@
                     <h4>Rider<b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    {{ $customer_collection->rider->name ?? 'N/A'}}
+                    @if($customer_collection->rider)
+                        <a href="/riders/{{ $customer_collection->rider_id }}">
+                            {{ $customer_collection->rider->name }}</a>
+                    @else
+                        N/A
+                    @endif
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -85,7 +91,12 @@
                     <h4>City<b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    {{ $customer_collection->city->name ?? 'N/A'}}
+                    @if($customer_collection->city)
+                        <a href="/cities/{{ $customer_collection->city_id }}">
+                            {{ $customer_collection->city->name }}</a>
+                    @else
+                        N/A
+                    @endif
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -93,7 +104,12 @@
                     <h4>Township<b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    {{ $customer_collection->township->name ?? 'N/A'}}
+                    @if($customer_collection->township)
+                        <a href="/townships/{{ $customer_collection->township_id }}">
+                            {{ $customer_collection->township->name }}</a>
+                    @else
+                        N/A
+                    @endif
                 </div>
             </div>
             <div class="row m-0 mb-3">
