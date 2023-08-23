@@ -1210,6 +1210,12 @@
                     },
                     {
                         "render": function(data, type, row) {
+                            return formatWithNumberingSystem(row.paid_amount);
+                        },
+                        "targets": 10
+                    },
+                    {
+                        "render": function(data, type, row) {
                             if (row.is_way_fees_payable == 0) {
                                 return "No";
                             }

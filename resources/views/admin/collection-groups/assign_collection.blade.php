@@ -53,7 +53,7 @@
                     </div>
                     @foreach($shop_collections as $shop_collection)
                     <div class="d-flex align-items-center mb-4">
-                        <input type="checkbox" class="card-checkbox" name="collection_checkbox[]" value="{{$shop_collection->id}}">
+                        <input type="checkbox" class="card-checkbox" name="collection_checkbox[]" value="{{$shop_collection->id}}" checked>
                         <div class="card-container card-wrapper">
                             <div class="card">
                                 <div class="card-body">
@@ -96,7 +96,7 @@
                     </div>
                     @foreach($customer_collections as $customer_collection)
                     <div class="d-flex align-items-center mb-4">
-                        <input type="checkbox" class="card-checkbox" name="customer_collection_checkbox[]" value="{{$customer_collection->id}}">
+                        <input type="checkbox" class="card-checkbox" name="customer_collection_checkbox[]" value="{{$customer_collection->id}}" checked>
                         <div class="card-container card-wrapper">
                             <div class="card">
                                 <div class="card-body">
