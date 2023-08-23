@@ -30,6 +30,10 @@
             @if(isset($order))
             <input type="hidden" name="order_id" value="{{$order->id}}">
             <input type="hidden" name="shop_id" value="{{$order->shop_id}}">
+            <input type="hidden" name="city_id" value="{{$order->city_id}}">
+            <input type="hidden" name="township_id" value="{{$order->township_id}}">
+            <input type="hidden" name="address" value="{{$order->full_address}}">
+            <input type="hidden" name="rider_id" value="{{$order->rider_id}}">
             <input type="hidden" name="customer_name" value="{{$order->customer_name}}">
             <input type="hidden" name="phone_number" value="{{$order->customer_phone_number}}">
             @else
@@ -72,6 +76,32 @@
                 </div>
             </div>
             <div class="row m-0 mb-3">
+                <label for="city_id" class="col-2">
+                    <h4>City Name <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <select name="city_id" id="city_id" class="form-control">
+                        <option value="" selected disabled>Select City for This Customer Exchange</option>
+                        @foreach ( $cities as $city)
+                        <option value="{{$city->id}}" @if($city->id == old('city_id')) {{'selected'}} @endif>{{$city->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <label for="township_id" class="col-2">
+                    <h4>Township Name <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <select name="township_id" id="township_id" class="form-control">
+                        <option value="" selected disabled>Select Township for This Customer Exchange</option>
+                        @foreach ( $townships as $township)
+                        <option value="{{$township->id}}" @if($township->id == old('township_id')) {{'selected'}} @endif>{{$township->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
                 <label for="rider_id" class="col-2">
                     <h4>Rider Name <b>:</b></h4>
                 </label>
@@ -106,7 +136,35 @@
                     @endif
                 </div>
             </div>
+            <div class="row m-0 mb-3">
+                <label for="address" class="col-2">
+                    <h4>Address <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <textarea id="address" name="address" class="form-control" style="height: 100px">{{old('address')}}</textarea>
+                </div>
+                @if ($errors->has('address'))
+                <span class="text-danger"><strong>{{ $errors->first('address') }}</strong></span>
+                @endif
+            </div>
             @endif
+            <div class="row m-0 mb-3">
+                <label for="schedule_date" class="col-2">
+                    <h4>Schedule Date <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <?php
+                    // Get tomorrow's date
+                    $today = date('Y-m-d');
+                    // Set the default value to tomorrow's date
+                    $defaultDate = old('schedule_date') ?? $today;
+                    ?>
+                    <input type="date" id="schedule_date" name="schedule_date" value="<?php echo $defaultDate; ?>" class="form-control" />
+                    @if ($errors->has('schedule_date'))
+                        <span class="text-danger"><strong>{{ $errors->first('schedule_date') }}</strong></span>
+                    @endif
+                </div>
+            </div>
             <div class="row m-0 mb-3">
                 <label for="items" class="col-2">
                     <h4>Item<b>:</b></h4>
@@ -159,6 +217,8 @@
         $('#order_id').select2();
         $("#shop").select2();
         $("#rider_id").select2();
+        $("#city_id").select2();
+        $("#township_id").select2();
 
         $("#order_id").on('change', function() {
             $.ajax({
@@ -173,10 +233,16 @@
                         var data = response.data;
                         $('#shop').val(data.shop_id);
                         $('#shop').trigger('change');
+                        $('#city_id').val(data.city_id);
+                        $('#city_id').trigger('change');
                         $('#rider_id').val(data.rider_id);
                         $('#rider_id').trigger('change');
+                        $('#township_id').val(data.township_id);
+                        $('#township_id').trigger('change');
+                        
                         $('#customer_name').val(data.customer_name);
                         $('#phone_number').val(data.customer_phone_number);
+                        $('#address').val(data.full_address);
                     }
                 }
             });
@@ -199,6 +265,68 @@
                 }
             });
         })
+
+        $('#city_id').change(function() {
+            console.log('success');
+            var city_id = $('#city_id').val();
+            $.ajax({
+                url: '/api/townships-get-by-city',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    city_id: city_id
+                },
+                success: function(response) {
+                    var township_id = $('#township_id').val();
+                    var townships = '<option value="" disabled>Select the Township for This Order</option>';
+                    if (response.data) {
+                        for (var i = 0; i < response.data.length; i++) {
+                            if (township_id == response.data[i].id) {
+                                townships += '<option value="' + response.data[i].id + '" selected>' + response.data[i].name + '</option>';
+                            } else {
+                                townships += '<option value="' + response.data[i].id + '">' + response.data[i].name + '</option>';
+                            }
+                        }
+                    }
+                    console.log(townships);
+                    $('#township_id').html(townships);
+
+                    // Update the delivery fees after selecting the township
+                    var selectedTownshipId = $('#township_id').val();
+                    getRidersByTownship(selectedTownshipId);
+                },
+            });
+        });
+
+        $("#township_id").change(function() {
+            var township_id = $('#township_id').val();
+            getRidersByTownship(township_id);
+        });
+
+        function getRidersByTownship(township_id) {
+            $.ajax({
+                url: '/api/riders-get-by-township',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    township_id: township_id
+                },
+                success: function(response) {
+                    var rider_id = $('#rider_id').val();
+                    var riders = '<option value="" selected disabled>Select the Rider for This Order</option>';
+                    if (response.data) {
+                        for (let i = 0; i < response.data.length; i++) {
+                             if (rider_id == response.data[i].id) {
+                                riders += '<option value="' + response.data[i].id + '" selected>' + response.data[i].name + '</option>';
+                            } else {
+                                riders += '<option value="' + response.data[i].id + '">' + response.data[i].name + '</option>';
+                            }
+                        }
+                    }
+                    $('#rider_id').html(riders);
+                },
+            })
+        }
 
         // Attach the click event to the parent container
         $('#tabs-container').on('click', '.tabs', function() {

@@ -24,6 +24,7 @@ use App\Services\RiderService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
@@ -205,47 +206,167 @@ class RiderApiController extends Controller
         }
     }
 
+    // public function getRiderTotalSalary()
+    // {
+    //     $rider = auth()->guard('rider-api')->user();
+    //     $deliFees = 0;
+    //     $totalCollectionFees = 0;
+    //     $totalPickUpCount = 0;
+    //     $orderCount = 0;
+    //     if($rider->salary_type == 'daily') {
+    //         $currentDate = Carbon::now()->format('Y-m-d');
+    //         $deliveredOrders = Order::where('rider_id',$rider->id)
+    //             ->where('status','success')->whereDate('schedule_date', $currentDate)->get();
+    //         $orderCount = Order::where('rider_id',$rider->id)
+    //             ->where('status','success')->whereDate('schedule_date', $currentDate)->count();
+    //         foreach($deliveredOrders as $order) {
+    //             $riderFee = DB::table('rider_township')
+    //                 ->where(['rider_id'=>$rider->id,'township_id'=>$order->township_id])->first()->rider_fees;
+    //             $deliFees  += $riderFee;
+    //         }
+            
+    //         $collections = Collection::whereDate('collected_at',$currentDate)
+    //             ->where('rider_id',$rider->id)->get();
+    //         $customerExchanges = CustomerCollection::whereDate('complete_at',$currentDate)
+    //             ->where(['rider_id' => $rider->id, 'is_way_fees_payable' => true])->get();
+    //         foreach($customerExchanges as $customerExchange){
+    //             $riderFee = DB::table('rider_township')
+    //                 ->where(['rider_id'=>$rider->id,'township_id'=>$customerExchange->township_id])
+    //                 ->first()->rider_fees;
+    //             $totalCollectionFees += $riderFee;
+    //         }
+    //         $collectionCount = Collection::whereDate('collected_at',$currentDate)
+    //             ->where('rider_id',$rider->id)->count();
+    //         $customerExchangeCount = CustomerCollection::whereDate('complete_at',$currentDate)
+    //             ->where(['rider_id' => $rider->id, 'is_way_fees_payable' => true])->count();
+    //         $totalPickUpCount = $collectionCount + $customerExchangeCount;
+            
+    //         $deficitFees = Deficit::where('rider_id',$rider->id)
+    //             ->whereDate('created_at',$currentDate)->sum('total_amount');
+    //     } else {
+    //         $startDate = Carbon::now()->startOfMonth()->format('Y-m-d');
+    //         $endDate = Carbon::now()->endOfMonth()->format('Y-m-d');
+    //         $deliveredOrders = Order::where('rider_id',$rider->id)
+    //             ->where('status','success')->whereBetween('schedule_date', [$startDate, $endDate])->get();
+    //         $orderCount = Order::where('rider_id', $rider->id)
+    //             ->where('status','success')->whereBetween('schedule_date', [$startDate, $endDate])->count();
+            
+    //         foreach($deliveredOrders as $order) {
+    //             $riderFee = DB::table('rider_township')
+    //                 ->where(['rider_id'=>$rider->id,'township_id'=>$order->township_id])->first()->rider_fees;
+    //             $deliFees  += $riderFee;
+    //         }
+            
+    //         $collections = Collection::whereBetween('collected_at', [$startDate, $endDate])
+    //             ->where('rider_id',$rider->id)->get();
+    //         $customerExchanges = CustomerCollection::whereBetween('complete_at', [$startDate, $endDate])
+    //             ->where(['rider_id' => $rider->id, 'is_way_fees_payable' => true])->get();
+    //         foreach($customerExchanges as $customerExchange){
+    //             $riderFee = DB::table('rider_township')
+    //                 ->where(['rider_id'=>$rider->id,'township_id'=>$customerExchange->township_id])
+    //                 ->first()->rider_fees;
+    //             $totalCollectionFees += $riderFee;
+    //         }
+    //         $collectionCount = Collection::whereBetween('collected_at', [$startDate, $endDate])
+    //             ->where('rider_id',$rider->id)->count();
+    //         $customerExchangeCount = CustomerCollection::whereBetween('complete_at', [$startDate, $endDate])
+    //             ->where(['rider_id' => $rider->id, 'is_way_fees_payable' => true])->count();
+    //         $totalPickUpCount = $collectionCount + $customerExchangeCount;
+
+    //         $deficitFees = Deficit::where('rider_id',$rider->id)
+    //             ->whereBetween('created_at',[$startDate, $endDate])->sum('total_amount');
+    //     }
+
+    //     $totalSalary    = ($totalCollectionFees + $deliFees + $rider->base_salary) - $deficitFees;
+    //     $data = [];
+    //     $data['total_salary'] = $totalSalary;
+    //     $data['deficit_fees'] = $deliFees;
+    //     $data['collection_count'] = $totalPickUpCount;
+    //     $data['order_count'] = $orderCount;
+    //     return response()->json([
+    //         'data' => $data,
+    //         'message' => 'Successfully Get Total Salary for Rider',
+    //         'status' => 'success'], 200);
+    // }
+
     public function getRiderTotalSalary()
     {
         $rider = auth()->guard('rider-api')->user();
-        $rider_fees = $rider->townships->first()->pivot->rider_fees;
-        if($rider->salary_type == 'daily') {
-            $currentDate = Carbon::now()->format('Y-m-d');
-            $order_count = Order::where('rider_id',$rider->id)->where('status','success')->whereDate('schedule_date', $currentDate)->count();
-            $collection_groups = CollectionGroup::where('rider_id',$rider->id)->whereDate('assigned_date', $currentDate)->get();
-            $collection_count = 0;
-            $customer_collection_count = 0;
-            foreach($collection_groups as $collection_group){
-                $collection_count += Collection::where('collection_group_id',$collection_group->id)->where('status','complete')->count(); 
-                $customer_collection_count += CustomerCollection::where('collection_group_id',$collection_group->id)->where('status','complete')->count(); 
-            }
-            $total_pick_up_count = $collection_count + $customer_collection_count;
-            
-            $deficit_fees = Deficit::where('rider_id',$rider->id)->whereDate('created_at',$currentDate)->sum('total_amount'); 
-        } else {
-            $startDate = Carbon::now()->startOfMonth()->format('Y-m-d');
-            $endDate = Carbon::now()->endOfMonth()->format('Y-m-d');
-            $order_count = Order::where('rider_id', $rider->id)->where('status','success')->whereBetween('schedule_date', [$startDate, $endDate])->count();
-            $collection_groups = CollectionGroup::where('rider_id',$rider->id)->whereBetween('assigned_date', [$startDate, $endDate])->get();
-            $collection_count = 0;
-            $customer_collection_count = 0;
-            foreach($collection_groups as $collection_group){
-                $collection_count += Collection::where('collection_group_id',$collection_group->id)->where('status','complete')->count(); 
-                $customer_collection_count += CustomerCollection::where('collection_group_id',$collection_group->id)->where('status','complete')->count(); 
-            }
-            $total_pick_up_count = $collection_count + $customer_collection_count;
-            
-            $deficit_fees = Deficit::where('rider_id',$rider->id)->whereBetween('created_at',[$startDate, $endDate])->sum('total_amount');
+        $currentDate = Carbon::now();
+        $startDate = $rider->salary_type == 'daily' ?
+                $currentDate->format('Y-m-d') : $currentDate->startOfMonth()->format('Y-m-d');
+        $endDate = $rider->salary_type == 'daily' ?
+                $currentDate->format('Y-m-d').' 23:59:59' : $currentDate->endOfMonth()->format('Y-m-d').' 23:59:59';
+
+        $deliveredOrders = $this->getDeliveredOrders($rider, $startDate, $endDate);
+        $orderCount = $deliveredOrders->count();
+        $deliFees = $this->calculateFees($deliveredOrders, $rider->id);
+
+        $collections = $this->getCollections($rider, $startDate, $endDate);
+        $customerExchanges = $this->getCustomerExchanges($rider, $startDate, $endDate);
+        $totalCollectionFees = $this->calculateFees($customerExchanges, $rider->id);
+        $totalPickUpCount = $collections->count() + $customerExchanges->count();
+
+        $deficitFees = $this->getDeficitFees($rider, $startDate, $endDate);
+
+        $totalSalary = ($totalCollectionFees + $deliFees + $rider->base_salary) - $deficitFees;
+
+        $data = [
+            'total_salary' => $totalSalary,
+            'deficit_fees' => $deliFees,
+            'collection_count' => $totalPickUpCount,
+            'order_count' => $orderCount,
+        ];
+
+        return response()->json([
+            'data' => $data,
+            'message' => 'Successfully Get Total Salary for Rider',
+            'status' => 'success'
+        ], 200);
+    }
+
+    private function calculateFees($items, $riderId)
+    {
+        $totalFees = 0;
+
+        foreach ($items as $item) {
+            $riderFee = DB::table('rider_township')
+                ->where(['rider_id' => $riderId, 'township_id' => $item->township_id])
+                ->first()->rider_fees;
+
+            $totalFees += $riderFee;
         }
-        $total_collection_fees = $rider_fees * $total_pick_up_count;
-        $total_deli_fees = $rider_fees * $order_count;
-        $total_salary    = ($total_collection_fees + $total_deli_fees + $rider->base_salary) - $deficit_fees;
-        $data = [];
-        $data['total_salary'] = $total_salary;
-        $data['deficit_fees'] = $deficit_fees;
-        $data['collection_count'] = $total_pick_up_count;
-        $data['order_count'] = $order_count;
-        return response()->json(['data' => $data, 'message' => 'Successfully Get Total Salary for Rider', 'status' => 'success'], 200);
+
+        return $totalFees;
+    }
+
+    private function getDeliveredOrders($rider, $startDate, $endDate)
+    {
+        return Order::where('rider_id', $rider->id)
+            ->where('status', 'success')
+            ->whereBetween('schedule_date', [$startDate, $endDate])
+            ->get();
+    }
+
+    private function getCollections($rider, $startDate, $endDate)
+    {
+        return Collection::whereBetween('collected_at', [$startDate, $endDate])
+            ->where('rider_id', $rider->id)
+            ->get();
+    }
+
+    private function getCustomerExchanges($rider, $startDate, $endDate)
+    {
+        return CustomerCollection::whereBetween('complete_at', [$startDate, $endDate])
+            ->where(['rider_id' => $rider->id, 'is_way_fees_payable' => true])
+            ->get();
+    }
+
+    private function getDeficitFees($rider, $startDate, $endDate)
+    {
+        return Deficit::where('rider_id', $rider->id)
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->sum('total_amount');
     }
 
     public function getCustomerCollectionByRiderId($page = 1) {

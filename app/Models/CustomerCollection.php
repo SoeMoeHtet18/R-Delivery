@@ -12,7 +12,9 @@ class CustomerCollection extends Model
 
     protected $fillable = [
         'collection_group_id', 'order_id', 'items', 'paid_amount', 'is_way_fees_payable', 'item_image', 'quantities',
-        'status', 'note', 'branch_id', 'customer_collection_code', 'shop_id','customer_name', 'customer_phone_number'
+        'status', 'note', 'branch_id', 'customer_collection_code', 'shop_id','customer_name', 'customer_phone_number',
+        'rider_id', 'city_id', 'township_id', 'address', 'schedule_date', 'pending_at', 'picking_at', 'warehouse_at',
+        'complete_at'
     ];
     
     public function order() {
@@ -29,5 +31,15 @@ class CustomerCollection extends Model
 
     public function rider() {
         return $this->belongsTo(Rider::class, 'rider_id', 'id')->withTrashed();
+    }
+    
+    public function city()
+    {
+        return $this->belongsTo(City::class, 'city_id', 'id')->withTrashed();
+    }
+
+    public function township()
+    {
+        return $this->belongsTo(Township::class, 'township_id', 'id')->withTrashed();
     }
 }

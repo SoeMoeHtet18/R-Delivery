@@ -22,7 +22,7 @@
                 <div class="col-2">
                     <h4>Customer Exchange Code<b>:</b></h4>
                 </div>
-                <div class="col-10"> 
+                <div class="col-10">
                     {{ $customer_collection->customer_collection_code }}
                 </div>
             </div>
@@ -31,7 +31,8 @@
                     <h4>Pick Up Group<b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    @if($customer_collection->order->collection_group != null) {{ $customer_collection->order->collection_group }}
+                    @if($customer_collection->collection_group)
+                        {{ $customer_collection->collection_group->collection_group_code }}
                     @else N/A
                     @endif
                 </div>
@@ -41,7 +42,8 @@
                     <h4>Order Code<b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    @if($customer_collection->order->order_code != null) {{ $customer_collection->order->order_code }}
+                    @if($customer_collection->order)
+                        {{ $customer_collection->order->order_code }}
                     @else N/A
                     @endif
                 </div>
@@ -68,6 +70,46 @@
                 </div>
                 <div class="col-10">
                     {{ $customer_collection->shop->name }}
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <div class="col-2">
+                    <h4>Rider<b>:</b></h4>
+                </div>
+                <div class="col-10">
+                    {{ $customer_collection->rider->name ?? 'N/A'}}
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <div class="col-2">
+                    <h4>City<b>:</b></h4>
+                </div>
+                <div class="col-10">
+                    {{ $customer_collection->city->name ?? 'N/A'}}
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <div class="col-2">
+                    <h4>Township<b>:</b></h4>
+                </div>
+                <div class="col-10">
+                    {{ $customer_collection->township->name ?? 'N/A'}}
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <div class="col-2">
+                    <h4>Address<b>:</b></h4>
+                </div>
+                <div class="col-10">
+                    {{ $customer_collection->address ?? 'N/A'}}
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <div class="col-2">
+                    <h4>Schedule Date<b>:</b></h4>
+                </div>
+                <div class="col-10">
+                    {{ $customer_collection->schedule_date ? \Carbon\Carbon::parse($customer_collection->schedule_date)->format('j F, Y') : 'N/A'}}
                 </div>
             </div>
             <div class="row m-0 mb-3">
