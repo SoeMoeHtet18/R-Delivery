@@ -196,12 +196,12 @@ class TransactionsForShopController extends Controller
 
         $shop_id = $request->shop_id;
 
-        $actual_amount = $this->transactionsForShopRepository->getActualAmount($order_ids, $shop_id);
+        // $actual_amount = $this->transactionsForShopRepository->getActualAmount($order_ids, $shop_id);
 
         $shops = $this->shopRepository->getAllShops();
         $shops = $shops->sortByDesc('id');
         $users = $this->adminRepository->getAllUsers();
         $users = $users->sortByDESC('id');
-        return view('admin.transactionsforshop.create', compact('shop_id', 'order_ids', 'shops', 'users', 'actual_amount'));
+        return view('admin.transactionsforshop.create', compact('shop_id', 'order_ids', 'shops', 'users'));
     }
 }

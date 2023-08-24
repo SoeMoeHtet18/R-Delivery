@@ -67,18 +67,25 @@ class ShopRepository
     {
         // $shop_payments = ShopPayment::where('shop_id', $shop_id)->sum('amount');
 
-        $payLaterAmount = Order::where('shop_id', $shopId)
+        $deliveredOrderAmount = Order::where('shop_id', $shopId)
+            ->where('status', 'success')
             ->where('payment_flag', 0)
             ->where('payment_method', 'cash_on_delivery')
-            ->where('pay_later', 1)
-            ->where('status', 'success')
             ->sum(DB::raw('total_amount + markup_delivery_fees'));
 
+        $deliveredOrderAmount .= Order::where('shop_id', $shopId)
+            ->where('status', 'success')
+            ->where('payment_flag', 0)
+            ->where('payment_method', 'item_prepaid')
+            ->sum('markup_delivery_fees');
+        
         $todayDate = Carbon::today();
 
         $remainingOrdersAmount = 0;
 
-        $orders = Order::where('shop_id', $shopId)->where('payment_flag', 0)->get();
+        $orders = Order::where('shop_id', $shopId)
+            ->where('status', 'pending')
+            ->where('payment_flag', 0)->get();
 
         foreach ($orders as $order) {
             $notifiedDate = $order->delivery_type->notified_on - 1;
@@ -101,7 +108,7 @@ class ShopRepository
             ->whereDate('schedule_date', $todayDate)
             ->sum('paid_amount');
         
-        return $payLaterAmount + $remainingOrdersAmount - $customerCollectionAmount;
+        return $deliveredOrderAmount + $remainingOrdersAmount - $customerCollectionAmount;
         // return $totalAmount - ($transactionAmount + $collectionAmount + $customerCollectionAmount);
     }
 
