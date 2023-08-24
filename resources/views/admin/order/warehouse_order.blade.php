@@ -53,28 +53,33 @@
     .warehouse-order-card {
         padding-right: 0px;
     }
+
+    .bdr-5 {
+        border-radius: 5px !important;
+    }
     
-    @media (max-width: 767px) {
+    @media (max-width: 910px) {
         .warehouse_order_card {
         margin: auto !important;
         max-width: 100%;
     }
     }
+    
 </style>
     <div class="card card-container action-form-card warehouse_order_card">
         <div class="card-header justify-content-between">
             <h5><strong>{{$order->order_code}}</strong></h5>
                 <div class="action-button">
-                    <a href="{{url('/orders/'.$order->id)}}"
-                        class="info btn btn-info btn-sm me-3">View</a>
                     <form action="{{url('/orders/' . $order->id . '/change-status')}}" method="post">
                         @csrf
                         @method('POST')
                         <input type="hidden" value="delay" name="status">
-                        <input type="submit" value="Cancel" class="btn btn-danger">
+                        <input type="submit" value="Cancel" class="btn btn-danger bdr-5">
                     </form>
                     <a href="{{url('/orders/'.$order->id.'/assign-rider')}}"
-                        class="btn btn-secondary ms-3 text-nowrap">Assign Rider</a>
+                        class="btn btn-secondary ms-3 text-nowrap bdr-5">Assign Rider</a>
+                    <a href="{{url('/orders/'.$order->id)}}"
+                        class="info btn btn-secondary ms-3 text-nowrap bdr-5">View</a>
             </div>
         </div>
         <div class="card-body warehouse-order-card">
