@@ -1,13 +1,14 @@
 @extends('admin.layouts.master')
 @section('title','Payment')
-@section('sub-title','Transactions For Shop Editing')
+@section('sub-title','Payment From Company Editing')
 @section('content')
 <div class="card card-container action-form-card">
     <div class="card-body">
         <h2 class="ps-1 card-header-title">
-            <strong>Update Transaction</strong>
+            <strong>Update Payment From Company</strong>
         </h2>
-        <form action="{{route('transactions-for-shop.update', $transaction_for_shop->id)}}" method="POST" class="action-form" enctype="multipart/form-data">
+        <form action="{{route('transactions-for-shop.update', $transaction_for_shop->id)}}"
+            method="POST" class="action-form" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="row m-0 mb-3">
@@ -18,7 +19,8 @@
                     <select name="shop_id" id="shop_name" class="form-control">
                         <option value="" selected disabled>Select the Shop for This Payment</option>
                         @foreach ( $shops as $shop)
-                        <option value="{{$shop->id}}" @if($transaction_for_shop->shop_id == $shop->id) {{'selected'}} @endif>{{$shop->name}}</option>
+                        <option value="{{$shop->id}}" @if($transaction_for_shop->shop_id == $shop->id)
+                            {{'selected'}} @endif>{{$shop->name}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -63,7 +65,7 @@
                 </label>
                 <div class="col-10">
                     <select name="paid_by" id="paid_by" class="form-control">
-                        <option value="" selected disabled>Select the User for This Payment</option>
+                        <option value="" selected disabled>Select the user for this payment</option>
                         @foreach ( $users as $user)
                         <option value="{{$user->id}}" @if($transaction_for_shop->paid_by == $user->id) {{'selected'}} @endif>{{$user->name}}</option>
                         @endforeach

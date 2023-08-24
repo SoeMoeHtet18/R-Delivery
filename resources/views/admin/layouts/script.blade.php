@@ -24,21 +24,23 @@
 
     document.addEventListener("click", function(event) {
         const targetDiv = document.getElementById("pageSidebarCollapse");
+        const dropdownItems = document.querySelectorAll('.sidebar-dropdown');
         const clickedElement = event.target;
 
         // Check if the clicked element is not inside the targetDiv
-        if (!targetDiv.contains(clickedElement)) {
-                $('.page-container').click(function() {
-                    if($('#pageSidebarCollapse').hasClass('toggle-menu')) {
-                        $('#pageSidebarCollapse').toggleClass('toggle-menu');
-                }
-            });
-        }
+        try {
+            if (!targetDiv.contains(clickedElement) && !dropdownItems.contains(clickedElement)) {
+                    $('.page-container').click(function() {
+                        if($('#pageSidebarCollapse').hasClass('toggle-menu')) {
+                            $('#pageSidebarCollapse').toggleClass('toggle-menu');
+                    }
+                });
+            }
+        } catch {}
     });
     
     $(function() {
         $('#pageSidebarCollapseBtn').click(function() {
-            console.log('toggled');
             $('#pageSidebarCollapse').toggleClass('toggle-menu');
         });
         

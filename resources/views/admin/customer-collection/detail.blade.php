@@ -11,7 +11,7 @@
             <div class="create-button">
                 <a href="{{route('customer-collections.edit' , $customer_collection->id)}}" class="btn btn-light">Edit</a>
             </div>
-            <form action="{{route('customer-collections.destroy', $customer_collection->id)}}" method="post" onclick="return confirm(`Are you sure you want to Delete this customer payment?`);">
+            <form action="{{route('customer-collections.destroy', $customer_collection->id)}}" method="post" onclick="return confirm(`Are you sure you want to delete this customer exchange?`);">
                 @csrf
                 @method('DELETE')
                 <input type="submit" value="Delete" class="btn btn-danger float-end">

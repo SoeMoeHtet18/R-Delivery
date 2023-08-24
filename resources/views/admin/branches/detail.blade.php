@@ -13,7 +13,7 @@
             <div class="create-button">
                 <a href="{{route('branches.edit' , $branch->id)}}" class="btn btn-light">Edit</a>
             </div>
-            <form action="{{route('branches.destroy', $branch->id)}}" method="post" onclick="return confirm(`Are you sure you want to Delete this Branch?`);">
+            <form action="{{route('branches.destroy', $branch->id)}}" method="post" onclick="return confirm(`Are you sure you want to delete this branch?`);">
                 @csrf
                 @method('DELETE')
                 <input type="submit" value="Delete" class="btn btn-danger float-end">

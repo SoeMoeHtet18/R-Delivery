@@ -60,7 +60,7 @@
             <div class="create-button">
                 <a href="{{route('shops.edit' , $shop->id)}}" class="btn btn-light">Edit</a>
             </div>
-            <form action="{{route('shops.destroy', $shop->id)}}" method="post" onclick="return confirm(`Are you sure you want to Delete this shop?`);">
+            <form action="{{route('shops.destroy', $shop->id)}}" method="post" onclick="return confirm(`Are you sure you want to delete this shop?`);">
                 @csrf
                 @method('DELETE')
                 <input type="submit" value="Delete" class="btn btn-danger float-end">
@@ -168,11 +168,11 @@
             </li>
             <li>
                 <a href="#shop-payment-display" id="shop-payment-tab" class="nav-link"
-                    data-toggle="tab">Shop Payments</a>
+                    data-toggle="tab">Payments From Shop</a>
             </li>
             <li>
                 <a href="#payment-for-shop-display" id="payment-for-shop-tab" class="nav-link"
-                    data-toggle="tab">Transactions For Shop</a>
+                    data-toggle="tab">Payments From Company</a>
             </li>
             <li>
                 <a href="#collection-for-shop-display" id="collection-for-shop-tab" class="nav-link"
@@ -267,11 +267,12 @@
             </div>
             <div id="shop-payment-display" class="portlet box green tab-pane">
                 <div class="portlet-title">
-                    <div class="caption">Shop Payment Lists</div>
+                    <div class="caption">Payment From Shop Lists</div>
                 </div>
                 <div class="portlet-body">
                     <div class="create-button pb-5">
-                        <a href="{{url('/shoppayment-create-by-shop-id')}}?shop_id={{$shop->id}}" class="btn create-btn">Add Shop Payment</a>
+                        <a href="{{url('/shoppayment-create-by-shop-id')}}?shop_id={{$shop->id}}"
+                            class="btn create-btn">Create New Payment From Shop</a>
                     </div>
 
                     <table id="shop-payment-datatable" class="table table-striped table-hover table-responsive datatable">
@@ -291,12 +292,12 @@
             </div>
             <div id="payment-for-shop-display" class="portlet box green tab-pane">
                 <div class="portlet-title">
-                    <div class="caption">Transactions For Shop Lists</div>
+                    <div class="caption">Payment From Company Lists</div>
                 </div>
                 <div class="portlet-body">
                     <div class="create-button pb-5">
                         <a href="{{url('/transactions-for-shop-create-by-shop-id')}}?shop_id={{$shop->id}}"
-                            class="btn create-btn">Add New Transaction</a>
+                            class="btn create-btn">Create New Payment From Company</a>
                     </div>
                     <table id="transaction-for-shop-datatable"
                         class="table table-striped table-hover table-responsive datatable">
@@ -328,10 +329,11 @@
                             <tr>
                                 <th>#</th>
                                 <th>Pick Up Code</th>
-                                <th>Total Quantity</th>
-                                <th>Total Amount</th>
-                                <th>Paid Amount</th>
-                                <th>Collection Group</th>
+                                <th>Total Quantity of Pick Up</th>
+                                <th>Total Amount of Pick Up</th>
+                                <th>Paid Amount by Rider</th>
+                                <th>Leftover Amount of pick Up</th>
+                                <th>Pick Up Group</th>
                                 <th>Rider</th>
                                 <th>Collected At</th>
                                 <th>Note</th>
@@ -926,19 +928,23 @@
                     },
                     {
                         data: 'total_quantity',
-                        name: 'total_quantity'
+                        name: 'total_quantity_of_pick_up'
                     },
                     {
                         data: 'total_amount',
-                        name: 'total_amount',
+                        name: 'total_amount_of_pick_up',
                     },
                     {
                         data: 'paid_amount',
-                        name: 'paid_amount',
+                        name: 'paid_amount_by_rider',
+                    },
+                    {
+                        data: '',
+                        name: 'leftover_amount_of_pick_up',
                     },
                     {
                         data: 'collection_group_code',
-                        name: 'collection_group',
+                        name: 'pick_up_group',
                     },
                     {
                         data: 'rider_name',
@@ -962,6 +968,14 @@
                     },
                 ],
                 columnDefs: [
+                        // link with self
+                        {
+                            "render": function(data, type, row) {
+                                return '<a href="/collections/' + row.id + '">'
+                                    + row.collection_code + '</a>';
+                                },
+                            "targets": 1
+                        },
                         // render with numbering system
                         {
                             "render": function(data, type, row) {
@@ -993,16 +1007,21 @@
                             },
                             "targets": 4
                         },
-                        // link with collections
+                        // bind data for leftover amount
                         {
                             "render": function(data, type, row) {
-                                return '<a href="/collections/' + row.id + '">'
-                                    + row.collection_code + '</a>';
-                                },
-                            "targets": 1
+                                if(row.paid_amount != null) {
+                                    return formatWithNumberingSystem(row.total_amount - row.paid_amount);
+                                } else if(row.total_amount != null) {
+                                    return formatWithNumberingSystem(row.total_amount);
+                                } else {
+                                    return '';
+                                }
+                            },
+                            "targets": 5
                         },
-                        // link with collection group
-                        {
+                         // link with collection group
+                         {
                             "render": function(data, type, row) {
                                 if(row.collection_group_id != null) {
                                     return '<a href="/collection-groups/' + row.collection_group_id + '">'
@@ -1011,7 +1030,7 @@
                                         return '';
                                     }
                                 },
-                            "targets": 5
+                            "targets": 6
                         },
                         // link with rider
                         {
@@ -1023,7 +1042,7 @@
                                     return '';
                                 }
                             },
-                            "targets": 6
+                            "targets": 7
                         },
                         {
                             "render": function(data, type, row) {
@@ -1037,7 +1056,7 @@
                                     return "Picking Up";
                                 }
                             },
-                            "targets": 9
+                            "targets": 10
                         },
                         {
                             "render": function(data, type, row) {
@@ -1048,7 +1067,7 @@
                                     return "Yes";
                                 }
                             },
-                            "targets": 10
+                            "targets": 11
                         },
                     ],
             });

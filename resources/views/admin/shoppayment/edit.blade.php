@@ -1,13 +1,14 @@
 @extends('admin.layouts.master')
 @section('title','Payment')
-@section('sub-title','Shop Payment Editing')
+@section('sub-title','Payment From Shop Editing')
 @section('content')
 <div class="card card-container action-form-card">
     <div class="card-body">
         <h2 class="ps-1 card-header-title">
-            <strong>Update Shop Payment</strong>
+            <strong>Update Payment From Shop</strong>
         </h2>
-        <form action="{{route('shoppayments.update', $shop_payment->id)}}" method="POST" enctype="multipart/form-data" class="action-form">
+        <form action="{{route('shoppayments.update', $shop_payment->id)}}" method="POST"
+            enctype="multipart/form-data" class="action-form">
             @csrf
             @method('PUT')
             <div class="row m-0 mb-3">
@@ -16,9 +17,10 @@
                 </label>
                 <div class="col-10">
                     <select name="shop_id" id="shop_name" class="form-control">
-                        <option value="" selected disabled>Select the Shop for This Payment</option>
+                        <option value="" selected disabled>Select the shop for this payment</option>
                         @foreach ( $shops as $shop)
-                        <option value="{{$shop->id}}" @if($shop_payment->shop_id == $shop->id) {{'selected'}} @endif>{{$shop->name}}</option>
+                        <option value="{{$shop->id}}" @if($shop_payment->shop_id == $shop->id)
+                            {{'selected'}} @endif>{{$shop->name}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -28,7 +30,8 @@
                     <h4>Amount <b>:</b></h4>
                 </label>
                 <div class="col-10">
-                    <input type="text" id="amount" name="amount" value="{{$shop_payment->amount}}" class="form-control" />
+                    <input type="text" id="amount" name="amount" value="{{$shop_payment->amount}}"
+                        class="form-control"/>
                     @if ($errors->has('amount'))
                     <span class="text-danger"><strong>{{ $errors->first('amount') }}</strong></span>
                     @endif

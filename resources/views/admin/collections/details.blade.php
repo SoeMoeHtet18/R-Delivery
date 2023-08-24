@@ -12,7 +12,7 @@
             <div class="create-button">
                 <a href="{{route('collections.edit' , $collection->id)}}" class="btn btn-light">Edit</a>
             </div>
-            <form action="{{route('collections.destroy', $collection->id)}}" method="post" onclick="return confirm(`Are you sure you want to Delete this collection?`);">
+            <form action="{{route('collections.destroy', $collection->id)}}" method="post" onclick="return confirm(`Are you sure you want to delete this pick up?`);">
                 @csrf
                 @method('DELETE')
                 <input type="submit" value="Delete" class="btn btn-danger float-end">
@@ -61,6 +61,14 @@
                 </div>
                 <div class="col-10">
                     {{ number_format($collection->paid_amount, 2, '.', ',') }} MMK
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
+                <div class="col-2">
+                    <h4>Leftover Amount of Pick Up <b>:</b></h4>
+                </div>
+                <div class="col-10">
+                    {{ number_format($collection->total_amount - $collection->paid_amount, 2, '.', ',') }} MMK
                 </div>
             </div>
             <div class="row m-0 mb-3">

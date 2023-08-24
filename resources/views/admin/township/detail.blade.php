@@ -12,7 +12,7 @@
                 <a href="{{route('townships.edit' , $township->id)}}" class="btn btn-light">Edit</a>
             </div>
             <form action="{{route('townships.destroy', $township->id)}}"
-                method="post" onclick="return confirm(`Are you sure you want to Delete this township?`);">
+                method="post" onclick="return confirm(`Are you sure you want to delete this township?`);">
                 @csrf
                 @method('DELETE')
                 <input type="submit" value="Delete" class="btn btn-danger float-end">

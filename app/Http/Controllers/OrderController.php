@@ -8,6 +8,7 @@ use App\Helpers\Helper;
 use App\Http\Requests\OrderCreateRequest;
 use App\Http\Requests\OrderUpdateRequest;
 use App\Http\Requests\RiderAssignRequest;
+use App\Models\User;
 use App\Repositories\CityRepository;
 use App\Repositories\CollectionGroupRepository;
 use App\Repositories\DeliveryTypesRepository;
@@ -712,10 +713,12 @@ class OrderController extends Controller
 
     public function changeOrderStatusToWarehouse(Request $request)
     {
+        $user = auth()->user();
         $order_code = $request->search;
         $order = $this->orderRepository->getOrderByOrderCode($order_code);
         if($order->status == 'delay'){
-            $order->status = 'warehouse';
+            $this->orderService->changeStatus($order, 'warehouse', $user, User::class);
+            // $order->status = 'warehouse';
             // $order->save();
             $view = view('admin.order.warehouse_order',compact('order'));
             $html = $view->render();

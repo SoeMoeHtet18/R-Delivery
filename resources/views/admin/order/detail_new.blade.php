@@ -140,7 +140,7 @@
                 
                 <li><a href="{{route('orders.edit' , $order->id)}}" class="btn btn-light dropdown-item">Edit</a></li>
                 <li> 
-                    <form action="{{route('orders.destroy', $order->id)}}" method="post" onclick="return confirm(`Are you sure you want to Delete this order?`);">
+                    <form action="{{route('orders.destroy', $order->id)}}" method="post" onclick="return confirm(`Are you sure you want to delete this order?`);">
                         @csrf
                         @method('DELETE')
                         <input type="submit" value="Delete" class="btn btn-danger dropdown-item">

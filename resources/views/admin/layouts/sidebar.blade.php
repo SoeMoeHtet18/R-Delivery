@@ -59,7 +59,7 @@
                     <span class="title">Payment Due Order List</span>
                 </a>
             </li>
-            <li>
+            <li class="sidebar-dropdown">
                 <a id="paymentBoxCollapse" data-bs-toggle="collapse" href="#paymentBox" role="button" aria-expanded="false" aria-controls="collapseExample">
                     <span class="title">Payments<span class="arrow"></span></span>
                 </a>
@@ -75,13 +75,13 @@
                     <li class="@if(request()->is('shoppayments*')) {{'active'}} @endif">
                         <a href="{{route('shoppayments.index')}}">
                             <!-- <i class="fa fa-users"></i> -->
-                            <span class="title">Shop Payment</span>
+                            <span class="title">Payments From Shop</span>
                         </a>
-                    </li>        
+                    </li>
                     <li class="@if(request()->is('transactions-for-shop*')) {{'active'}} @endif">
                         <a href="{{route('transactions-for-shop.index')}}">
                             <!-- <i class="fa fa-users"></i> -->
-                            <span class="title">Transactions For Shop</span>
+                            <span class="title">Payments From Company</span>
                         </a>
                     </li>
                     <li class="@if(request()->is('rider-payments*')) {{'active'}} @endif">
@@ -96,8 +96,9 @@
                     <span class="title">Set To Warehouse</span>
                 </a>
             </li>
-            <li>
-                <a id="adminToolsCollapse" data-bs-toggle="collapse" href="#adminTools" role="button" aria-expanded="false" aria-controls="collapseExample">
+            <li class="sidebar-dropdown">
+                <a id="adminToolsCollapse" data-bs-toggle="collapse" href="#adminTools"
+                    role="button" aria-expanded="false" aria-controls="collapseExample">
                     <span class="title">Admin Tools<span class="arrow"></span></span>
                 </a>
             </li>

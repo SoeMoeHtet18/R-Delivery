@@ -11,7 +11,7 @@
             <div class="create-button">
                 <a href="{{route('users.edit' , $user->id)}}" class="btn btn-light">Edit</a>
             </div>
-            <form action="{{route('users.destroy', $user->id)}}" method="post" onclick="return confirm(`Are you sure you want to Delete this user?`);">
+            <form action="{{route('users.destroy', $user->id)}}" method="post" onclick="return confirm(`Are you sure you want to delete this user?`);">
                 @csrf
                 @method('DELETE')
                 <input type="submit" value="Delete" class="btn btn-danger float-end">

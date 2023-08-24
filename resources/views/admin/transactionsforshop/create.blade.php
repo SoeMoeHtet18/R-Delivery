@@ -1,13 +1,14 @@
 @extends('admin.layouts.master')
 @section('title','Payment')
-@section('sub-title','Transactions For Shop Create')
+@section('sub-title','Payment From Company Create')
 @section('content')
 <div class="card card-container action-form-card">
     <div class="card-body">
         <h2 class="ps-1 card-header-title">
-            <strong>Add New Transaction</strong>
+            <strong>Create New Payment From Company</strong>
         </h2>
-        <form action="{{route('transactions-for-shop.store')}}" method="POST" class="action-form" enctype="multipart/form-data">
+        <form action="{{route('transactions-for-shop.store')}}" method="POST"
+            class="action-form" enctype="multipart/form-data">
             @csrf
             <div class="row m-0 mb-3">
                 <label for="shop" class="col-2">
@@ -15,7 +16,7 @@
                 </label>
                 <div class="col-10">
                     <select name="shop_id" id="shop_name" class="form-control">
-                        <option value="" selected disabled>Select the Shop of this Payment</option>
+                        <option value="" selected disabled>Select the shop of this payment</option>
                         @foreach($shops as $shop)
                         <option value="{{$shop->id}}" @isset($shop_id) @if($shop->id == $shop_id) selected
                             @endif
@@ -40,7 +41,8 @@
                     <h4>Amount <b>:</b></h4>
                 </label>
                 <div class="col-10">
-                    <input type="text" id="amount" name="amount" value="@isset($actual_amount){{ $actual_amount }}@else{{ old('amount') }}@endisset" class="form-control" />
+                    <input type="text" id="amount" name="amount" value="@isset($actual_amount)
+                        {{ $actual_amount }}@else{{ old('amount') }}@endisset" class="form-control" />
                     @if($errors->has('amount'))
                     <span class="text-danger"><strong>{{ $errors->first('amount') }}</strong></span>
                     @endif
@@ -78,7 +80,7 @@
                 </label>
                 <div class="col-10">
                     <select name="paid_by" id="paid_by" class="form-control">
-                        <option value="" selected disabled>Select the User of this Payment</option>
+                        <option value="" selected disabled>Select the user of this payment</option>
                         @foreach($users as $user)
                         <option value="{{$user->id}}" @if($user->id == old('paid_by')) selected @endif>{{$user->name}}</option>
                         @endforeach
@@ -93,7 +95,8 @@
                     <h4>Description <b>:</b></h4>
                 </label>
                 <div class="col-10">
-                    <textarea name="description" id="description" class="form-control" style="height: 100px" placeholder="Write description here">{{old('description')}}</textarea>
+                    <textarea name="description" id="description" class="form-control"
+                        style="height: 100px" placeholder="Write description here">{{old('description')}}</textarea>
                 </div>
             </div>
             <div class="footer-button float-end">

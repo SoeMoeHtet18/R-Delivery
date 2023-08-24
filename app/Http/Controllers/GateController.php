@@ -127,7 +127,7 @@ class GateController extends Controller
                 $actionBtn = '
                         <a href="' . route("gates.show", $gate->id) . '" class="edit btn btn-info btn-sm">View</a> 
                         <a href="' . route("gates.edit", $gate->id) . '" class="edit btn btn-light btn-sm">Edit</a> 
-                        <form action="' . route("gates.destroy", $gate->id) . '" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this gate?`);">
+                        <form action="' . route("gates.destroy", $gate->id) . '" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to delete this gate?`);">
                             <input type="hidden" name="_token" value="' . csrf_token() . '">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>

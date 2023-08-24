@@ -137,7 +137,7 @@ class TransactionsForShopController extends Controller
                 $actionBtn = '
                         <a href="' . route("transactions-for-shop.show", $transaction_for_shops->id) . '" class="edit btn btn-info btn-sm">View</a> 
                         <a href="' . route("transactions-for-shop.edit", $transaction_for_shops->id) . '" class="edit btn btn-light btn-sm">Edit</a> 
-                        <form action="' . route("transactions-for-shop.destroy", $transaction_for_shops->id) . '" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this shop user?`);">
+                        <form action="' . route("transactions-for-shop.destroy", $transaction_for_shops->id) . '" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to delete this payment?`);">
                             <input type="hidden" name="_token" value="' . csrf_token() . '">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
@@ -167,7 +167,7 @@ class TransactionsForShopController extends Controller
                 $actionBtn = '
                         <a href="' . route("transactions-for-shop.show", $transaction_for_shops->id) . '" class="edit btn btn-info btn-sm">View</a> 
                         <a href="' . route("transactions-for-shop.edit", $transaction_for_shops->id) . '" class="edit btn btn-light btn-sm">Edit</a> 
-                        <form action="' . route("transactions-for-shop.destroy", $transaction_for_shops->id) . '" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this shop user?`);">
+                        <form action="' . route("transactions-for-shop.destroy", $transaction_for_shops->id) . '" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to delete this payment?`);">
                             <input type="hidden" name="_token" value="' . csrf_token() . '">
                             <input type="hidden" name="_method" value="DELETE">
                             <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>
@@ -196,12 +196,12 @@ class TransactionsForShopController extends Controller
 
         $shop_id = $request->shop_id;
 
-        $actual_amount = $this->transactionsForShopRepository->getActualAmount($order_ids, $shop_id);
+        // $actual_amount = $this->transactionsForShopRepository->getActualAmount($order_ids, $shop_id);
 
         $shops = $this->shopRepository->getAllShops();
         $shops = $shops->sortByDesc('id');
         $users = $this->adminRepository->getAllUsers();
         $users = $users->sortByDESC('id');
-        return view('admin.transactionsforshop.create', compact('shop_id', 'order_ids', 'shops', 'users', 'actual_amount'));
+        return view('admin.transactionsforshop.create', compact('shop_id', 'order_ids', 'shops', 'users'));
     }
 }
