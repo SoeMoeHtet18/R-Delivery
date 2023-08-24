@@ -65,6 +65,8 @@
         <div class="card-header justify-content-between">
             <h5><strong>{{$order->order_code}}</strong></h5>
                 <div class="action-button">
+                    <a href="{{url('/orders/'.$order->id)}}"
+                        class="info btn btn-info btn-sm me-3">View</a>
                     <form action="{{url('/orders/' . $order->id . '/change-status')}}" method="post">
                         @csrf
                         @method('POST')
@@ -106,7 +108,9 @@
                             <label><strong>Shop Name</strong><b>:</b></label>
                         </div>
                         <div class="col-8">
-                            {{ $order->shop->name }}
+                            <a href="/shops/{{ $order->shop_id }}">
+                                {{ $order->shop->name }}
+                            </a>
                         </div>
                     </div>
                     <div class="row m-0 mb-3">
@@ -114,7 +118,9 @@
                             <label><strong>Rider Name</strong><b>:</b></label>
                         </div>
                         <div class="col-8">
-                            {{ $order->rider->name }}
+                            <a href="/riders/{{ $order->rider_id }}">
+                                {{ $order->rider->name }}
+                            </a>
                         </div>
                     </div>
                     <div class="row m-0 mb-3">

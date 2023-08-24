@@ -63,4 +63,9 @@ class TownshipRepository
     {
         return Township::orderBy('name','asc')->where(['associable_id' => null, 'associable_type' => null])->get();
     }
+
+    public function getTownshipsWithAssociable($id, $type)
+    {
+        return Township::where(['associable_id' => $id, 'associable_type' => $type]);
+    }
 }

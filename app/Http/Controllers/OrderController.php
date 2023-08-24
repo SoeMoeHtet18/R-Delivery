@@ -716,7 +716,7 @@ class OrderController extends Controller
         $order = $this->orderRepository->getOrderByOrderCode($order_code);
         if($order->status == 'delay'){
             $order->status = 'warehouse';
-            $order->save();
+            // $order->save();
             $view = view('admin.order.warehouse_order',compact('order'));
             $html = $view->render();
             return response()->json(['data' => $html, 'message' => 'Successfully assign order into warehouse.', 'status' => 'success'], 200);

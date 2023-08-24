@@ -4,6 +4,7 @@
 @section('content')
 <div class="card card-container detail-card">
     <div class="card-body">
+    <div id="branch-id" data-branch-id="{{ $branch->id }}"></div>
         <h2 class="ps-1 card-header-title">
             <strong>Branch Detail</strong>
         </h2>
@@ -32,7 +33,9 @@
                     <h4>City Name <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    {{ $branch->city->name }}
+                    <a href="/cities/{{ $branch->city_id }}">
+                        {{ $branch->city->name }}
+                    </a>
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -51,7 +54,7 @@
                     {{ $branch->address}}
                 </div>
             </div>
-            <div class="row m-0 mb-3">
+            {{--<div class="row m-0 mb-3">
                 <div class="col-2">
                     <h4>Township <b>:</b></h4>
                 </div>
@@ -69,10 +72,68 @@
                         N/A
                     @endif
                 </div>
+            </div>--}}
+            <hr>
+            <div class="portlet box green">
+                <div class="portlet-title">
+                    <div class="caption">Township Lists</div>
+                </div>
+                <div class="portlet-body">
+                    <table id="datatable" class="table table-striped table-hover table-responsive datatable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             
             
         </div>
     </div>
 </div>
+@endsection
+@section('javascript')
+<script type="text/javascript">
+    $(function() {
+        var branch_id = document.getElementById('branch-id').getAttribute('data-branch-id');
+        var table = $('.datatable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                "url": '/ajax-get-townships-with-associable',
+                "type": "GET",
+                "data": function(r) {
+                    r.type = 'branch';
+                    r.id   = branch_id;
+                }
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    name: 'id'
+                },
+                {
+                    data: 'name',
+                    name: 'name'
+                },
+                
+            ],
+            columnDefs: [
+                {
+                    "render": function(data, type, row) {
+                        return '<a href="/townships/' + row.id + '">' + row.name + '</a>';
+                    },
+                    "targets": 1
+                },
+                
+            ]
+        });
+            
+       
+    });
+</script>
 @endsection

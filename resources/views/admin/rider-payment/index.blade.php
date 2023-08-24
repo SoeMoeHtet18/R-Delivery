@@ -81,6 +81,10 @@
             $('#rider_name').select2();
         });
 
+        function formatWithNumberingSystem(number, decimal_place = 2) {
+            return parseFloat(number).toFixed(decimal_place).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        }
+
         get_ajax_dynamic_data(rider_name = '');
 
         function get_ajax_dynamic_data(rider_name) {
@@ -126,6 +130,12 @@
                                 + row.rider_name + '</a>';
                             },
                         "targets": 1
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            return formatWithNumberingSystem(row.total_amount);
+                        },
+                        "targets": 2
                     },
                 ],
             });

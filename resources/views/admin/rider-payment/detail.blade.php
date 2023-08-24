@@ -23,7 +23,9 @@
                     <h4>Rider Name <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    {{ $rider_payment->rider->name }}
+                    <a href="/riders/{{ $rider_payment->rider_id }}">
+                        {{ $rider_payment->rider->name }}
+                    </a>
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -31,7 +33,7 @@
                     <h4>Total Amount <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    {{ $rider_payment->total_amount }}
+                    {{ number_format($rider_payment->total_amount, 2, '.', ',') }} MMK
                 </div>
             </div>
             <div class="row m-0 mb-3">

@@ -116,6 +116,9 @@
             $('#type').select2();
             $('#paid_by').select2();
         });
+        function formatWithNumberingSystem(number, decimal_place = 2) {
+            return parseFloat(number).toFixed(decimal_place).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        }
        
         get_ajax_dynamic_data(shop_name = '', amount = '', type = '', paid_by = '');
 
@@ -172,6 +175,12 @@
                                 + row.shop_name + '</a>';
                             },
                         "targets": 1
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            return formatWithNumberingSystem(row.amount);
+                        },
+                        "targets": 2
                     },
                     {
                     "render": function(data, type, row) {

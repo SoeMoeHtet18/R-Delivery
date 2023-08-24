@@ -102,6 +102,9 @@
             $('#item_type').select2();
             $('#order_code').select2();
         });
+        function formatWithNumberingSystem(number, decimal_place = 2) {
+            return parseFloat(number).toFixed(decimal_place).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        }
        
         get_ajax_dynamic_data(item_type = '', order_code = '', amount = '');
 
@@ -157,6 +160,12 @@
                                 + row.order_code + '</a>';
                             },
                         "targets": 1
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            return formatWithNumberingSystem(row.amount);
+                        },
+                        "targets": 2
                     },
                     {
                         "render": function(data, type, row) {

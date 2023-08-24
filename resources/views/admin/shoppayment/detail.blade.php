@@ -23,7 +23,9 @@
                     <h4>Shop Name <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    {{ $shop_payment->shop->name }}
+                    <a href="/shops/{{ $shop_payment->shop_id }}">
+                        {{ $shop_payment->shop->name }}
+                    </a>
                 </div>
             </div>
             <div class="row m-0 mb-3">
@@ -31,7 +33,7 @@
                     <h4>Amount <b>:</b></h4>
                 </div>
                 <div class="col-10">
-                    {{ $shop_payment->amount }}
+                    {{ number_format($shop_payment->amount, 2, '.', ',') }} MMK
                 </div>
             </div>
             <div class="row m-0 mb-3">

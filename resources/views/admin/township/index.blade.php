@@ -123,12 +123,20 @@
                         searchable: false
                     },
                 ],
-                columnDefs: [{
-                    "render": function(data, type, row) {
-                        return '<a href="/townships/' + row.id + '">' + row.name + '</a>';
+                columnDefs: [
+                    {
+                        "render": function(data, type, row) {
+                            return '<a href="/townships/' + row.id + '">' + row.name + '</a>';
+                        },
+                        "targets": 1
                     },
-                    "targets": 1
-                }, ]
+                    {
+                        "render": function(data, type, row) {
+                            return '<a href="/cities/' + row.city_id + '">' + row.city_name + '</a>';
+                        },
+                        "targets": 2
+                    },
+                ]
             });
             $('.search_filter').click(function() {
                 var search = $('#search').val();
