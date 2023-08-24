@@ -303,12 +303,13 @@ class RiderApiController extends Controller
         $deliFees = $this->calculateFees($deliveredOrders, $rider->id);
 
         $collections = $this->getCollections($rider, $startDate, $endDate);
+        $totalPickUpFees = $this->calculatePickUpFees($collections, $rider->id);
+        
         $customerExchanges = $this->getCustomerExchanges($rider, $startDate, $endDate);
-        $totalCollectionFees = $this->calculateFees($customerExchanges, $rider->id);
+        $totalCustomerExchangesFees = $this->calculateFees($customerExchanges, $rider->id);
         $totalPickUpCount = $collections->count() + $customerExchanges->count();
-
+        $totalCollectionFees = $totalPickUpFees + $totalCustomerExchangesFees;
         $deficitFees = $this->getDeficitFees($rider, $startDate, $endDate);
-        // dd($totalCollectionFees + $deliFees + $rider->base_salary);
 
         $totalSalary = ($totalCollectionFees + $deliFees + $rider->base_salary) - $deficitFees;
 
@@ -324,6 +325,19 @@ class RiderApiController extends Controller
             'message' => 'Successfully Get Total Salary for Rider',
             'status' => 'success'
         ], 200);
+    }
+
+    private function calculatePickUpFees($collections, $riderId)
+    {
+        $totalFees = 0;
+        foreach($collections as $collection) {
+            $riderFee = DB::table('rider_township')
+                ->where(['rider_id' => $riderId, 'township_id' => $collection->shop->township_id])
+                ->first()->rider_fees ?? 0;
+
+            $totalFees += $riderFee;
+        }
+        return $totalFees;
     }
 
     private function calculateFees($items, $riderId)

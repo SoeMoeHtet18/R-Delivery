@@ -22,6 +22,21 @@
                 </div>
             </div>
             <div class="row m-0 mb-3">
+                <label for="township_id" class="col-2">
+                    <h4>Township Name <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <select name="township_id" id="township_id" class="form-control">
+                        <option value="" selected disabled>Select the Township for This Shop</option>
+                        @foreach ( $townships as $township)
+                        <option value="{{$township->id}}"
+                        @if($shop->township_id == $township->id) {{'selected'}} @endif
+                        >{{$township->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
                 <label for="address" class="col-2">
                     <h4>Address <b>:</b></h4>
                 </label>
@@ -52,4 +67,12 @@
     </div>
 </div>
 
+@endsection
+@section('javascript')
+<script type="text/javascript">
+    $(function() {
+        $('#township_id').select2();
+    });
+
+</script>
 @endsection

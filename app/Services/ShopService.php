@@ -17,6 +17,7 @@ class ShopService
         $user = auth()->user();
         $shop = new Shop();
         $shop->name = $data['name'];
+        $shop->township_id = $data['township_id'];
         $shop->address =  $data['address'];
         $shop->phone_number = $data['phone_number'];
         $shop->branch_id = $user->branch_id;
@@ -27,6 +28,7 @@ class ShopService
     public function updateShopByID($data, $shop)
     {
         $shop->name = $data['name'];
+        $shop->township_id = $data['township_id'];
         $shop->address =  $data['address'];
         $shop->phone_number = $data['phone_number'];
         $shop->save();
