@@ -75,13 +75,13 @@
                     <li class="@if(request()->is('shoppayments*')) {{'active'}} @endif">
                         <a href="{{route('shoppayments.index')}}">
                             <!-- <i class="fa fa-users"></i> -->
-                            <span class="title">Shop Payment</span>
+                            <span class="title">Payments From Shop</span>
                         </a>
-                    </li>        
+                    </li>
                     <li class="@if(request()->is('transactions-for-shop*')) {{'active'}} @endif">
                         <a href="{{route('transactions-for-shop.index')}}">
                             <!-- <i class="fa fa-users"></i> -->
-                            <span class="title">Transactions For Shop</span>
+                            <span class="title">Payments From Company</span>
                         </a>
                     </li>
                     <li class="@if(request()->is('rider-payments*')) {{'active'}} @endif">

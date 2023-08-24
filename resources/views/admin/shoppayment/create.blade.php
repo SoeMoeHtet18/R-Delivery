@@ -1,11 +1,11 @@
 @extends('admin.layouts.master')
 @section('title','Payment')
-@section('sub-title','Shop Payment Create')
+@section('sub-title','Payment From Shop Create')
 @section('content')
 <div class="card card-container action-form-card">
     <div class="card-body">
         <h2 class="ps-1 card-header-title">
-            <strong>Add New Shop Payment</strong>
+            <strong>Create New Payment From Shop</strong>
         </h2>
         <form action="{{route('shoppayments.store')}}" method="POST" class="action-form" enctype="multipart/form-data">
             @csrf
@@ -15,7 +15,7 @@
                 </label>
                 <div class="col-10">
                     <select name="shop_id" id="shop_name" class="form-control">
-                        <option value="" selected disabled>Select the Shop of this Payment</option>
+                        <option value="" selected disabled>Select the shop of this payment</option>
                         @foreach($shops as $shop)
                         <option value="{{$shop->id}}"  @isset($shop_id) @if($shop->id == $shop_id) selected
                             @endif
@@ -58,7 +58,7 @@
                 </label>
                 <div class="col-10">
                     <select name="type" id="type" class="form-control">
-                        <option value="" selected disabled>Select the Type for This Payment</option>
+                        <option value="" selected disabled>Select the type for this payment</option>
                         <option value="delivery_payment" @if(old('type')=='delivery_payment' ) selected @endif>Delivery Payment</option>
                         <option value="remaining_payment" @if(old('type')=='remaining_payment' ) selected @endif>Remaining Payment</option>
                     </select>

@@ -1,11 +1,11 @@
 @extends('admin.layouts.master')
 @section('title','Payment')
-@section('sub-title','Shop Payment Listing')
+@section('sub-title','Payment From Shop Listing')
 @section('content')
 
 <div class="d-flex justify-content-between mb-3">
     <div class="create-button">
-        <a href="{{route('shoppayments.create')}}" class="btn create-btn">Add Shop Payment</a>
+        <a href="{{route('shoppayments.create')}}" class="btn create-btn">Create Payment From Shop</a>
     </div>
     <button class="btn btn-link" id="toggleFilter">
         <svg width="18" height="20" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -68,7 +68,7 @@
 
 <div class="portlet box green">
     <div class="portlet-title">
-        <div class="caption">Shop Payment Lists</div>
+        <div class="caption">Payment From Shop Lists</div>
     </div>
     <div class="portlet-body">
         <table id="datatable" class="table table-striped table-hover table-responsive datatable">

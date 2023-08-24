@@ -160,11 +160,11 @@
             </li>
             <li>
                 <a href="#shop-payment-display" id="shop-payment-tab" class="nav-link"
-                    data-toggle="tab">Shop Payments</a>
+                    data-toggle="tab">Payments From Shop</a>
             </li>
             <li>
                 <a href="#payment-for-shop-display" id="payment-for-shop-tab" class="nav-link"
-                    data-toggle="tab">Transactions For Shop</a>
+                    data-toggle="tab">Payments From Company</a>
             </li>
             <li>
                 <a href="#collection-for-shop-display" id="collection-for-shop-tab" class="nav-link"
@@ -259,11 +259,12 @@
             </div>
             <div id="shop-payment-display" class="portlet box green tab-pane">
                 <div class="portlet-title">
-                    <div class="caption">Shop Payment Lists</div>
+                    <div class="caption">Payment From Shop Lists</div>
                 </div>
                 <div class="portlet-body">
                     <div class="create-button pb-5">
-                        <a href="{{url('/shoppayment-create-by-shop-id')}}?shop_id={{$shop->id}}" class="btn create-btn">Add Shop Payment</a>
+                        <a href="{{url('/shoppayment-create-by-shop-id')}}?shop_id={{$shop->id}}"
+                            class="btn create-btn">Create New Payment From Shop</a>
                     </div>
 
                     <table id="shop-payment-datatable" class="table table-striped table-hover table-responsive datatable">
@@ -283,12 +284,12 @@
             </div>
             <div id="payment-for-shop-display" class="portlet box green tab-pane">
                 <div class="portlet-title">
-                    <div class="caption">Transactions For Shop Lists</div>
+                    <div class="caption">Payment From Company Lists</div>
                 </div>
                 <div class="portlet-body">
                     <div class="create-button pb-5">
                         <a href="{{url('/transactions-for-shop-create-by-shop-id')}}?shop_id={{$shop->id}}"
-                            class="btn create-btn">Add New Transaction</a>
+                            class="btn create-btn">Create New Payment From Company</a>
                     </div>
                     <table id="transaction-for-shop-datatable"
                         class="table table-striped table-hover table-responsive datatable">
