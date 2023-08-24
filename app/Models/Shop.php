@@ -11,7 +11,7 @@ class Shop extends Model
 {
     use HasFactory, SoftDeletes;
     protected $fillable = [
-        'name', 'address', 'phone_number', 'branch_id'
+        'name', 'address', 'phone_number', 'branch_id', 'township_id'
     ];
     
     public function shop_users()
@@ -25,5 +25,9 @@ class Shop extends Model
     public function payments_from_company()
     {
         return $this->hasMany(TransactionsForShop::class);
+    }
+
+    public function township() {
+        return $this->belongsTo(Township::class, 'township_id', 'id')->withTrashed();
     }
 }

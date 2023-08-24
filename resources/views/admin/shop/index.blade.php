@@ -53,6 +53,7 @@
                 <tr>
                     <th>#</th>
                     <th>Name</th>
+                    <th>Township Name</th>
                     <th>Address</th>
                     <th>Phone Number</th>
                     <th>Action</th>
@@ -94,6 +95,10 @@
                     {
                         data: 'name',
                         name: 'name'
+                    },
+                    {
+                        data: 'township_name',
+                        name: 'township_name'
                     },
                     {
                         data: 'address',

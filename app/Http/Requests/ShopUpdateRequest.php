@@ -24,6 +24,7 @@ class ShopUpdateRequest extends FormRequest
         $id = $this->input('id');
         return [
             'name' => 'required|string',
+            'township_id' => 'required',
             'address' => 'required|string',
             'phone_number' => 'required|string|unique:shops,phone_number,' . $id
         ];
@@ -38,6 +39,7 @@ class ShopUpdateRequest extends FormRequest
     {
         return [
             'name.required' => 'Name field is required',
+            'township_id.required' => 'Township field is required',
             'address.required' => 'Address field is required',
             'phone_number.required' => 'Phone Number is required',
             'phone_number.unique' => 'Phone Number already exists'

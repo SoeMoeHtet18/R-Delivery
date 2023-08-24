@@ -25,8 +25,9 @@ class ShopRepository
     public function getAllShopsQuery()
     {
         $branch_id = auth()->user()->branch_id;
-        $query = Shop::select('*')->where('branch_id', $branch_id);
-        return $query;
+        return Shop::select('shops.*','townships.name as township_name')
+            ->leftJoin('townships','townships.id','shops.township_id')
+            ->where('branch_id', $branch_id);
     }
 
     public function getShopByID($id)

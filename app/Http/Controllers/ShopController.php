@@ -9,6 +9,7 @@ use App\Models\CustomerCollection;
 use App\Repositories\CollectionRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\ShopRepository;
+use App\Repositories\TownshipRepository;
 use App\Services\ShopService;
 use App\Services\TransactionsForShopService;
 use Exception;
@@ -24,16 +25,18 @@ class ShopController extends Controller
     protected $orderRepository;
     protected $transactionsForShopService;
     protected $collectionRepository;
+    protected $townshipRepository;
 
-    public function __construct(ShopRepository $shopRepository, ShopService $shopService, 
-        OrderRepository $orderRepository, TransactionsForShopService $transactionsForShopService, 
-        CollectionRepository $collectionRepository)
+    public function __construct(ShopRepository $shopRepository, ShopService $shopService,
+        OrderRepository $orderRepository, TransactionsForShopService $transactionsForShopService,
+        CollectionRepository $collectionRepository, TownshipRepository $townshipRepository)
     {
         $this->shopRepository = $shopRepository;
         $this->shopService = $shopService;
         $this->orderRepository = $orderRepository;
         $this->transactionsForShopService = $transactionsForShopService;
         $this->collectionRepository = $collectionRepository;
+        $this->townshipRepository = $townshipRepository;
     }
 
     /**
@@ -49,7 +52,8 @@ class ShopController extends Controller
      */
     public function create()
     {
-        return view('admin.shop.create');
+        $townships = $this->townshipRepository->getAllTownships();
+        return view('admin.shop.create',compact('townships'));
     }
 
     /**
@@ -85,8 +89,9 @@ class ShopController extends Controller
     public function edit(string $id)
     {
         $shop = $this->shopRepository->getShopByID($id);
+        $townships = $this->townshipRepository->getAllTownships();
         
-        return view('admin.shop.edit', compact('shop'));
+        return view('admin.shop.edit', compact('shop','townships'));
     }
 
     /**
@@ -133,7 +138,7 @@ class ShopController extends Controller
                     return $actionBtns;
                 })
                 ->rawColumns(['action'])
-                ->orderColumn('id', '-id $1')
+                ->orderColumn('shops.id', '-id $1')
                 ->make(true);
     }
 

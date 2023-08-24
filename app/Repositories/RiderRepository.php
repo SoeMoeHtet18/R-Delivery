@@ -151,9 +151,11 @@ class RiderRepository
         $deliFees = $this->calculateFees($deliveredOrders, $rider->id);
 
         $collections = $this->getCollections($rider, $startDate, $endDate);
+        $totalPickUpFees = $this->calculatePickUpFees($collections, $rider->id);
         $customerExchanges = $this->getCustomerExchanges($rider, $startDate, $endDate);
-        $totalCollectionFees = $this->calculateFees($customerExchanges, $rider->id);
+        $totalCustomerExchangesFees = $this->calculateFees($customerExchanges, $rider->id);
         $totalPickUpCount = $collections->count() + $customerExchanges->count();
+        $totalCollectionFees = $totalPickUpFees + $totalCustomerExchangesFees;
 
         $deficitFees = $this->getDeficitFees($rider, $startDate, $endDate);
 
@@ -166,6 +168,19 @@ class RiderRepository
         $data['salary_type'] = $rider->salary_type;
         $data['base_salary'] = $rider->base_salary ?? 0;
         return $data;
+    }
+
+    private function calculatePickUpFees($collections, $riderId)
+    {
+        $totalFees = 0;
+        foreach($collections as $collection) {
+            $riderFee = DB::table('rider_township')
+                ->where(['rider_id' => $riderId, 'township_id' => $collection->shop->township_id])
+                ->first()->rider_fees ?? 0;
+
+            $totalFees += $riderFee;
+        }
+        return $totalFees;
     }
 
     private function calculateFees($items, $riderId)
