@@ -321,10 +321,11 @@
                             <tr>
                                 <th>#</th>
                                 <th>Pick Up Code</th>
-                                <th>Total Quantity</th>
-                                <th>Total Amount</th>
-                                <th>Paid Amount</th>
-                                <th>Collection Group</th>
+                                <th>Total Quantity of Pick Up</th>
+                                <th>Total Amount of Pick Up</th>
+                                <th>Paid Amount by Rider</th>
+                                <th>Leftover Amount of pick Up</th>
+                                <th>Pick Up Group</th>
                                 <th>Rider</th>
                                 <th>Collected At</th>
                                 <th>Note</th>
@@ -919,19 +920,23 @@
                     },
                     {
                         data: 'total_quantity',
-                        name: 'total_quantity'
+                        name: 'total_quantity_of_pick_up'
                     },
                     {
                         data: 'total_amount',
-                        name: 'total_amount',
+                        name: 'total_amount_of_pick_up',
                     },
                     {
                         data: 'paid_amount',
-                        name: 'paid_amount',
+                        name: 'paid_amount_by_rider',
+                    },
+                    {
+                        data: '',
+                        name: 'leftover_amount_of_pick_up',
                     },
                     {
                         data: 'collection_group_code',
-                        name: 'collection_group',
+                        name: 'pick_up_group',
                     },
                     {
                         data: 'rider_name',
@@ -955,6 +960,14 @@
                     },
                 ],
                 columnDefs: [
+                        // link with self
+                        {
+                            "render": function(data, type, row) {
+                                return '<a href="/collections/' + row.id + '">'
+                                    + row.collection_code + '</a>';
+                                },
+                            "targets": 1
+                        },
                         // render with numbering system
                         {
                             "render": function(data, type, row) {
@@ -986,16 +999,21 @@
                             },
                             "targets": 4
                         },
-                        // link with collections
+                        // bind data for leftover amount
                         {
                             "render": function(data, type, row) {
-                                return '<a href="/collections/' + row.id + '">'
-                                    + row.collection_code + '</a>';
-                                },
-                            "targets": 1
+                                if(row.paid_amount != null) {
+                                    return formatWithNumberingSystem(row.total_amount - row.paid_amount);
+                                } else if(row.total_amount != null) {
+                                    return formatWithNumberingSystem(row.total_amount);
+                                } else {
+                                    return '';
+                                }
+                            },
+                            "targets": 5
                         },
-                        // link with collection group
-                        {
+                         // link with collection group
+                         {
                             "render": function(data, type, row) {
                                 if(row.collection_group_id != null) {
                                     return '<a href="/collection-groups/' + row.collection_group_id + '">'
@@ -1004,7 +1022,7 @@
                                         return '';
                                     }
                                 },
-                            "targets": 5
+                            "targets": 6
                         },
                         // link with rider
                         {
@@ -1016,7 +1034,7 @@
                                     return '';
                                 }
                             },
-                            "targets": 6
+                            "targets": 7
                         },
                         {
                             "render": function(data, type, row) {
@@ -1030,7 +1048,7 @@
                                     return "Picking Up";
                                 }
                             },
-                            "targets": 9
+                            "targets": 10
                         },
                         {
                             "render": function(data, type, row) {
@@ -1041,7 +1059,7 @@
                                     return "Yes";
                                 }
                             },
-                            "targets": 10
+                            "targets": 11
                         },
                     ],
             });

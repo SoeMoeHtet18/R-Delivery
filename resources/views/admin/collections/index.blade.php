@@ -120,6 +120,7 @@
                     <th>Total Quantity of Pick Up</th>
                     <th>Total Amount of Pick Up</th>
                     <th>Paid Amount By Rider</th>
+                    <th>Leftover Amount of Pick Up</th>
                     <th>Rider</th>
                     <th>Shop</th>
                     <th>Scheduled At</th>
@@ -196,6 +197,10 @@
                         name: 'paid_amount_by_rider',
                     },
                     {
+                        data: '',
+                        name: 'leftover_amount_of_pick_up',
+                    },
+                    {
                         data: 'rider_name',
                         name: 'rider',
                     },
@@ -251,51 +256,6 @@
                             },
                         "targets": 2
                     },
-                    // link with shop
-                    {
-                        "render": function(data, type, row) {
-                            return '<a href="/shops/' + row.shop_id + '">'
-                                + row.shop_name + '</a>';
-                            },
-                        "targets": 7
-                    },
-                    // link with rider
-                    {
-                        "render": function(data, type, row) {
-                            if(row.rider_id != null) {
-                                return '<a href="/riders/' + row.rider_id + '">'
-                                + row.rider_name + '</a>';
-                            } else {
-                                return '';
-                            }
-                        },
-                        "targets": 6
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            if (row.status == 'pending') {
-                                return "Pending";
-                            }
-                            if (row.status == 'complete') {
-                                return "Completed";
-                            }
-                            if (row.status == 'picking-up') {
-                                return "Picking Up";
-                            }
-                        },
-                        "targets": 11
-                    },
-                    {
-                        "render": function(data, type, row) {
-                            if (row.is_payable == 0) {
-                                return "No";
-                            }
-                            if (row.payment_flag == 1) {
-                                return "Yes";
-                            }
-                        },
-                        "targets": 12
-                    },
                     // render with numbering system
                     {
                         "render": function(data, type, row) {
@@ -326,6 +286,64 @@
                             }
                         },
                         "targets": 5
+                    },
+                    // bind data for leftover amount
+                    {
+                        "render": function(data, type, row) {
+                            if(row.paid_amount != null) {
+                                return formatWithNumberingSystem(row.total_amount - row.paid_amount);
+                            } else if(row.total_amount != null) {
+                                return formatWithNumberingSystem(row.total_amount);
+                            } else {
+                                return '';
+                            }
+                        },
+                        "targets": 6
+                    },
+                    // link with rider
+                    {
+                        "render": function(data, type, row) {
+                            if(row.rider_id != null) {
+                                return '<a href="/riders/' + row.rider_id + '">'
+                                + row.rider_name + '</a>';
+                            } else {
+                                return '';
+                            }
+                        },
+                        "targets": 7
+                    },
+                    // link with shop
+                    {
+                        "render": function(data, type, row) {
+                            return '<a href="/shops/' + row.shop_id + '">'
+                                + row.shop_name + '</a>';
+                            },
+                        "targets": 8
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            if (row.status == 'pending') {
+                                return "Pending";
+                            }
+                            if (row.status == 'complete') {
+                                return "Completed";
+                            }
+                            if (row.status == 'picking-up') {
+                                return "Picking Up";
+                            }
+                        },
+                        "targets": 12
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            if (row.is_payable == 0) {
+                                return "No";
+                            }
+                            if (row.payment_flag == 1) {
+                                return "Yes";
+                            }
+                        },
+                        "targets": 13
                     },
                 ],
             });
