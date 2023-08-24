@@ -59,7 +59,7 @@
                     <span class="title">Payment Due Order List</span>
                 </a>
             </li>
-            <li>
+            <li class="sidebar-dropdown">
                 <a id="paymentBoxCollapse" data-bs-toggle="collapse" href="#paymentBox" role="button" aria-expanded="false" aria-controls="collapseExample">
                     <span class="title">Payments<span class="arrow"></span></span>
                 </a>
@@ -96,8 +96,9 @@
                     <span class="title">Set To Warehouse</span>
                 </a>
             </li>
-            <li>
-                <a id="adminToolsCollapse" data-bs-toggle="collapse" href="#adminTools" role="button" aria-expanded="false" aria-controls="collapseExample">
+            <li class="sidebar-dropdown">
+                <a id="adminToolsCollapse" data-bs-toggle="collapse" href="#adminTools"
+                    role="button" aria-expanded="false" aria-controls="collapseExample">
                     <span class="title">Admin Tools<span class="arrow"></span></span>
                 </a>
             </li>

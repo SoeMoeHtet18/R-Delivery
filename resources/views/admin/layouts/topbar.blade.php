@@ -3,7 +3,7 @@
         <div class="page-header-inner">
             <a id="pageSidebarCollapseBtn" data-bs-toggle="modal" data-bs-target="#sidebarModelCollapse"
                 href="#pageSidebarCollapse" role="button" aria-expanded="false" class="text-white">
-                <i class="fa-solid fa-bars"></i>
+                <i class="fa-solid fa-bars" style="vertical-align: middle"></i>
             </a>
             <div class="top-menu" style="display: flex;">
             

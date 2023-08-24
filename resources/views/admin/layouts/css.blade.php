@@ -275,7 +275,7 @@
     }
 
     div.page-content {
-        backdrop-filter: blur(5px);
+        backdrop-filter: blur(10px);
     }
     .toggle-menu {
         display: block !important;
@@ -287,6 +287,10 @@
     @media (max-width: 1100px) {
         #pageSidebarCollapseBtn {
             display: block;
+        }
+
+        .page-header.navbar {
+            padding: 0 10px;
         }
     }
 
