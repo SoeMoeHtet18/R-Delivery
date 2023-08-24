@@ -395,9 +395,15 @@
         });
 
         var tabIndex = 0;
+        $('.pdf-ul').hide();
         $('.nav-tabs a').click(function() {
             $(this).tab('show');
             tabIndex = $('.nav-tabs a').index(this);
+            if(tabIndex == 1 || tabIndex == 4){
+                $('.pdf-ul').show();
+            }else{
+                $('.pdf-ul').hide();
+            }
         });
 
         var shop_id = document.getElementById('shop-id').getAttribute('data-shop-id');
