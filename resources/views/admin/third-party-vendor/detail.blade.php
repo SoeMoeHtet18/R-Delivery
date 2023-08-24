@@ -13,7 +13,7 @@
             <div class="create-button">
                 <a href="{{route('third-party-vendor.edit' , $thirdPartyVendor->id)}}" class="btn btn-light">Edit</a>
             </div>
-            <form action="{{route('third-party-vendor.destroy', $thirdPartyVendor->id)}}" method="post" onclick="return confirm(`Are you sure you want to Delete this Third Party Vendor?`);">
+            <form action="{{route('third-party-vendor.destroy', $thirdPartyVendor->id)}}" method="post" onclick="return confirm(`Are you sure you want to delete this third party vendor?`);">
                 @csrf
                 @method('DELETE')
                 <input type="submit" value="Delete" class="btn btn-danger float-end">

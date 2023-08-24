@@ -12,7 +12,7 @@
             <div class="create-button">
                 <a href="{{route('collection-groups.edit' , $collectionGroup->id)}}" class="btn btn-light">Edit</a>
             </div>
-            <form action="{{route('collection-groups.destroy', $collectionGroup->id)}}" method="post" onclick="return confirm(`Are you sure you want to Delete this collection?`);">
+            <form action="{{route('collection-groups.destroy', $collectionGroup->id)}}" method="post" onclick="return confirm(`Are you sure you want to delete this pick up group?`);">
                 @csrf
                 @method('DELETE')
                 <input type="submit" value="Delete" class="btn btn-danger float-end">

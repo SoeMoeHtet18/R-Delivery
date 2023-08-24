@@ -5,13 +5,13 @@
 <div class="card card-container detail-card">
     <div class="card-body">
         <h2 class="ps-1 card-header-title">
-            <strong>ShopUser Detail</strong>
+            <strong>Shop User Detail</strong>
         </h2>
         <div class="card-toolbar">
             <div class="create-button">
                 <a href="{{route('shopusers.edit' , $shop_user->id)}}" class="btn btn-light">Edit</a>
             </div>
-            <form action="{{route('shopusers.destroy', $shop_user->id)}}" method="post" onclick="return confirm(`Are you sure you want to Delete this shop user?`);">
+            <form action="{{route('shopusers.destroy', $shop_user->id)}}" method="post" onclick="return confirm(`Are you sure you want to delete this shop user?`);">
                 @csrf
                 @method('DELETE')
                 <input type="submit" value="Delete" class="btn btn-danger float-end">

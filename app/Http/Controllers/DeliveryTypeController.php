@@ -102,7 +102,7 @@ class DeliveryTypeController extends Controller
             ->addColumn('action', function($row){
                 $actionBtn = '<a href="' . route("delivery-types.show", $row->id) . '" class="info btn btn-info btn-sm">View</a>
                 <a href="' . route("delivery-types.edit", $row->id) . '" class="edit btn btn-light btn-sm">Edit</a>
-                <form action="'.route("delivery-types.destroy", $row->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this city?`);">
+                <form action="'.route("delivery-types.destroy", $row->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to delete this delivery type?`);">
                     <input type="hidden" name="_token" value="'. csrf_token() .'">
                     <input type="hidden" name="_method" value="DELETE">
                     <input type="submit" value="Delete" class="btn btn-sm btn-danger"/>

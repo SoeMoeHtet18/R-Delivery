@@ -125,7 +125,7 @@ class ShopController extends Controller
                     $actionBtns =  '
                         <a href="'. route("shops.show", $shops->id) .'" class="btn btn-info btn-sm">View</a>
                         <a href="'. route("shops.edit", $shops->id) .'" class="btn btn-light btn-sm">Edit</a>
-                        <form action="'. route("shops.destroy", $shops->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to Delete this shop?`);">
+                        <form action="'. route("shops.destroy", $shops->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to delete this shop?`);">
                             <input type="hidden" name="_token" value="'. csrf_token() .'"/>
                             <input type="hidden" name="_method" value="DELETE"/>
                             <input type="submit" value="Delete" class="btn btn-danger btn-sm"/>

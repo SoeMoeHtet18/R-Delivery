@@ -12,7 +12,7 @@
             <div class="create-button">
                 <a href="{{route('delivery-types.edit' , $deliveryType->id)}}" class="btn btn-light">Edit</a>
             </div>
-            <form action="{{route('delivery-types.destroy', $deliveryType->id)}}" method="post" onclick="return confirm(`Are you sure you want to Delete this city?`);">
+            <form action="{{route('delivery-types.destroy', $deliveryType->id)}}" method="post" onclick="return confirm(`Are you sure you want to delete this delivery type?`);">
                 @csrf
                 @method('DELETE')
                 <input type="submit" value="Delete" class="btn btn-danger float-end">
