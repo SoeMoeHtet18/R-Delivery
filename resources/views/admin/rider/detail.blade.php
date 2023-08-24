@@ -945,7 +945,7 @@
                 columnDefs: [
                     {
                         "render": function(data, type, row) {
-                            return '<a href="/townships/' + row.id + '">' + row.name + '</a>';
+                            return '<a href="/townships/' + row.township_id + '">' + row.township_name + '</a>';
                         },
                         "targets": 1
                     },
