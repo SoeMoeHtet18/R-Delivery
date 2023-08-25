@@ -1,4 +1,4 @@
-@if(count($customer_collections) != 0 || count($collections) != 0 )
+@if(count($customer_collections) != 0 || count($shop_collections) != 0 )
 <style>
     /* .card-wrapper {
         display: flex;
