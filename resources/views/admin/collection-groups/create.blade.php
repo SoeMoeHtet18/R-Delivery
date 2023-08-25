@@ -56,18 +56,6 @@
                 </div>
             </div>
             <div class="row m-0 mb-3">
-                <label for="total_quantity" class="col-2">
-                    <h4>Total Quantity <b>:</b></h4>
-                </label>
-                <div class="col-10">
-                    <input type="text" id="total_quantity" name="total_quantity" class="form-control"
-                        value="{{old('total_quantity')}}"/>
-                    @if ($errors->has('total_quantity'))
-                    <span class="text-danger"><strong>{{ $errors->first('total_quantity') }}</strong></span>
-                    @endif
-                </div>
-            </div>
-            <div class="row m-0 mb-3">
                 <label for="total_amount" class="col-2">
                     <h4>Total Amount <b>:</b></h4>
                 </label>
@@ -175,33 +163,6 @@
         </div>
     </div>
 </div>
-
-<!-- <div class="card card-container action-form-card">
-    <div class="card-body">
-        <div class="row">
-            <div class="generat_sku margin10" style="cursor: pointer;"><i id="addMoreCategory" class="fal fa-plus plus-btn" style="cursor: pointer;"></i></div>
-            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
-                <label for="shop">
-                    <strong>Shop</strong>
-                </label>
-                <div class="col-10">
-                    <select name="shop" id="shop" class="form-control shop-dropdown">
-                        <option value="" selected disabled>Select</option>
-                        @foreach($shops as $shop)
-                        <option value="{{$shop->id}}">{{$shop->name}}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-6">
-            <label><strong>Amount</strong></label>
-            <input type="text" id="total_amount" name="total_amount" class="form-control" />
-            </div>
-        </div>
-        <div id="extraHtml">
-        </div>
-    </div>
-</div> -->
 
 <button type="button" id="add-card-btn" class="btn green rounded-pill float-end mb-5">+</button>
 

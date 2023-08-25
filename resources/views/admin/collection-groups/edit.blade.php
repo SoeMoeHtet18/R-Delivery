@@ -12,15 +12,6 @@
             @csrf
             @method('PUT')
             <div class="row m-0 mb-3">
-                <label for="total_quantity" class="col-2">
-                    <h4>Total Quantity <b>:</b></h4>
-                </label>
-                <div class="col-10">
-                    <input type="text" id="total_quantity" name="total_quantity" class="form-control"
-                        value="{{$collectionGroup->total_quantity}}"/>
-                </div>
-            </div>
-            <div class="row m-0 mb-3">
                 <label for="total_amount" class="col-2">
                     <h4>Total Amount <b>:</b></h4>
                 </label>

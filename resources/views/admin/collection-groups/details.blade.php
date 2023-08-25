@@ -165,19 +165,31 @@
             },
             {
                 "render": function(data, type, row) {
-                    return formatWithNumberingSystem(row.total_quantity);
+                    if(row.total_quantity != null) {
+                        return formatWithNumberingSystem(row.total_quantity, 0);
+                    } else {
+                        return '';
+                    }
                 },
                 "targets": 2
             },
             {
                 "render": function(data, type, row) {
-                    return formatWithNumberingSystem(row.total_amount);
+                    if(row.total_amount != null) {
+                        return formatWithNumberingSystem(row.total_amount);
+                    } else {
+                        return '';
+                    }
                 },
                 "targets": 3
             },
             {
                 "render": function(data, type, row) {
-                    return formatWithNumberingSystem(row.paid_amount);
+                    if(row.paid_amount != null) {
+                        return formatWithNumberingSystem(row.paid_amount);
+                    } else {
+                        return '';
+                    }
                 },
                 "targets": 4
             },

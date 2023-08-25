@@ -46,7 +46,7 @@ class CollectionGroupService
             'assigned_date' => $data['assigned_date'],
             'branch_id' => $user->branch_id,
             'total_quantity' => $data['total_quantity'] ?? 0,
-            'total_collection' => $data['total_collection']
+            'total_collection' => $data['total_collection'] ?? 0
         ]);
 
         if (isset($data['checkedShopCollections'])) {
@@ -83,11 +83,11 @@ class CollectionGroupService
                 ->update(['collection_group_id' => $collectionGroup->id]);
         }
         
-        $totalCollection = count($collectionIds) + count($customerCollectionIds);
+        $totalQuantity = count($collectionIds) + count($customerCollectionIds);
 
         $collectionGroup->update([
-            'total_collection' => $totalCollection,
-            'total_quantity' => $data['total_quantity'],
+            'total_collection' => count($collectionIds),
+            'total_quantity' => $totalQuantity,
             'total_amount' => $data['total_amount'],
             'rider_id' => $data['rider_id'],
             'assigned_date' => $data['assigned_date']
