@@ -67,18 +67,21 @@ class CollectionGroupController extends Controller
         $riderId = $data['rider_id'];
         $checkedShopCollections = json_decode($request->input('checked_shop_collections'));
         $checkedCustomerCollections = json_decode($request->input('checked_customer_collections'));
+        $dataForCollections = json_decode($data['create-collections-data'], true);
+
         $data['checkedShopCollections'] = $checkedShopCollections ?? 0;
         $data['checkedCustomerCollections'] = $checkedCustomerCollections ?? 0;
 
-        $data['total_collection'] = count($data['checkedShopCollections']) +
-            count($data['checkedCustomerCollections']);
+        $data['total_quantity'] = count($data['checkedShopCollections']) +
+            count($data['checkedCustomerCollections']) + count($dataForCollections);
+
+        $data['total_collection'] = count($data['checkedShopCollections']) + count($dataForCollections);
         
         $collectionGroup = $this->collectionGroupService->saveCollectionGroup($data);
 
-        $dataForCollections = json_decode($data['create-collections-data'], true);
         foreach($dataForCollections as $dataForCollection) {
             $this->collectionService->saveCollectionFromGroup($dataForCollection, $riderId, $collectionGroup->id);
-        } 
+        }
        
         // $this->collectionGroupService->saveCollectionGroupByAdmin($data);
         return redirect()->route('collection-groups.index');
