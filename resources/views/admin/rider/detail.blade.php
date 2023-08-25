@@ -383,6 +383,11 @@
         $('.nav-tabs a').click(function() {
             $(this).tab('show');
             tabIndex = $('.nav-tabs a').index(this);
+            if(tabIndex == 0 || tabIndex == 2){
+                $('.pdf-ul').show();
+            }else{
+                $('.pdf-ul').hide();
+            }
         });
 
         var rider_id = document.getElementById('rider-id').getAttribute('data-rider-id');
