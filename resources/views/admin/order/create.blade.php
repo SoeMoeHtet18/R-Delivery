@@ -10,102 +10,156 @@
         <form action="{{route('orders.store')}}" method="POST" class="action-form">
             @csrf
             <div class="row m-0 mb-3">
-                <label for="shop_id" class="col-2">
-                    <h4>Shop Name <b>:</b></h4>
-                </label>
-                <div class="ps-4 col-10">
-                    <select name="shop_id" id="shop_id" class="form-control">
-                        <option value="" selected disabled>Select the Shop for This Order</option>
-                        @foreach ( $shops as $shop)
-                        <option value="{{$shop->id}}" @isset($shop_id) @if($shop->id == $shop_id) selected
-                            @endif
-                            @else
-                            @if($shop->id == old('shop_id')) selected
-                            @endif
-                            @endisset
-                            >{{$shop->name}}</option>
-                        @endforeach
-                    </select>
-                    @if ($errors->has('shop_id'))
-                    <span class="text-danger"><strong>{{ $errors->first('shop_id') }}</strong></span>
-                    @endif
+                <div class="col">
+                    <label for="shop_id">
+                        <h4>Shop Name <b>:</b></h4>
+                    </label>
+                    <div>
+                        <select name="shop_id" id="shop_id" class="form-control">
+                            <option value="" selected disabled>Select the Shop for This Order</option>
+                            @foreach ( $shops as $shop)
+                            <option value="{{$shop->id}}" @isset($shop_id) @if($shop->id == $shop_id) selected
+                                @endif
+                                @else
+                                @if($shop->id == old('shop_id')) selected
+                                @endif
+                                @endisset
+                                >{{$shop->name}}</option>
+                            @endforeach
+                        </select>
+                        @if ($errors->has('shop_id'))
+                        <span class="text-danger"><strong>{{ $errors->first('shop_id') }}</strong></span>
+                        @endif
+                    </div>
+                </div>
+                <div class="col">
+                    <label for="order_code">
+                        <h4>Order Code <b>:</b></h4>
+                    </label>
+                    <div >
+                        <input type="text" id="order_code" name="order_code" class="form-control" readonly />
+                    </div>
                 </div>
             </div>
+
             <div class="row m-0 mb-3">
-                <label for="order_code" class="col-2">
-                    <h4>Order Code <b>:</b></h4>
-                </label>
-                <div class="ps-4 col-10">
-                    <input type="text" id="order_code" name="order_code" class="form-control" readonly />
+                <div class="col">
+                    <label for="customer_phone_number">
+                        <h4>Customer PhoneNumber <b>:</b></h4>
+                    </label>
+                    <div>
+                        <input type="text" id="customer_phone_number" name="customer_phone_number" value="{{old('customer_phone_number')}}" class="form-control" />
+                        @if ($errors->has('customer_phone_number'))
+                        <span class="text-danger"><strong>{{ $errors->first('customer_phone_number') }}</strong></span>
+                        @endif
+                    </div>
+                </div>
+                <div class="col">
+                    <label for="customer_name">
+                        <h4>Customer Name <b>:</b></h4>
+                    </label>
+                    <div>
+                        <input type="text" id="customer_name" name="customer_name" value="{{old('customer_name')}}" class="form-control" />
+                        @if ($errors->has('customer_name'))
+                        <span class="text-danger"><strong>{{ $errors->first('customer_name') }}</strong></span>
+                        @endif
+                    </div>
                 </div>
             </div>
+            
             <div class="row m-0 mb-3">
-                <label for="customer_phone_number" class="col-2">
-                    <h4>Customer PhoneNumber <b>:</b></h4>
-                </label>
-                <div class="ps-4 col-10">
-                    <input type="text" id="customer_phone_number" name="customer_phone_number" value="{{old('customer_phone_number')}}" class="form-control" />
-                    @if ($errors->has('customer_phone_number'))
-                    <span class="text-danger"><strong>{{ $errors->first('customer_phone_number') }}</strong></span>
-                    @endif
+                <div class="col">
+                    <label for="city_id">
+                        <h4>City Name <b>:</b></h4>
+                    </label>
+                    <div>
+                        <select name="city_id" id="city_id" class="form-control">
+                            <option value="" selected disabled>Select the City for This Order</option>
+                            @foreach ( $cities as $city)
+                            <option value="{{$city->id}}"
+                                @if($city->id == old('city_id')) selected @endif
+                            >{{$city->name}}</option>
+                            @endforeach
+                        </select>
+                        @if ($errors->has('city_id'))
+                        <span class="text-danger"><strong>{{ $errors->first('city_id') }}</strong></span>
+                        @endif
+                    </div>
+                </div>
+                <div class="col">
+                    <label for="township_id">
+                        <h4>Township Name <b>:</b></h4>
+                    </label>
+                    <div>
+                        <select name="township_id" id="township_id" class="form-control">
+                            <option value="" selected disabled>Select the Township for This Order</option>
+                            @foreach ( $townships as $township)
+                            <option value="{{$township->id}}"
+                                @if($township->id == old('township_id')) selected @endif
+                            >{{$township->name}}</option>
+                            @endforeach
+                        </select>
+                        @if ($errors->has('township_id'))
+                        <span class="text-danger"><strong>{{ $errors->first('township_id') }}</strong></span>
+                        @endif
+                    </div>
                 </div>
             </div>
+
             <div class="row m-0 mb-3">
-                <label for="customer_name" class="col-2">
-                    <h4>Customer Name <b>:</b></h4>
-                </label>
-                <div class="ps-4 col-10">
-                    <input type="text" id="customer_name" name="customer_name" value="{{old('customer_name')}}" class="form-control" />
-                    @if ($errors->has('customer_name'))
-                    <span class="text-danger"><strong>{{ $errors->first('customer_name') }}</strong></span>
-                    @endif
+                <div class="col">
+                    <label for="rider_id">
+                        <h4>Rider Name <b>:</b></h4>
+                    </label>
+                    <div>
+                        <select name="rider_id" id="rider_id" class="form-control">
+                            <option value="" selected disabled>Select the Rider for This Order</option>
+                            @foreach ( $riders as $rider)
+                            <option value="{{$rider->id}}"
+                            @if($rider->id == old('rider_id')) {{'selected'}} @endif
+                            >{{$rider->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <label for="delivery_fees">
+                        <h4>Delivery Fees <b>:</b></h4>
+                    </label>
+                    <div>
+                        <input type="text" id="delivery_fees" name="delivery_fees" value="{{old('delivery_fees')}}" class="form-control" />
+                        @if ($errors->has('delivery_fees'))
+                        <span class="text-danger"><strong>{{ $errors->first('delivery_fees') }}</strong></span>
+                        @endif
+                    </div>
                 </div>
             </div>
+
             <div class="row m-0 mb-3">
-                <label for="city_id" class="col-2">
-                    <h4>City Name <b>:</b></h4>
-                </label>
-                <div class="ps-4 col-10">
-                    <select name="city_id" id="city_id" class="form-control">
-                        <option value="" selected disabled>Select the City for This Order</option>
-                        @foreach ( $cities as $city)
-                        <option value="{{$city->id}}" @if($city->id == old('city_id')) selected @endif>{{$city->name}}</option>
-                        @endforeach
-                    </select>
-                    @if ($errors->has('city_id'))
-                    <span class="text-danger"><strong>{{ $errors->first('city_id') }}</strong></span>
-                    @endif
+                <div class="col">
+                    <label for="markup_delivery_fees" class="text-nowrap">
+                        <h4>Markup Delivery Fees <b>:</b></h4>
+                    </label>
+                    <div>
+                        <input type="text" id="markup_delivery_fees" name="markup_delivery_fees" value="{{old('markup_delivery_fees')}}" class="form-control" />
+                        @if ($errors->has('markup_delivery_fees'))
+                        <span class="text-danger"><strong>{{ $errors->first('markup_delivery_fees') }}</strong></span>
+                        @endif
+                    </div>
+                </div>
+                <div class="col">
+                    <label for="extra_charges">
+                        <h4>Extra Charges <b>:</b></h4>
+                    </label>
+                    <div>
+                        <input type="text" id="extra_charges" name="extra_charges" value="{{old('extra_charges')}}" class="form-control" />
+                        @if ($errors->has('extra_charges'))
+                        <span class="text-danger"><strong>{{ $errors->first('extra_charges') }}</strong></span>
+                        @endif
+                    </div>
                 </div>
             </div>
-            <div class="row m-0 mb-3">
-                <label for="township_id" class="col-2">
-                    <h4>Township Name <b>:</b></h4>
-                </label>
-                <div class="ps-4 col-10">
-                    <select name="township_id" id="township_id" class="form-control">
-                        <option value="" selected disabled>Select the Township for This Order</option>
-                        @foreach ( $townships as $township)
-                        <option value="{{$township->id}}" @if($township->id == old('township_id')) selected @endif>{{$township->name}}</option>
-                        @endforeach
-                    </select>
-                    @if ($errors->has('township_id'))
-                    <span class="text-danger"><strong>{{ $errors->first('township_id') }}</strong></span>
-                    @endif
-                </div>
-            </div>
-            <div class="row m-0 mb-3">
-                <label for="rider_id" class="col-2">
-                    <h4>Rider Name <b>:</b></h4>
-                </label>
-                <div class="ps-4 col-10">
-                    <select name="rider_id" id="rider_id" class="form-control">
-                        <option value="" selected disabled>Select the Rider for This Order</option>
-                        @foreach ( $riders as $rider)
-                        <option value="{{$rider->id}}" @if($rider->id == old('rider_id')) {{'selected'}} @endif>{{$rider->name}}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
+            
             <!-- <div class="row m-0 mb-3">
                 <label for="quantity" class="col-2">
                     <h4>Quantity <b>:</b></h4>
@@ -118,115 +172,132 @@
                 </div>
             </div> -->
             <div class="row m-0 mb-3">
-                <label for="total_amount" class="col-2">
-                    <h4>Total Amount <b>:</b></h4>
-                </label>
-                <div class="ps-4 col-10">
-                    <input type="text" id="total_amount" name="total_amount" value="{{old('total_amount')}}" class="form-control" />
-                    @if ($errors->has('total_amount'))
-                    <span class="text-danger"><strong>{{ $errors->first('total_amount') }}</strong></span>
+                <div class="col">
+                    <label for="total_amount">
+                        <h4>Total Amount <b>:</b></h4>
+                    </label>
+                    <div>
+                        <input type="text" id="total_amount" name="total_amount" value="{{old('total_amount')}}" class="form-control" />
+                        @if ($errors->has('total_amount'))
+                        <span class="text-danger"><strong>{{ $errors->first('total_amount') }}</strong></span>
+                        @endif
+                    </div>
+                </div>
+                <div class="col">
+                    <label for="schedule_date">
+                        <h4>Schedule Date <b>:</b></h4>
+                    </label>
+                    <div>
+                        <?php
+                        // Get tomorrow's date
+                        $tomorrow = date('Y-m-d', strtotime('+1 day'));
+                        // Set the default value to tomorrow's date
+                        $defaultDate = old('schedule_date') ?? $tomorrow;
+                        ?>
+                        <input type="date" id="schedule_date" name="schedule_date" value="<?php echo $defaultDate; ?>" class="form-control" />
+                        @if ($errors->has('schedule_date'))
+                            <span class="text-danger"><strong>{{ $errors->first('schedule_date') }}</strong></span>
+                        @endif
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row m-0 mb-3">
+                <div class="col">
+                    <label for="full_address">
+                        <h4>Address <b>:</b></h4>
+                    </label>
+                    <div>
+                        <textarea id="full_address" name="full_address" class="form-control" style="height: 100px">{{old('full_address')}}</textarea>
+                    </div>
+                    @if ($errors->has('full_address'))
+                    <span class="text-danger"><strong>{{ $errors->first('full_address') }}</strong></span>
+                    @endif
+                </div>
+                <div class="col">
+                    <label for="remark">
+                        <h4>Remark <b>:</b></h4>
+                    </label>
+                    <div>
+                        <textarea id="remark" name="remark" class="form-control" style="height: 100px">{{old('remark')}}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row m-0 mb-3">
+                <div class="col">
+                    <label for="item_type_id">
+                        <h4>Item Type <b>:</b></h4>
+                    </label>
+                    <div>
+                        <select name="item_type_id" id="item_type_id" class="form-control">
+                            <option value="" selected disabled>Select Item Type for This Order</option>
+                            @foreach($item_types as $item_type)
+                            <option value="{{$item_type->id}}" @if($item_type->id == old('item_type_id')) selected @endif>{{$item_type->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <label for="type">
+                        <h4>Delivery Type <b>:</b></h4>
+                    </label>
+                    <div>
+                        <select name="delivery_type_id" id="delivery_type_id" class="form-control">
+                            <option value="" selected disabled>Select Delivery Type for This Order</option>
+                            @foreach($delivery_types as $delivery_type)
+                            <option value="{{$delivery_type->id}}" @if($delivery_type->id == old('delivery_type_id')) selected @endif>{{$delivery_type->name}}</option>
+                            @endforeach
+                        </select>
+                        @if ($errors->has('type'))
+                        <span class="text-danger"><strong>{{ $errors->first('type') }}</strong></span>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
+            <div class="row m-0 mb-3">
+                <div class="col">
+                    <label for="collection_method">
+                        <h4>Collection Method <b>:</b></h4>
+                    </label>
+                    <div>
+                        <input type="radio" id="pickup" name="collection_method" value="pickup"
+                            @if(old('collection_method')=='pickup' ) checked @endif/>
+                        <label for="pickup" class="ps-3 pe-5">Pick Up</label>
+
+                        <input type="radio" id="dropoff" name="collection_method" value="dropoff"
+                            @if(old('collection_method')=='dropoff' ) checked @endif/>
+                        <label for="dropoff" class="ps-3">Drop Off</label>
+                    </div>
+                    @if ($errors->has('collection_method'))
+                        <span class="text-danger"><strong>{{ $errors->first('collection_method') }}</strong></span>
+                    @endif
+                </div>
+                <div class="col">
+                    <label for="payment_method">
+                        <h4>Payment Method <b>:</b></h4>
+                    </label>
+                    <div class="col">
+                        <input type="radio" id="cash_on_delivery" name="payment_method" value="cash_on_delivery"
+                            @if(old('payment_method')=='cash_on_delivery' ) checked @endif/>
+                        <label for="cash_on_delivery" class="ps-2 pe-4">Cash On Delivery</label>
+
+                        <input type="radio" id="item_prepaid" name="payment_method" value="item_prepaid"
+                            @if(old('payment_method')=='item_prepaid' ) checked @endif/>
+                        <label for="item_prepaid" class="ps-2 pe-4">Item Prepaid</label>
+
+                        <input type="radio" id="all_prepaid" name="payment_method" value="all_prepaid"
+                            @if(old('payment_method')=='all_prepaid' ) checked @endif/>
+                        <label for="all_prepaid" class="ps-2">All Prepaid</label>
+                    </div>
+                    @if ($errors->has('payment_method'))
+                        <span class="text-danger"><strong>{{ $errors->first('payment_method') }}</strong></span>
                     @endif
                 </div>
             </div>
-            <div class="row m-0 mb-3">
-                <label for="delivery_fees" class="col-2">
-                    <h4>Delivery Fees <b>:</b></h4>
-                </label>
-                <div class="ps-4 col-10">
-                    <input type="text" id="delivery_fees" name="delivery_fees" value="{{old('delivery_fees')}}" class="form-control" />
-                    @if ($errors->has('delivery_fees'))
-                    <span class="text-danger"><strong>{{ $errors->first('delivery_fees') }}</strong></span>
-                    @endif
-                </div>
-            </div>
-            <div class="row m-0 mb-3">
-                <label for="markup_delivery_fees" class="col-2 text-nowrap">
-                    <h4>Markup Delivery Fees <b>:</b></h4>
-                </label>
-                <div class="ps-4 col-10">
-                    <input type="text" id="markup_delivery_fees" name="markup_delivery_fees" value="{{old('markup_delivery_fees')}}" class="form-control" />
-                    @if ($errors->has('markup_delivery_fees'))
-                    <span class="text-danger"><strong>{{ $errors->first('markup_delivery_fees') }}</strong></span>
-                    @endif
-                </div>
-            </div>
-            <div class="row m-0 mb-3">
-                <label for="extra_charges" class="col-2">
-                    <h4>Extra Charges <b>:</b></h4>
-                </label>
-                <div class="ps-4 col-10">
-                    <input type="text" id="extra_charges" name="extra_charges" value="{{old('extra_charges')}}" class="form-control" />
-                    @if ($errors->has('extra_charges'))
-                    <span class="text-danger"><strong>{{ $errors->first('extra_charges') }}</strong></span>
-                    @endif
-                </div>
-            </div>
-            <div class="row m-0 mb-3">
-                <label for="remark" class="col-2">
-                    <h4>Remark <b>:</b></h4>
-                </label>
-                <div class="ps-4 col-10">
-                    <textarea id="remark" name="remark" class="form-control" style="height: 100px">{{old('remark')}}</textarea>
-                </div>
-            </div>
-            <div class="row m-0 mb-3">
-                <label for="item_type_id" class="col-2">
-                    <h4>Item Type <b>:</b></h4>
-                </label>
-                <div class="ps-4 col-10">
-                    <select name="item_type_id" id="item_type_id" class="form-control">
-                        <option value="" selected disabled>Select Item Type for This Order</option>
-                        @foreach($item_types as $item_type)
-                        <option value="{{$item_type->id}}" @if($item_type->id == old('item_type_id')) selected @endif>{{$item_type->name}}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-            <div class="row m-0 mb-3">
-                <label for="full_address" class="col-2">
-                    <h4>Address <b>:</b></h4>
-                </label>
-                <div class="ps-4 col-10">
-                    <textarea id="full_address" name="full_address" class="form-control" style="height: 100px">{{old('full_address')}}</textarea>
-                </div>
-                @if ($errors->has('full_address'))
-                <span class="text-danger"><strong>{{ $errors->first('full_address') }}</strong></span>
-                @endif
-            </div>
-            <div class="row m-0 mb-3">
-                <label for="type" class="col-2">
-                    <h4>Delivery Type <b>:</b></h4>
-                </label>
-                <div class="ps-4 col-10">
-                    <select name="delivery_type_id" id="delivery_type_id" class="form-control">
-                        <option value="" selected disabled>Select Delivery Type for This Order</option>
-                        @foreach($delivery_types as $delivery_type)
-                        <option value="{{$delivery_type->id}}" @if($delivery_type->id == old('delivery_type_id')) selected @endif>{{$delivery_type->name}}</option>
-                        @endforeach
-                    </select>
-                    @if ($errors->has('type'))
-                    <span class="text-danger"><strong>{{ $errors->first('type') }}</strong></span>
-                    @endif
-                </div>
-            </div>
-            <div class="row m-0 mb-3">
-                <label for="schedule_date" class="col-2">
-                    <h4>Schedule Date <b>:</b></h4>
-                </label>
-                <div class="ps-4 col-10">
-                    <?php
-                    // Get tomorrow's date
-                    $tomorrow = date('Y-m-d', strtotime('+1 day'));
-                    // Set the default value to tomorrow's date
-                    $defaultDate = old('schedule_date') ?? $tomorrow;
-                    ?>
-                    <input type="date" id="schedule_date" name="schedule_date" value="<?php echo $defaultDate; ?>" class="form-control" />
-                    @if ($errors->has('schedule_date'))
-                        <span class="text-danger"><strong>{{ $errors->first('schedule_date') }}</strong></span>
-                    @endif
-                </div>
-            </div>
-            <div class="row m-0 mb-3">
+            
+            {{--<div class="row m-0 mb-3">
                 <label for="collection_method" class="col-2">
                     <h4>Collection Method <b>:</b></h4>
                 </label>
@@ -240,8 +311,8 @@
                     <span class="text-danger"><strong>{{ $errors->first('collection_method') }}</strong></span>
                     @endif
                 </div>
-            </div>
-            <div class="row m-0 mb-3">
+            </div>--}}
+            {{--<div class="row m-0 mb-3">
                 <label for="payment_method" class="col-2">
                     <h4>Payment Method <b>:</b></h4>
                 </label>
@@ -256,7 +327,7 @@
                     <span class="text-danger"><strong>{{ $errors->first('payment_method') }}</strong></span>
                     @endif
                 </div>
-            </div>
+            </div>--}}
             <!-- <div class="row m-0 mb-3">
                 <label for="note" class="col-2">
                     <h4>Note <b>:</b></h4>
@@ -278,13 +349,13 @@
 @section('javascript')
 <script>
     $(document).ready(function() {
-        $('#city_id').select2();
-        $('#township_id').select2();
-        $('#rider_id').select2();
-        $('#shop_id').select2();
+        $('#city_id').select2({width: '100%'});
+        $('#township_id').select2({width: '100%'});
+        $('#rider_id').select2({width: '100%'});
+        $('#shop_id').select2({width: '100%'});
         $('#status_id').select2();
-        $('#item_type_id').select2();
-        $('#delivery_type_id').select2();
+        $('#item_type_id').select2({width: '100%'});
+        $('#delivery_type_id').select2({width: '100%'});
         $('#collection_method_id').select2();
         $('#payment_method').select2();
 

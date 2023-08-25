@@ -143,7 +143,7 @@ class OrderService
         // $order->type =  $data['type'];
         $order->collection_method =  $data['collection_method'];
         $order->payment_method = $data['payment_method'] ?? null;
-        $order->note = $data['note'];
+        $order->note = $data['note'] ?? $order->note;
         if ($file) {
             $file_name = $this->uploadFile($file, 'public', 'customer payment');
             $order->proof_of_payment = $file_name;
