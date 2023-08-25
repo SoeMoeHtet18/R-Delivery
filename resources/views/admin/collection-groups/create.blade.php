@@ -345,7 +345,7 @@
                             $("#assign-container").append(datas);
                         }
                     } else {
-                        $("#assign-container").html("");
+                        return;
                     }
                 }
             });
