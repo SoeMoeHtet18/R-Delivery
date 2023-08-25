@@ -314,7 +314,7 @@ class OrderController extends Controller
         if ($request->ajax()) {
             $orderQuery = $this->orderRepository->getAllOrdersQuery();
 
-            $orders = $orderQuery->where('orders.township_id', $id)->where('status', 'pending')->orWhere('status', 'delay');
+            $orders = $orderQuery->where('orders.township_id', $id)->where('status', 'pending')->orWhere('status', 'delay')->orWhere('status', 'delivering');
 
             return DataTables::of($orders)
                 ->addColumn('order_code', function ($data) {
