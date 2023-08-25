@@ -491,38 +491,52 @@ class OrderRepository
         return $order;
     }
 
-    public function getOrderTotalAmount($rider_id, $date) 
+    public function getOrderTotalAmount($rider_id, $date)
     {
-        
-        $cashTotalAmount = Order::where([
+        $commonConditions = [
             'rider_id' => $rider_id,
-            'status' => 'success',
-            'payment_channel' => 'cash'
-        ])
-        ->whereDate('schedule_date', $date)
-        ->selectRaw('SUM(total_amount + delivery_fees + COALESCE(markup_delivery_fees, 0) + extra_charges - COALESCE(discount, 0)) AS total_amount')
-        ->first()
-        ->total_amount;
+            'status' => 'success'
+        ];
 
-        $onlinePaymentTotalAmount = Order::where([
-                'rider_id' => $rider_id,
-                'status' => 'success'
-            ])
+        $cashOnDeliQuery = Order::where($commonConditions)
+            ->where('payment_channel', 'cash')
+            ->whereDate('schedule_date', $date)
+            ->where('payment_method', 'cash_on_delivery');
+
+        $itemPrepaidQuery = Order::where($commonConditions)
+            ->where('payment_channel', 'cash')
+            ->whereDate('schedule_date', $date)
+            ->where('payment_method', 'item_prepaid');
+
+        $onlinePaymentQuery = Order::where($commonConditions)
             ->whereIn('payment_channel', ['shop_online_payment', 'company_online_payment'])
             ->whereDate('schedule_date', $date)
-            ->selectRaw('SUM(total_amount + delivery_fees + COALESCE(markup_delivery_fees, 0) + extra_charges - COALESCE(discount, 0)) AS total_amount')
-            ->first()
-            ->total_amount;
+            ->where('payment_method', 'cash_on_delivery');
 
-            $deficit_fees = Deficit::where('rider_id',$rider_id)->whereDate('created_at',$date)->sum('total_amount');
+        $onlineItemPrepaidQuery = Order::where($commonConditions)
+            ->whereIn('payment_channel', ['shop_online_payment', 'company_online_payment'])
+            ->whereDate('schedule_date', $date)
+            ->where('payment_method', 'item_prepaid');
 
-        $data = [
+        $cashTotalAmount = strval($cashOnDeliQuery->selectRaw('SUM(total_amount + delivery_fees + COALESCE(markup_delivery_fees, 0) + extra_charges - COALESCE(discount, 0)) AS total_amount')
+            ->first()->total_amount + $itemPrepaidQuery->selectRaw('SUM(delivery_fees + COALESCE(markup_delivery_fees, 0) + extra_charges - COALESCE(discount, 0)) AS total_amount')
+            ->first()->total_amount);
+
+        $onlinePaymentTotalAmount = strval($onlinePaymentQuery->selectRaw('SUM(total_amount + delivery_fees + COALESCE(markup_delivery_fees, 0) + extra_charges - COALESCE(discount, 0)) AS total_amount')
+            ->first()->total_amount + $onlineItemPrepaidQuery->selectRaw('SUM(delivery_fees + COALESCE(markup_delivery_fees, 0) + extra_charges - COALESCE(discount, 0)) AS total_amount')
+            ->first()->total_amount);
+
+        $deficit_fees = Deficit::where('rider_id', $rider_id)
+            ->whereDate('created_at', $date)
+            ->sum('total_amount');
+
+        return [
             'cash_total_amount' => $cashTotalAmount,
             'online_payment_total_amount' => $onlinePaymentTotalAmount,
             'deficit_fees' => $deficit_fees,
         ];
-        return $data;
     }
+
     
     public function getTodayOrdersByRider($id)
     {
