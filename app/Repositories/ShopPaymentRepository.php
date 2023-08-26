@@ -33,8 +33,8 @@ class ShopPaymentRepository
 
     public function getAllShopPaymentCount()
     {
-        $shop_payment_count = ShopPayment::count();
-        return $shop_payment_count;
+        $user = auth()->user();
+        return ShopPayment::where('branch_id', $user->branch_id)->count();
     }
 
     public function getShopPaymentQueryByShopID($id)

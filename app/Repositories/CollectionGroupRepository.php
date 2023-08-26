@@ -43,4 +43,10 @@ class CollectionGroupRepository
         }
         return $collectionGroups;
     }
+
+    public function getAllCollectionGroupCount()
+    {
+        $user = auth()->user();
+        return CollectionGroup::where('branch_id', $user->branch_id)->count();
+    }
 }

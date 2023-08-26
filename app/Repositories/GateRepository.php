@@ -22,4 +22,9 @@ class GateRepository
     {
         return Gate::with(['city','townships'])->orderBy('name','asc')->get();
     }
+
+    public function getAllGateCount()
+    {
+        return Gate::count();
+    }
 }

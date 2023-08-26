@@ -19,4 +19,9 @@ class RiderPaymentRepository
         return $data;
     }
     
+    public function getAllRiderPaymentCount()
+    {
+        $user = auth()->user();
+        return RiderPayment::where('branch_id', $user->branch_id)->count();
+    }
 }

@@ -21,7 +21,7 @@ class ShopUserRepository
 
     public function getAllShopUserCount()
     {
-        $shopusercount = ShopUser::count();
-        return $shopusercount;
+        $user = auth()->user();
+        return ShopUser::where('branch_id', $user->branch_id)->count();
     }
 }

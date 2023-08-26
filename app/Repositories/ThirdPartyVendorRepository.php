@@ -23,4 +23,9 @@ class ThirdPartyVendorRepository
     {
         return ThirdPartyVendor::orderBy('name','asc')->get();
     }
+
+    public function getAllThirdPartyVendorCount()
+    {
+        return ThirdPartyVendor::count();
+    }
 }

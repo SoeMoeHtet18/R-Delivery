@@ -40,8 +40,8 @@ class TransactionsForShopRepository
 
     public function getAllTransactionsForShopCount()
     {
-        $count = TransactionsForShop::count();
-        return $count;
+        $user = auth()->user();
+        return TransactionsForShop::where('branch_id', $user->branch_id)->count();
     }
 
     public function getTransactionsQueryByShopID($id)
