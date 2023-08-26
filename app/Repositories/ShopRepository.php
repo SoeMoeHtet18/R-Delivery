@@ -60,8 +60,8 @@ class ShopRepository
 
     public function getAllShopCount()
     {
-        $shopcount = Shop::count();
-        return $shopcount;
+        $user = auth()->user();
+        return Shop::where('branch_id', $user->branch_id)->count();
     }
 
     public function getPayableAmountForShop($shopId)

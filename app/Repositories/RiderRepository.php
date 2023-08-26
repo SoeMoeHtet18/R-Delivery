@@ -84,8 +84,8 @@ class RiderRepository
 
     public function getAllRidersCount()
     {
-        $count = Rider::count();
-        return $count;
+        $user = auth()->user();
+        return Rider::where('branch_id', $user->branch_id)->count();
     }
 
     public function getRiderBySalaryType($type)

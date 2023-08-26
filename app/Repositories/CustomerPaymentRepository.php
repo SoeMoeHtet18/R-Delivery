@@ -27,7 +27,7 @@ class CustomerPaymentRepository
 
     public function getAllCustomerPaymentCount()
     {
-        $count = CustomerPayment::count();
-        return $count;
+        $user = auth()->user();
+        return CustomerPayment::where('branch_id', $user->branch_id)->count();
     }
 }

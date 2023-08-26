@@ -32,7 +32,7 @@ class AdminRepository
 
     public function getAllUsersCount()
     {
-        $usercount = User::count();
-        return $usercount;
+        $user = auth()->user();
+        return User::where('branch_id', $user->branch_id)->count();
     }
 }

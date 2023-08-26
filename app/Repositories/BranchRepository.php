@@ -22,4 +22,9 @@ class BranchRepository
     {
         return Branch::orderBy('name','asc')->get();
     }
+
+    public function getAllBranchCount()
+    {
+        return Branch::count();
+    }
 }
