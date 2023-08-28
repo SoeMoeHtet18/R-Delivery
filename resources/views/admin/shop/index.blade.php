@@ -115,12 +115,25 @@
                         searchable: false
                     },
                 ],
-                columnDefs: [{
-                    "render": function(data, type, row) {
-                        return '<a href="/shops/' + row.id + '">' + row.name + '</a>';
+                columnDefs: [
+                    {
+                        "render": function(data, type, row) {
+                            return '<a href="/shops/' + row.id + '">' + row.name + '</a>';
+                        },
+                        "targets": 1
                     },
-                    "targets": 1
-                }, ]
+                    {
+                        "render": function(data, type, row) {
+                            if(row.township_id != null){
+                                return '<a href="/townships/' + row.township_id + '">' + row.township_name + '</a>';
+                            }else{
+                                return '';
+                            }
+                            
+                        },
+                        "targets": 2
+                    },
+                ]
             });
             $('.search_filter').click(function() {
                 var search = $('#search').val();
