@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Collection;
+use App\Models\CollectionGroup;
 use App\Models\CustomerCollection;
 use App\Models\Deficit;
 use App\Models\Gate;
@@ -519,7 +520,7 @@ class OrderRepository
             ->whereDate('schedule_date', $date)
             ->where('payment_method', 'item_prepaid');
         
-        $paymentFromCompany = Collection::where('rider_id',$rider_id)
+        $paymentFromCompany = CollectionGroup::where('rider_id',$rider_id)
             ->whereDate('assigned_date', $date)->sum('total_amount');
 
         $cashTotalAmount = strval($cashOnDeliQuery->selectRaw('SUM(total_amount + delivery_fees + COALESCE(markup_delivery_fees, 0) + extra_charges - COALESCE(discount, 0)) AS total_amount')
@@ -535,7 +536,7 @@ class OrderRepository
             ->sum('total_amount');
 
         return [
-            'payment_from_amount' => $paymentFromCompany,
+            'payment_from_company' => $paymentFromCompany,
             'cash_total_amount' => $cashTotalAmount,
             'online_payment_total_amount' => $onlinePaymentTotalAmount,
             'deficit_fees' => $deficit_fees,
