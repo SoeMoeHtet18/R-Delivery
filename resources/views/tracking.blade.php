@@ -27,8 +27,7 @@
 
     .dotted-container {
         box-sizing: border-box;
-        width: 423px;
-        height: 143px;
+        width: 430px;
         border: 2px dashed #224466;
         border-radius: 10px !important;
         margin-left: 20px !important;
@@ -214,9 +213,8 @@
 
         .main-page .dotted-container {
             width: 259px;
-            height: 206px;
             margin-left: 35px !important;
-            padding: 10px 20px !important;
+            padding: 13px 20px !important;
         }
 
         .main-page .dotted-container div:not(.dotted-container) {
@@ -226,6 +224,10 @@
 
         .main-page .dotted-container div .sub-title {
             margin-bottom: 15px !important;
+        }
+
+        .main-page .dotted-container div .order-id {
+            margin: 10px 0 !important;
         }
 
         .main-page .dotted-container div .info-text:not(:last-child) {
@@ -297,6 +299,12 @@
         }
 
     }
+
+    @media screen and (max-width: 464px) {
+        .main-page .dotted-container {
+            margin: auto !important;
+        }
+    }
 </style>
 @section('content')
 <div class="container-fluid g-0">
@@ -319,8 +327,8 @@
                     </div>
                 </div>
                 <!-- status monitor start -->
-                <div class="status-monitor-container row justify-content-center my-5 pt-5">
-                    <div class="col-md-8 status-monitor d-flex justify-content-center p-0">
+                <div class="status-monitor-container row my-5 pt-5">
+                    <div class="col-md-8 status-monitor d-flex py-0 m-auto">
                         <!-- pending status box -->
                         <div class="d-flex flex-column align-items-center preview-container">
                             <div class="pending-preview preview-box rounded-pill
