@@ -375,13 +375,14 @@
                                 <span class="preview-status shipping text-nowrap">Picking-up</span>
                             </div>
                             @endif
-                            @if($log->to_status == 'warehouse')
+                            @if($log->to_status == 'warehouse' )
                             <div class="line"></div>
                             <!-- in warehouse status box -->
                             <div class="d-flex flex-column align-items-center preview-container">
                                 <div class="shipping-preview preview-box rounded-pill
-                                    @if($order->status == 'warehouse') bg-black border border-0 @endif">
-                                    @if($order->status == 'warehouse')
+                                    @if($order->status == 'warehouse' && $log->id == $latestWarehouseLog->id)
+                                        bg-black border border-0 @endif">
+                                    @if($order->status == 'warehouse' && $log->id == $latestWarehouseLog->id)
                                     <!-- in warehouse active -->
                                     <svg class="preview-svg" width="27" height="27" viewBox="0 0 27 27" fill="none"
                                         xmlns="http://www.w3.org/2000/svg">
@@ -406,9 +407,9 @@
                             <!-- delivering status box -->
                             <div class="d-flex flex-column align-items-center preview-container">
                                 <div class="shipping-preview preview-box rounded-pill
-                                    @if($order->status === 'delivering')
+                                    @if($order->status == 'delivering' && $log->id == $latestDeliveringLog->id)
                                     bg-black border border-0 @endif">
-                                    @if($order->status == 'delivering')
+                                    @if($order->status == 'delivering' && $log->id == $latestDeliveringLog->id)
                                     <!-- delivering active -->
                                     <svg class="preview-svg" width="27" height="22" viewBox="0 0 27 22"
                                         fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -431,8 +432,9 @@
                             <!-- delay status box -->
                             <div class="d-flex flex-column align-items-center preview-container">
                                 <div class="shipping-preview preview-box rounded-pill
-                                    @if($order->status == 'delay') bg-black border border-0 @endif">
-                                    @if($order->status == 'delay')
+                                    @if($order->status == 'delay' && $log->id == $latestDelayLog->id)
+                                        bg-black border border-0 @endif">
+                                    @if($order->status == 'delay' && $log->id == $latestDelayLog->id)
                                     <!-- delay active  -->
                                     <svg class="preview-svg" width="21" height="27" viewBox="0 0 21 27"
                                         fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -542,7 +544,7 @@
                                     </div>
                                     <div class="vertical-line mx-auto"></div>
                                     @endif
-                                    @if($log->to_status == 'delay' && $order->status == 'delay')
+                                    @if($log->to_status == 'delay' && $order->status == 'delay' && $log->id == $latestDelayLog->id)
                                     <div id="delay-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center" style="background-color: #278AF9;">
                                         <i class="fa-solid fa-check text-white"></i>
                                     </div>
@@ -552,7 +554,7 @@
                                     </div>
                                     <div class="vertical-line mx-auto"></div>
                                     @endif
-                                    @if($log->to_status == 'delivering' && $order->status == 'delivering')
+                                    @if($log->to_status == 'delivering' && $order->status == 'delivering' && $log->id == $latestDeliveringLog->id)
                                     <div id="shipping-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center" style="background-color: #278AF9;">
                                         <i class="fa-solid fa-check text-white"></i>
                                     </div>
@@ -562,7 +564,7 @@
                                     </div>
                                     <div class="vertical-line mx-auto"></div>
                                     @endif
-                                    @if($log->to_status == 'warehouse' && $order->status == 'warehouse')
+                                    @if($log->to_status == 'warehouse' && $order->status == 'warehouse' && $log->id == $latestWarehouseLog->id)
                                     <div id="picked-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center" style="background-color: #278AF9;">
                                         <i class="fa-solid fa-check text-white"></i>
                                     </div>
@@ -648,7 +650,8 @@
                                     </div>
                                     <div class="vertical-line mx-auto"></div>
                                     @endif
-                                    @if($log->to_status == 'delay' && $order->status == 'delay')
+                                    @if($log->to_status == 'delay' && $order->status == 'delay'
+                                        && $log->id == $latestDelayLog->id)
                                     <div id="delay-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center" style="background-color: #278AF9;">
                                         <i class="fa-solid fa-check text-white"></i>
                                     </div>
@@ -658,7 +661,8 @@
                                     </div>
                                     <div class="vertical-line mx-auto"></div>
                                     @endif
-                                    @if($log->to_status == 'delivering' && $order->status == 'delivering')
+                                    @if($log->to_status == 'delivering' && $order->status == 'delivering'
+                                        && $log->id == $latestDeliveringLog->id)
                                     <div id="shipping-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center" style="background-color: #278AF9;">
                                         <i class="fa-solid fa-check text-white"></i>
                                     </div>
@@ -668,7 +672,8 @@
                                     </div>
                                     <div class="vertical-line mx-auto"></div>
                                     @endif
-                                    @if($log->to_status == 'warehouse' && $order->status == 'warehouse')
+                                    @if($log->to_status == 'warehouse' && $order->status == 'warehouse'
+                                        && $log->id == $latestWarehouseLog->id)
                                     <div id="picked-timeline-box" class="timeline-box mx-auto rounded-pill d-flex justify-content-center align-items-center" style="background-color: #278AF9;">
                                         <i class="fa-solid fa-check text-white"></i>
                                     </div>

@@ -8,6 +8,7 @@ use App\Helpers\Helper;
 use App\Http\Requests\OrderCreateRequest;
 use App\Http\Requests\OrderUpdateRequest;
 use App\Http\Requests\RiderAssignRequest;
+use App\Models\Log;
 use App\Models\User;
 use App\Repositories\CityRepository;
 use App\Repositories\CollectionGroupRepository;
@@ -388,6 +389,21 @@ class OrderController extends Controller
         $order = $this->orderRepository->trackOrderByOrderID($orderCode);
         $orderId = $order->id;
         $logs = $this->logRepository->getLogByOrderID($orderId);
+
+        $latestDeliveringLog = Log::where('order_id', $orderId)
+            ->where('to_status', 'delivering')
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        $latestWarehouseLog = Log::where('order_id', $orderId)
+            ->where('to_status', 'warehouse')
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        $latestDelayLog = Log::where('order_id', $orderId)
+            ->where('to_status', 'delay')
+            ->orderBy('created_at', 'desc')
+            ->first();
         // dd($logs);
         // $orders = [];
         // if (Storage::exists('order_data.txt')) {
@@ -398,7 +414,8 @@ class OrderController extends Controller
         //     $orderData = $orders[$orderId];
         //     $order->order_data = $orderData;
         // }
-        return view('tracking', compact('order', 'logs'));
+        return view('tracking', compact('order', 'logs', 'latestWarehouseLog', 'latestDeliveringLog',
+            'latestDelayLog'));
     }
 
     public function getAjaxCancelRequestOrderData(Request $request)
