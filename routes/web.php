@@ -57,7 +57,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('/riders/{id}/assign-township', [RiderController::class, 'assignTownshipToRider']);
     Route::resource('/shopusers', ShopUserController::class);
     Route::resource('/townships',TownshipController::class);
-    Route::get('townships/{id}/get-pending-orders-by-township-id',
+    Route::get('townships/{id}/get-current-orders-by-township-id',
         [OrderController::class, 'getPendingOrderTableByTownshipID']);
     Route::get('townships/{id}/get-completed-orders-by-township-id',
         [OrderController::class, 'getCompletedOrderTableByTownshipID']);

@@ -312,9 +312,7 @@ class OrderController extends Controller
     public function getPendingOrderTableByTownshipID(Request $request, $id)
     {
         if ($request->ajax()) {
-            $orderQuery = $this->orderRepository->getAllOrdersQuery();
-
-            $orders = $orderQuery->where('orders.township_id', $id)->where('status', 'pending')->orWhere('status', 'delay')->orWhere('status', 'delivering');
+            $orders = $this->orderRepository->getCurrentOrdersQuery($id);
 
             return DataTables::of($orders)
                 ->addColumn('order_code', function ($data) {
