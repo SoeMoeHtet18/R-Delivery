@@ -7,7 +7,7 @@
     }
 
     h5 {
-        font-size: 16px;
+        font-size: 15px;
     }
 
     .card,
@@ -23,10 +23,21 @@
     .overview-item .card-body h5 {
         white-space: nowrap;
         overflow: hidden;
-        text-overflow: ellipsis; /* Optional: Show ellipsis (...) for overflow */
-        max-width: 100%; /* Optional: Restrict maximum width */
+        text-overflow: ellipsis;
+        /* Optional: Show ellipsis (...) for overflow */
+        max-width: 100%;
+        /* Optional: Restrict maximum width */
     }
-    
+
+    .link {
+        color: black;
+        text-decoration: none;
+    }
+
+    .link:hover {
+        color: black;
+        text-decoration: none;
+    }
 </style>
 <div>
     <h3>Dashboard</h3>
@@ -44,31 +55,38 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <div class="card overview-item">
-                                <div class="card-body text-center">
-                                    <h5>USERS</h5>
-                                    <hr>
-                                    <h5>{{$usercount}}</h5>
+                            <a href="{{route('users.index')}}" class="link">
+                                <div class="card overview-item">
+                                    <div class="card-body text-center">
+                                        <h5>USERS</h5>
+                                        <hr>
+                                        <h5>{{$usercount}}</h5>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                         <div class="col">
-                            <div class="card overview-item">
-                                <div class="card-body text-center">
-                                    <h5>SHOP USERS</h5>
-                                    <hr>
-                                    <h5>{{$shopusercount}}</h5>
+                            <a href="{{route('shopusers.index')}}" class="link">
+
+                                <div class="card overview-item">
+                                    <div class="card-body text-center">
+                                        <h5>SHOP USERS</h5>
+                                        <hr>
+                                        <h5>{{$shopusercount}}</h5>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                         <div class="col">
-                            <div class="card overview-item">
-                                <div class="card-body text-center">
-                                    <h5>RIDERS</h5>
-                                    <hr>
-                                    <h5>{{$ridercount}}</h5>
+                            <a href="{{route('riders.index')}}" class="link">
+                                <div class="card overview-item">
+                                    <div class="card-body text-center">
+                                        <h5>RIDERS</h5>
+                                        <hr>
+                                        <h5>{{$ridercount}}</h5>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -85,37 +103,43 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <div class="card overview-item">
-                                <div class="card-body text-center">
-                                    <h5>SHOP PAYMENT FROM COMPANY</h5>
-                                    <hr>
-                                    <h5>{{$transactionforshopcount}}</h5>
+                            <a href="{{route('transactions-for-shop.index')}}" class="link">
+                                <div class="card overview-item">
+                                    <div class="card-body text-center">
+                                        <h5>SHOP PAYMENT <br> FROM COMPANY</h5>
+                                        <hr>
+                                        <h5>{{$transactionforshopcount}}</h5>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
+                        </div>
+                        <div class="col">
+                            <a href="{{route('shoppayments.index')}}" class="link">
+                                <div class="card overview-item">
+                                    <div class="card-body text-center">
+                                        <h5>SHOP PAYMENT <br> FROM SHOP</h5>
+                                        <hr>
+                                        <h5>{{$shoppaymentcount}}</h5>
+                                    </div>
+                                </div>
+                            </a>
                         </div>
                         <div class="col">
                             <div class="card overview-item">
-                                <div class="card-body text-center">
-                                    <h5>SHOP PAYMENT FROM SHOP</h5>
-                                    <hr>
-                                    <h5>{{$shoppaymentcount}}</h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card overview-item">
-                                <div class="card-body text-center">
-                                    <h5>RIDER PAYMENTS</h5>
-                                    <hr>
-                                    <h5>{{$riderPaymentCount}}</h5>
-                                </div>
+                                <a href="{{route('rider-payments.index')}}" class="link">
+                                    <div class="card-body text-center" style="padding: 17px 0px;">
+                                        <h5 style="margin-bottom: 25px; margin-top: 9px;">RIDER PAYMENTS</h5>
+                                        <hr>
+                                        <h5>{{$riderPaymentCount}}</h5>
+                                    </div>
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-5">
+                <div class="col-lg-5 col-md-6 col-sm-6">
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex">
@@ -127,20 +151,22 @@
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    <div class="card overview-item">
-                                        <div class="card-body text-center">
-                                            <h5>ORDERS</h5>
-                                            <hr>
-                                            <h5>{{$ordercount}}</h5>
+                                    <a href="{{route('orders.index')}}" class="link">
+                                        <div class="card overview-item">
+                                            <div class="card-body text-center">
+                                                <h5>ORDERS</h5>
+                                                <hr>
+                                                <h5>{{$ordercount}}</h5>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-1"></div>
-                <div class="col-5">
+                <div class="col-lg-1 col-md-0 col-sm-0"></div>
+                <div class="col-lg-5 col-md-6 col-sm-6">
                     <div class="card ">
                         <div class="card-body">
                             <div class="d-flex">
@@ -152,19 +178,21 @@
                             </div>
                             <div class="row">
                                 <div class="col">
-                                    <div class="card overview-item">
-                                        <div class="card-body text-center">
-                                            <h5>SHOPS</h5>
-                                            <hr>
-                                            <h5>{{$shopcount}}</h5>
+                                    <a href="{{route('shops.index')}}" class="link">
+                                        <div class="card overview-item">
+                                            <div class="card-body text-center">
+                                                <h5>SHOPS</h5>
+                                                <hr>
+                                                <h5>{{$shopcount}}</h5>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-1"></div>
+                <div class="col-lg-1 col-md-0 col-sm-0"></div>
             </div>
         </div>
         <div class="col">
@@ -172,38 +200,44 @@
                 <div class="card-body">
                     <div class="d-flex">
                         <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="12.5" cy="12.5" r="12.5" fill="#116A5B"/>
-                            <path d="M11.7991 9.50267L11.9371 9.49892H17.5624C18.1849 9.49887 18.7838 9.737 19.2364 10.1645C19.6889 10.5919 19.9608 11.1764 19.9963 11.7979L20 11.9367V17.5623C20 18.1849 19.7618 18.784 19.3342 19.2366C18.9066 19.6892 18.322 19.961 17.7004 19.9962L17.5624 20H11.9371C11.3144 20 10.7154 19.7618 10.2628 19.3342C9.81024 18.9065 9.53845 18.3219 9.5032 17.7003L9.49945 17.563V11.9374C9.49941 11.3148 9.73762 10.7157 10.1652 10.2631C10.5928 9.81048 11.1774 9.53867 11.7991 9.50342V9.50267ZM17.5624 10.624H11.9371C11.6077 10.624 11.2903 10.7479 11.048 10.9711C10.8057 11.1942 10.6561 11.5004 10.629 11.8287L10.6245 11.9367V17.5623C10.6245 17.8918 10.7485 18.2093 10.9718 18.4516C11.1951 18.694 11.5014 18.8435 11.8298 18.8704L11.9371 18.8749H17.5624C17.8919 18.8749 18.2094 18.7509 18.4517 18.5276C18.694 18.3043 18.8435 17.998 18.8704 17.6695L18.8749 17.5623V11.9367C18.8749 11.5885 18.7367 11.2547 18.4905 11.0085C18.2443 10.7623 17.9105 10.624 17.5624 10.624ZM14.7497 11.7499C14.8989 11.7499 15.042 11.8092 15.1475 11.9147C15.253 12.0202 15.3123 12.1633 15.3123 12.3125V14.1862H17.1874C17.3365 14.1862 17.4796 14.2454 17.5851 14.3509C17.6906 14.4564 17.7499 14.5995 17.7499 14.7487C17.7499 14.8979 17.6906 15.041 17.5851 15.1465C17.4796 15.252 17.3365 15.3113 17.1874 15.3113H15.3123V17.188C15.3123 17.3372 15.253 17.4803 15.1475 17.5857C15.042 17.6912 14.8989 17.7505 14.7497 17.7505C14.6005 17.7505 14.4574 17.6912 14.352 17.5857C14.2465 17.4803 14.1872 17.3372 14.1872 17.188V15.3113H12.3121C12.1629 15.3113 12.0198 15.252 11.9143 15.1465C11.8088 15.041 11.7496 14.8979 11.7496 14.7487C11.7496 14.5995 11.8088 14.4564 11.9143 14.3509C12.0198 14.2454 12.1629 14.1862 12.3121 14.1862H14.1872V12.3125C14.1872 12.1633 14.2465 12.0202 14.352 11.9147C14.4574 11.8092 14.6005 11.7499 14.7497 11.7499ZM15.1862 6.67413L15.2252 6.80689L15.745 8.74809H14.5802L14.1392 7.09792C14.0946 6.93133 14.0177 6.77514 13.9127 6.6383C13.8078 6.50145 13.6769 6.38663 13.5276 6.3004C13.3782 6.21416 13.2133 6.1582 13.0424 6.13571C12.8714 6.11322 12.6977 6.12464 12.5311 6.16933L7.09782 7.62598C6.78065 7.71104 6.50688 7.91189 6.33054 8.18892C6.15419 8.46594 6.08809 8.79901 6.14527 9.12238L6.16927 9.23339L7.62585 14.667C7.69417 14.9223 7.83797 15.151 8.03845 15.3233C8.23892 15.4955 8.48671 15.6032 8.74941 15.6323V16.7619C8.26175 16.7329 7.79405 16.558 7.40691 16.26C7.01976 15.9621 6.731 15.5547 6.57804 15.0907L6.53904 14.9587L5.08321 9.52442C4.92196 8.92314 4.99684 8.28295 5.29249 7.73511C5.58815 7.18728 6.08219 6.77332 6.6733 6.57812L6.8068 6.53912L12.2401 5.08322C12.8413 4.92195 13.4815 4.99684 14.0293 5.29251C14.5771 5.58818 14.9911 6.08299 15.1862 6.67413Z" fill="white"/>
+                            <circle cx="12.5" cy="12.5" r="12.5" fill="#116A5B" />
+                            <path d="M11.7991 9.50267L11.9371 9.49892H17.5624C18.1849 9.49887 18.7838 9.737 19.2364 10.1645C19.6889 10.5919 19.9608 11.1764 19.9963 11.7979L20 11.9367V17.5623C20 18.1849 19.7618 18.784 19.3342 19.2366C18.9066 19.6892 18.322 19.961 17.7004 19.9962L17.5624 20H11.9371C11.3144 20 10.7154 19.7618 10.2628 19.3342C9.81024 18.9065 9.53845 18.3219 9.5032 17.7003L9.49945 17.563V11.9374C9.49941 11.3148 9.73762 10.7157 10.1652 10.2631C10.5928 9.81048 11.1774 9.53867 11.7991 9.50342V9.50267ZM17.5624 10.624H11.9371C11.6077 10.624 11.2903 10.7479 11.048 10.9711C10.8057 11.1942 10.6561 11.5004 10.629 11.8287L10.6245 11.9367V17.5623C10.6245 17.8918 10.7485 18.2093 10.9718 18.4516C11.1951 18.694 11.5014 18.8435 11.8298 18.8704L11.9371 18.8749H17.5624C17.8919 18.8749 18.2094 18.7509 18.4517 18.5276C18.694 18.3043 18.8435 17.998 18.8704 17.6695L18.8749 17.5623V11.9367C18.8749 11.5885 18.7367 11.2547 18.4905 11.0085C18.2443 10.7623 17.9105 10.624 17.5624 10.624ZM14.7497 11.7499C14.8989 11.7499 15.042 11.8092 15.1475 11.9147C15.253 12.0202 15.3123 12.1633 15.3123 12.3125V14.1862H17.1874C17.3365 14.1862 17.4796 14.2454 17.5851 14.3509C17.6906 14.4564 17.7499 14.5995 17.7499 14.7487C17.7499 14.8979 17.6906 15.041 17.5851 15.1465C17.4796 15.252 17.3365 15.3113 17.1874 15.3113H15.3123V17.188C15.3123 17.3372 15.253 17.4803 15.1475 17.5857C15.042 17.6912 14.8989 17.7505 14.7497 17.7505C14.6005 17.7505 14.4574 17.6912 14.352 17.5857C14.2465 17.4803 14.1872 17.3372 14.1872 17.188V15.3113H12.3121C12.1629 15.3113 12.0198 15.252 11.9143 15.1465C11.8088 15.041 11.7496 14.8979 11.7496 14.7487C11.7496 14.5995 11.8088 14.4564 11.9143 14.3509C12.0198 14.2454 12.1629 14.1862 12.3121 14.1862H14.1872V12.3125C14.1872 12.1633 14.2465 12.0202 14.352 11.9147C14.4574 11.8092 14.6005 11.7499 14.7497 11.7499ZM15.1862 6.67413L15.2252 6.80689L15.745 8.74809H14.5802L14.1392 7.09792C14.0946 6.93133 14.0177 6.77514 13.9127 6.6383C13.8078 6.50145 13.6769 6.38663 13.5276 6.3004C13.3782 6.21416 13.2133 6.1582 13.0424 6.13571C12.8714 6.11322 12.6977 6.12464 12.5311 6.16933L7.09782 7.62598C6.78065 7.71104 6.50688 7.91189 6.33054 8.18892C6.15419 8.46594 6.08809 8.79901 6.14527 9.12238L6.16927 9.23339L7.62585 14.667C7.69417 14.9223 7.83797 15.151 8.03845 15.3233C8.23892 15.4955 8.48671 15.6032 8.74941 15.6323V16.7619C8.26175 16.7329 7.79405 16.558 7.40691 16.26C7.01976 15.9621 6.731 15.5547 6.57804 15.0907L6.53904 14.9587L5.08321 9.52442C4.92196 8.92314 4.99684 8.28295 5.29249 7.73511C5.58815 7.18728 6.08219 6.77332 6.6733 6.57812L6.8068 6.53912L12.2401 5.08322C12.8413 4.92195 13.4815 4.99684 14.0293 5.29251C14.5771 5.58818 14.9911 6.08299 15.1862 6.67413Z" fill="white" />
                         </svg>
                         <h4 class="ms-2 mb-3">Collections</h4>
                     </div>
                     <div class="row">
                         <div class="col">
-                            <div class="card overview-item">
-                                <div class="card-body text-center">
-                                    <h5>PICKUP</h5>
-                                    <hr>
-                                    <h5>{{$collectionCount}}</h5>
+                            <a href="{{route('collections.index')}}" class="link">
+                                <div class="card overview-item">
+                                    <div class="card-body text-center">
+                                        <h5>PICKUP</h5>
+                                        <hr>
+                                        <h5>{{$collectionCount}}</h5>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                         <div class="col">
-                            <div class="card overview-item">
-                                <div class="card-body text-center">
-                                    <h5>EXCHANGES</h5>
-                                    <hr>
-                                    <h5>{{$customerCollectionCount}}</h5>
+                            <a href="{{route('customer-collections.index')}}" class="link">
+                                <div class="card overview-item">
+                                    <div class="card-body text-center">
+                                        <h5>EXCHANGES</h5>
+                                        <hr>
+                                        <h5>{{$customerCollectionCount}}</h5>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                         <div class="col">
-                            <div class="card overview-item">
-                                <div class="card-body text-center">
-                                    <h5>PICKUP GROUPS</h5>
-                                    <hr>
-                                    <h5>{{$collectionGroupCount}}</h5>
+                            <a href="{{route('collection-groups.index')}}" class="link">
+                                <div class="card overview-item">
+                                    <div class="card-body text-center">
+                                        <h5>PICKUP GROUPS</h5>
+                                        <hr>
+                                        <h5>{{$collectionGroupCount}}</h5>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -219,71 +253,87 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <div class="card overview-item">
-                                <div class="card-body text-center">
-                                    <h5>CITIES</h5>
-                                    <hr>
-                                    <h5>{{$citycount}}</h5>
+                            <a href="{{route('cities.index')}}" class="link">
+                                <div class="card overview-item">
+                                    <div class="card-body text-center">
+                                        <h5>CITIES</h5>
+                                        <hr>
+                                        <h5>{{$citycount}}</h5>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                         <div class="col">
-                            <div class="card overview-item">
-                                <div class="card-body text-center">
-                                    <h5>TOWNSHIPS</h5>
-                                    <hr>
-                                    <h5>{{$townshipcount}}</h5>
+                            <a href="{{route('townships.index')}}" class="link">
+                                <div class="card overview-item">
+                                    <div class="card-body text-center">
+                                        <h5>TOWNSHIPS</h5>
+                                        <hr>
+                                        <h5>{{$townshipcount}}</h5>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                         <div class="col">
-                            <div class="card overview-item">
-                                <div class="card-body text-center">
-                                    <h5>BRANCHES</h5>
-                                    <hr>
-                                    <h5>{{$branchCount}}</h5>
+                            <a href="{{route('branches.index')}}" class="link">
+                                <div class="card overview-item">
+                                    <div class="card-body text-center">
+                                        <h5>BRANCHES</h5>
+                                        <hr>
+                                        <h5>{{$branchCount}}</h5>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col">
-                            <div class="card overview-item">
-                                <div class="card-body text-center">
-                                    <h5>GATES</h5>
-                                    <hr>
-                                    <h5>{{$gateCount}}</h5>
+                            <a href="{{route('gates.index')}}" class="link">
+                                <div class="card overview-item">
+                                    <div class="card-body text-center">
+                                        <h5>GATES</h5>
+                                        <hr>
+                                        <h5>{{$gateCount}}</h5>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                         <div class="col">
-                            <div class="card overview-item">
-                                <div class="card-body text-center">
-                                    <h5>THIRD PARTY VENDOR</h5>
-                                    <hr>
-                                    <h5>{{$thirdPartyVendorCount}}</h5>
+                            <a href="{{route('third-party-vendor.index')}}" class="link">
+                                <div class="card overview-item">
+                                    <div class="card-body text-center">
+                                        <h5>THIRD PARTY VENDOR</h5>
+                                        <hr>
+                                        <h5>{{$thirdPartyVendorCount}}</h5>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                         <div class="col">
-                            <div class="card overview-item">
-                                <div class="card-body text-center">
-                                    <h5>ITEM TYPES</h5>
-                                    <hr>
-                                    <h5>{{$itemTypeCount}}</h5>
+                            <a href="{{route('itemtypes.index')}}" class="link">
+
+                                <div class="card overview-item">
+                                    <div class="card-body text-center">
+                                        <h5>ITEM TYPES</h5>
+                                        <hr>
+                                        <h5>{{$itemTypeCount}}</h5>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-4 col-md-6 col-sm-12">
-                            <div class="card overview-item">
-                                <div class="card-body text-center">
-                                    <h5>DELIVERY TYPES</h5>
-                                    <hr>
-                                    <h5>{{$deliveryTypeCount}}</h5>
+                            <a href="{{route('delivery-types.index')}}" class="link">
+
+                                <div class="card overview-item">
+                                    <div class="card-body text-center">
+                                        <h5>DELIVERY TYPES</h5>
+                                        <hr>
+                                        <h5>{{$deliveryTypeCount}}</h5>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                     </div>
                 </div>
