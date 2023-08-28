@@ -167,7 +167,11 @@ class CollectionGroupController extends Controller
                 </form>';
                 return $actionBtn;
             })
-            ->rawColumns(['action'])
+            ->addColumn('total_collection', function($row){
+                return'<p>' . $row->total_collection_quantity +
+                    $row->total_customer_collection_quantity .'</p>';
+            })
+            ->rawColumns(['action', 'total_collection'])
             ->addIndexColumn()
             ->orderColumn('id', '-collection_groups.id')
             ->make(true);

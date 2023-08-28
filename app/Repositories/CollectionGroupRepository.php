@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\CollectionGroup;
+use Illuminate\Support\Facades\DB;
 
 class CollectionGroupRepository
 {
@@ -21,9 +22,17 @@ class CollectionGroupRepository
     public function getAllCollectionGroupData()
     {
         $branch_id = auth()->user()->branch_id;
-        $collectionGroups = CollectionGroup::select('collection_groups.*', 'riders.name as rider_name')
-                ->leftJoin('riders', 'riders.id', 'collection_groups.rider_id')
-                ->where('collection_groups.branch_id', $branch_id);
+        $collectionGroups = CollectionGroup::where('collection_groups.branch_id', $branch_id)
+            ->with('collections', 'customer_collections')
+            ->leftJoin('riders', 'riders.id', '=', 'collection_groups.rider_id')
+            ->select('collection_groups.*', 'riders.name as rider_name')
+            ->selectRaw("(SELECT SUM(collections.total_quantity) FROM collections WHERE
+                    collections.collection_group_id = collection_groups.id) as total_quantity")
+            ->withCount([
+                'collections as total_collection_quantity',
+                'customer_collections as total_customer_collection_quantity'
+            ]);
+                
         return $collectionGroups;
     }
 
