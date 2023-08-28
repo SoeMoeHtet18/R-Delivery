@@ -34,7 +34,7 @@
             
             <div class="navbar-header">
                 <a href="{{ URL::to('/dashboard') }}" class="navbar-brand topbar-brand">
-                    R-Delivery
+                    {{config('app.delivery_company_name')}}
                 </a>
             </div>
         </div>

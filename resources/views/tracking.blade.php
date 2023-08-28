@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @yield('style')
 <title>
-    R-Delivery - Tracking Detail
+{{config('app.delivery_company_name')}} - Tracking Detail
 </title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -307,7 +307,7 @@
                 <div class="dotted-container row px-3 py-3">
                     <div class="col-7 g-0">
                         <h2 class="sub-title">Order Info</h2>
-                        <span class="info-text mb-2">Delivery partner : R-Delivery</span>
+                        <span class="info-text mb-2">Delivery partner : {{config('app.delivery_company_name')}}</span>
                         <span class="info-text from mb-2">From : {{$order->shop_name}} </span>
                         @if(isset($order->rider_id))
                         <span class="info-text phone-number text-no-wrap">Delivery Phone No : {{$order->rider_phone_number}}</span>
@@ -597,13 +597,13 @@
                                     @if($log->to_status == 'delivering')
                                     <div class="timeline-status-box">
                                         <h5 class="timeline-status">Out For Delivery</h5>
-                                        <span class="shipping-timeline-status sub-status">R-Delivery will attempt to deliver your order today. </span>
+                                        <span class="shipping-timeline-status sub-status">{{config('app.delivery_company_name')}} will attempt to deliver your order today. </span>
                                     </div>
                                     @endif
                                     @if($log->to_status == 'warehouse')
                                     <div class="timeline-status-box">
                                         <h5 class="timeline-status">Order Successfully Picked Up</h5>
-                                        <span class="picked-timeline-status sub-status">Your order has been picked up by R-Delivery. </span>
+                                        <span class="picked-timeline-status sub-status">Your order has been picked up by {{config('app.delivery_company_name')}}. </span>
                                     </div>
                                     @endif
                                 @endforeach
@@ -717,13 +717,13 @@
 
                                 <span class="shipping-timeline-date-time timeline-date-time">{{$log->created_at}}</span>
 
-                                <span class="shipping-timeline-status sub-status d-block">R-Delivery will attempt to deliver your order today. </span>
+                                <span class="shipping-timeline-status sub-status d-block">{{config('app.delivery_company_name')}} will attempt to deliver your order today. </span>
 
                             </div>
                             <div class="timeline-status-box">
                                 <span class="timeline-status">Order Successfully Picked Up</span>
                                 <span class="picked-timeline-date-time timeline-date-time ">{{$log->created_at}}</span>
-                                <span class="picked-timeline-status sub-status d-block">Your order has been picked up by R-Delivery. </span>
+                                <span class="picked-timeline-status sub-status d-block">Your order has been picked up by {{config('app.delivery_company_name')}}. </span>
                             </div>
                             @endif
                         @endforeach

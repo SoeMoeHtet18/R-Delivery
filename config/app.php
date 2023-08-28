@@ -222,4 +222,7 @@ return [
 
     //Admin PhoneNumer
     'admin_phone_number' => env('ADMIN_PHONE_NUMBER', '09783368412'),
+
+    //Delivery Company Name
+    'delivery_company_name' => env('DELIVERY_COMPANY_NAME'),
 ];

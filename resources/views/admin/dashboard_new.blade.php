@@ -16,8 +16,12 @@
     }
 
     .overview-item .card-body {
-        background-color: #8fe1d4;
+        background-color: #d4efeb;
         padding: 17px 0;
+    }
+
+    .overview-item .card-body:hover {
+        background-color: #8fe1d4;
     }
 
     .overview-item .card-body h5 {

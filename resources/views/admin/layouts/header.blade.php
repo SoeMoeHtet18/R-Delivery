@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <title>
-        R-Delivery - Dashboard
+      {{config('app.delivery_company_name')}} - Dashboard
     </title>
 
     <meta http-equiv="X-UA-Compatible"
