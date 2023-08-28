@@ -444,9 +444,11 @@ class OrderController extends Controller
 
     public function changeStatus(Request $request, string $id)
     {
+        $user = auth()->user();
+        
         $status = $request->status;
         $order = $this->orderRepository->getOrderByID($id);
-        $this->orderService->changeStatus($order, $status);
+        $this->orderService->changeStatus($order, $status, $user, User::class);
         return redirect()->back();
     }
 
