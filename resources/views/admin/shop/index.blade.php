@@ -124,10 +124,10 @@
                     },
                     {
                         "render": function(data, type, row) {
-                            if(row.towship_id != null){
+                            if(row.township_id != null){
                                 return '<a href="/townships/' + row.township_id + '">' + row.township_name + '</a>';
                             }else{
-                                return 'N/A';
+                                return '';
                             }
                             
                         },
