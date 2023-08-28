@@ -733,6 +733,8 @@
                                 <span class="shipping-timeline-status sub-status d-block">{{config('app.delivery_company_name')}} will attempt to deliver your order today. </span>
 
                             </div>
+                            @endif
+                            @if($log->to_status == 'warehouse')
                             <div class="timeline-status-box">
                                 <span class="timeline-status">Order Successfully Picked Up</span>
                                 <span class="picked-timeline-date-time timeline-date-time ">{{$log->created_at}}</span>
