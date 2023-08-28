@@ -48,7 +48,7 @@
         <div class="card-body">
             <div class="row">
                 @if(count($customer_collections) != 0)
-                    <div class="col">
+                <div class="col-lg-6 col-md-6 col-sm-12">
                     <div class="collection-name">
                         <h5>Customer Exchanges For {{$shop->name}}</h5>
                     </div>
@@ -89,10 +89,10 @@
                     </div>
                     @endforeach
                     
-                    </div>
+                </div>
                 @endif
                 @if(count($shop_collections) != 0)
-                    <div class="col">
+                    <div class="col-lg-6 col-md-6 col-sm-12">
                         <div class="collection-name">
                             <h5>Pick Ups For {{$shop->name}}</h5>
                         </div>
@@ -131,8 +131,9 @@
                                     </div>
                                 </div>
                             </div>
-                            @endforeach
-                    </div>
+                        </div>
+                        @endforeach
+                </div>
                 @endif
             </div>
         </div>

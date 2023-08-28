@@ -30,4 +30,9 @@ class DeliveryTypesRepository
         return $deliveryType;
     }
 
+    public function getAllDeliveryTypeCount()
+    {
+        return DeliveryType::count();
+    }
+
 }

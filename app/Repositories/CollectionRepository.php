@@ -182,6 +182,11 @@ class CollectionRepository
             ->groupBy('shop_id', 'shops.name', 'riders.name')
             ->get();
         return $collections;
-        
-    }    
+    }
+
+    public function getAllCollectionCount()
+    {
+        $user = auth()->user();
+        return Collection::where('branch_id', $user->branch_id)->count();
+    }
 }

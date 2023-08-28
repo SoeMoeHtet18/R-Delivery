@@ -21,4 +21,8 @@ class CollectionGroup extends Model
     public function rider() {
         return $this->belongsTo(Rider::class);
     }
+
+    public function customer_collections() {
+        return $this->hasMany(CustomerCollection::class)->withTrashed();
+    }
 }

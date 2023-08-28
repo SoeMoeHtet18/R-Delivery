@@ -177,4 +177,10 @@ class CustomerCollectionRepository
 
         return $customer_collections;
     }
+
+    public function getAllCustomerCollectionCount()
+    {
+        $user = auth()->user();
+        return CustomerCollection::where('branch_id', $user->branch_id)->count();
+    }
 }

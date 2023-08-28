@@ -4,14 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Models\TransactionsForShop;
 use App\Repositories\AdminRepository;
+use App\Repositories\BranchRepository;
 use App\Repositories\CityRepository;
+use App\Repositories\CollectionGroupRepository;
+use App\Repositories\CollectionRepository;
+use App\Repositories\CustomerCollectionRepository;
 use App\Repositories\CustomerPaymentRepository;
+use App\Repositories\DeliveryTypesRepository;
+use App\Repositories\GateRepository;
 use App\Repositories\ItemTypeRepository;
 use App\Repositories\OrderRepository;
+use App\Repositories\RiderPaymentRepository;
 use App\Repositories\RiderRepository;
 use App\Repositories\ShopPaymentRepository;
 use App\Repositories\ShopRepository;
 use App\Repositories\ShopUserRepository;
+use App\Repositories\ThirdPartyVendorRepository;
 use App\Repositories\TownshipRepository;
 use App\Repositories\TransactionsForShopRepository;
 use Illuminate\Http\Request;
@@ -29,6 +37,14 @@ class DashboardController extends Controller
     protected $transactionsForShopRepository;
     protected $riderRepository;
     protected $orderRepository;
+    protected $riderPaymentRepository;
+    protected $collectionRepository;
+    protected $customerCollectionRepository;
+    protected $collectionGroupRepository;
+    protected $branchRepository;
+    protected $gateRepository;
+    protected $thirdPartyVentorRepository;
+    protected $deliveryTypeRepository;
 
     public function __construct(
         AdminRepository $adminRepository,
@@ -41,7 +57,16 @@ class DashboardController extends Controller
         CustomerPaymentRepository $customerPaymentRepository,
         TransactionsForShopRepository $transactionsForShopRepository,
         RiderRepository $riderRepository,
-        OrderRepository $orderRepository)
+        OrderRepository $orderRepository,
+        RiderPaymentRepository $riderPaymentRepository,
+        CollectionRepository $collectionRepository,
+        CustomerCollectionRepository $customerCollectionRepository,
+        CollectionGroupRepository $collectionGroupRepository,
+        BranchRepository $branchRepository,
+        GateRepository $gateRepository,
+        ThirdPartyVendorRepository $thirdPartyVentorRepository,
+        DeliveryTypesRepository $deliveryTypeRepository,
+    )
     {
         $this->adminRepository = $adminRepository;
         $this->shopRepository  = $shopRepository;
@@ -54,6 +79,14 @@ class DashboardController extends Controller
         $this->transactionsForShopRepository = $transactionsForShopRepository;
         $this->riderRepository = $riderRepository;
         $this->orderRepository = $orderRepository;
+        $this->riderPaymentRepository = $riderPaymentRepository;
+        $this->collectionRepository = $collectionRepository;
+        $this->customerCollectionRepository = $customerCollectionRepository;
+        $this->collectionGroupRepository = $collectionGroupRepository;
+        $this->branchRepository = $branchRepository;
+        $this->gateRepository = $gateRepository;
+        $this->thirdPartyVentorRepository = $thirdPartyVentorRepository;
+        $this->deliveryTypeRepository = $deliveryTypeRepository;
     }
 
     public function count()
@@ -69,8 +102,19 @@ class DashboardController extends Controller
         $transactionforshopcount = $this->transactionsForShopRepository->getAllTransactionsForShopCount();
         $ridercount = $this->riderRepository->getAllRidersCount();
         $ordercount = $this->orderRepository->getAllOrdersCount();
+        $riderPaymentCount = $this->riderPaymentRepository->getAllRiderPaymentCount();
+        $collectionCount = $this->collectionRepository->getAllCollectionCount();
+        $customerCollectionCount = $this->customerCollectionRepository->getAllCustomerCollectionCount();
+        $collectionGroupCount = $this->collectionGroupRepository->getAllCollectionGroupCount();
+        $branchCount = $this->branchRepository->getAllBranchCount();
+        $gateCount = $this->gateRepository->getAllGateCount();
+        $thirdPartyVendorCount = $this->thirdPartyVentorRepository->getAllThirdPartyVendorCount();
+        $deliveryTypeCount = $this->deliveryTypeRepository->getAllDeliveryTypeCount();
 
         // dd($usercount);
-        return view('admin.dashboard',compact('usercount','shopcount','shopusercount','citycount','itemTypeCount','townshipcount','shoppaymentcount','customerpaymentcount','transactionforshopcount','ridercount','ordercount'));
+        return view('admin.dashboard_new',compact('usercount','shopcount','shopusercount','citycount',
+            'itemTypeCount','townshipcount','shoppaymentcount','customerpaymentcount', 'riderPaymentCount',
+            'transactionforshopcount','ridercount','ordercount', 'collectionCount', 'customerCollectionCount',
+            'collectionGroupCount', 'branchCount', 'gateCount', 'thirdPartyVendorCount', 'deliveryTypeCount'));
     }
 }

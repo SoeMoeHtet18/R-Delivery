@@ -94,8 +94,8 @@ class OrderRepository
 
     public function getAllOrdersCount()
     {
-        $count = Order::count();
-        return $count;
+        $user = auth()->user();
+        return Order::where('branch_id', $user->branch_id)->count();
     }
 
     public function getOrdersStatusCountByShopID($shop_id)
