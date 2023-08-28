@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Helpers\Helper;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\Rider;
 use App\Repositories\CollectionRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\ShopRepository;
@@ -124,6 +125,7 @@ class OrderApiController extends Controller
     {
         $id = $request->order_id;
         $order = $this->orderRepository->getOrderByID($id);
+        $rider = auth()->guard('rider-api')->user();
 
         if ($request->hasFile('image')) {
             $image = $request->file('image');
@@ -137,7 +139,7 @@ class OrderApiController extends Controller
         }
 
         if ($order->status != 'success') {
-            $status = $this->orderService->changeStatus($order, 'success');
+            $status = $this->orderService->changeStatus($order, 'success', $rider, Rider::class);
         }
 
         return response()->json([

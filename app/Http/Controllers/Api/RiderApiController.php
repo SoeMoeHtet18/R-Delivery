@@ -114,8 +114,9 @@ class RiderApiController extends Controller
     {
         $order_id = $request->order_id;
         $status = $request->status;
+        $rider = auth()->guard('rider-api')->user();
         $order = $this->orderRepository->getOrderByID($order_id);
-        $data = $this->orderService->changeStatus($order, $status);
+        $data = $this->orderService->changeStatus($order, $status, $rider, Rider::class);
         return response()->json(['data' => $data, 'message' => 'Successfully Change Order Status', 'status' => 'success'], 200);
     }
 
