@@ -24,6 +24,7 @@
         .left img {
             width: 350px;
         }
+        
 
         .maincontent{
             position: relative;
@@ -32,7 +33,7 @@
             height: 87%;
             width: 100%;
             padding-left: 20px;
-            padding-right:40px;
+            /* padding-right:40px; */
         }
 
         .maincontent img {
@@ -72,6 +73,13 @@
             padding-left: 0.5em;
             width: 100%;
         }
+        
+        .font-1 {
+            font-family: Arial, sans-serif;
+            font-size: 1.8em;
+            font-weight: bold;
+            width: 100%;
+        }
         .label {
             font-family: Arial, sans-serif;
             font-size: 2em;
@@ -79,6 +87,10 @@
         }
         .mr-3{
             margin-right:30px;
+        }
+
+        .contact{
+            text-align: right;
         }
     </style>
 </head>
@@ -106,7 +118,7 @@
                         <img src="data:image/png;base64, {{ base64_encode(QrCode::size(150)->generate($order->order_code)) }}">
                         <table>
                             <tr>
-                        <td><span class="font"> {{ $order->order_code }}</span></td>
+                        <td><span class="font-1"> {{ $order->order_code }}</span></td>
                     </tr>
                         </table>
                     </td>

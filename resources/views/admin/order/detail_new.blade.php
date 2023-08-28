@@ -137,7 +137,8 @@
                     <a href="{{url('/orders/'.$order->id.'/assign-rider')}}" class="btn btn-secondary dropdown-item">Assign Rider</a>
                 </li>
                 @endif
-                
+
+                <li><a class="dropdown-item" id="qr-code-generate">Print QrCode</a></li>
                 <li><a href="{{route('orders.edit' , $order->id)}}" class="btn btn-light dropdown-item">Edit</a></li>
                 <li> 
                     <form action="{{route('orders.destroy', $order->id)}}" method="post" onclick="return confirm(`Are you sure you want to delete this order?`);">
@@ -150,6 +151,7 @@
             </ul>
         </div>
     </div>
+    <input type="hidden" name="order_id" value="{{$order->id}}" id="order_id">
         
     <div class="d-flex">
         <div class="left-content">
@@ -345,4 +347,40 @@
     </div>
 </div>
 
+@endsection
+@section('javascript')
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#qr-code-generate').click(function() {
+            var order_ids = [];
+            var id = $('#order_id').val();
+            order_ids.push(id);
+
+            // Create a form element
+            var form = document.createElement('form');
+            form.method = 'POST';
+            form.action = "{{ url('/generate-qrcode') }}";
+            form.target = '_blank';
+
+            // Create hidden input fields for order_ids and _token
+            var orderIdsInput = document.createElement('input');
+            orderIdsInput.type = 'hidden';
+            orderIdsInput.name = 'order_ids';
+            orderIdsInput.value = order_ids;
+
+            var csrfTokenInput = document.createElement('input');
+            csrfTokenInput.type = 'hidden';
+            csrfTokenInput.name = '_token';
+            csrfTokenInput.value = '{{ csrf_token() }}';
+
+            // Append the input fields to the form
+            form.appendChild(orderIdsInput);
+            form.appendChild(csrfTokenInput);
+
+            // Append the form to the document body and submit it
+            document.body.appendChild(form);
+            form.submit();
+        });
+    })
+</script>
 @endsection
