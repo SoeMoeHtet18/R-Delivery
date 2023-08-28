@@ -554,4 +554,28 @@ class OrderRepository
         $order = Order::with(['shop','rider'])->where('order_code',$order_code)->firstOrFail();
         return $order;
     }
+
+    public function getCurrentOrdersQuery($id)
+    {
+        $branch_id = auth()->user()->branch_id;
+        return Order::leftJoin('riders', 'riders.id', 'orders.rider_id')
+            ->leftJoin('shops', 'shops.id', 'orders.shop_id')
+            ->leftJoin('users', 'users.id', 'orders.last_updated_by')
+            ->leftJoin('item_types', 'item_types.id', 'orders.item_type_id')
+            ->leftJoin('delivery_types', 'delivery_types.id', 'orders.delivery_type_id')
+            ->leftJoin('branches', 'branches.id', 'orders.branch_id')
+            ->leftJoin('collection_groups', 'collection_groups.id', 'orders.collection_group_id')
+            ->where('orders.branch_id', $branch_id)
+            ->where('orders.township_id', $id)
+            ->whereNotIn('status', ['success', 'cancel_request', 'cancel'])
+            ->select('orders.*', 'shops.name as shop_name',
+                'riders.name as rider_name',
+                'users.name as last_updated_by_name',
+                'item_types.name as item_type_name',
+                'delivery_types.name as delivery_type_name',
+                'branches.name as branch_name',
+                'collection_groups.collection_group_code as collection_group_code',
+                'collection_groups.assigned_date as pick_up_date',
+            );
+    }
 }

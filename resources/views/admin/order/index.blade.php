@@ -969,6 +969,7 @@
                         },
                         "targets": 4
                     },
+                    // render order status
                     {
                         "render": function(data, type, row) {
                             if (row.status == 'pending') {
@@ -1028,7 +1029,7 @@
                         "render": function(data, type, row) {
                             if (row.payment_method == 'cash_on_delivery') {
                                 return "Cash On Delivery";
-                            } 
+                            }
                             if(row.payment_method == 'item_prepaid') {
                                 return "Item Prepaid";
                             }

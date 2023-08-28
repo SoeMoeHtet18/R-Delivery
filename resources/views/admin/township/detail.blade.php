@@ -63,7 +63,7 @@
             <div class="tab-content">
                 <div id="current-order-display" class="portlet box green tab-pane active">
                     <div class="portlet-title">
-                        <div class="caption">Pending Orders</div>
+                        <div class="caption">Current Orders</div>
                     </div>
                     <div class="portlet-body">
                         <table id="current-order-datatable"
@@ -83,6 +83,7 @@
                                     <th>Full Address</th>
                                     <th>Schedule Date</th>
                                     <th>Collection Method</th>
+                                    <th>Status</th>
                                     <th>Last Updated By</th>
                                 </tr>
                             </thead>
@@ -168,7 +169,7 @@
             $('#current-order-datatable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "/townships/" + township_id + "/get-pending-orders-by-township-id",
+                ajax: "/townships/" + township_id + "/get-current-orders-by-township-id",
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'id'
@@ -220,6 +221,10 @@
                     {
                         data: 'collection_method',
                         name: 'collection_method'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status'
                     },
                     {
                         data: 'last_updated_by_name',
@@ -289,6 +294,26 @@
                             }
                         },
                         "targets": 4
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            if (row.status == 'pending') {
+                                return "Pending";
+                            }
+                            if (row.status == 'delay') {
+                                return "Delay";
+                            }
+                            if (row.status == 'warehouse') {
+                                return "In Warehouse";
+                            }
+                            if (row.status == 'picking-up') {
+                                return "Picking Up";
+                            }
+                            if (row.status == 'delivering') {
+                                return "Delivering";
+                            }
+                        },
+                        "targets": 13
                     },
                 ]
             });
