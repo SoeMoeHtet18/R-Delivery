@@ -168,7 +168,16 @@
                 <div class="card-body ">
                     <div class="text-center">
                         <h5>Cash To Collect</h5>
-                        <b>{{ $order->total_amount + $order->delivery_fees + $order->markup_delivery_fees + $order->extra_charges - $order->discount }} MMK</b>
+                        <b>
+                        @if ($order->payment_method === 'cash_on_delivery')
+                            {{ $order->total_amount + ($order->delivery_fees + $order->markup_delivery_fees + $order->extra_charges) - $order->discount }}
+                        @elseif ($order->payment_method === 'item_prepaid')
+                            {{ ($order->delivery_fees + $order->markup_delivery_fees + $order->extra_charges) - $order->discount }}
+                        @else
+                            0
+                        @endif
+                         MMK
+                        </b>
                     </div>
                     <hr>
                     <div class="d-flex justify-content-between">
