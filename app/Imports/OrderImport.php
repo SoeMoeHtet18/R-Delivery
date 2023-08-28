@@ -176,7 +176,7 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
             'township' => function ($attribute, $value, $onFailure) {
                 if ($value) {
                     $township = Township::where('name', trim($value))->first();
-                    if ($township) {
+                    if ($township == null) {
                         $onFailure("Township is invalid.");
                     }
                 } else {
