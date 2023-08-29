@@ -125,23 +125,27 @@ class ShopApiController extends Controller
 
     private function getAmounts($shopId, $start, $end, $type)
     {
-        $paymentMethods = $type === 'payable'
-            ? ['cash_on_delivery', 'item_prepaid', 'all_prepaid']
-            : ['all_prepaid'];
-
-        return Order::where('shop_id', $shopId)
+        $query = Order::where('shop_id', $shopId)
             ->where('payment_flag', 0)
-            ->whereIn('payment_method', $paymentMethods)
-            ->whereBetween('created_at', [$start, $end])
-            ->when($type === 'payable', function ($query) {
-                return $query->selectRaw('DATE(created_at) as date,
-                    SUM(total_amount + markup_delivery_fees) as total_amount');
-            }, function ($query) {
-                return $query->where('payment_channel','shop_online_payment')
-                    ->selectRaw('DATE(created_at) as date,
-                        SUM(delivery_fees + extra_charges- discount) as total_amount');
-            })
-            ->groupBy('date')
+            ->whereBetween('created_at', [$start, $end]);
+
+        if ($type == 'payable') {
+            $query->whereIn('payment_method', ['cash_on_delivery', 'item_prepaid'])
+                ->selectRaw('DATE(created_at) as date, SUM(CASE WHEN payment_method = "cash_on_delivery"
+                    THEN total_amount + COALESCE(markup_delivery_fees, 0)
+                    ELSE COALESCE(markup_delivery_fees, 0) END) as total_amount');
+        } else {
+            $query->where(function ($query) {
+                    $query->where(function ($query) {
+                        $query->where('payment_method', 'cash_on_delivery')
+                            ->where('payment_channel', 'shop_online_payment');
+                    })->orWhere('payment_method', 'all_prepaid');
+                })
+                ->selectRaw('DATE(created_at) as date,
+                    SUM(delivery_fees + COALESCE(extra_charges, 0) - COALESCE(discount, 0)) as total_amount');
+        }
+
+        return $query->groupBy('date')
             ->orderBy('date', 'desc')
             ->get();
     }
@@ -156,12 +160,13 @@ class ShopApiController extends Controller
                 if ($record->total_amount > 0) {
                     $date = $record->date;
                     $totalAmount = $record->total_amount;
+                    $totalAmount = number_format($totalAmount, 2, '.', ',');
                     $textReport .= "$date   $totalAmount MMK\n\n";
                 }
             }
             $textReport .= "_________________________________\n";
             $textReport .= "Total $title    ";
-            $textReport .= "{$data->sum('total_amount')} MMK\n\n";
+            $textReport .= number_format($data->sum('total_amount'), 2, '.', ',') . " MMK\n\n";
         }
 
         return $textReport;
