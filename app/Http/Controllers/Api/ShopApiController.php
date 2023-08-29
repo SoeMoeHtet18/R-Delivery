@@ -130,7 +130,7 @@ class ShopApiController extends Controller
             ->whereBetween('created_at', [$start, $end]);
 
         if ($type == 'payable') {
-            $query->whereIn('payment_method', ['cash_on_delivery', 'all_prepaid'])
+            $query->whereIn('payment_method', ['cash_on_delivery', 'item_prepaid'])
                 ->selectRaw('DATE(created_at) as date, SUM(CASE WHEN payment_method = "cash_on_delivery"
                     THEN total_amount + COALESCE(markup_delivery_fees, 0)
                     ELSE COALESCE(markup_delivery_fees, 0) END) as total_amount');
