@@ -59,16 +59,22 @@ class RiderService
         // $rider->townships()->sync([]);
         
         // Insert the records into the pivot table with rider_fees values
-        $records = [];
         for ($i = 0; $i < count($townships); $i++) {
-            $records[] = [
+            
+            $existingData = [
                 'rider_id' => $rider->id,
                 'township_id' => $townships[$i],
-                'rider_fees' => $rider_fees[$i],
             ];
+            $newData = [
+                'rider_id' => $rider->id,
+                'township_id' => $townships[$i],
+                'rider_fees' => $rider_fees[$i] ?? 0,
+            ];
+            
+            DB::table('rider_township')->updateOrInsert($existingData, $newData);
         }
         
-        DB::table('rider_township')->insert($records);        
+        // DB::table('rider_township')->insert($records);
     }
 
     public function changePassword($rider, $old_password, $new_password)
@@ -127,7 +133,7 @@ class RiderService
                     $newData = [
                         'rider_id' => $rider->id,
                         'township_id' => $township->id,
-                        'rider_fees' => $rider_fees[$i],
+                        'rider_fees' => $rider_fees[$i] ?? 0,
                     ];
                     
                     DB::table('rider_township')->updateOrInsert($existingData, $newData);
@@ -154,7 +160,7 @@ class RiderService
                     $newData = [
                         'rider_id' => $rider->id,
                         'township_id' => $township->id,
-                        'rider_fees' => $rider_fees[$i],
+                        'rider_fees' => $rider_fees[$i] ?? 0,
                     ];
                     
                     DB::table('rider_township')->updateOrInsert($existingData, $newData);

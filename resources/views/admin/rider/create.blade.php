@@ -91,6 +91,9 @@
                                     <option value="{{$township->id}}">{{$township->name}}</option>
                                     @endforeach
                                 </select>
+                                @if ($errors->has('township_id'))
+                                    <span class="text-danger"><strong>{{ $errors->first('township_id') }}</strong></span>
+                                @endif
                             </div>
                         </div>
                         <div class="row m-0 mb-3">
@@ -99,6 +102,9 @@
                             </label>
                             <div class="col-10">
                                 <input type="text" name="rider_fees[]" id="rider_fees" class="form-control">
+                                @if ($errors->has('rider_fees'))
+                                    <span class="text-danger"><strong>{{ $errors->first('rider_fees') }}</strong></span>
+                                @endif
                             </div>
                         </div>
                     </div>

@@ -26,7 +26,9 @@ class RiderCreateRequest extends FormRequest
             'name'                  => 'required|string',
             'phone_number'          => 'required|string|unique:riders',
             'password'              => 'required|min:8|confirmed',
-            'salary_type'           => 'required'
+            'salary_type'           => 'required',
+            'township_id'           => 'required|array',
+            'rider_fees'            => 'required',
         ];
     }
 
@@ -41,8 +43,10 @@ class RiderCreateRequest extends FormRequest
             'name.required'                 => 'Name field is required.',
             'phone_number.required'         => 'Phone Number is required.',
             'phone_number.unique'           => 'Phone Number already exists.',
-            'password.required'             => 'Password is required', 
+            'password.required'             => 'Password is required',
             'password.min'                  => 'Password should be a minimum of 8 characters.',
+            'township_id.required'          => 'Township field is required',
+            'rider_fees.required'           => 'Rider Fees field is required',
         ];
     }
 
