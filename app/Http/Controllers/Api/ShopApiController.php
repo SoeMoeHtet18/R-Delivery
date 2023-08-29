@@ -125,23 +125,27 @@ class ShopApiController extends Controller
 
     private function getAmounts($shopId, $start, $end, $type)
     {
-        $paymentMethods = $type === 'payable'
-            ? ['cash_on_delivery', 'item_prepaid', 'all_prepaid']
-            : ['all_prepaid'];
-
-        return Order::where('shop_id', $shopId)
+        $query = Order::where('shop_id', $shopId)
             ->where('payment_flag', 0)
-            ->whereIn('payment_method', $paymentMethods)
-            ->whereBetween('created_at', [$start, $end])
-            ->when($type === 'payable', function ($query) {
-                return $query->selectRaw('DATE(created_at) as date,
-                    SUM(total_amount + markup_delivery_fees) as total_amount');
-            }, function ($query) {
-                return $query->where('payment_channel','shop_online_payment')
-                    ->selectRaw('DATE(created_at) as date,
-                        SUM(delivery_fees + extra_charges- discount) as total_amount');
-            })
-            ->groupBy('date')
+            ->whereBetween('created_at', [$start, $end]);
+
+        if ($type === 'payable') {
+            $query->whereIn('payment_method', ['cash_on_delivery', 'all_prepaid'])
+                ->selectRaw('DATE(created_at) as date,
+                    SUM(CASE WHEN payment_method = "cash_on_delivery" THEN total_amount + markup_delivery_fees
+                            ELSE markup_delivery_fees END) as total_amount');
+        } else {
+            $query->whereIn('payment_method', ['cash_on_delivery', 'all_prepaid'])
+                ->where(function ($query) {
+                    $query->where('payment_method', 'cash_on_delivery')
+                        ->where('payment_channel', 'shop_online_payment')
+                        ->orWhere('payment_method', 'all_prepaid');
+                })
+                ->selectRaw('DATE(created_at) as date,
+                    SUM(delivery_fees + extra_charges - discount) as total_amount');
+        }
+
+        return $query->groupBy('date')
             ->orderBy('date', 'desc')
             ->get();
     }
