@@ -24,7 +24,6 @@ class TransactionForShopRequest extends FormRequest
     {
         return [
             'shop_id'   => 'required|string',
-            'amount'    => 'required',
             'type'      => 'required',
             'paid_by'   => 'required',
             'image'     => 'mimes:jpeg,jpg,webp,png,bmp'
