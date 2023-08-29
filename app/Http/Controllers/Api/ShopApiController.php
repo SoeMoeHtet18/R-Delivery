@@ -160,12 +160,13 @@ class ShopApiController extends Controller
                 if ($record->total_amount > 0) {
                     $date = $record->date;
                     $totalAmount = $record->total_amount;
+                    $totalAmount = number_format($totalAmount, 2, '.', ',');
                     $textReport .= "$date   $totalAmount MMK\n\n";
                 }
             }
             $textReport .= "_________________________________\n";
             $textReport .= "Total $title    ";
-            $textReport .= "{$data->sum('total_amount')} MMK\n\n";
+            $textReport .= number_format($data->sum('total_amount'), 2, '.', ',') . " MMK\n\n";
         }
 
         return $textReport;
