@@ -129,20 +129,20 @@ class ShopApiController extends Controller
             ->where('payment_flag', 0)
             ->whereBetween('created_at', [$start, $end]);
 
-        if ($type === 'payable') {
+        if ($type == 'payable') {
             $query->whereIn('payment_method', ['cash_on_delivery', 'all_prepaid'])
-                ->selectRaw('DATE(created_at) as date,
-                    SUM(CASE WHEN payment_method = "cash_on_delivery" THEN total_amount + markup_delivery_fees
-                            ELSE markup_delivery_fees END) as total_amount');
+                ->selectRaw('DATE(created_at) as date, SUM(CASE WHEN payment_method = "cash_on_delivery"
+                    THEN total_amount + COALESCE(markup_delivery_fees, 0)
+                    ELSE COALESCE(markup_delivery_fees, 0) END) as total_amount');
         } else {
-            $query->whereIn('payment_method', ['cash_on_delivery', 'all_prepaid'])
-                ->where(function ($query) {
-                    $query->where('payment_method', 'cash_on_delivery')
-                        ->where('payment_channel', 'shop_online_payment')
-                        ->orWhere('payment_method', 'all_prepaid');
+            $query->where(function ($query) {
+                    $query->where(function ($query) {
+                        $query->where('payment_method', 'cash_on_delivery')
+                            ->where('payment_channel', 'shop_online_payment');
+                    })->orWhere('payment_method', 'all_prepaid');
                 })
                 ->selectRaw('DATE(created_at) as date,
-                    SUM(delivery_fees + extra_charges - discount) as total_amount');
+                    SUM(delivery_fees + COALESCE(extra_charges, 0) - COALESCE(discount, 0)) as total_amount');
         }
 
         return $query->groupBy('date')
