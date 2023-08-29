@@ -169,36 +169,38 @@
                     <div class="text-center">
                         <h5>Cash To Collect</h5>
                         <b>
-                        @if ($order->payment_method === 'cash_on_delivery')
-                            {{ $order->total_amount + ($order->delivery_fees + $order->markup_delivery_fees + $order->extra_charges) - $order->discount }}
-                        @elseif ($order->payment_method === 'item_prepaid')
-                            {{ ($order->delivery_fees + $order->markup_delivery_fees + $order->extra_charges) - $order->discount }}
-                        @else
-                            0
-                        @endif
-                         MMK
+                        @php
+                        $cashToCollect = 0;
+                        if ($order->payment_method === 'cash_on_delivery'){
+                           $cashToCollect = $order->total_amount + ($order->delivery_fees + $order->markup_delivery_fees + $order->extra_charges) - $order->discount;
+                        }
+                        if ($order->payment_method === 'item_prepaid'){
+                            $cashToCollect = ($order->delivery_fees + $order->markup_delivery_fees + $order->extra_charges) - $order->discount;
+                        } 
+                        @endphp
+                        {{ number_format($cashToCollect, 2, '.', ',') }} MMK
                         </b>
                     </div>
                     <hr>
                     <div class="d-flex justify-content-between">
-                        <b>ORDER AMOUNT</b><b>{{$order->total_amount}} MMK</b>
+                        <b>ORDER AMOUNT</b><b>{{ number_format($order->total_amount, 2, '.', ',') }} MMK</b>
                     </div>
                     <div class="d-flex justify-content-between">
                         <b>DELIVERY FEES</b><b> @if($order->discount == null || $order->discount == 0)
-                            {{ $order->delivery_fees }}
+                            {{ number_format($order->delivery_fees, 2, '.', ',') }}
                             @else
-                            {{ $order->delivery_fees - $order->discount }}
+                            {{ number_format(($order->delivery_fees - $order->discount), 2, '.', ',') }}
                             @endif
                             MMK</b>
                     </div>
                     <div class="d-flex justify-content-between">
-                        <b>MARKUP DELIVERY FEES</b><b>{{$order->markup_delivery_fees}} MMK</b>
+                        <b>MARKUP DELIVERY FEES</b><b>{{ number_format($order->markup_delivery_fees, 2, '.', ',') }} MMK</b>
                     </div>
                     <div class="d-flex justify-content-between">
                         <b>EXTRA CHARGES</b><b> @if($order->extra_charges == null || $order->extra_charges == 0)
                             0.00
                             @else
-                            {{ $order->extra_charges }}
+                            {{ number_format($order->extra_charges, 2, '.', ',') }}
                             @endif
                             MMK</b>
                     </div>

@@ -144,14 +144,17 @@
                                 <td><span class="label"> Cash To Collect </span></td>
                                 <td><span class="label"> - </span></td>
                                 <td><span class="font">
-                                        @if ($order->payment_method === 'cash_on_delivery')
-                                            {{ $order->total_amount + ($order->delivery_fees + $order->markup_delivery_fees + $order->extra_charges) - $order->discount }}
-                                        @elseif ($order->payment_method === 'item_prepaid')
-                                            {{ ($order->delivery_fees + $order->markup_delivery_fees + $order->extra_charges) - $order->discount }}
-                                        @else
-                                            0
-                                        @endif
-                                    MMK </span></td>
+                                @php
+                                $cashToCollect = 0;
+                                if ($order->payment_method === 'cash_on_delivery'){
+                                $cashToCollect = $order->total_amount + ($order->delivery_fees + $order->markup_delivery_fees + $order->extra_charges) - $order->discount;
+                                }
+                                if ($order->payment_method === 'item_prepaid'){
+                                    $cashToCollect = ($order->delivery_fees + $order->markup_delivery_fees + $order->extra_charges) - $order->discount;
+                                } 
+                                @endphp
+                                {{ number_format($cashToCollect, 2, '.', ',') }} MMK
+                                </span></td>
                             </tr>
                             <tr>
                                 <td><span class="label"> Shop </span></td>

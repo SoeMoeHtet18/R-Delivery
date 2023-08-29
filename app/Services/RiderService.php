@@ -22,6 +22,7 @@ class RiderService
         $rider->email = $data['email'] ?? null;
         $rider->password = bcrypt($data['password']);
         $rider->salary_type = $data['salary_type'];
+        $rider->base_salary = $data['base_salary'] ?? 0;
         $rider->device_id = $data['device_id'] ?? null;
         $rider->branch_id = $user->branch_id;
         $rider->save();
@@ -39,6 +40,7 @@ class RiderService
             $rider->password =  bcrypt($data['password']);
         }
         $rider->device_id = $data['device_id'] ?? $rider->device_id;
+        $rider->base_salary = $data['base_salary'] ?? $rider->base_salary;
         if (isset($data['salary_type'])) {
             $rider->salary_type = $data['salary_type'];
         }

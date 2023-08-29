@@ -57,6 +57,17 @@
                 </div>
             </div>
             <div class="row m-0 mb-3">
+                <label for="base_salary" class="col-2">
+                    <h4>Base Salary <b>:</b></h4>
+                </label>
+                <div class="col-10">
+                    <input type="text" id="base_salary" name="base_salary" value="{{old('base_salary')}}" class="form-control" />
+                    @if ($errors->has('base_salary'))
+                    <span class="text-danger"><strong>{{ $errors->first('base_salary') }}</strong></span>
+                    @endif
+                </div>
+            </div>
+            <div class="row m-0 mb-3">
                 <label for="password" class="col-2">
                     <h4>Password <b>:</b></h4>
                 </label>
