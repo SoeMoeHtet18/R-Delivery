@@ -21,7 +21,7 @@ class ReportCalculationRepository
             })
             ->sum(DB::raw('total_amount + markup_delivery_fees'));
 
-        $deliveredOrderAmount .= Order::where('shop_id', $shopId)
+        $deliveredOrderAmount += Order::where('shop_id', $shopId)
             ->where('status', 'success')
             ->where('payment_flag', 0)
             ->where('payment_method', 'item_prepaid')
@@ -52,7 +52,8 @@ class ReportCalculationRepository
 
             if ($todayDate->isSameDay($calculatedDate)) {
 
-                if ($order->payment_method === 'cash_on_delivery' &&
+                if (
+                    $order->payment_method === 'cash_on_delivery' &&
                     $order->payment_channel === 'shop_online_payment' ||
                     $order->payment_method === 'all_prepaid'
                 ) {
