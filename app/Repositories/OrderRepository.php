@@ -364,7 +364,7 @@ class OrderRepository
     public function getWarehouseOrderListQuery()
     {
         $branch_id = auth()->user()->branch_id;
-        $query = Order::where('orders.status', 'in-warehouse')
+        $query = Order::where('orders.status', 'warehouse')
             ->leftJoin('riders', 'riders.id', 'orders.rider_id')
             ->leftJoin('shops', 'shops.id', 'orders.shop_id')
             ->leftJoin('branches', 'branches.id', 'orders.branch_id')
