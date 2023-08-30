@@ -43,8 +43,9 @@ class ReportCalculationRepository
         $remainingOrdersAmount = 0;
 
         $orders = Order::where('shop_id', $shopId)
-            ->where('status', 'pending')
-            ->where('payment_flag', 0)->get();
+            ->whereNotIn('status', ['success', 'cancel', 'cancel_request'])
+            ->where('payment_flag', 0)
+            ->get();
 
         foreach ($orders as $order) {
             $notifiedDate = $order->delivery_type->notified_on - 1;

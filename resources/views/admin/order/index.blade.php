@@ -396,6 +396,7 @@
                         <th>Type</th>
                         <th>Collection Method</th>
                         <th>Payment Method</th>
+                        <th>Payment Channel</th>
                         <th>Last Updated By</th>
                         <th>Branch</th>
                         <th>Pick Up Group Code</th>
@@ -414,7 +415,7 @@
             <div class="caption">Cancel Request Orders Lists</div>
         </div>
         <div class="portlet-body">
-            <table id="cancel-request-orders-datatable" 
+            <table id="cancel-request-orders-datatable"
                 class="table table-striped table-hover table-responsive datatable">
                 <thead>
                     <tr>
@@ -857,6 +858,10 @@
                         name: 'payment_method'
                     },
                     {
+                        data: 'payment_channel',
+                        name: 'payment_channel'
+                    },
+                    {
                         data: 'last_updated_by_name',
                         name: 'last_updated_by'
                     },
@@ -933,7 +938,7 @@
                                     return '';
                                 }
                             },
-                        "targets": 23
+                        "targets": 24
                     },
                     // render with numbering system
                     {
@@ -1039,6 +1044,21 @@
                             return '';
                         },
                         "targets": 20
+                    },
+                    {
+                        "render": function(data, type, row) {
+                            if (row.payment_channel == 'cash') {
+                                return "Cash";
+                            }
+                            if(row.payment_channel == 'company_online_payment') {
+                                return "Online Payment(Company)";
+                            }
+                            if (row.payment_channel == 'shop_online_payment') {
+                                return "Online Payment(Shop)";
+                            }
+                            return '';
+                        },
+                        "targets": 21
                     },
                 ]
             });
