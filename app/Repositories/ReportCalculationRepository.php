@@ -76,6 +76,10 @@ class ReportCalculationRepository
     {
         $codAmount = Order::where('shop_id', $shopId)
             ->where('payment_method', 'cash_on_delivery')
+            ->where(function ($query) {
+                $query->where('payment_channel', '!=', 'shop_online_payment')
+                    ->orWhereNull('payment_channel');
+            })
             ->sum(DB::raw('total_amount + markup_delivery_fees'));
 
         $remainingAmount = Order::where('shop_id', $shopId)
