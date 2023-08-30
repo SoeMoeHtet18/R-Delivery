@@ -8,6 +8,7 @@ use App\Models\Collection;
 use App\Models\CustomerCollection;
 use App\Repositories\CollectionRepository;
 use App\Repositories\OrderRepository;
+use App\Repositories\ReportCalculationRepository;
 use App\Repositories\ShopRepository;
 use App\Repositories\TownshipRepository;
 use App\Services\ShopService;
@@ -26,10 +27,12 @@ class ShopController extends Controller
     protected $transactionsForShopService;
     protected $collectionRepository;
     protected $townshipRepository;
+    protected $reportCalculationRepository;
 
     public function __construct(ShopRepository $shopRepository, ShopService $shopService,
         OrderRepository $orderRepository, TransactionsForShopService $transactionsForShopService,
-        CollectionRepository $collectionRepository, TownshipRepository $townshipRepository)
+        CollectionRepository $collectionRepository, TownshipRepository $townshipRepository,
+        ReportCalculationRepository $reportCalculationRepository)
     {
         $this->shopRepository = $shopRepository;
         $this->shopService = $shopService;
@@ -37,6 +40,7 @@ class ShopController extends Controller
         $this->transactionsForShopService = $transactionsForShopService;
         $this->collectionRepository = $collectionRepository;
         $this->townshipRepository = $townshipRepository;
+        $this->reportCalculationRepository = $reportCalculationRepository;
     }
 
     /**
@@ -75,7 +79,7 @@ class ShopController extends Controller
         $shop = $this->shopRepository->getShopByID($id);
         // $order_ids = $this->orderRepository->getAllOrderIdsByShopID($id);
         // $payable_amount = $this->shopService->getPayableAmount($order_ids,$shop->id);
-        $payable_amount = $this->shopRepository->getPayableAmountForShop($shop->id);
+        $payable_amount = $this->reportCalculationRepository->getPayableAmountForShop($shop->id);
         $shop->payable_amount = $payable_amount;
         // $collection_total_amount = Collection::where('shop_id',$id)->where('status','success')->sum('total_amount');
         // $collection_paid_amount = Collection::where('shop_id',$id)->where('status','success')->sum('paid_amount');

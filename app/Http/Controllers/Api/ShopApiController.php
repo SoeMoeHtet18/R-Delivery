@@ -9,6 +9,7 @@ use App\Models\Collection;
 use App\Models\Order;
 use App\Repositories\CollectionRepository;
 use App\Repositories\OrderRepository;
+use App\Repositories\ReportCalculationRepository;
 use App\Repositories\ShopRepository;
 use App\Repositories\TransactionsForShopRepository;
 use App\Services\ShopService;
@@ -23,14 +24,19 @@ class ShopApiController extends Controller
     protected $orderRepository;
     protected $collectionRepository;
     protected $transactionForShopRepository;
+    protected $reportCalculationRepository;
 
-    public function __construct(ShopService $shopService, ShopRepository $shopRepository, OrderRepository $orderRepository, CollectionRepository $collectionRepository, TransactionsForShopRepository $transactionForShopRepository)
+    public function __construct(ShopService $shopService, ShopRepository $shopRepository,
+        OrderRepository $orderRepository, CollectionRepository $collectionRepository,
+        TransactionsForShopRepository $transactionForShopRepository,
+        ReportCalculationRepository $reportCalculationRepository)
     {
         $this->shopService = $shopService;
         $this->shopRepository = $shopRepository;
         $this->orderRepository = $orderRepository;
         $this->collectionRepository = $collectionRepository;
         $this->transactionForShopRepository = $transactionForShopRepository;
+        $this->reportCalculationRepository = $reportCalculationRepository;
     }
 
     public function getAllShopList()
@@ -78,7 +84,7 @@ class ShopApiController extends Controller
         $shop_id = $shop_user->shop_id;
         $credits = [];
 
-        $total_credit = $this->shopRepository->getTotalCreditForShop($shop_id);
+        $total_credit = $this->reportCalculationRepository->getTotalCreditForShop($shop_id);
         $credits['total_amount'] = $total_credit;
 
         $paid_credit_from_collection = $this->collectionRepository->getPaidAmountByShopUser($shop_id);
@@ -110,10 +116,13 @@ class ShopApiController extends Controller
         $start = DateTime::createFromFormat('d/m/Y', $request->from_date)->format('Y-m-d 00:00:00');
         $end = DateTime::createFromFormat('d/m/Y', $request->to_date)->format('Y-m-d 23:59:59');
 
-        $receivables = $this->getAmounts($shopId, $start, $end, 'receivable');
-        $payables = $this->getAmounts($shopId, $start, $end, 'payable');
+        $receivables = $this->reportCalculationRepository
+            ->getPayableAndReceivableAmountsForShopByDate($shopId, $start, $end, 'receivable');
+        $payables = $this->reportCalculationRepository
+            ->getPayableAndReceivableAmountsForShopByDate($shopId, $start, $end, 'payable');
 
         $textReport = $this->generateTextReport($receivables, 'Receivable Amounts');
+        
         $textReport .= $this->generateTextReport($payables, 'Payable Amounts');
 
         return response()->json([
@@ -121,33 +130,6 @@ class ShopApiController extends Controller
             'message' => 'Successfully get description by shop',
             'status' => 'success'
         ], 200);
-    }
-
-    private function getAmounts($shopId, $start, $end, $type)
-    {
-        $query = Order::where('shop_id', $shopId)
-            ->where('payment_flag', 0)
-            ->whereBetween('created_at', [$start, $end]);
-
-        if ($type == 'payable') {
-            $query->whereIn('payment_method', ['cash_on_delivery', 'item_prepaid'])
-                ->selectRaw('DATE(created_at) as date, SUM(CASE WHEN payment_method = "cash_on_delivery"
-                    THEN total_amount + COALESCE(markup_delivery_fees, 0)
-                    ELSE COALESCE(markup_delivery_fees, 0) END) as total_amount');
-        } else {
-            $query->where(function ($query) {
-                    $query->where(function ($query) {
-                        $query->where('payment_method', 'cash_on_delivery')
-                            ->where('payment_channel', 'shop_online_payment');
-                    })->orWhere('payment_method', 'all_prepaid');
-                })
-                ->selectRaw('DATE(created_at) as date,
-                    SUM(delivery_fees + COALESCE(extra_charges, 0) - COALESCE(discount, 0)) as total_amount');
-        }
-
-        return $query->groupBy('date')
-            ->orderBy('date', 'desc')
-            ->get();
     }
 
     private function generateTextReport($data, $title)

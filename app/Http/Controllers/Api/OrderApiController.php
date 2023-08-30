@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\Rider;
 use App\Repositories\CollectionRepository;
 use App\Repositories\OrderRepository;
+use App\Repositories\ReportCalculationRepository;
 use App\Repositories\ShopRepository;
 use App\Repositories\TransactionsForShopRepository;
 use App\Services\OrderService;
@@ -21,16 +22,18 @@ class OrderApiController extends Controller
     protected $collectionRepository;
     protected $transactionForShopRepository;
     protected $shopRepository;
+    protected $reportCalculationRepository;
 
-    public function __construct(OrderRepository $orderRepository, OrderService $orderService, 
+    public function __construct(OrderRepository $orderRepository, OrderService $orderService,
         CollectionRepository $collectionRepository, TransactionsForShopRepository $transactionForShopRepository,
-        ShopRepository $shopRepository)
+        ShopRepository $shopRepository, ReportCalculationRepository $reportCalculationRepository)
     {
         $this->orderRepository = $orderRepository;
         $this->orderService = $orderService;
         $this->collectionRepository = $collectionRepository;
         $this->transactionForShopRepository = $transactionForShopRepository;
         $this->shopRepository = $shopRepository;
+        $this->reportCalculationRepository = $reportCalculationRepository;
     }
 
     public function getOrderCode(Request $request)
@@ -64,7 +67,7 @@ class OrderApiController extends Controller
     {
         $shop_user = auth()->guard('shop-user-api')->user();
         $shop_id   = $shop_user->shop_id;
-        $totalCredit = $this->shopRepository->getTotalCreditForShop($shop_id);
+        $totalCredit = $this->shopRepository->reportCalculationRepository($shop_id);
 
         // $paid_credit_from_collection = $this->collectionRepository->getPaidAmountByShopUser($shop_id);
         // $paid_credit_from_transaction = $this->transactionForShopRepository->getPaidAmountByShopUser($shop_id);
