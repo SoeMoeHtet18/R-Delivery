@@ -2,6 +2,35 @@
 @section('title','Dashboard')
 @section('sub-title','Shop Listing')
 @section('content')
+<style>
+    .pdf-ul {
+        padding-left: 0;
+        padding-right: 0;
+        border-radius: 3px;
+        display: flex;
+        list-style-type: none;
+        padding-left: 0;
+        margin-left: auto;
+        margin-bottom: 0;
+    }
+
+    .pdf-ul li {
+        background: #f4f5f8;
+        margin: 0;
+    }
+
+    .pdf-ul li a {
+        padding: 0;
+        padding-right: 6px;
+        padding-left: 2px;
+        font-size: 13px;
+        text-decoration: none;
+    }
+
+    .pdf-ul li a:first-child {
+        border-right: 1px solid #dfe2ea;
+    }
+</style>
 
 <div class="d-flex justify-content-between mb-3">
     <div class="create-button">
@@ -31,6 +60,19 @@
                     <input type="text" id="search" name="search" class="form-control" />
                 </div>
             </div>
+            <div class="mb-3 p-3 col-4">
+                <label for="date_range">
+                    <strong>Total Ways By Date Range</strong>
+                </label>
+                <div class="col-10">
+                    <div style="position: relative;">
+                        <input type="text" name="datefilter" value="" class="form-control"/>
+                        <span class="fa fa-calendar" style="position: absolute; top: 12px; right: 8px;"></span>
+                    </div>
+                    <input type="hidden" name="start_date" id="start_date">
+                    <input type="hidden" name="end_date" id="end_date">
+                </div>
+            </div>
         </div>
 
     </div>
@@ -40,6 +82,20 @@
 
             <button class="btn btn-secondary" id="reset">Reset</button>
         </div>
+    </div>
+</div>
+<div class="d-flex justify-content-end pb-3">
+    <div class="d-inline-block">
+        <ul class="pdf-ul">
+            <li>
+                <form id="pdf_form" method="GET" style="display: inline;">
+                    <meta name="csrf-token" content="{{ csrf_token() }}">
+                    <button type="submit" id="pdf_button" class="btn border">
+                        <i class="fa-regular fa-file-pdf"></i>&nbsp;<span>PDF</span>
+                    </button>
+                </form>
+            </li>
+        </ul>
     </div>
 </div>
 
@@ -56,6 +112,7 @@
                     <th>Township Name</th>
                     <th>Address</th>
                     <th>Phone Number</th>
+                    <th>Total Ways</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -74,18 +131,54 @@
         $("#toggleFilter").on("click", function() {
             $(".filter-content").slideToggle(300);
         });
-        
-        get_ajax_dynamic_data(search = '');
 
-        function get_ajax_dynamic_data(search) {
+        function formatWithNumberingSystem(number) {
+            const formattedNumber = parseFloat(number).toFixed(0); 
+            return formattedNumber.replace(/\d(?=(\d{3})+$)/g, '$&,');
+        }
+        
+        get_ajax_dynamic_data(search = '', start = '', end = '');
+
+        function get_ajax_dynamic_data(search,start,end) {
             var table = $('.datatable').DataTable({
                 processing: true,
                 serverSide: true,
+                buttons: [
+                    {
+                        extend: 'pdf',
+                        title: 'Shops List',
+                        filename: 'Shops List',
+                        pageSize: 'LEGAL',
+                        charset: 'UTF-8',
+                        orientation: 'landscape',
+                        exportOptions: {
+                            columns: [0, 1, 2, 3, 4, 5] // Exclude column index 6 (Action)
+                        },
+                        customize: function (doc) {
+                            // Center-align the table header and data cells
+                            var table = doc.content[1].table;
+                            table.body.forEach(function (row) {
+                                row.forEach(function (cell) {
+                                    cell.alignment = 'start';
+                                });
+                            });
+
+                            // Add background color to header row
+                            table.headerRows = 1;
+                            table.widths = Array(table.body[0].length + 1).join('*').split('');
+                            table.body[0].forEach(function (headerCell) {
+                                headerCell.fillColor = '#CCCCCC';
+                            });
+                        }
+                    },
+                ],
                 ajax: {
                     "url": '/ajax-get-shops-data',
                     "type": "GET",
                     "data": function(r) {
                         r.search = search;
+                        r.from_date = start;
+                        r.to_date = end;
                     }
                 },
                 columns: [{
@@ -107,6 +200,10 @@
                     {
                         data: 'phone_number',
                         name: 'phone_number'
+                    },
+                    {
+                        data: 'total_ways',
+                        name: 'total_ways'
                     },
                     {
                         data: 'action',
@@ -133,19 +230,76 @@
                         },
                         "targets": 2
                     },
+                    {
+                        "render": function(data, type, row) {
+                            return formatWithNumberingSystem(row.total_ways);
+                        },
+                        "targets": 5
+                    },
                 ]
             });
             $('.search_filter').click(function() {
                 var search = $('#search').val();
+                var start = $('#start_date').val();
+                var end = $('#end_date').val();
                 table.destroy();
-                get_ajax_dynamic_data(search);
+                get_ajax_dynamic_data(search,start,end);
             });
             $("#reset").click(function() {
                 $("#search").val("").trigger("change");
+                $("#start_date").val("").trigger("change");
+                $("#end_date").val("").trigger("change");
+                $('input[name="datefilter"]').val("");
+                var start = $("#start_date").val();
+                var end = $('#end_date').val();
                 var search = $('#search').val();
                 table.destroy();
-                get_ajax_dynamic_data(search);
+                get_ajax_dynamic_data(search,start,end);
             });
+            // $("#pdf_button").on("click", function() {
+            //     table.button( '.buttons-pdf' ).trigger();
+            // })
+            
+        }
+
+        // for date range picker
+        $('input[name="datefilter"]').daterangepicker({
+            autoUpdateInput: false,
+            locale: {
+                cancelLabel: 'Clear'
+            }
+        });
+
+        $('input[name="datefilter"]').on('apply.daterangepicker', function(ev, picker) {
+            $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+            $('#start_date').val(picker.startDate.format('YYYY-MM-DD'));
+            $('#end_date').val(picker.endDate.format('YYYY-MM-DD'));
+        });
+
+        $('input[name="datefilter"]').on('cancel.daterangepicker', function(ev, picker) {
+            $(this).val('');
+        });
+
+        $(".fa-calendar").on("click", function() {
+            $('input[name="datefilter"]').trigger("click");
+        });
+
+        const form = $('#pdf_form');
+        form.submit(function(event) {
+            // Prevent the default form submission behavior
+            event.preventDefault();
+            var start = $('#start_date').val();
+            var end = $('#end_date').val();
+            console.log('download shops list pdf');
+            
+            generatePDF(start, end);
+        });
+
+        function generatePDF(start, end) {
+            // Create the download URL with query parameters
+            const downloadUrl = `/generate-shops-list-pdf?from_date=${encodeURIComponent(start)}&to_date=${encodeURIComponent(end)}`;
+            // Navigate to the download URL
+            window.location.href = downloadUrl;
         }
     });
 </script>

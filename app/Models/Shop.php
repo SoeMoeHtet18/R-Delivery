@@ -30,4 +30,8 @@ class Shop extends Model
     public function township() {
         return $this->belongsTo(Township::class, 'township_id', 'id')->withTrashed();
     }
+
+    public function orders() {
+        return $this->hasMany(Order::class);
+    }
 }
