@@ -117,27 +117,35 @@ class ShopController extends Controller
     }
 
     public function getAjaxShopData(Request $request)
-    {   
+    {
         $search = $request->search;
-        $data = $this->shopRepository->getAllShopsQuery();
+        $from_date = $request->from_date;
+        $to_date   = $request->to_date;
+        $data = $this->shopRepository->getAllShopsQuery($from_date, $to_date);
         if($search) {
-            $data = $data->where('shops.name','like', '%'. $search . '%')->orWhere('shops.address', 'like', '%'. $search . '%')->orWhere('shops.phone_number', 'like', '%'. $search . '%');
+            $data = $data->where('shops.name','like', '%'. $search . '%')
+                    ->orWhere('shops.address', 'like', '%'. $search . '%')
+                    ->orWhere('shops.phone_number', 'like', '%'. $search . '%');
         }
             return DataTables::of($data)
 
                 ->addIndexColumn()
+                ->addColumn('total_ways', function ($shop) {
+                    return $shop->orders->count();
+                })
                 ->addColumn('action', function($shops) {
-                    $actionBtns =  '
+                    return  '
                         <a href="'. route("shops.show", $shops->id) .'" class="btn btn-info btn-sm">View</a>
                         <a href="'. route("shops.edit", $shops->id) .'" class="btn btn-light btn-sm">Edit</a>
-                        <form action="'. route("shops.destroy", $shops->id) .'" method="post" class="d-inline" onclick="return confirm(`Are you sure you want to delete this shop?`);">
+                        <form action="'. route("shops.destroy", $shops->id) .'" method="post" class="d-inline"
+                            onclick="return confirm(`Are you sure you want to delete this shop?`);">
                             <input type="hidden" name="_token" value="'. csrf_token() .'"/>
                             <input type="hidden" name="_method" value="DELETE"/>
                             <input type="submit" value="Delete" class="btn btn-danger btn-sm"/>
                         </form>';
-                    return $actionBtns;
+                     
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['action','total_ways'])
                 ->orderColumn('shops.id', '-id $1')
                 ->make(true);
     }
@@ -184,7 +192,7 @@ class ShopController extends Controller
                 $mpdf->WriteHTML(view('admin.shop.pdf_export', compact('orders')));
     
                 // Output the PDF for download
-                $mpdf->Output('shop_order.pdf', 'D');   
+                $mpdf->Output('shop_order.pdf', 'D');
             } else if($type == 'pick_up') {
                 $collections = $this->collectionRepository->getAllCollectionsByShopUser($shop_id);
 
@@ -197,11 +205,38 @@ class ShopController extends Controller
                 $mpdf->WriteHTML(view('admin.shop.pdf_export_for_pick_up', compact('collections')));
     
                 // Output the PDF for download
-                $mpdf->Output('shop_pick_up.pdf', 'D');   
+                $mpdf->Output('shop_pick_up.pdf', 'D');
             } else {
                 return redirect()->back()->with('error', "Can't generate pdf");
             }
            
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', "Can't generate pdf");
+        }
+    }
+    
+    public function generateShopsListPdf(Request $request) {
+        try {
+            $mpdf = new Mpdf();
+
+            // Enable Myanmar language support
+            $mpdf->autoScriptToLang = true;
+            $mpdf->autoLangToFont = true;
+
+            // Set the font for Myanmar language
+            $mpdf->SetFont('myanmar3');
+
+            //retrieve data
+            $from_date = $request->from_date;
+            $to_date = $request->to_date;
+            $data = $this->shopRepository->getAllShopsQuery($from_date, $to_date);
+            $shops = $data->get();
+            // Add HTML content with Myanmar text
+            $mpdf->WriteHTML(view('admin.shop.pdf_export_for_shops_list', compact('shops')));
+    
+            // Output the PDF for download
+            $mpdf->Output('shops_list.pdf', 'D');
+
         } catch (Exception $e) {
             return redirect()->back()->with('error', "Can't generate pdf");
         }

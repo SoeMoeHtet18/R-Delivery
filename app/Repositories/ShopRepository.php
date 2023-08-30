@@ -22,10 +22,20 @@ class ShopRepository
         return $shops;
     }
 
-    public function getAllShopsQuery()
+    public function getAllShopsQuery($from_date, $to_date)
     {
         $branch_id = auth()->user()->branch_id;
-        return Shop::select('shops.*','townships.name as township_name')
+        if($from_date && $to_date) {
+            $from_date = Carbon::parse($from_date)->format('Y-m-d');
+            $to_date   = Carbon::parse($to_date)->format('Y-m-d').' 23:59:59';
+        } else {
+            $from_date = Carbon::now()->startOfMonth()->format('Y-m-d');
+            $to_date = Carbon::now()->endOfMonth()->format('Y-m-d').' 23:59:59';
+        }
+        
+        return Shop::with(['orders' => function ($query) use ($from_date,$to_date) {
+                $query->where('status', 'success')->whereBetween('created_at', [$from_date, $to_date]);
+            }])->select('shops.*','townships.name as township_name')
             ->leftJoin('townships','townships.id','shops.township_id')
             ->where('branch_id', $branch_id);
     }
