@@ -103,8 +103,14 @@ class OrderController extends Controller
     public function store(OrderCreateRequest $request)
     {
         $data = $request->all();
+        $moreOrders = $request->more_orders;
+        $shopId  = $request->shop_id;
         $this->orderService->saveOrderData($data);
-        return redirect()->route('orders.index');
+        if($moreOrders == 'true'){
+            return redirect('/order-create-by-shop-id?shop_id=' . $shopId);
+        } else {
+            return redirect()->route('orders.index');
+        }
     }
 
     /**

@@ -2,7 +2,57 @@
 @section('title','Dashboard')
 @section('sub-title','Order Create')
 @section('content')
+<style>
+.modal {
+        display: none;
+        /* Hidden by default */
+        position: fixed;
+        /* Stay in place */
+        z-index: 1;
+        /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%;
+        /* Full width */
+        height: 100%;
+        /* Full height */
+        overflow: auto;
+        /* Enable scroll if needed */
+        background-color: rgba(0, 0, 0, 0.4);
+        /* Black w/ opacity */
+    }
+
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        /* 15% from the top and centered */
+        padding: 20px;
+        border: 1px solid #888;
+        width: 80%;
+        border-radius: 10px !important;
+        /* Could be more or less, depending on screen size */
+    }
+
+    #popupCard.modal {
+        /* display: flex !important; */
+        align-items: center;
+        justify-content: center;
+    }
+
+    #confirm-no {
+        background-color: white;
+        color: black;
+        border-color: green;
+        border-radius: 2px !important;
+    }
+
+    #confirm-yes {
+        border-radius: 2px !important;
+    }
+
+</style>
 <div class="card card-container action-form-card">
+    
     <div class="card-body">
         <h2 class="ps-1 card-header-title">
             <strong>Add New Order</strong>
@@ -344,6 +394,24 @@
     </div>
 </div>
 
+<div id="popupCard" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h5 class="modal-title text-center">Do you want to add more orders?</h5>
+                
+            </div>
+            <!-- Modal Footer -->
+            <div class="modal-footer">
+                <!-- "No" Button -->
+                <button type="button" id="confirm-no" class="btn btn-secondary" data-more-orders="false" data-dismiss="modal">No</button>
+                <!-- "Yes" Button -->
+                <button type="button" id="confirm-yes" class="btn btn-success" data-more-orders="true">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
 @section('javascript')
@@ -523,6 +591,39 @@
         $('#shop_id').change(function() {
             getOrderCode();
         });
+
+        $('#confirm-yes').click(function() {
+            $('#popupCard').fadeOut(300);
+            submitFormWithParameter(true);
+        });
+
+        $('#confirm-no').click(function() {
+            $('#popupCard').fadeOut(300);
+            submitFormWithParameter(false);
+        });
+
+        $('form.action-form').submit(function(event) {
+            event.preventDefault(); // Prevent the default form submission
+            // $('#popupCard').modal('show');
+            var popupCard = document.getElementById('popupCard');
+            popupCard.style.display = 'block';
+            popupCard.style.background = 'none';
+            popupCard.style.height = '100vh';
+            popupCard.style.top = '500px';
+        });
+
+        function submitFormWithParameter(moreOrders) {
+            console.log(moreOrders);
+            var form = $('form.action-form');
+            var actionUrl = form.attr('action');
+            var newUrl = actionUrl + '?more_orders=' + moreOrders;
+
+            // Update the form action URL
+            form.attr('action', newUrl);
+
+            // Submit the form
+            form.unbind('submit').submit();
+        }
 
     });
 </script>
