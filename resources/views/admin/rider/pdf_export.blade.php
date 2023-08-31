@@ -15,7 +15,7 @@
         }
 
         th {
-            background-color: #f2f2f2;
+            background-color: #39CAB2;
             font-weight: bold;
         }
 
@@ -29,7 +29,7 @@
         }
 
         thead th, .last-row td, .color {
-            background-color: #d676fc;
+            background-color: #39CAB2;
         }
     </style>
 </head>
@@ -45,10 +45,11 @@
                 <th>Rider</th>
                 <th>Shop</th>
                 <th>Quantity</th>
-                <th>Amount</th>
+                <th>Cash To Collect</th>
+                <!-- <th>Amount</th>
                 <th>Deli</th>
                 <th>OS Deli</th>
-                <th>Deli Add</th>
+                <th>Deli Add</th> -->
                 <th>Remark</th>
             </tr>
         </thead>
@@ -72,19 +73,28 @@
                 if($order->payment_method == 'cash_on_delivery') {
                     $totalAmountSum += $order->total_amount;
                 }
-                $deliveryFeesSum += ($order->delivery_fees - $order->discount);
-                $markupDeliveryFeesSum += $order->markup_delivery_fees;
-                $extraChargesSum += $order->extra_charges;
+                if($order->payment_method != 'all_prepaid') {
+                    $deliveryFeesSum += ($order->delivery_fees - $order->discount);
+                    $markupDeliveryFeesSum += $order->markup_delivery_fees;
+                    $extraChargesSum += $order->extra_charges;
+                }
+                
                 @endphp
-                <td>{{ $totalQuantity }}</td>
+                <td>1</td>
                 <td>
                     @if($order->payment_method == 'cash_on_delivery')
-                        {{ number_format($order->total_amount, 2, '.', ',') }}
+                        {{ number_format($order->total_amount + $order->delivery_fees + $order->extra_charges
+                            + $order->markup_delivery_fees - $order->discount, 2, '.', ',') }}
+                    @elseif($order->payment_method == 'item_prepaid')
+                        {{ number_format($order->delivery_fees + $order->extra_charges
+                            + $order->markup_delivery_fees - $order->discount, 2, '.', ',') }}
+                    @else
+                        0.00
                     @endif
                 </td>
-                <td>{{ number_format($order->delivery_fees - $order->discount, 2, '.', ',') }}</td>
+                <!-- <td>{{ number_format($order->delivery_fees - $order->discount, 2, '.', ',') }}</td>
                 <td>{{ number_format($order->markup_delivery_fees, 2, '.', ',') }}</td>
-                <td>{{ number_format($order->extra_charges, 2, '.', ',') }}</td>
+                <td>{{ number_format($order->extra_charges, 2, '.', ',') }}</td> -->
                 <td>{{ $order->remark }}</td>
             </tr>
            
@@ -96,10 +106,11 @@
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>{{ number_format($totalAmountSum, 2, '.', ',') }}</td>
-                <td>{{ number_format($deliveryFeesSum, 2, '.', ',') }}</td>
+                <td>{{ number_format($totalAmountSum + $deliveryFeesSum + $markupDeliveryFeesSum
+                    + $extraChargesSum , 2, '.', ',') }}</td>
+                <!-- <td>{{ number_format($deliveryFeesSum, 2, '.', ',') }}</td>
                 <td>{{ number_format($markupDeliveryFeesSum, 2, '.', ',') }}</td>
-                <td>{{ number_format($extraChargesSum, 2, '.', ',') }}</td>
+                <td>{{ number_format($extraChargesSum, 2, '.', ',') }}</td> -->
                 <td></td>
             </tr>
         </tbody>
@@ -116,7 +127,7 @@
             </tr>
             <tr>
                 <td>Total Delivery Fees</td>
-                <td>{{ number_format($deliveryFeesSum, 2, '.', ',') }}</td>
+                <td>{{ number_format($deliveryFeesSum + $extraChargesSum, 2, '.', ',') }}</td>
             </tr>
         </tbody>
     </table>

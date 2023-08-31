@@ -6,6 +6,7 @@ use App\Http\Requests\ShopCreateRequest;
 use App\Http\Requests\ShopUpdateRequest;
 use App\Models\Collection;
 use App\Models\CustomerCollection;
+use App\Models\TransactionsForShop;
 use App\Repositories\CollectionRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\ReportCalculationRepository;
@@ -184,16 +185,25 @@ class ShopController extends Controller
 
             if($type == 'order') {
                 $data = $this->orderRepository->getAllOrdersQueryByShop($shop_id);
+                $collectionAmountPaidByCompany = Collection::where('shop_id', $shop_id)->sum('paid_amount');
+                $transactionAmountPaidByCompany = TransactionsForShop::where('shop_id',$shop_id)->sum('amount');
             
                 $start = $request->from_date;
                 $end = $request->to_date . ' 23:59:00';
                 if ($start && $end) {
                     $data = $data->whereBetween('orders.created_at', [$start, $end]);
+                    $collectionAmountPaidByCompany = Collection::where('shop_id', $shop_id)
+                        ->whereBetween('created_at', [$start, $end])
+                        ->sum('paid_amount');
+                    $transactionAmountPaidByCompany = TransactionsForShop::where('shop_id',$shop_id)
+                        ->whereBetween('created_at', [$start, $end])
+                        ->sum('amount');
                 }
 
                 $orders = $data->get();
+                $paidAmount = $collectionAmountPaidByCompany + $transactionAmountPaidByCompany;
                 // Add HTML content with Myanmar text
-                $mpdf->WriteHTML(view('admin.shop.pdf_export', compact('orders')));
+                $mpdf->WriteHTML(view('admin.shop.pdf_export', compact('orders','paidAmount')));
     
                 // Output the PDF for download
                 $mpdf->Output('shop_order.pdf', 'D');
