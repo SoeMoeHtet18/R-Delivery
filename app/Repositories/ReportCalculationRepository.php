@@ -2,8 +2,11 @@
 
 namespace App\Repositories;
 
+use App\Models\Collection;
 use App\Models\CustomerCollection;
 use App\Models\Order;
+use App\Models\ShopPayment;
+use App\Models\TransactionsForShop;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -13,7 +16,6 @@ class ReportCalculationRepository
     {
         $deliveredOrderAmount = Order::where('shop_id', $shopId)
             ->where('status', 'success')
-            ->where('payment_flag', 0)
             ->where('payment_method', 'cash_on_delivery')
             ->where(function ($query) {
                 $query->where('payment_channel', '!=', 'shop_online_payment')
@@ -23,13 +25,11 @@ class ReportCalculationRepository
 
         $deliveredOrderAmount += Order::where('shop_id', $shopId)
             ->where('status', 'success')
-            ->where('payment_flag', 0)
             ->where('payment_method', 'item_prepaid')
             ->sum('markup_delivery_fees');
 
         $deliveredOrderAmount -= Order::where('shop_id', $shopId)
             ->where('status', 'success')
-            ->where('payment_flag', 0)
             ->where(function ($query) {
                 $query->where(function ($query) {
                     $query->where('payment_method', 'cash_on_delivery')
@@ -44,7 +44,6 @@ class ReportCalculationRepository
 
         $orders = Order::where('shop_id', $shopId)
             ->whereNotIn('status', ['success', 'cancel', 'cancel_request'])
-            ->where('payment_flag', 0)
             ->get();
 
         foreach ($orders as $order) {
@@ -52,7 +51,6 @@ class ReportCalculationRepository
             $calculatedDate = $order->created_at->addDays($notifiedDate);
 
             if ($todayDate->isSameDay($calculatedDate)) {
-
                 if (
                     $order->payment_method === 'cash_on_delivery' &&
                     $order->payment_channel === 'shop_online_payment' ||
@@ -71,7 +69,15 @@ class ReportCalculationRepository
             ->whereDate('schedule_date', $todayDate)
             ->sum('paid_amount');
 
-        return ($deliveredOrderAmount ?? 0) + ($remainingOrdersAmount ?? 0) - ($customerCollectionAmount ?? 0);
+        $collectionAmountPaidByCompany = Collection::where('shop_id', $shopId)->sum('paid_amount');
+
+        $transactionAmountPaidByCompany = TransactionsForShop::where('shop_id',$shopId)->sum('amount');
+
+        $totalCredit = ($deliveredOrderAmount ?? 0) + ($remainingOrdersAmount ?? 0) - ($customerCollectionAmount ?? 0);
+        
+        $totalReceived = ($collectionAmountPaidByCompany ?? 0) + ($transactionAmountPaidByCompany ?? 0);
+        
+        return $totalCredit - $totalReceived;
     }
 
     public function getTotalCreditForShop($shopId)
