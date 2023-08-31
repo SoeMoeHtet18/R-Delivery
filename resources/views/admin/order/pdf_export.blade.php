@@ -91,20 +91,31 @@
                 if($order->payment_method == 'cash_on_delivery') {
                     $totalAmountSum += $order->total_amount;
                 }
-                $deliveryFeesSum += ($order->delivery_fees - $order->discount);
-                $markupDeliveryFeesSum += $order->markup_delivery_fees;
-                $extraChargesSum += $order->extra_charges;
+                if($order->payment_method != 'all_prepaid') {
+                    $deliveryFeesSum += ($order->delivery_fees - $order->discount);
+                    $markupDeliveryFeesSum += $order->markup_delivery_fees;
+                    $extraChargesSum += $order->extra_charges;
+                }
                 @endphp
-                <td>{{ $totalQuantity }}</td>
+                <td>1</td>
                 <td>
                     @if($order->payment_method == 'cash_on_delivery')
                         {{ number_format($order->total_amount, 2, '.', ',') }}
+                    @else
+                        0.00
                     @endif
                 </td>
-                <td>{{ number_format($order->delivery_fees - $order->discount, 2, '.', ',') }}</td>
-                <td>{{ number_format($order->markup_delivery_fees, 2, '.', ',') }}</td>
-                <td>{{ number_format($order->extra_charges, 2, '.', ',') }}</td>
+                @if($order->payment_method != 'all_prepaid')
+                    <td>{{ number_format($order->delivery_fees - $order->discount, 2, '.', ',') }}</td>
+                    <td>{{ number_format($order->markup_delivery_fees, 2, '.', ',') }}</td>
+                    <td>{{ number_format($order->extra_charges, 2, '.', ',') }}</td>
+                @else
+                    <td>0.00</td>
+                    <td>0.00</td>
+                    <td>0.00</td>
+                @endif
                 <td>{{ $order->remark }}</td>
+
                 <!-- <td> @if($order->status == 'pending')
                     Pending @elseif($order->status == 'picking-up')
                     Picking Up @elseif($order->status == 'warehouse')
@@ -165,7 +176,7 @@
             </tr>
             <tr>
                 <td>Total Delivery Fees</td>
-                <td>{{ number_format($deliveryFeesSum, 2, '.', ',') }}</td>
+                <td>{{ number_format($deliveryFeesSum + $extraChargesSum, 2, '.', ',') }}</td>
             </tr>
         </tbody>
     </table>
