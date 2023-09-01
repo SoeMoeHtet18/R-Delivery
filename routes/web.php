@@ -176,6 +176,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/ajax-get-townships-with-associable',
         [TownshipController::class, 'getTownshipsWithAssociable']);
     Route::get('generate-shops-list-pdf', [ShopController::class, 'generateShopsListPdf']);
+    Route::post('get-related-order-amounts-by-shop', [ShopController::class, 'getRelatedOrderAmountsByShop']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
