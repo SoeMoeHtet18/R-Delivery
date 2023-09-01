@@ -61,7 +61,9 @@ class OrderService
         $order->is_confirm = 0;
         $order->extra_charges = $data['extra_charges'] ?? 0;
         $order->branch_id = $user->branch_id;
-        $order->pay_later = $data['total_amount'] > 100000 ? true : false;
+        // $order->pay_later = $data['total_amount'] > 100000 ? true : false;
+        $order->pay_later = isset($data['pay_later']) ? true : false;
+        $order->is_deli_free = isset($data['is_deli_free']) ? true : false;
         $order->save();
         if($today == Carbon::parse($data['schedule_date'])->format('Y-m-d')) {
             $this->changeStatus($order, 'delivering', $user, User::class);
@@ -153,7 +155,9 @@ class OrderService
         $order->last_updated_by = auth()->user()->id;
         $order->extra_charges = $data['extra_charges'] ?? 0;
         $order->delivery_type_id = $data['delivery_type_id'];
-        $order->pay_later = $data['total_amount'] > 100000 ? true : false;
+        // $order->pay_later = $data['total_amount'] > 100000 ? true : false;
+        $order->pay_later = isset($data['pay_later']) ? true : false;
+        $order->is_deli_free = isset($data['is_deli_free']) ? true : false;
         $order->save();
         return $order;
     }

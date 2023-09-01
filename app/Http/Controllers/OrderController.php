@@ -103,6 +103,7 @@ class OrderController extends Controller
     public function store(OrderCreateRequest $request)
     {
         $data = $request->all();
+        // dd($data);
         $moreOrders = $request->more_orders;
         $shopId  = $request->shop_id;
         $this->orderService->saveOrderData($data);

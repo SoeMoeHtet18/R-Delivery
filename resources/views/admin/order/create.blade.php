@@ -50,6 +50,11 @@
         border-radius: 2px !important;
     }
 
+    #second_amount{
+        display: flex;
+        justify-content: space-between;
+    }
+
 </style>
 <div class="card card-container action-form-card">
     
@@ -210,6 +215,19 @@
                 </div>
             </div>
             
+            <div class="d-flex align-items-center m-0 ms-3 col-6">
+                <div>
+                <input type="checkbox" id="is_deli_free" name="is_deli_free" value="true" @if(old('is_deli_free', false)) checked @endif/>
+                </div>
+                <label for="is_deli_free" class="ms-2">
+                    <h4>Is Delivery Free</h4>
+                </label>
+                    
+                @if ($errors->has('is_deli_free'))
+                <span class="text-danger"><strong>{{ $errors->first('is_deli_free') }}</strong></span>
+                @endif
+            </div>
+            
             <!-- <div class="row m-0 mb-3">
                 <label for="quantity" class="col-2">
                     <h4>Quantity <b>:</b></h4>
@@ -222,7 +240,7 @@
                 </div>
             </div> -->
             <div class="row m-0 mb-3">
-                <div class="col">
+                <div class="col" id="total_amount_1">
                     <label for="total_amount">
                         <h4>Total Amount <b>:</b></h4>
                     </label>
@@ -231,6 +249,30 @@
                         @if ($errors->has('total_amount'))
                         <span class="text-danger"><strong>{{ $errors->first('total_amount') }}</strong></span>
                         @endif
+                    </div>
+                </div>
+                <div class="col" id="second_amount">
+                    <div class="col-5" id="actual_amount_1">
+                        <label for="actual_amount">
+                            <h4>Actual Amount <b>:</b></h4>
+                        </label>
+                        <div >
+                            <input type="text" id="actual_amount" name="actual_amount" value="{{old('actual_amount')}}" class="form-control" />
+                            @if ($errors->has('actual_amount'))
+                            <span class="text-danger"><strong>{{ $errors->first('actual_amount') }}</strong></span>
+                            @endif
+                        </div>
+                    </div>
+                    <div  class="col-5" id="total_amount_2">
+                        <label for="second_total_amount">
+                            <h4>Total Amount <b>:</b></h4>
+                        </label>
+                        <div>
+                            <input type="text" id="second_total_amount" name="second_total_amount" value="{{old('second_total_amount')}}" class="form-control" disabled/>
+                            @if ($errors->has('second_total_amount'))
+                            <span class="text-danger"><strong>{{ $errors->first('second_total_amount') }}</strong></span>
+                            @endif
+                        </div>
                     </div>
                 </div>
                 <div class="col">
@@ -345,6 +387,19 @@
                         <span class="text-danger"><strong>{{ $errors->first('payment_method') }}</strong></span>
                     @endif
                 </div>
+            </div>
+
+            <div class="d-flex align-items-center m-0 ms-3 col-6">
+                <div>
+                <input type="checkbox" id="pay_later" name="pay_later" value="true"  @if(old('pay_later', false)) checked @endif/>
+                </div>
+                <label for="pay_later" class="ms-2">
+                    <h4>Is Pay Later</h4>
+                </label>
+                    
+                @if ($errors->has('pay_later'))
+                <span class="text-danger"><strong>{{ $errors->first('pay_later') }}</strong></span>
+                @endif
             </div>
             
             {{--<div class="row m-0 mb-3">
@@ -624,6 +679,38 @@
             // Submit the form
             form.unbind('submit').submit();
         }
+
+        $('#second_amount').hide();
+        $('#is_deli_free').change(function() {
+            var isDeliFree = $(this).prop('checked');
+            var actualAmount = $('#actual_amount').val();
+            var deliveryFees = $('#delivery_fees').val();
+            var totalAmount = $('#total_amount').val();
+            var secondTotalAmount = $('#second_total_amount').val();
+            if (isDeliFree) {
+                $('#total_amount_1').hide();
+                $('#second_amount').show();
+                if(totalAmount != '' && deliveryFees != ''){
+                    $('#actual_amount').val(totalAmount);
+                    $('#second_total_amount,#total_amount').val(parseFloat(totalAmount) - parseFloat(deliveryFees));
+                }
+            } else {
+                $('#total_amount_1').show();
+                $('#second_amount').hide();
+                if(actualAmount != ''){
+                    $('#total_amount').val(actualAmount);
+                }
+            }
+        })
+
+        $('#actual_amount').on('input',function() {
+            var actualAmount = parseFloat($('#actual_amount').val());
+            var deliveryFees = parseFloat($('#delivery_fees').val());
+            var totalAmount  = actualAmount - deliveryFees;
+            console.log(totalAmount);
+            $('#total_amount').val(totalAmount);
+            $('#second_total_amount').val(totalAmount);
+        })
 
     });
 </script>
