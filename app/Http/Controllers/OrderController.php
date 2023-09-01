@@ -762,7 +762,8 @@ class OrderController extends Controller
     public function getAmountsRelatedToOrder(Request $request)
     {
         $pickUpDate = $request->pick_up_date;
-        $amounts = $this->orderRepository->getAmountsWithCOD($pickUpDate);
+        $shopId = $request->shop_id;
+        $amounts = $this->orderRepository->getAmountsWithCOD($pickUpDate, $shopId);
         
         return response()->json([
             'data' => $amounts,
