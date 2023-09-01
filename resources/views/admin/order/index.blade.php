@@ -9,7 +9,6 @@
         border-radius: 3px;
         display: flex;
         list-style-type: none;
-        padding-left: 0;
         margin-left: auto;
         margin-bottom: 0;
     }
@@ -95,6 +94,24 @@
 
     .filter-content {
         display: none;
+    }
+
+    #amount-display .card {
+        border-radius: 10px !important;
+    }
+
+    #amount-display .card .card-body {
+        padding: 16px 0;
+        text-align: center;
+        background-color: #d4efeb;
+    }
+
+    #amount-display .card .card-body:hover {
+        background-color: #8fe1d4;
+    }
+
+    #amount-display .card .card-body h5 {
+        font-size: 14px;
     }
 </style>
 
@@ -355,19 +372,58 @@
         <a href="#all-orders-display" id="all-orders-tab" class="nav-link active" data-toggle="tab">All Orders</a>
     </li>
     <li class="nav-item">
-        <a href="#cancel-request-orders-display" id="cancel-request-orders-tab" class="nav-link" data-toggle="tab">Cancel Request Orders</a>
+        <a href="#cancel-request-orders-display" id="cancel-request-orders-tab" class="nav-link" data-toggle="tab">
+            Cancel Request Orders</a>
     </li>
     <li class="nav-item">
         <a href="#rejected-order-display" id="rejected-order-tab" class="nav-link" data-toggle="tab">Rejected Orders</a>
     </li>
     <li class="nav-item">
-        <a href="#warehouse-order-display" id="warehouse-order-tab" class="nav-link" data-toggle="tab">Warehouse Orders</a>
+        <a href="#warehouse-order-display" id="warehouse-order-tab" class="nav-link" data-toggle="tab">
+            Warehouse Orders</a>
     </li>
 </ul>
 
 <input type="hidden" id="current_screen" value="all-orders-display">
 <div class="tab-content">
-   
+    <div class="row" id="amount-display">
+        <div class="col">
+            <div class="card" id="item-amount">
+                <div class="card-body">
+                    <h5>Item Amount</h5>
+                    <hr>
+                    <h5>0.00 MMK</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card" id="markup-delivery-fees">
+                <div class="card-body">
+                    <h5>Markup Delivery Fees</h5>
+                    <hr>
+                    <h5>0.00 MMK</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card" id="delivery-fees">
+                <div class="card-body">
+                    <h5>Delivery Fees</h5>
+                    <hr>
+                    <h5>0.00 MMK</h5>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card" id="amount-to-pay-shop">
+                <div class="card-body">
+                    <h5>Amount To Pay Shop</h5>
+                    <hr>
+                    <h5>0.00 MMK</h5>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="all-orders-display" class="portlet box green tab-pane active">
         <div class="portlet-title">
             <div class="caption">Order Lists</div>
@@ -1074,10 +1130,10 @@
                 var shop = $('#shop').val();
                 var pay_later = $('#pay_later').val();
                 var pick_up_date = $('#pick_up_date').val();
-                console.log(pick_up_date);
 
                 table.destroy();
                 get_ajax_dynamic_data(search, city, rider, shop, status, township, pay_later, pick_up_date);
+                getRelatedAmounts(pick_up_date);
             });
             $("#reset").click(function() {
                 $("#status").val("").trigger("change");
@@ -1098,6 +1154,7 @@
                 var pick_up_date = $('#pick_up_date').val();
                 table.destroy();
                 get_ajax_dynamic_data(search, city, rider, shop, status, township, pay_later, pick_up_date);
+                getRelatedAmounts(pick_up_date);
             });
 
             // handle when enter search
@@ -1613,6 +1670,35 @@
             // Navigate to the download URL
             window.location.href = downloadUrl;
         }
+
+        getRelatedAmounts();
+
+        //bind amounts api
+        function getRelatedAmounts(pickUpDate) {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: '/get-amounts-related-to-order',
+                type: "POST",
+                data: {
+                    'pick_up_date' : pickUpDate
+                },
+                success: function(res) {
+                    $('#item-amount h5:last-child').text(
+                        formatWithNumberingSystem(res.data.totalItemAmount ?? 0) + ' MMK');
+                    $('#markup-delivery-fees h5:last-child').text(
+                        formatWithNumberingSystem(res.data.totalMarkUpDeliveryFees ?? 0) + ' MMK');
+                    $('#delivery-fees h5:last-child').text(
+                        formatWithNumberingSystem(res.data.totalDeliveryFees ?? 0) + ' MMK');
+                    $('#amount-to-pay-shop h5:last-child').text(
+                        formatWithNumberingSystem(res.data.totalAmountToPayShop ?? 0) + ' MMK');
+                }
+            })
+        }
+        
     });
 </script>
 @endsection

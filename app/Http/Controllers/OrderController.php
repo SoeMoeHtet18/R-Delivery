@@ -9,6 +9,7 @@ use App\Http\Requests\OrderCreateRequest;
 use App\Http\Requests\OrderUpdateRequest;
 use App\Http\Requests\RiderAssignRequest;
 use App\Models\Log;
+use App\Models\Order;
 use App\Models\User;
 use App\Repositories\CityRepository;
 use App\Repositories\CollectionGroupRepository;
@@ -23,6 +24,7 @@ use App\Services\OrderService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 use Mpdf\Mpdf;
@@ -756,10 +758,14 @@ class OrderController extends Controller
         }
     }
 
-    public function getAmountsRelatedToOrder()
+    public function getAmountsRelatedToOrder(Request $request)
     {
-        $itemAmount = Order::sum('total_amount');
-        $markUpDeliveryFees = Order::sum('markup_delivery_fees');
-        $deliveryFees = Order::sum(DB::raw('delivery_fees + extra_charges - COALESCE(discount, 0)'));
+        $pickUpDate = $request->pick_up_date;
+        $amounts = $this->orderRepository->getAmountsWithCOD($pickUpDate);
+        
+        return response()->json([
+            'data' => $amounts,
+            'message' => 'Successfully get related amounts',
+            'status' => 'success'], 200);
     }
 }
