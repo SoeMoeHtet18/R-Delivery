@@ -785,8 +785,16 @@
             }).showToast();
         }
 
+        //collapse amount boxes
+        var tabIndex = 0;
         $('.nav-tabs a').click(function() {
             $(this).tab('show');
+            tabIndex = $('.nav-tabs a').index(this);
+            if(tabIndex == 0){
+                $('#amount-display').show();
+            }else{
+                $('#amount-display').hide();
+            }
         });
 
         get_ajax_dynamic_data(search = '', city = '', rider = '', shop = '', status = '',
@@ -1697,9 +1705,8 @@
                     $('#amount-to-pay-shop h5:last-child').text(
                         formatWithNumberingSystem(res.data.totalAmountToPayShop ?? 0) + ' MMK');
                 }
-            })
+            });
         }
-        
     });
 </script>
 @endsection
