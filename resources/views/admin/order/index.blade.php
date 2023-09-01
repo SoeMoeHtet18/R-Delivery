@@ -104,6 +104,7 @@
         padding: 16px 0;
         text-align: center;
         background-color: #d4efeb;
+        border-radius: 10px !important;
     }
 
     #amount-display .card .card-body:hover {
