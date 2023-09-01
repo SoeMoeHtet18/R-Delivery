@@ -50,6 +50,25 @@
         outline: 1px solid grey; /* Customize focus outline */
     }
     
+    #amount-display {
+        gap: 15px;
+    }
+
+    #amount-display .card {
+        border-radius: 6px !important;
+    }
+
+    #amount-display .card-body {
+        padding: 15px 0 18px 0;
+    }
+
+    #amount-display .card-body h5 {
+        margin: 0 16px;
+    }
+
+    #amount-display .card-body hr {
+        margin: 10px 0;
+    }
 </style>
 <div class="card card-container detail-card">
     <div class="card-body">
@@ -60,7 +79,8 @@
             <div class="create-button">
                 <a href="{{route('shops.edit' , $shop->id)}}" class="btn btn-light">Edit</a>
             </div>
-            <form action="{{route('shops.destroy', $shop->id)}}" method="post" onclick="return confirm(`Are you sure you want to delete this shop?`);">
+            <form action="{{route('shops.destroy', $shop->id)}}" method="post"
+                onclick="return confirm(`Are you sure you want to delete this shop?`);">
                 @csrf
                 @method('DELETE')
                 <input type="submit" value="Delete" class="btn btn-danger float-end">
@@ -185,6 +205,28 @@
         </ul>
         <input type="hidden" id="current_screen" value="shop-user-display">
         <div class="d-flex justify-content-end">
+            <!-- <div id="amount-display" class="d-flex">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5>Total Amount</h5>
+                        <hr>
+                        <h5>4000</h5>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5>Delivery Fees</h5>
+                        <hr>
+                        <h5>1000</h5>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h5></h5>
+                        <hr>
+                    </div>
+                </div>
+            </div> -->
             <div class="d-inline-block">
                 <ul class="pdf-ul">
                     <li>
@@ -275,7 +317,8 @@
                             class="btn create-btn">Create New Payment From Shop</a>
                     </div>
 
-                    <table id="shop-payment-datatable" class="table table-striped table-hover table-responsive datatable">
+                    <table id="shop-payment-datatable"
+                        class="table table-striped table-hover table-responsive datatable">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -1339,6 +1382,23 @@
         $(".fa-calendar").on("click", function() {
             $('input[name="datefilter"]').trigger("click");
         });
+
+        //bind amounts
+        // $.ajaxSetup({
+        //     headers: {
+        //         'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+        //     }
+        // });
+        // $.ajax({
+        //     url: '/get-related-order-amounts-by-shop',
+        //     type: "POST",
+        //     data: {
+        //         'shop_id' : shop_id
+        //     },
+        //     success: function(res) {
+        //         console.log(res);
+        //     }
+        // })
     });
 </script>
 @endsection

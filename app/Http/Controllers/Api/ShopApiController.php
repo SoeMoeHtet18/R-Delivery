@@ -43,7 +43,10 @@ class ShopApiController extends Controller
     {
         $shops = $this->shopRepository->getAllShops();
         $shops = $shops->sortByDesc('id');
-        return response()->json(['data' => $shops, 'message' => 'Successfully Get Shop List', 'status' => 'success', 200]);
+        return response()->json([
+            'data' => $shops,
+            'message' => 'Successfully Get Shop List',
+            'status' => 'success', 200]);
     }
 
     public function create(ShopCreateApiRequest $request)
@@ -68,7 +71,10 @@ class ShopApiController extends Controller
     {
         $shop_user = auth()->guard('shop-user-api')->user();
         $shop = $this->shopRepository->getShopByID($shop_user->shop_id);
-        return response()->json(['data' => $shop, 'message' => 'Successfully Get Shop Info', 'status' => 'success'], 200);
+        return response()->json([
+            'data' => $shop,
+            'message' => 'Successfully Get Shop Info',
+            'status' => 'success'], 200);
     }
 
     public function delete(Request $request)
@@ -103,11 +109,15 @@ class ShopApiController extends Controller
         $payment_history_from_collection = $this->collectionRepository->getPaymentHistoryForShop($shop_id);
         $payment_history_from_transaction = $this->transactionForShopRepository->getPaymentHistoryForShop($shop_id);
 
-        $payment_histories = array_merge($payment_history_from_collection->toArray(), $payment_history_from_transaction->toArray());
+        $payment_histories = array_merge($payment_history_from_collection->toArray(),
+            $payment_history_from_transaction->toArray());
 
         $sorted_payment_histories = collect($payment_histories)->sortByDesc('created_at')->values()->all();
 
-        return response()->json(['data' => $sorted_payment_histories, 'message' => 'Successfully get payment history by shop user', 'status' => 'success'], 200);
+        return response()->json([
+            'data' => $sorted_payment_histories,
+            'message' => 'Successfully get payment history by shop user',
+            'status' => 'success'], 200);
     }
 
     public function getDescriptionForShop(Request $request)

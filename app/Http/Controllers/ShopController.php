@@ -6,6 +6,7 @@ use App\Http\Requests\ShopCreateRequest;
 use App\Http\Requests\ShopUpdateRequest;
 use App\Models\Collection;
 use App\Models\CustomerCollection;
+use App\Models\Order;
 use App\Models\TransactionsForShop;
 use App\Repositories\CollectionRepository;
 use App\Repositories\OrderRepository;
@@ -207,7 +208,7 @@ class ShopController extends Controller
     
                 // Output the PDF for download
                 $mpdf->Output('shop_order.pdf', 'D');
-            } else if($type == 'pick_up') {
+            } elseif($type == 'pick_up') {
                 $collections = $this->collectionRepository->getAllCollectionsByShopUser($shop_id);
 
                 $start = $request->from_date;
@@ -254,5 +255,39 @@ class ShopController extends Controller
         } catch (Exception $e) {
             return redirect()->back()->with('error', "Can't generate pdf");
         }
+    }
+
+    public function getRelatedOrderAmountsByShop(Request $request) {
+        $shopId = $request->shop_id;
+        $start = $request->from_date;
+        $end = $request->to_date;
+
+        $query = Order::where('shop_id', $shopId);
+
+        if ($start && $end) {
+            $query->whereBetween('created_at', [$start, $end]);
+        }
+
+        $result = $query->selectRaw('
+            SUM(CASE WHEN payment_method = "cash_on_delivery" THEN total_amount + markup_delivery_fees
+                ELSE 0 END) AS cod_amount,
+            SUM(CASE WHEN payment_method = "item_prepaid" THEN markup_delivery_fees ELSE 0 END)
+                AS item_prepaid_amount,
+            SUM(CASE WHEN payment_method != "all_prepaid" THEN delivery_fees + extra_charges
+                - COALESCE(discount, 0) ELSE 0 END) AS total_delivery_fees
+        ')->first();
+
+        $cod_amount = $result->cod_amount;
+        $item_prepaid_amount = $result->item_prepaid_amount;
+        $totalDeliveryFees = $result->total_delivery_fees;
+
+        $totalAmount = $cod_amount + $item_prepaid_amount;
+        return response()->json([
+            'data'=> [
+                'total_amount' => $totalAmount,
+                'total_delivery_fees' => $totalDeliveryFees
+            ],
+            'message' => 'Successfully Related Order Amounts By Shop',
+            'status' => 'success'],200);
     }
 }

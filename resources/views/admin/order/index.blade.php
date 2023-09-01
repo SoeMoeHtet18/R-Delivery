@@ -367,6 +367,7 @@
 
 <input type="hidden" id="current_screen" value="all-orders-display">
 <div class="tab-content">
+   
     <div id="all-orders-display" class="portlet box green tab-pane active">
         <div class="portlet-title">
             <div class="caption">Order Lists</div>

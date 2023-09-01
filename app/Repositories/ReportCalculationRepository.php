@@ -26,13 +26,17 @@ class ReportCalculationRepository
         $deliveredOrderAmount += Order::where('shop_id', $shopId)
             ->where('status', 'success')
             ->where('payment_method', 'item_prepaid')
+            ->where(function ($query) {
+                $query->where('payment_channel', '!=', 'shop_online_payment')
+                    ->orWhereNull('payment_channel');
+            })
             ->sum('markup_delivery_fees');
 
         $deliveredOrderAmount -= Order::where('shop_id', $shopId)
             ->where('status', 'success')
             ->where(function ($query) {
                 $query->where(function ($query) {
-                    $query->where('payment_method', 'cash_on_delivery')
+                    $query->whereIn('payment_method', ['cash_on_delivery', 'item_prepaid'])
                         ->where('payment_channel', 'shop_online_payment');
                 })->orWhere('payment_method', 'all_prepaid');
             })
@@ -54,6 +58,8 @@ class ReportCalculationRepository
                 if (
                     $order->payment_method === 'cash_on_delivery' &&
                     $order->payment_channel === 'shop_online_payment' ||
+                    $order->payment_method === 'item_prepaid' &&
+                    $order->payment_channel === 'shop_online_payment' ||
                     $order->payment_method === 'all_prepaid'
                 ) {
                     $remainingOrdersAmount -= ($order->delivery_fees + $order->extra_charges - $order->discount);
@@ -73,7 +79,10 @@ class ReportCalculationRepository
 
         $transactionAmountPaidByCompany = TransactionsForShop::where('shop_id',$shopId)->sum('amount');
 
-        $totalCredit = ($deliveredOrderAmount ?? 0) + ($remainingOrdersAmount ?? 0) - ($customerCollectionAmount ?? 0);
+        $paymentFromShop = ShopPayment::where('shop_id',$shopId)->sum('amount');
+
+        $totalCredit = ($deliveredOrderAmount ?? 0) + ($remainingOrdersAmount ?? 0) + ($paymentFromShop ?? 0)
+            - ($customerCollectionAmount ?? 0);
         
         $totalReceived = ($collectionAmountPaidByCompany ?? 0) + ($transactionAmountPaidByCompany ?? 0);
         
@@ -94,10 +103,10 @@ class ReportCalculationRepository
             ->where('payment_method', 'item_prepaid')
             ->sum('markup_delivery_fees');
 
-        $substractedAmount = Order::where('shop_id', $shopId)
+        $subtractedAmount = Order::where('shop_id', $shopId)
             ->where(function ($query) {
                 $query->where(function ($query) {
-                    $query->where('payment_method', 'cash_on_delivery')
+                    $query->whereIn('payment_method', ['cash_on_delivery', 'item_prepaid'])
                         ->where('payment_channel', 'shop_online_payment');
                 })->orWhere('payment_method', 'all_prepaid');
             })
@@ -105,7 +114,10 @@ class ReportCalculationRepository
 
         $customerCollectionAmount = CustomerCollection::where('shop_id', $shopId)->sum('paid_amount');
 
-        return strval(($codAmount + $remainingAmount) - ($customerCollectionAmount + $substractedAmount));
+        $paymentFromShop = ShopPayment::where('shop_id',$shopId)->sum('amount');
+
+        return strval(($codAmount + $remainingAmount + $paymentFromShop)
+            - ($customerCollectionAmount + $subtractedAmount) );
     }
 
     public function getPayableAndReceivableAmountsForShopByDate($shopId, $start, $end, $type)
@@ -123,7 +135,7 @@ class ReportCalculationRepository
         } else {
             $query->where(function ($query) {
                 $query->where(function ($query) {
-                    $query->where('payment_method', 'cash_on_delivery')
+                    $query->whereIn('payment_method', ['cash_on_delivery', 'item_prepaid'])
                         ->where('payment_channel', 'shop_online_payment');
                 })->orWhere('payment_method', 'all_prepaid');
             })
