@@ -110,8 +110,8 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
             $payment_method = 'item_prepaid';
         }
 
-        Log::debug($row['payment_method']);
-        Log::debug($payment_method);
+        $pay_later = $this->convertData($row['pay_later']);
+        $pay_later = $pay_later == 'yes' ? 1 : 0;
 
         $formattedDate = $date->format('Y-m-d H:i:s');
 
@@ -138,7 +138,7 @@ class OrderImport implements ToModel, WithHeadingRow, WithValidation, WithEvents
             'is_payment_channel_confirm' => false,
             'payable_or_not' => 'pending',
             'branch_id' => auth()->user()->branch_id,
-            'pay_later' => $row['total_amount'] > 100000 ? true : false,
+            'pay_later' => $pay_later ?? 0,
             'payment_method' => $payment_method,
             'extra_charges' => $row['extra_charges'] ?? null
         ]);
