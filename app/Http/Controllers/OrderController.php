@@ -269,7 +269,11 @@ class OrderController extends Controller
             $data = $data->where('orders.township_id', $township);
         }
         if ($search) {
-            $data = $data->where('orders.order_code', 'like', '%' . $search . '%')->orWhere('orders.customer_name', 'like', '%' . $search . '%')->orWhere('orders.customer_phone_number', 'like', '%' . $search . '%')->orWhere('orders.item_type', 'like', '%' . $search . '%')->orWhere('orders.full_address', 'like', '%' . $search . '%');
+            $data = $data->where('orders.order_code', 'like', '%' . $search . '%')
+                ->orWhere('orders.customer_name', 'like', '%' . $search . '%')
+                ->orWhere('orders.customer_phone_number', 'like', '%' . $search . '%')
+                ->orWhere('orders.item_type', 'like', '%' . $search . '%')
+                ->orWhere('orders.full_address', 'like', '%' . $search . '%');
         }
         if ($city != null) {
             $data = $data->where('orders.city_id', $city);
@@ -750,5 +754,12 @@ class OrderController extends Controller
         } else {
             return response()->json(['data' => null, 'message' => 'The status of this order is not delayed.', 'status' => 'fail'], 200);
         }
+    }
+
+    public function getAmountsRelatedToOrder()
+    {
+        $itemAmount = Order::sum('total_amount');
+        $markUpDeliveryFees = Order::sum('markup_delivery_fees');
+        $deliveryFees = Order::sum(DB::raw('delivery_fees + extra_charges - COALESCE(discount, 0)'));
     }
 }
