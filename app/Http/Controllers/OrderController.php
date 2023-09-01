@@ -763,7 +763,7 @@ class OrderController extends Controller
     {
         $pickUpDate = $request->pick_up_date;
         $shopId = $request->shop_id;
-        $amounts = $this->orderRepository->getAmountsWithCOD($pickUpDate, $shopId);
+        $amounts = $this->orderRepository->getAmountsRelatedToOrder($pickUpDate, $shopId);
         
         return response()->json([
             'data' => $amounts,

@@ -585,25 +585,26 @@ class OrderRepository
             );
     }
 
-    public function getAmountsWithCOD($pickUpDate, $shopId)
+    public function getAmountsRelatedToOrder($pickUpDate, $shopId)
     {
         $cashOnDeliveryInfo = Order::leftJoin('collection_groups', 'collection_groups.id', 'orders.collection_group_id')
             ->leftJoin('shops', 'shops.id', 'orders.shop_id')
-            ->where('orders.payment_method', 'cash_on_delivery')
             ->when(isset($pickUpDate), function ($query) use ($pickUpDate) {
                 $query->whereDate('collection_groups.assigned_date', $pickUpDate);
             })
             ->when(isset($shopId), function ($query) use ($shopId) {
                 $query->where('orders.shop_id', $shopId);
             })
-            ->where(function ($query) {
-                $query->where('orders.payment_channel', '!=', 'shop_online_payment')
-                    ->orWhereNull('orders.payment_channel');
-            })
-            ->selectRaw('SUM(orders.total_amount) as totalItemAmount')
-            ->selectRaw('SUM(orders.markup_delivery_fees) as totalMarkUpDeliveryFees')
-            ->selectRaw('SUM(orders.delivery_fees + COALESCE(extra_charges, 0)
-                - COALESCE(discount, 0)) as totalDeliveryFees')
+            ->selectRaw('SUM(CASE WHEN orders.payment_method = "cash_on_delivery"
+                AND (orders.payment_channel != "shop_online_payment" OR orders.payment_channel IS null)
+                THEN orders.total_amount END) as totalItemAmount')
+            ->selectRaw('SUM(CASE WHEN (orders.payment_method != "all_prepaid")
+                AND (orders.payment_channel != "shop_online_payment" OR orders.payment_channel IS null)
+                THEN orders.markup_delivery_fees END) as totalMarkUpDeliveryFees')
+            ->selectRaw('SUM(CASE WHEN orders.payment_method = "all_prepaid"
+                OR (orders.payment_method != "all_prepaid" AND orders.payment_channel = "shop_online_payment")
+                THEN orders.delivery_fees + COALESCE(orders.extra_charges, 0)
+                - COALESCE(orders.discount, 0) END) as totalDeliveryFees')
             ->first();
 
         $cashOnDeliveryInfo['totalAmountToPayShop'] = ($cashOnDeliveryInfo->totalItemAmount
