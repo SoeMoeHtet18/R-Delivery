@@ -1133,7 +1133,7 @@
 
                 table.destroy();
                 get_ajax_dynamic_data(search, city, rider, shop, status, township, pay_later, pick_up_date);
-                getRelatedAmounts(pick_up_date);
+                getRelatedAmounts(pick_up_date, shop);
             });
             $("#reset").click(function() {
                 $("#status").val("").trigger("change");
@@ -1154,7 +1154,7 @@
                 var pick_up_date = $('#pick_up_date').val();
                 table.destroy();
                 get_ajax_dynamic_data(search, city, rider, shop, status, township, pay_later, pick_up_date);
-                getRelatedAmounts(pick_up_date);
+                getRelatedAmounts();
             });
 
             // handle when enter search
@@ -1674,7 +1674,7 @@
         getRelatedAmounts();
 
         //bind amounts api
-        function getRelatedAmounts(pickUpDate) {
+        function getRelatedAmounts(pickUpDate, shopId) {
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -1684,7 +1684,8 @@
                 url: '/get-amounts-related-to-order',
                 type: "POST",
                 data: {
-                    'pick_up_date' : pickUpDate
+                    'pick_up_date' : pickUpDate,
+                    'shop_id' : shopId
                 },
                 success: function(res) {
                     $('#item-amount h5:last-child').text(
