@@ -326,12 +326,12 @@ class OrderService
                 $order->save();
             } else {
                 if ($order->delivery_fees > $amount) {
-                    $amount_to_substract = $amount - $order->delivery_fees;
-                    $amount_to_substract = abs($amount_to_substract);
+                    $amount_to_subtract = $amount - $order->delivery_fees;
+                    $amount_to_subtract = abs($amount_to_subtract);
                 } else {
-                    $amount_to_substract = 0;
+                    $amount_to_subtract = 0;
                 }
-                $order->discount = $amount_to_substract;
+                $order->discount = $amount_to_subtract;
                 $order->save();
             }
         }

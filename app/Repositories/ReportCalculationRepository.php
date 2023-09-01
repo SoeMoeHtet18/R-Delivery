@@ -103,7 +103,7 @@ class ReportCalculationRepository
             ->where('payment_method', 'item_prepaid')
             ->sum('markup_delivery_fees');
 
-        $substractedAmount = Order::where('shop_id', $shopId)
+        $subtractedAmount = Order::where('shop_id', $shopId)
             ->where(function ($query) {
                 $query->where(function ($query) {
                     $query->whereIn('payment_method', ['cash_on_delivery', 'item_prepaid'])
@@ -117,7 +117,7 @@ class ReportCalculationRepository
         $paymentFromShop = ShopPayment::where('shop_id',$shopId)->sum('amount');
 
         return strval(($codAmount + $remainingAmount + $paymentFromShop)
-            - ($customerCollectionAmount + $substractedAmount) );
+            - ($customerCollectionAmount + $subtractedAmount) );
     }
 
     public function getPayableAndReceivableAmountsForShopByDate($shopId, $start, $end, $type)

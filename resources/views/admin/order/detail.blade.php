@@ -365,7 +365,7 @@
             @if($order->status == 'cancel' && $order->payable_or_not == 'pending')
             <div class="row m-0 mb-3">
                 <div class="col-2">
-                    <h4>Remaining Amount Substraction <b>:</b></h4>
+                    <h4>Remaining Amount Subtraction <b>:</b></h4>
                 </div>
                 <div class="col-10">
                     <div class="create-button">
