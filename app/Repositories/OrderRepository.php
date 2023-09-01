@@ -584,4 +584,28 @@ class OrderRepository
                 'collection_groups.assigned_date as pick_up_date',
             );
     }
+
+    public function getAmountsWithCOD($pickUpDate)
+    {
+        if(isset($pickUpDate)) {
+            $cashOnDeliveryInfo = Order::leftJoin('collection_groups', 'collection_groups.id', 'orders.collection_group_id')
+                ->where('orders.payment_method', 'cash_on_delivery')
+                ->whereDate('collection_groups.assigned_date', $pickUpDate)
+                ->selectRaw('SUM(orders.total_amount) as totalItemAmount')
+                ->selectRaw('SUM(orders.markup_delivery_fees) as totalMarkUpDeliveryFees')
+                ->selectRaw('SUM(orders.delivery_fees + extra_charges - COALESCE(discount, 0)) as totalDeliveryFees')
+                ->first();
+        } else {
+            $cashOnDeliveryInfo = Order::where('payment_method', 'cash_on_delivery')
+                ->selectRaw('SUM(total_amount) as totalItemAmount')
+                ->selectRaw('SUM(markup_delivery_fees) as totalMarkUpDeliveryFees')
+                ->selectRaw('SUM(delivery_fees + extra_charges - COALESCE(discount, 0)) as totalDeliveryFees')
+                ->first();
+        }
+
+        $cashOnDeliveryInfo['totalAmountToPayShop'] = ($cashOnDeliveryInfo->totalItemAmount
+            + $cashOnDeliveryInfo->totalMarkUpDeliveryFees) - $cashOnDeliveryInfo->totalDeliveryFees;
+
+        return $cashOnDeliveryInfo;
+    }
 }
