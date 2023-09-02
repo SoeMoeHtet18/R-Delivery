@@ -54,7 +54,7 @@ class ReportCalculationRepository
             $notifiedDate = $order->delivery_type->notified_on - 1;
             $calculatedDate = $order->created_at->addDays($notifiedDate);
 
-            if ($todayDate->isSameDay($calculatedDate)) {
+            if ($todayDate->greaterThanOrEqualTo($calculatedDate)) {
                 if (
                     $order->payment_method === 'cash_on_delivery' &&
                     $order->payment_channel === 'shop_online_payment' ||
