@@ -607,8 +607,8 @@ class OrderRepository
                 - COALESCE(orders.discount, 0) END) as totalDeliveryFees')
             ->first();
 
-        $cashOnDeliveryInfo['totalAmountToPayShop'] = $cashOnDeliveryInfo->totalItemAmount
-            + $cashOnDeliveryInfo->totalMarkUpDeliveryFees;
+        $cashOnDeliveryInfo['totalAmountToPayShop'] = ($cashOnDeliveryInfo->totalItemAmount
+            + $cashOnDeliveryInfo->totalMarkUpDeliveryFees) - $cashOnDeliveryInfo->totalDeliveryFees;
 
         return $cashOnDeliveryInfo;
     }
