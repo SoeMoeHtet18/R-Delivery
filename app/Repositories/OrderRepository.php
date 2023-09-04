@@ -594,6 +594,9 @@ class OrderRepository
         $riderId = $request->rider_id;
         $status = $request->status;
         $payLater = $request->pay_later;
+        $start = $request->from_date;
+        $end = $request->to_date . ' 23:59:00';
+        $paymentChannel = $request->payment_channel;
 
         $cashOnDeliveryInfo = Order::leftJoin('collection_groups', 'collection_groups.id', 'orders.collection_group_id')
             ->leftJoin('shops', 'shops.id', 'orders.shop_id')
@@ -627,6 +630,14 @@ class OrderRepository
             //filter with pay later
             ->when(isset($payLater), function ($query) use ($payLater) {
                 $query->where('orders.pay_later', $payLater);
+            })
+            //filter with created Between
+             ->when(isset($start) && isset($end), function ($query) use ($start, $end) {
+                $query->whereBetween('orders.created_at', [$start, $end]);
+            })
+            //filter with payment channel
+            ->when(isset($paymentChannel), function ($query) use ($paymentChannel) {
+                $query->where('orders.payment_channel', $paymentChannel);
             })
             ->selectRaw('SUM(CASE WHEN orders.payment_method = "cash_on_delivery"
                 AND (orders.payment_channel != "shop_online_payment" OR orders.payment_channel IS null)

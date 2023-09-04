@@ -50,25 +50,25 @@
         outline: 1px solid grey; /* Customize focus outline */
     }
     
-    #amount-display {
-        gap: 15px;
-    }
-
     #amount-display .card {
-        border-radius: 6px !important;
+        border-radius: 10px !important;
     }
 
-    #amount-display .card-body {
-        padding: 15px 0 18px 0;
+    #amount-display .card .card-body {
+        padding: 16px 0;
+        text-align: center;
+        background-color: #d4efeb;
+        border-radius: 10px !important;
     }
 
-    #amount-display .card-body h5 {
-        margin: 0 16px;
+    #amount-display .card .card-body:hover {
+        background-color: #8fe1d4;
     }
 
-    #amount-display .card-body hr {
-        margin: 10px 0;
+    #amount-display .card .card-body h5 {
+        font-size: 14px;
     }
+
 </style>
 <div class="card card-container detail-card">
     <div class="card-body">
@@ -205,28 +205,6 @@
         </ul>
         <input type="hidden" id="current_screen" value="shop-user-display">
         <div class="d-flex justify-content-end">
-            <!-- <div id="amount-display" class="d-flex">
-                <div class="card">
-                    <div class="card-body text-center">
-                        <h5>Total Amount</h5>
-                        <hr>
-                        <h5>4000</h5>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-body text-center">
-                        <h5>Delivery Fees</h5>
-                        <hr>
-                        <h5>1000</h5>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-body text-center">
-                        <h5></h5>
-                        <hr>
-                    </div>
-                </div>
-            </div> -->
             <div class="d-inline-block">
                 <ul class="pdf-ul">
                     <li>
@@ -238,6 +216,44 @@
                         </form>
                     </li>
                 </ul>
+            </div>
+        </div>
+        <div class="row" id="amount-display">
+            <div class="col">
+                <div class="card" id="item-amount">
+                    <div class="card-body">
+                        <h5>Item Amount</h5>
+                        <hr>
+                        <h5>0.00 MMK</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card" id="markup-delivery-fees">
+                    <div class="card-body">
+                        <h5>Markup Delivery Fees</h5>
+                        <hr>
+                        <h5>0.00 MMK</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card" id="delivery-fees">
+                    <div class="card-body">
+                        <h5>Delivery Fees</h5>
+                        <hr>
+                        <h5>0.00 MMK</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card" id="amount-to-pay-shop">
+                    <div class="card-body">
+                        <h5>Amount To Pay Shop</h5>
+                        <hr>
+                        <h5>0.00 MMK</h5>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="tab-content mt-4">
@@ -439,12 +455,17 @@
 
         var tabIndex = 0;
         $('.pdf-ul').hide();
+        $('#amount-display').hide();
         $('.nav-tabs a').click(function() {
             $(this).tab('show');
             tabIndex = $('.nav-tabs a').index(this);
-            if(tabIndex == 1 || tabIndex == 4){
+            if(tabIndex == 1){
+                $('#amount-display').show();
                 $('.pdf-ul').show();
-            }else{
+            }else if(tabIndex == 4) {
+                $('.pdf-ul').show();
+            } else {
+                $('#amount-display').hide();
                 $('.pdf-ul').hide();
             }
         });
@@ -813,6 +834,7 @@
                 var paymentChannel = $('#payment_channel').val();
                 order_table.destroy();
                 get_ajax_dynamic_shop_order_table(start, end, paymentChannel);
+                getRelatedAmounts(shop_id, start, end, paymentChannel);
             });
             $("#clear").click(function() {
                 $("#start_date").val("").trigger("change");
@@ -823,10 +845,11 @@
                 var paymentChannel = $('#payment_channel').val();
                 order_table.destroy();
                 get_ajax_dynamic_shop_order_table(start, end, paymentChannel);
+                getRelatedAmounts();
             });
         }
+
         // Initialize shop-payment-datatable
-        
         $("#shop-payment-datatable").DataTable({
             processing: true,
             serverSide: true,
@@ -1383,22 +1406,36 @@
             $('input[name="datefilter"]').trigger("click");
         });
 
-        //bind amounts
-        // $.ajaxSetup({
-        //     headers: {
-        //         'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-        //     }
-        // });
-        // $.ajax({
-        //     url: '/get-related-order-amounts-by-shop',
-        //     type: "POST",
-        //     data: {
-        //         'shop_id' : shop_id
-        //     },
-        //     success: function(res) {
-        //         console.log(res);
-        //     }
-        // })
+        getRelatedAmounts(shop_id, start, end, paymentChannel);
+
+        //bind amounts api
+        function getRelatedAmounts(shopId, start, end, paymentChannel) {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: '/get-amounts-related-to-order',
+                type: "POST",
+                data: {
+                    'shop_id' : shopId,
+                    'from_date' : start,
+                    'to_date': end,
+                    'payment_channel': paymentChannel
+                },
+                success: function(res) {
+                    $('#item-amount h5:last-child').text(
+                        formatWithNumberingSystem(res.data.totalItemAmount ?? 0) + ' MMK');
+                    $('#markup-delivery-fees h5:last-child').text(
+                        formatWithNumberingSystem(res.data.totalMarkUpDeliveryFees ?? 0) + ' MMK');
+                    $('#delivery-fees h5:last-child').text(
+                        formatWithNumberingSystem(res.data.totalDeliveryFees ?? 0) + ' MMK');
+                    $('#amount-to-pay-shop h5:last-child').text(
+                        formatWithNumberingSystem(res.data.totalAmountToPayShop ?? 0) + ' MMK');
+                }
+            });
+        }
     });
 </script>
 @endsection
