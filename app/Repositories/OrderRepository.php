@@ -585,15 +585,48 @@ class OrderRepository
             );
     }
 
-    public function getAmountsRelatedToOrder($pickUpDate, $shopId)
+    public function getAmountsRelatedToOrder($request)
     {
+        $pickUpDate = $request->pick_up_date;
+        $shopId = $request->shop_id;
+        $cityId = $request->city_id;
+        $townshipId = $request->township_id;
+        $riderId = $request->rider_id;
+        $status = $request->status;
+        $payLater = $request->pay_later;
+
         $cashOnDeliveryInfo = Order::leftJoin('collection_groups', 'collection_groups.id', 'orders.collection_group_id')
             ->leftJoin('shops', 'shops.id', 'orders.shop_id')
+            ->leftJoin('cities', 'cities.id', 'orders.city_id')
+            ->leftJoin('townships', 'townships.id', 'orders.township_id')
+            ->leftJoin('riders', 'riders.id', 'orders.rider_id')
+            //filter with pick up date
             ->when(isset($pickUpDate), function ($query) use ($pickUpDate) {
                 $query->whereDate('collection_groups.assigned_date', $pickUpDate);
             })
+            //filter with shop
             ->when(isset($shopId), function ($query) use ($shopId) {
                 $query->where('orders.shop_id', $shopId);
+            })
+            //filter with city
+            ->when(isset($cityId), function ($query) use ($cityId) {
+                $query->where('orders.city_id', $cityId);
+            })
+            //filter with township
+            ->when(isset($townshipId), function ($query) use ($townshipId) {
+                $query->where('orders.township_id', $townshipId);
+            })
+            //filter with rider
+            ->when(isset($riderId), function ($query) use ($riderId) {
+                $query->where('orders.rider_id', $riderId);
+            })
+            //filter with status
+            ->when(isset($status), function ($query) use ($status) {
+                $query->where('orders.status', $status);
+            })
+            //filter with pay later
+            ->when(isset($payLater), function ($query) use ($payLater) {
+                $query->where('orders.pay_later', $payLater);
             })
             ->selectRaw('SUM(CASE WHEN orders.payment_method = "cash_on_delivery"
                 AND (orders.payment_channel != "shop_online_payment" OR orders.payment_channel IS null)
