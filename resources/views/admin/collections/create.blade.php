@@ -91,6 +91,9 @@
 @section('javascript')
 <script>
     $('#shop_id').select2();
+    $(".select2-selection").on("focus", function () {
+        $(this).parent().parent().prev().select2("open");
+    });
 
     $('#shop_id').on('change', function() {
         var shop_id = $('#shop_id').val();

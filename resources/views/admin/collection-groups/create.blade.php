@@ -184,6 +184,9 @@
             placeholder: 'Select Collections',
             allowClear: true
         });
+        $(".select2-selection").on("focus", function () {
+            $(this).parent().parent().prev().select2("open");
+        });
         $('#description_filter_1').daterangepicker({
             autoUpdateInput: false,
             locale: {

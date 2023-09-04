@@ -395,7 +395,27 @@
         $('#delivery_type_id').select2({width: '100%'});
         $('#collection_method_id').select2();
         $('#payment_method').select2();
+        $(".select2-selection").on("focus", function () {
+            $(this).parent().parent().prev().select2("open");
+        });
 
+        function handleEnterKeyPress(event, checkbox) {
+            if (event.keyCode === 13) {
+                checkbox.checked = !checkbox.checked;
+                event.preventDefault();
+            }
+        }
+
+        var payLaterCheckBox = document.getElementById("pay_later");
+        var deliFreeCheckBox = document.getElementById("is_deli_free");
+
+        payLaterCheckBox.addEventListener("keydown", function(event) {
+            handleEnterKeyPress(event, payLaterCheckBox);
+        });
+
+        deliFreeCheckBox.addEventListener("keydown", function(event) {
+            handleEnterKeyPress(event, deliFreeCheckBox);
+        });
 
         $('#type_id').change(function() {
             console.log($('#type_id').val());

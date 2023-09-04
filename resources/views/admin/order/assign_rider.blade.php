@@ -57,6 +57,9 @@
     $(document).ready(function() {
         $('#township_id').select2();
         $('#rider_id').select2();
+        $(".select2-selection").on("focus", function () {
+            $(this).parent().parent().prev().select2("open");
+        });
 
         getRidersByTownshipId();
         function getRidersByTownshipId() {

@@ -98,6 +98,9 @@
         $('#rider_id').select2();
         $('#shop_id').select2();
         $('#status').select2();
+        $(".select2-selection").on("focus", function () {
+            $(this).parent().parent().prev().select2("open");
+        });
     });
 </script>
 @endsection

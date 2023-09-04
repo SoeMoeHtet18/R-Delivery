@@ -48,7 +48,12 @@
 @section('javascript')
 <script>
     $(document).ready(function() {
-        $('#township_id').select2();
+        $('#township_id').select2({
+            allowClear: true
+        });
+        $(".select2-selection").on("focus", function () {
+            $(this).parent().parent().prev().select2("open");
+        });
     });
 </script>
 @endsection

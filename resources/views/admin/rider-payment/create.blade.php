@@ -174,6 +174,9 @@
         // });
         $('#rider_id').select2();
         $('#date_input, #date_input2').hide();
+        $(".select2-selection").on("focus", function () {
+            $(this).parent().parent().prev().select2("open");
+        });
         
         function updateRiderTotalSalaryBaseOnDate() {
             var rider_id = $('#rider_id').val();

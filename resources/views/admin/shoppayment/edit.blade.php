@@ -82,6 +82,9 @@
     $(document).ready(function() {
         $('#shop_name').select2();
         $('#type').select2();
+        $(".select2-selection").on("focus", function () {
+            $(this).parent().parent().prev().select2("open");
+        });
 
     });
 </script>

@@ -81,6 +81,9 @@
     $(document).ready(function() {
         $('#city_id').select2();
         $('#township_id').select2();
+        $(".select2-selection").on("focus", function () {
+            $(this).parent().parent().prev().select2("open");
+        });
         // $('#city_id').change(function() {
         //     var city_id = $('#city_id').val();
         //     var gate_id = $('#gate_id').val();

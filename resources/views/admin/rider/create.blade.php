@@ -134,6 +134,9 @@
     $(function() {
         $('#salary_type').select2();
         $('#township_id').select2();
+        $(".select2-selection").on("focus", function () {
+            $(this).parent().parent().prev().select2("open");
+        });
     });
 
     var clonecard = () => {
@@ -174,6 +177,9 @@
             // Initialize select2 for the newly cloned card
             const newIndex = $("#assign-container .card-container").length; // Get the index of the last cloned card
             $(`#township_id_${newIndex}`).select2();
+            $(".select2-selection").on("focus", function () {
+                $(this).parent().parent().prev().select2("open");
+            });
         });
     }
 
