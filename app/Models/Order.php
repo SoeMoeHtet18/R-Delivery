@@ -82,4 +82,12 @@ class Order extends Model
 
         return $statusLabels[$this->status] ?? $this->status;
     }
+
+    public function logs() {
+        return $this->hasMany(Log::class);
+    }
+
+    public function successLog() {
+        return $this->hasOne(Log::class)->where('to_status', 'success')->latest();
+    }
 }

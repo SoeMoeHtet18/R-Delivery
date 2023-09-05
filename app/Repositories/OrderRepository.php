@@ -227,7 +227,7 @@ class OrderRepository
         $limit = 10; 
         $offset = ($page - 1) * $limit; 
         $currentDate = Carbon::now()->format('Y-m-d');
-        $orders = Order::where('orders.rider_id', $rider_id)
+        $orders = Order::with('successLog')->where('orders.rider_id', $rider_id)
             ->where('status', 'success')
             ->leftJoin('shops', 'shops.id', 'orders.shop_id')
             ->select('orders.*', 'shops.name as shop_name');
@@ -238,6 +238,9 @@ class OrderRepository
             $orders = $orders->whereDate('orders.schedule_date', $currentDate);
         }
         $orders = $orders->offset($offset)->limit($limit)->orderBy('orders.id','DESC')->get();
+        foreach($orders as $order) {
+            $order['delivered_at'] = $order->successLog ? $order->successLog->created_at : null;
+        }
         return $orders;
     }
 
@@ -287,7 +290,7 @@ class OrderRepository
 
     public function getOrderDetailWithRelatedData($id)
     {
-        $order = Order::where('orders.id', $id)
+        $order = Order::with('successLog')->where('orders.id', $id)
             ->leftJoin('shops', 'shops.id', 'orders.shop_id')
             ->leftJoin('cities', 'cities.id', 'orders.city_id')
             ->leftJoin('townships', 'townships.id', 'orders.township_id')
@@ -301,18 +304,18 @@ class OrderRepository
             // dd($gate);
             $order['full_address'] = $gate->address;
         }
-        if (Storage::exists('order_data.txt')) {
-            $orderDataJson = Storage::get('order_data.txt');
-            $orders = json_decode($orderDataJson, true);
-        }
-        $order_code = $order->order_code;
-        $order['delivered_at'] = null;
-        if (isset($orders[$order_code])) {
-            $orderData = $orders[$order_code];
-            if(isset($orderData['delivered_at'])){
-                $order['delivered_at'] = $orderData['delivered_at'];
-            }
-        }
+        // if (Storage::exists('order_data.txt')) {
+        //     $orderDataJson = Storage::get('order_data.txt');
+        //     $orders = json_decode($orderDataJson, true);
+        // }
+        // $order_code = $order->order_code;
+        $order['delivered_at'] = $order->successLog ? $order->successLog->created_at : null;
+        // if (isset($orders[$order_code])) {
+        //     $orderData = $orders[$order_code];
+        //     if(isset($orderData['delivered_at'])){
+        //         $order['delivered_at'] = $orderData['delivered_at'];
+        //     }
+        // }
         // dd($order);
 
         return $order;
