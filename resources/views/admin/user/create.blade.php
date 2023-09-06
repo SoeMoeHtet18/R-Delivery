@@ -91,7 +91,7 @@
 @section('javascript')
 <script>
     $(document).ready(function() {
-        $('#branch_id').select2();
+        $('#branch_id').select2({width: '100%'});
         $(".select2-selection").on("focus", function () {
             $(this).parent().parent().prev().select2("open");
         });

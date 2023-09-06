@@ -85,12 +85,14 @@
 @section('javascript')
 <script type="text/javascript">
     $(function() {
-        $('#rider_id').select2();
+        $('#rider_id').select2({width: '100%'});
         $('#collection_id').select2({
             placeholder: 'Select Pick Up',
+            width: '100%',
             allowClear: true
         });
         $('#customer_collection_id').select2({
+            width: '100%',
             placeholder: 'Select',
             allowClear: true
         });

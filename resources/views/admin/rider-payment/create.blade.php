@@ -172,7 +172,7 @@
         //         },
         //     });
         // });
-        $('#rider_id').select2();
+        $('#rider_id').select2({width: '100%'});
         $('#date_input, #date_input2').hide();
         $(".select2-selection").on("focus", function () {
             $(this).parent().parent().prev().select2("open");

@@ -214,11 +214,11 @@
 @section('javascript')
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#order_id').select2();
-        $("#shop").select2();
-        $("#rider_id").select2();
-        $("#city_id").select2();
-        $("#township_id").select2();
+        $('#order_id').select2({width: '100%'});
+        $("#shop").select2({width: '100%'});
+        $("#rider_id").select2({width: '100%'});
+        $("#city_id").select2({width: '100%'});
+        $("#township_id").select2({width: '100%'});
         $(".select2-selection").on("focus", function () {
             $(this).parent().parent().prev().select2("open");
         });

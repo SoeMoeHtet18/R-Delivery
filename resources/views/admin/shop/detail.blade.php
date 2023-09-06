@@ -173,7 +173,7 @@
                 </div>
             </div>
             <div class="d-flex flex-row-reverse pb-3">
-                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 btncenter margin-btn">
+                <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 btncenter margin-btn filter-footer">
                     <button id='filter' class="btn green ms-2 me-0">Filter</button>
                     <button id="clear" class="btn btn-secondary mx-0">Clear</button>
                 </div>
@@ -450,7 +450,7 @@
 
         $("#toggleFilter").on("click", function() {
             $(".filter-content").slideToggle(300);
-            $('#payment_channel').select2();
+            $('#payment_channel').select2({width: '100%'});
         });
 
         var tabIndex = 0;

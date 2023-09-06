@@ -90,7 +90,7 @@
 @endsection
 @section('javascript')
 <script>
-    $('#shop_id').select2();
+    $('#shop_id').select2({width: '100%'});
     $(".select2-selection").on("focus", function () {
         $(this).parent().parent().prev().select2("open");
     });

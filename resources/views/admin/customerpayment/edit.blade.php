@@ -94,8 +94,8 @@
 @section('javascript')
 <script>
     $(document).ready(function() {
-        $('#order_id').select2();
-        $('#type').select2();
+        $('#order_id').select2({width: '100%'});
+        $('#type').select2({width: '100%'});
         $(".select2-selection").on("focus", function () {
             $(this).parent().parent().prev().select2("open");
         });

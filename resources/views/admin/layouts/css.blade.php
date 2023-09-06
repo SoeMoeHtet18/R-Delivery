@@ -299,4 +299,10 @@
             overflow: auto !important;
         }
     }
+    
+    @media (max-width: 800px) {
+        .filter-footer {
+           width: 25%;
+        }
+    }
 </style>

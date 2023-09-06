@@ -50,7 +50,7 @@
         </div>
     </div> -->
     <div class="d-flex flex-row-reverse pb-3">
-        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 btncenter margin-btn">
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 btncenter margin-btn filter-footer">
             <button class="btn btn-primary search_filter">Filter</button>
 
             <button class="btn btn-secondary" id="reset">Reset</button>

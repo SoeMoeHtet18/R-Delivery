@@ -385,7 +385,7 @@
     $('#assign-collection-group').click(function() {
         var popupCard = document.getElementById('popupCard');
             popupCard.style.display = 'block';
-            $('#collection_group_id').select2();
+            $('#collection_group_id').select2({width: '100%'});
     });
 
     $('#pop-up-close-btn').click(function() {

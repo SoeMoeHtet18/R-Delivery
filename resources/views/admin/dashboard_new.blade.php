@@ -42,6 +42,52 @@
         color: black;
         text-decoration: none;
     }
+
+    .rp-mg {
+        margin-bottom: 1rem; 
+        margin-top: 1rem;
+    }
+
+    .rp-pd {
+        padding: 17px 0;
+    }
+
+    @media (max-width: 800px) {
+        .overview-item .card-body {
+            padding: 10px 0px;
+        }
+        .overview-item .card-body h5 {
+            font-size: 10px;
+            margin-top: 0.5rem;
+        }
+        .overview-item .card-body hr {
+            margin: 1px 0;
+        }
+
+        .fs-8 {
+            font-size: 8px !important;
+        }
+
+        .wd-34{
+            width: 34% !important;
+        }
+
+        .wd-45 {
+            width: 45% !important;
+        }
+        .wd-9 {
+            width: 9% !important;
+        }
+
+        .rp-mg {
+            margin-bottom: 1rem; 
+            margin-top: 0.7rem;
+        }
+
+        .rp-pd {
+            padding: 10px 0;
+        }
+    }
 </style>
 <div>
     <h3>Dashboard</h3>
@@ -131,8 +177,8 @@
                         <div class="col">
                             <div class="card overview-item">
                                 <a href="{{route('rider-payments.index')}}" class="link">
-                                    <div class="card-body text-center" style="padding: 17px 0px;">
-                                        <h5 style="margin-bottom: 25px; margin-top: 9px;">RIDER PAYMENTS</h5>
+                                    <div class="card-body text-center" class="rp-pd">
+                                        <h5 class="rp-mg">RIDER PAYMENTS</h5>
                                         <hr>
                                         <h5>{{$riderPaymentCount}}</h5>
                                     </div>
@@ -143,7 +189,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-5 col-md-6 col-sm-6">
+                <div class="col-lg-5 col-md-6 col-sm-6 wd-45">
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex">
@@ -169,8 +215,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-1 col-md-0 col-sm-0"></div>
-                <div class="col-lg-5 col-md-6 col-sm-6">
+                <div class="col-lg-1 col-md-0 col-sm-0 wd-9"></div>
+                <div class="col-lg-5 col-md-6 col-sm-6 wd-45">
                     <div class="card ">
                         <div class="card-body">
                             <div class="d-flex">
@@ -196,7 +242,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-1 col-md-0 col-sm-0"></div>
+                <div class="col-lg-1 col-md-0 col-sm-0 wd-9"></div>
             </div>
         </div>
         <div class="col">
@@ -306,7 +352,7 @@
                             <a href="{{route('third-party-vendor.index')}}" class="link">
                                 <div class="card overview-item">
                                     <div class="card-body text-center">
-                                        <h5>THIRD PARTY VENDOR</h5>
+                                        <h5 class="fs-8">THIRD PARTY VENDOR</h5>
                                         <hr>
                                         <h5>{{$thirdPartyVendorCount}}</h5>
                                     </div>
@@ -327,12 +373,12 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="col-lg-4 col-md-6 col-sm-12 wd-34">
                             <a href="{{route('delivery-types.index')}}" class="link">
 
                                 <div class="card overview-item">
                                     <div class="card-body text-center">
-                                        <h5>DELIVERY TYPES</h5>
+                                        <h5 class="fs-8">DELIVERY TYPES</h5>
                                         <hr>
                                         <h5>{{$deliveryTypeCount}}</h5>
                                     </div>

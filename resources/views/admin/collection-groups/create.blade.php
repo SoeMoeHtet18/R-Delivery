@@ -178,10 +178,11 @@
 @section('javascript')
 <script type="text/javascript">
     $(function() {
-        $('#rider_id').select2();
-        $('#shop_id').select2();
+        $('#rider_id').select2({width: '100%'});
+        $('#shop_id').select2({width: '100%'});
         $('#collection_id').select2({
             placeholder: 'Select Collections',
+            width: '100%',
             allowClear: true
         });
         $(".select2-selection").on("focus", function () {
@@ -282,7 +283,7 @@
             // Get the index of the last cloned card
 
             const newIndex = $("#assign-container .shop-card-container").length;
-            $(`#shop_id_${newIndex}`).select2();
+            $(`#shop_id_${newIndex}`).select2({width: '100%'});
             $(`#description_filter_${newIndex}`).daterangepicker({
                 autoUpdateInput: false,
                 locale: {

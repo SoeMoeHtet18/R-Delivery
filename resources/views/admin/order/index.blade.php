@@ -248,8 +248,8 @@
             </div>
         </div>
     </div>
-    <div class="d-flex flex-row-reverse pb-3">
-        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 btncenter margin-btn">
+    <div class="d-flex flex-row-reverse pb-3 ">
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 btncenter margin-btn filter-footer">
             <button class="btn btn-primary search_filter">Filter</button>
 
             <button class="btn btn-secondary" id="reset">Reset</button>
@@ -571,12 +571,12 @@
 
         $("#toggleFilter").on("click", function() {
             $(".filter-content").slideToggle(300);
-            $('#city').select2([]);
-            $('#status').select2();
-            $('#township').select2();
-            $('#rider').select2();
-            $('#shop').select2();
-            $('#pay_later').select2();
+            $('#city').select2({width: '100%'});
+            $('#status').select2({width: '100%'});
+            $('#township').select2({width: '100%'});
+            $('#rider').select2({width: '100%'});
+            $('#shop').select2({width: '100%'});
+            $('#pay_later').select2({width: '100%'});
         });
 
         $('#assign-pick-up-gp').click(function() {
@@ -603,7 +603,7 @@
                 var popupCard = document.getElementById('collectionPopupCard');
                 popupCard.style.display = 'block';
                 $('#collection-order-ids').val(order_ids);
-                $('#collection_group_id').select2();
+                $('#collection_group_id').select2({width: '100%'});
             }
         });
 

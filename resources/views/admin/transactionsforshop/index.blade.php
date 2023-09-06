@@ -74,7 +74,7 @@
 
     </div>
     <div class="d-flex flex-row-reverse pb-3">
-        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 btncenter margin-btn">
+        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 btncenter margin-btn filter-footer">
             <button class="btn btn-primary search_filter">Filter</button>
 
             <button class="btn btn-secondary" id="reset">Reset</button>
@@ -112,9 +112,9 @@
     $(document).ready(function() {
         $("#toggleFilter").on("click", function() {
             $(".filter-content").slideToggle(300);
-            $('#shop_name').select2();
-            $('#type').select2();
-            $('#paid_by').select2();
+            $('#shop_name').select2({width: '100%'});
+            $('#type').select2({width: '100%'});
+            $('#paid_by').select2({width: '100%'});
         });
         function formatWithNumberingSystem(number, decimal_place = 2) {
             return parseFloat(number).toFixed(decimal_place).replace(/\d(?=(\d{3})+\.)/g, '$&,');

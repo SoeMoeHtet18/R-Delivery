@@ -77,7 +77,7 @@
 <script type="text/javascript">
     $(function() {
         // Initialize select2 for the initial card
-        $('#gate_id').select2();
+        $('#gate_id').select2({width: '100%'});
         $(".select2-selection").on("focus", function () {
             $(this).parent().parent().prev().select2("open");
         });
@@ -120,7 +120,7 @@
             
             // Initialize select2 for the newly cloned card
             const newIndex = $("#assign-container .card-container").length; // Get the index of the last cloned card
-            $(`#gate_id_${newIndex}`).select2();
+            $(`#gate_id_${newIndex}`).select2({width: '100%'});
             $(".select2-selection").on("focus", function () {
                 $(this).parent().parent().prev().select2("open");
             });

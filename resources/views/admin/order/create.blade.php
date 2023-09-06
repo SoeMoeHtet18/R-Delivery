@@ -480,11 +480,11 @@
         $riderSelectBox.select2({width: '100%'});
         var $shopSelectBox = $('#shop_id');
          $shopSelectBox.select2({width: '100%'});
-        $('#status_id').select2();
+        $('#status_id').select2({width: '100%'});
         $('#item_type_id').select2({width: '100%'});
         $('#delivery_type_id').select2({width: '100%'});
-        $('#collection_method_id').select2();
-        $('#payment_method').select2();
+        $('#collection_method_id').select2({width: '100%'});
+        $('#payment_method').select2({width: '100%'});
         $(".select2-selection").on("focus", function () {
             $(this).parent().parent().prev().select2("open");
         });

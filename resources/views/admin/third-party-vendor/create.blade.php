@@ -57,7 +57,7 @@
 @section('javascript')
 <script>
     $(document).ready(function() {
-        $('#type').select2();
+        $('#type').select2({width: '100%'});
         $(".select2-selection").on("focus", function () {
             $(this).parent().parent().prev().select2("open");
         });

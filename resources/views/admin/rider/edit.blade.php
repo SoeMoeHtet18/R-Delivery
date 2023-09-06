@@ -100,7 +100,7 @@
 @section('javascript')
 <script type="text/javascript">
     $(function() {
-        $('#salary_type').select2();
+        $('#salary_type').select2({width: '100%'});
         $(".select2-selection").on("focus", function () {
             $(this).parent().parent().prev().select2("open");
         });

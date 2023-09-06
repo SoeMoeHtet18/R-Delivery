@@ -226,13 +226,13 @@
 @endsection
 @section('javascript')
 <script type="text/javascript">
-    $('#status_id').select2();
-    $('#collection_group_id').select2();
-    $('#order_id').select2();
-    $("#shop_id").select2();
-    $("#rider_id").select2();
-    $("#city_id").select2();
-    $("#township_id").select2();
+    $('#status_id').select2({width: '100%'});
+    $('#collection_group_id').select2({width: '100%'});
+    $('#order_id').select2({width: '100%'});
+    $("#shop_id").select2({width: '100%'});
+    $("#rider_id").select2({width: '100%'});
+    $("#city_id").select2({width: '100%'});
+    $("#township_id").select2({width: '100%'});
     $(".select2-selection").on("focus", function () {
         $(this).parent().parent().prev().select2("open");
     });
