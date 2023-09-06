@@ -387,4 +387,15 @@ class OrderService
         return $order;
 
     }
+
+    public function updateRider($data)
+    {
+        Order::where('id', $data['order_id'])->update(['rider_id' => $data['rider_id']]);
+    }
+
+    public function updateSchedule($data)
+    {
+        $schedule_date = Carbon::parse($data['schedule_date']);
+        Order::where('id', $data['order_id'])->update(['schedule_date' => $schedule_date]);
+    }
 }

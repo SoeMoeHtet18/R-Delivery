@@ -768,4 +768,18 @@ class OrderController extends Controller
             'message' => 'Successfully get related amounts',
             'status' => 'success'], 200);
     }
+
+    public function updateRiderFromOrderDetail(Request $request)
+    {
+        $data = $request->all();
+        $this->orderService->updateRider($data);
+        return redirect()->back();
+    }
+
+    public function updateScheduleDateFromOrderDetail(Request $request)
+    {
+        $data = $request->all();
+        $this->orderService->updateSchedule($data);
+        return redirect()->back();
+    }
 }
