@@ -73,7 +73,7 @@
                             <input type="hidden" value="warehouse" name="status">
                             <input type="submit" value="Assign To Warehouse" class="btn btn-secondary dropdown-item">
                         </form>
-                    </li>               
+                    </li>
                     @endif
                     @if($order->status == 'warehouse' || $order->status == 'success')
                     <li>
