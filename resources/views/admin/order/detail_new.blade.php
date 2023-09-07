@@ -16,6 +16,7 @@
     }
 
     .order-detail-card {
+        position: relative;
         border-radius: 10px !important;
         background: #F1F5F5;
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -39,13 +40,43 @@
     .dropdown > .dropdown-menu:after {
         border-bottom: none;
     }
+
+    .edit-info {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+    }
+
+    .save-info {
+        position: absolute;
+        right: 16px;
+        top: 10px;
+    }
+
+    .cancel-info {
+        position: absolute;
+        right: 37px;
+        top: 10px;
+    }
+
+    .status-card {
+        text-align: center;
+        color: white;
+        padding: 10px 0 5px 0;
+    }
+
+    #edit-status {
+        font-size: 12px;
+        right: 7px;
+        top: 4px;
+    }
 </style>
 <div>
     <div class="d-flex align-items-center">
         <h4 class="m-0 me-3">
             <strong>Order ID: {{$order->order_code}}</strong>
         </h4>
-        <div class="rounded-pill btn btn-{{$order->statusLabelColor}} status-box text-white"> 
+        <div class="rounded-pill btn btn-{{$order->statusLabelColor}} status-box text-white">
             {{ $order->statusLabel }}
         </div>
     </div>
@@ -114,7 +145,7 @@
                         <input type="hidden" value="warehouse" name="status">
                         <input type="submit" value="Assign To Warehouse" class="btn btn-secondary dropdown-item">
                     </form>
-                </li>               
+                </li>
                 @endif
                 @if($order->status == 'warehouse' || $order->status == 'success')
                 <li>
@@ -164,6 +195,27 @@
         
     <div class="d-flex">
         <div class="left-content">
+            <div id="order-status-box">
+                <div class="card order-detail-card bg-{{$order->statusLabelColor}} status-card">
+                    <h4>{{ $order->statusLabel }}</h4>
+                    <i class="fa-solid fa-pen d-none edit-info" id="edit-status"></i>
+                </div>
+                <form action="{{url('/orders/' . $order->id . '/change-status')}}" method="POST" class="d-none"
+                    id="status-form">
+                    @csrf
+                    @method('POST')
+                    <select name="status" id="status" class="form-control">
+                        <option value="" selected disabled>Select Status</option>
+                        <option value="pending" @if($order->status == "pending") {{'selected'}} @endif>Pending</option>
+                        <option value="picking-up" @if($order->status == "picking-up") {{'selected'}} @endif>Picking Up</option>
+                        <option value="warehouse" @if($order->status == "warehouse") {{'selected'}} @endif>In Warehouse</option>
+                        <option value="delivering" @if($order->status == "delivering") {{'selected'}} @endif>Delivering</option>
+                        <option value="success" @if($order->status == "success") {{'selected'}} @endif>Delivered</option>
+                        <option value="delay" @if($order->status == "delay") {{'selected'}} @endif>Delay</option>
+                        <option value="cancel" @if($order->status == "cancel") {{'selected'}} @endif>Cancel</option>
+                    </select>
+                </form>
+            </div>
             <div class="card order-detail-card">
                 <div class="card-body ">
                     <div class="text-center">
@@ -207,25 +259,46 @@
 
                 </div>
             </div>
-            <div class="card order-detail-card">
+            <div class="card order-detail-card date-card">
                 <div class="card-body">
+                    <i class="fa-solid fa-pen edit-info d-none" id="edit-date"></i>
+                    <i class="fa-regular fa-floppy-disk save-info d-none" id="save-date"></i>
+                    <i class="fa-solid fa-xmark cancel-info d-none" id="cancel-date"></i>
                     <div class="text-center">
                         <h5>Schedule Date</h5>
                         <hr>
-                        <b>
-                            {{ $order->schedule_date ? \Carbon\Carbon::parse($order->schedule_date)->format('j F, Y') : 'N/A'}}
+                        <b id="date-info">
+                            {{ $order->schedule_date ?
+                                    \Carbon\Carbon::parse($order->schedule_date)->format('j F, Y')
+                                    : 'N/A'
+                            }}
                         </b>
+                        <form action="{{url('/orders/update-schedule-date')}}" method="POST"
+                            id="date-form" class="d-none">
+                            @csrf
+                            @method('POST')
+                            <div style="position: relative; margin-left: 10px;" id="edit-date">
+                                <input type="hidden" name="order_id" value="{{$order->id}}">
+                                <input type="text" name="schedule_date" value="" class="form-control"
+                                    id="schedule_date"/>
+                                <span class="fa fa-calendar calendar"
+                                    style="position: absolute; top: 12px; right: 8px;"></span>
+                            </div>
+                        </form>
                     </div>
 
                 </div>
             </div>
-            <div class="card order-detail-card">
+            <div class="card order-detail-card rider-card">
                 <div class="card-body">
+                    <i class="fa-solid fa-pen d-none edit-info" id="edit-rider"></i>
+                    <i class="fa-regular fa-floppy-disk save-info d-none" id="save-rider"></i>
+                    <i class="fa-solid fa-xmark cancel-info d-none" id="cancel-rider"></i>
                     <div class="text-center">
                         <h5>Rider</h5>
                     </div>
                     <hr>
-                    <div class="d-flex justify-content-around">
+                    <div class="d-flex justify-content-around" id="rider-info">
                         <b>Name</b><b>@if($order->rider)
                             <a href="/riders/{{ $order->rider_id }}">  {{ $order->rider->name }}</a>
                             @else
@@ -233,6 +306,12 @@
                             @endif
                         </b>
                     </div>
+                    <form action="{{url('/orders/update-rider')}}" id="rider-form" class="d-none" method="POST">
+                        @csrf
+                        @method('POST')
+                        <input type="hidden" name="order_id" value="{{$order->id}}">
+                        <select name="rider_id" id="rider_id" class="form-control"></select>
+                    </form>
                 </div>
             </div>
 
@@ -280,6 +359,7 @@
                             <br>
                             <b>@if($order->township)
                             <a href="/townships/{{ $order->township_id }}">  {{ $order->township->name }}</a>
+                            <div id="township-id" data-township-id="{{ $order->township_id }}"></div>
                             @else
                             N/A
                             @endif</b>
@@ -356,7 +436,7 @@
                                 @elseif($order->payment_channel == 'cash')
                                     Cash
                                 @endif
-                            </b>                            
+                            </b>
                             <br>
                             <b>{{ $order->remark ? $order->remark : 'N/A'}}</b>
                         </div>
@@ -372,6 +452,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         var order_code = $('#order_code').val();
+        var township_id = document.getElementById('township-id').getAttribute('data-township-id');
 
         $('#order-tracking').click(function() {
             window.open("/tracking?order_id=" + order_code, "_blank");
@@ -407,6 +488,113 @@
             document.body.appendChild(form);
             form.submit();
         });
+
+        function handleHover(element, target, checkmate) {
+            element.hover(
+                function() {
+                    if(checkmate.hasClass('d-none')) {
+                        target.removeClass('d-none');
+                    }
+                },
+                function() {
+                    target.addClass('d-none');
+                }
+            );
+        }
+
+        // Function to handle edit button click
+        function handleEditClick(editButton, saveButton, cancelButton, infoElement, 
+            formElement, selectElement, type) {
+            editButton.click(function() {
+                editButton.toggleClass('d-none');
+                saveButton.toggleClass('d-none');
+                cancelButton.toggleClass('d-none');
+                infoElement.toggleClass('d-none');
+                formElement.toggleClass('d-none');
+
+                // Initialize data for the relevant select element
+                if(type !== 'date') {
+                    if(type === 'rider') {
+                        getRidersByTownship(township_id);
+                    }
+                    selectElement.select2({ width: '100%' });
+                } else {
+                    selectElement.daterangepicker({
+                        singleDatePicker: true,
+                        showDropdowns: true,
+                        minDate: moment(),
+                        maxYear: parseInt(moment().format('YYYY'), 10)
+                    });
+
+                    // Handle calendar click to trigger date picker
+                    $(".calendar").on("click", function() {
+                        $('#schedule_date').trigger("click");
+                    });
+
+                    // Clear the date picker when canceled
+                    selectElement.on('cancel.daterangepicker', function(ev, picker) {
+                        $(this).val('');
+                    });
+                }
+            });
+
+            cancelButton.click(function() {
+                editButton.toggleClass('d-none');
+                saveButton.toggleClass('d-none');
+                cancelButton.toggleClass('d-none');
+                infoElement.toggleClass('d-none');
+                formElement.toggleClass('d-none');
+            });
+
+            saveButton.click(function() {
+                formElement.submit();
+            });
+        }
+
+        // Use the functions to handle different elements
+        handleHover($(".status-card"), $("#edit-status"), $("#status-form"));
+        handleEditClick($("#edit-status"), $("#save-status"), $("#cancel-status"),
+            $('.status-card'), $('#status-form'), $("#status"), 'status');
+
+        // Function to submit status form on change
+        $("#status").on("change", function() {
+            $("#status-form").submit();
+        });
+
+        handleHover($(".date-card"), $("#edit-date"), $("#save-date"));
+        handleEditClick($("#edit-date"), $("#save-date"), $("#cancel-date"),
+            $('#date-info'), $('#date-form'), $("#schedule_date"), 'date');
+
+        handleHover($(".rider-card"), $("#edit-rider"), $("#save-rider"));
+        handleEditClick($("#edit-rider"), $("#save-rider"), $("#cancel-rider"),
+            $('#rider-info'), $('#rider-form'), $("#rider_id"), 'rider');
+
+        function getRidersByTownship(township_id) {
+            $.ajax({
+                url: '/api/riders-get-by-township',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    township_id: township_id
+                },
+                success: function(response) {
+                    var rider_id = $('#rider_id').val();
+                    var riders = '<option value="" selected disabled>Select the Rider for This Order</option>';
+                    if (response.data) {
+                        for (let i = 0; i < response.data.length; i++) {
+                            if(response.data[0]) {
+                                riders += '<option value="' + response.data[i].id + '" selected>' + response.data[i].name + '</option>';
+                            } else if (rider_id == response.data[i].id) {
+                                riders += '<option value="' + response.data[i].id + '" selected>' + response.data[i].name + '</option>';
+                            } else {
+                                riders += '<option value="' + response.data[i].id + '">' + response.data[i].name + '</option>';
+                            }
+                        }
+                    }
+                    $('#rider_id').html(riders);
+                },
+            });
+        };
     })
 </script>
 @endsection
