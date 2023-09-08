@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\ShopPayment;
 use App\Models\TransactionsForShop;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class ReportCalculationRepository
@@ -91,33 +92,53 @@ class ReportCalculationRepository
 
     public function getTotalCreditForShop($shopId)
     {
-        $codAmount = Order::where('shop_id', $shopId)
-            ->where('payment_method', 'cash_on_delivery')
-            ->where(function ($query) {
-                $query->where('payment_channel', '!=', 'shop_online_payment')
-                    ->orWhereNull('payment_channel');
-            })
-            ->sum(DB::raw('total_amount + markup_delivery_fees'));
+        // Check whether key 'total_credit' exists in cache
+        if(Cache::has('total_credit')) {
+            // If the key exists in cache, return the cached value
+            return Cache::get('total_credit');
+        } else {
+            // If the key does not exist in cache, calculate the value from the database
 
-        $remainingAmount = Order::where('shop_id', $shopId)
-            ->where('payment_method', 'item_prepaid')
-            ->sum('markup_delivery_fees');
+            // Calculate the total amount of COD (cash on delivery) orders that the shop will receiv
+            $codAmount = Order::where('shop_id', $shopId)
+                ->where('payment_method', 'cash_on_delivery')
+                ->where(function ($query) {
+                    $query->where('payment_channel', '!=', 'shop_online_payment')
+                        ->orWhereNull('payment_channel');
+                })
+                ->sum(DB::raw('total_amount + markup_delivery_fees'));
 
-        $subtractedAmount = Order::where('shop_id', $shopId)
-            ->where(function ($query) {
-                $query->where(function ($query) {
-                    $query->whereIn('payment_method', ['cash_on_delivery', 'item_prepaid'])
-                        ->where('payment_channel', 'shop_online_payment');
-                })->orWhere('payment_method', 'all_prepaid');
-            })
-            ->sum(DB::raw('delivery_fees + extra_charges - COALESCE(discount, 0)'));
+            // Retrieve the remaining amounts of remaining orders (item_prepaid)
+            $remainingAmount = Order::where('shop_id', $shopId)
+                ->where('payment_method', 'item_prepaid')
+                ->sum('markup_delivery_fees');
 
-        $customerCollectionAmount = CustomerCollection::where('shop_id', $shopId)->sum('paid_amount');
+            // Calculate the subtracted amount based on specific payment conditions
+            $subtractedAmount = Order::where('shop_id', $shopId)
+                ->where(function ($query) {
+                    $query->where(function ($query) {
+                        $query->whereIn('payment_method', ['cash_on_delivery', 'item_prepaid'])
+                            ->where('payment_channel', 'shop_online_payment');
+                    })->orWhere('payment_method', 'all_prepaid');
+                })
+                ->sum(DB::raw('delivery_fees + extra_charges - COALESCE(discount, 0)'));
 
-        $paymentFromShop = ShopPayment::where('shop_id',$shopId)->sum('amount');
+            // Calculate the total amount collected from customer collections
+            $customerCollectionAmount = CustomerCollection::where('shop_id', $shopId)->sum('paid_amount');
 
-        return strval(($codAmount + $remainingAmount + $paymentFromShop)
-            - ($customerCollectionAmount + $subtractedAmount) );
+            // Calculate the total amount received as shop payments
+            $paymentFromShop = ShopPayment::where('shop_id',$shopId)->sum('amount');
+
+            // Calculate the total credit for the shop by subtracting relevant amounts
+            $totalCredit = strval(($codAmount + $remainingAmount + $paymentFromShop)
+                - ($customerCollectionAmount + $subtractedAmount));
+
+            // Cache the calculated total credit for 30 seconds
+            Cache::put('total_credit', $totalCredit, $seconds = 30);
+            
+            // Return the calculated total credit
+            return $totalCredit;
+        }
     }
 
     public function getPayableAndReceivableAmountsForShopByDate($shopId, $start, $end, $type)
