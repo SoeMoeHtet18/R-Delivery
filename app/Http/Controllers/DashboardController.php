@@ -117,4 +117,9 @@ class DashboardController extends Controller
             'transactionforshopcount','ridercount','ordercount', 'collectionCount', 'customerCollectionCount',
             'collectionGroupCount', 'branchCount', 'gateCount', 'thirdPartyVendorCount', 'deliveryTypeCount'));
     }
+
+    public function index()
+    {
+        return view('vue-pages.dashboard.browse');
+    }
 }
