@@ -70,7 +70,7 @@
                         <h4>Shop Name <b>:</b></h4>
                     </label>
                     <div>
-                        <select name="shop_id" id="shop_id" class="form-control">
+                        <select name="shop_id" id="shop_id" class="form-control required">
                             <option value="" selected disabled>Select the Shop for This Order</option>
                             @foreach ( $shops as $shop)
                             <option value="{{$shop->id}}" @isset($shop_id) @if($shop->id == $shop_id) selected
@@ -82,6 +82,9 @@
                                 >{{$shop->name}}</option>
                             @endforeach
                         </select>
+                        <span id="shop-err-txt" class="text-danger d-none">
+                            <strong>Shop field is required.</strong>
+                        </span>
                         @if ($errors->has('shop_id'))
                         <span class="text-danger"><strong>{{ $errors->first('shop_id') }}</strong></span>
                         @endif
@@ -103,7 +106,11 @@
                         <h4>Customer PhoneNumber <b>:</b></h4>
                     </label>
                     <div>
-                        <input type="text" id="customer_phone_number" name="customer_phone_number" value="{{old('customer_phone_number')}}" class="form-control" />
+                        <input type="text" id="customer_phone_number" name="customer_phone_number"
+                            value="{{old('customer_phone_number')}}" class="form-control required" />
+                        <span id="phone-err-txt" class="text-danger d-none">
+                            <strong>Phone Number field is required.</strong>
+                        </span>
                         @if ($errors->has('customer_phone_number'))
                         <span class="text-danger"><strong>{{ $errors->first('customer_phone_number') }}</strong></span>
                         @endif
@@ -114,7 +121,11 @@
                         <h4>Customer Name <b>:</b></h4>
                     </label>
                     <div>
-                        <input type="text" id="customer_name" name="customer_name" value="{{old('customer_name')}}" class="form-control" />
+                        <input type="text" id="customer_name" name="customer_name" value="{{old('customer_name')}}"
+                            class="form-control required" />
+                        <span id="phone-err-txt" class="text-danger d-none">
+                            <strong>Customer Name field is required.</strong>
+                        </span>
                         @if ($errors->has('customer_name'))
                         <span class="text-danger"><strong>{{ $errors->first('customer_name') }}</strong></span>
                         @endif
@@ -182,7 +193,11 @@
                         <h4>Delivery Fees <b>:</b></h4>
                     </label>
                     <div>
-                        <input type="text" id="delivery_fees" name="delivery_fees" value="{{old('delivery_fees')}}" class="form-control" />
+                        <input type="text" id="delivery_fees" name="delivery_fees" value="{{old('delivery_fees')}}"
+                            class="form-control required" />
+                        <span id="phone-err-txt" class="text-danger d-none">
+                            <strong>Delivery Fees field is required.</strong>
+                        </span>
                         @if ($errors->has('delivery_fees'))
                         <span class="text-danger"><strong>{{ $errors->first('delivery_fees') }}</strong></span>
                         @endif
@@ -196,7 +211,8 @@
                         <h4>Markup Delivery Fees <b>:</b></h4>
                     </label>
                     <div>
-                        <input type="text" id="markup_delivery_fees" name="markup_delivery_fees" value="{{old('markup_delivery_fees')}}" class="form-control" />
+                        <input type="text" id="markup_delivery_fees" name="markup_delivery_fees"
+                            value="{{old('markup_delivery_fees')}}" class="form-control" />
                         @if ($errors->has('markup_delivery_fees'))
                         <span class="text-danger"><strong>{{ $errors->first('markup_delivery_fees') }}</strong></span>
                         @endif
@@ -245,7 +261,11 @@
                         <h4>Total Amount <b>:</b></h4>
                     </label>
                     <div>
-                        <input type="text" id="total_amount" name="total_amount" value="{{old('total_amount')}}" class="form-control" />
+                        <input type="text" id="total_amount" name="total_amount" value="{{old('total_amount')}}"
+                            class="form-control required" />
+                        <span id="phone-err-txt" class="text-danger d-none">
+                            <strong>Total Amount field is required.</strong>
+                        </span>
                         @if ($errors->has('total_amount'))
                         <span class="text-danger"><strong>{{ $errors->first('total_amount') }}</strong></span>
                         @endif
@@ -738,6 +758,36 @@
             $('#second_total_amount').val(totalAmount);
         })
 
+    });
+
+    // Get all input and select elements on the page, including input elements with type="date"
+    var inputAndSelectElements = document.querySelectorAll('input, select, input[type="date"]');
+
+    inputAndSelectElements.forEach(function(element) {
+        element.addEventListener('keydown', function (event) {
+            if (event.key === 'Tab') {
+
+                // handling the Tab key press on this element
+                var currentIndex = Array.from(inputAndSelectElements).indexOf(document.activeElement);
+                var nextIndex = currentIndex + 1;
+
+                // Make sure the next index is within bounds
+                if (nextIndex < inputAndSelectElements.length) {
+                    // Check if the input is required or not
+                    if(inputAndSelectElements[currentIndex].classList.contains('required')) {
+                            // Get the value of the checked input
+                            $checkForvalue = inputAndSelectElements[currentIndex].value;
+                            if($checkForvalue == '') {
+                                // if value is null, show err msg
+                                inputAndSelectElements[currentIndex].nextElementSibling.classList.remove('d-none');
+                            } else {
+                                // if value is not null, hide err msg
+                                inputAndSelectElements[currentIndex].nextElementSibling.classList.add('d-none');
+                            }
+                    }
+                }
+            }
+        });
     });
 </script>
 @endsection
