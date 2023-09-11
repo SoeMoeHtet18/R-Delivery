@@ -538,15 +538,70 @@ video {
   margin-bottom: 0.75rem;
 }
 
+.ml-\[10px\] {
+  margin-left: 10px;
+}
+
 .ms-2 {
   margin-inline-start: 0.5rem;
 }
 
-.bg-green-300 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(134 239 172 / var(--tw-bg-opacity));
+.flex {
+  display: flex;
+}
+
+.table {
+  display: table;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.px-6 {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.py-8 {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
 }
 
 .text-center {
   text-align: center;
+}
+
+.text-start {
+  text-align: start;
+}
+
+.font-lato {
+  font-family: Lato, sans-serif;
+}
+
+.text-\[34px\] {
+  font-size: 34px;
+}
+
+.font-extrabold {
+  font-weight: 800;
+}
+
+@media (min-width: 640px) {
+  .sm\:p-4 {
+    padding: 1rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .md\:px-6 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  .md\:py-4 {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
 }
