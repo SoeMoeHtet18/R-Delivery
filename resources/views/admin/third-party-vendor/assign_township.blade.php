@@ -50,9 +50,6 @@
 <script>
     $(document).ready(function() {
         $('#township_id').select2({width: '100%'});
-        $(".select2-selection").on("focus", function () {
-            $(this).parent().parent().prev().select2("open");
-        });
     });
 </script>
 @endsection

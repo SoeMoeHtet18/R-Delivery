@@ -44,12 +44,15 @@
                         <h4>Gate Name <b>:</b></h4>
                     </label>
                     <div class="col-10">
-                        <select name="gate_id[]" id="gate_id" class="form-control gate_id">
+                        <select name="gate_id[]" id="gate_id" class="form-control gate_id required">
                             <option value="" selected disabled>Select the Gate for This Rider</option>
                             @foreach ( $gates as $gate)
                             <option value="{{$gate->id}}">{{$gate->name}}</option>
                             @endforeach
                         </select>
+                        <span id="err-txt" class="text-danger d-none">
+                            <strong>Gate is required.</strong>
+                        </span>
                     </div>
                 </div>
                 <div class="row m-0 mb-3">
@@ -57,7 +60,10 @@
                         <h4>Rider Fees <b>:</b></h4>
                     </label>
                     <div class="col-10">
-                        <input type="text" name="rider_fees[]" id="rider_fees" class="form-control">
+                        <input type="text" name="rider_fees[]" id="rider_fees" class="form-control required">
+                        <span id="err-txt" class="text-danger d-none">
+                            <strong>Rider Fees is required.</strong>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -93,12 +99,15 @@
                         <h4>Gate Name <b>:</b></h4>
                     </label>
                     <div class="col-10">
-                        <select name="gate_id[]" id="gate_id_${newIndex}" class="form-control gate_id">
+                        <select name="gate_id[]" id="gate_id_${newIndex}" class="form-control gate_id required">
                             <option value="" selected disabled>Select the Gate for This Rider</option>
                             @foreach ($gates as $gate)
                                 <option value="{{$gate->id}}">{{$gate->name}}</option>
                             @endforeach
                         </select>
+                        <span id="err-txt" class="text-danger d-none">
+                            <strong>Gate is required.</strong>
+                        </span>
                     </div>
                 </div>
                 <div class="row m-0 mb-3">
@@ -106,7 +115,10 @@
                         <h4>Rider Fees <b>:</b></h4>
                     </label>
                     <div class="col-10">
-                        <input type="text" name="rider_fees[]" id="rider_fees_${newIndex}" class="form-control">
+                        <input type="text" name="rider_fees[]" id="rider_fees_${newIndex}" class="form-control required">
+                        <span id="err-txt" class="text-danger d-none">
+                            <strong>Rider Fees is required.</strong>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -124,10 +136,44 @@
             $(".select2-selection").on("focus", function () {
                 $(this).parent().parent().prev().select2("open");
             });
+            errFieldHandling();
         });
     }
 
     addMoreCard();
+    errFieldHandling();
+
+    function errFieldHandling() {
+        // Get all input and select elements on the page, including input elements with type="date"
+        var inputAndSelectElements = document.querySelectorAll('input, select, input[type="date"]');
+
+        inputAndSelectElements.forEach(function(element) {
+            element.addEventListener('keydown', function (event) {
+                if (event.key === 'Tab') {
+
+                    // handling the Tab key press on this element
+                    var currentIndex = Array.from(inputAndSelectElements).indexOf(document.activeElement);
+                    var nextIndex = currentIndex + 1;
+
+                    // Make sure the next index is within bounds
+                    if (nextIndex < inputAndSelectElements.length) {
+                        // Check if the input is required or not
+                        if(inputAndSelectElements[currentIndex].classList.contains('required')) {
+                                // Get the value of the checked input
+                                $checkForvalue = inputAndSelectElements[currentIndex].value;
+                                if($checkForvalue == '') {
+                                    // if value is null, show err msg
+                                    inputAndSelectElements[currentIndex].nextElementSibling.classList.remove('d-none');
+                                } else {
+                                    // if value is not null, hide err msg
+                                    inputAndSelectElements[currentIndex].nextElementSibling.classList.add('d-none');
+                                }
+                        }
+                    }
+                }
+            });
+        });
+    }
 </script>
 
 @endsection

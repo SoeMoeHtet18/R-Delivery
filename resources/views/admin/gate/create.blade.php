@@ -14,7 +14,9 @@
                     <h4>Name <b>:</b></h4>
                 </label>
                 <div class="col-10">
-                    <input type="text" id="name" name="name" value="@isset($name){{ $name }}@else{{ old('name') }}@endisset" class="form-control" />
+                    <input type="text" id="name" name="name" class="form-control required"
+                        value="@isset($name){{ $name }}@else{{ old('name') }}@endisset" />
+                    <span class="text-danger d-none"><strong>Name field is required.</strong></span>
                     @if($errors->has('name'))
                     <span class="text-danger"><strong>{{ $errors->first('name') }}</strong></span>
                     @endif
@@ -41,11 +43,10 @@
                     <h4>Township Name <b>:</b></h4>
                 </label>
                 <div class="col-10">
-                    <select name="township_id[]" id="township_id" class="form-control" multiple="">
+                    <select name="township_id[]" id="township_id" class="form-control" multiple>
                         @foreach ($townships as $township)
-                            <option value="{{$township->id}}"
-                                @if($township->id == old('township_id')) selected @endif
-                            >{{$township->name}}</option>
+                        <option value="{{$township->id}}" @if($township->id == old('township_id')) selected @endif>
+                            {{$township->name}}</option>
                         @endforeach
                     </select>
                     @if ($errors->has('township_id'))
@@ -58,7 +59,9 @@
                     <h4>Address <b>:</b></h4>
                 </label>
                 <div class="col-10">
-                    <textarea id="address" name="address" class="form-control" style="height: 100px">{{old('address')}}</textarea>
+                    <textarea id="address" name="address" class="form-control required"
+                        style="height: 100px">{{old('address')}}</textarea>
+                    <span class="text-danger d-none"><strong>Address field is required.</strong></span>
                     @if($errors->has('address'))
                     <span class="text-danger"><strong>{{ $errors->first('address') }}</strong></span>
                     @endif
@@ -78,37 +81,42 @@
 <script>
     $(document).ready(function() {
         $('#city_id').select2({width: '100%'});
-        $('#township_id').select2({width: '100%'});
+        $('#township_id').select2({multiple: true, width: '100%'});
         $(".select2-selection").on("focus", function () {
-            $(this).parent().parent().prev().select2("open");
+            if (!$(this).parent().parent().prev().prop("multiple")) {
+                $(this).parent().parent().prev().select2("open");
+            }
         });
         
-        // $('#city_id').change(function() {
-        //     var city_id = $('#city_id').val();
-        //     $.ajax({
-        //         url: '/api/get-township-by-associable',
-        //         type: 'POST',
-        //         dataType: 'json',
-        //         data: {
-        //             city_id: city_id
-        //         },
-        //         success: function(response) {
-        //             var township_id = $('#township_id').val();
-        //             var townships = '<option value="" disabled>Select the Township for This Order</option>';
-        //             if (response.data) {
-        //                 for (var i = 0; i < response.data.length; i++) {
-        //                     if (township_id == response.data[i].id) {
-        //                         townships += '<option value="' + response.data[i].id + '" selected>' + response.data[i].name + '</option>';
-        //                     } else {
-        //                         townships += '<option value="' + response.data[i].id + '">' + response.data[i].name + '</option>';
-        //                     }
-        //                 }
-        //             }
-        //             console.log(townships);
-        //             $('#township_id').html(townships);
-        //         },
-        //     });
-        // });
+        // Get all input and select elements on the page, including input elements with type="date"
+        var inputAndSelectElements = document.querySelectorAll('input, select, textarea, input[type="date"]');
+
+        inputAndSelectElements.forEach(function(element) {
+            element.addEventListener('keydown', function (event) {
+                if (event.key === 'Tab') {
+
+                    // handling the Tab key press on this element
+                    var currentIndex = Array.from(inputAndSelectElements).indexOf(document.activeElement);
+                    var nextIndex = currentIndex + 1;
+
+                    // Make sure the next index is within bounds
+                    if (nextIndex < inputAndSelectElements.length) {
+                        // Check if the input is required or not
+                        if(inputAndSelectElements[currentIndex].classList.contains('required')) {
+                                // Get the value of the checked input
+                                $checkForvalue = inputAndSelectElements[currentIndex].value;
+                                if($checkForvalue == '') {
+                                    // if value is null, show err msg
+                                    inputAndSelectElements[currentIndex].nextElementSibling.classList.remove('d-none');
+                                } else {
+                                    // if value is not null, hide err msg
+                                    inputAndSelectElements[currentIndex].nextElementSibling.classList.add('d-none');
+                                }
+                        }
+                    }
+                }
+            });
+        });
     });
 </script>
 @endsection

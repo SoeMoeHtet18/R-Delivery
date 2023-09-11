@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Helper;
+use App\Http\Requests\CollectionCreateRequest;
 use App\Models\Collection;
 use App\Repositories\CityRepository;
 use App\Repositories\CollectionGroupRepository;
@@ -63,7 +64,7 @@ class CollectionController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CollectionCreateRequest $request)
     {
         $data = $request->all();
         $this->collectionService->saveCollectionData($data);

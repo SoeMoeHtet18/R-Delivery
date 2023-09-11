@@ -14,7 +14,9 @@
                     <h4>Third Party Vendor Name <b>:</b></h4>
                 </label>
                 <div class="col-10">
-                    <input type="text" id="name" name="name" value="@isset($name){{ $name }}@else{{ old('name') }}@endisset" class="form-control" />
+                    <input type="text" id="name" name="name" class="form-control required"
+                        value="@isset($name){{ $name }}@else{{ old('name') }}@endisset" />
+                    <span class="text-danger d-none"><strong>Name field is required.</strong></span>
                     @if($errors->has('name'))
                     <span class="text-danger"><strong>{{ $errors->first('name') }}</strong></span>
                     @endif
@@ -25,7 +27,9 @@
                     <h4>Address <b>:</b></h4>
                 </label>
                 <div class="col-10">
-                    <input type="text" id="address" name="address" value="@isset($address){{ $address }}@else{{ old('address') }}@endisset" class="form-control" />
+                    <input type="text" id="address" name="address" class="form-control required"
+                        value="@isset($address){{ $address }}@else{{ old('address') }}@endisset" />
+                    <span class="text-danger d-none"><strong>Address field is required.</strong></span>
                     @if($errors->has('address'))
                     <span class="text-danger"><strong>{{ $errors->first('address') }}</strong></span>
                     @endif
@@ -60,6 +64,35 @@
         $('#type').select2({width: '100%'});
         $(".select2-selection").on("focus", function () {
             $(this).parent().parent().prev().select2("open");
+        });
+        // Get all input and select elements on the page, including input elements with type="date"
+        var inputAndSelectElements = document.querySelectorAll('input, select, input[type="date"]');
+
+        inputAndSelectElements.forEach(function(element) {
+            element.addEventListener('keydown', function (event) {
+                if (event.key === 'Tab') {
+
+                    // handling the Tab key press on this element
+                    var currentIndex = Array.from(inputAndSelectElements).indexOf(document.activeElement);
+                    var nextIndex = currentIndex + 1;
+
+                    // Make sure the next index is within bounds
+                    if (nextIndex < inputAndSelectElements.length) {
+                        // Check if the input is required or not
+                        if(inputAndSelectElements[currentIndex].classList.contains('required')) {
+                                // Get the value of the checked input
+                                $checkForvalue = inputAndSelectElements[currentIndex].value;
+                                if($checkForvalue == '') {
+                                    // if value is null, show err msg
+                                    inputAndSelectElements[currentIndex].nextElementSibling.classList.remove('d-none');
+                                } else {
+                                    // if value is not null, hide err msg
+                                    inputAndSelectElements[currentIndex].nextElementSibling.classList.add('d-none');
+                                }
+                        }
+                    }
+                }
+            });
         });
     });
 </script>
