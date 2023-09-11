@@ -52,9 +52,6 @@
             width: '100%',
             allowClear: true
         });
-        $(".select2-selection").on("focus", function () {
-            $(this).parent().parent().prev().select2("open");
-        });
     });
 </script>
 @endsection
