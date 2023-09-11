@@ -782,4 +782,9 @@ class OrderController extends Controller
         $this->orderService->updateSchedule($data);
         return redirect()->back();
     }
+    
+    public function bulkOrderCreate()
+    {
+        return view('vue-pages.order.create-bulk-order');
+    }
 }

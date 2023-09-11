@@ -180,6 +180,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('get-amounts-related-to-order', [OrderController::class, 'getAmountsRelatedToOrder']);
     Route::post('/orders/update-rider', [OrderController::class, 'updateRiderFromOrderDetail']);
     Route::post('/orders/update-schedule-date', [OrderController::class, 'updateScheduleDateFromOrderDetail']);
+    Route::get('/create-bulk-order', [OrderController::class, 'bulkOrderCreate']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
