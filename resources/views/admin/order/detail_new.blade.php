@@ -595,6 +595,8 @@
                 },
             });
         };
-    })
+    });
+
+    
 </script>
 @endsection
