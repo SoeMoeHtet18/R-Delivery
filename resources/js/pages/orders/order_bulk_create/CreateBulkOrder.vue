@@ -8,6 +8,154 @@
             </svg>
             <h1 class="text-[34px] font-extrabold font-lato text-start ml-[10px]">CREATE ORDERS</h1>
         </div>
-        <create-order></create-order>
+        <!-- table starts -->
+        <div class="overflow-hidden overflow-x-auto" id="createBulkOrderTable">
+            <table class="table-auto">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>SHOP</th>
+                        <th>CUSTOMER NAME</th>
+                        <th>CUSTOMER PHONE NUMBER</th>
+                        <th>CITY</th>
+                        <th>TOWNSHIP</th>
+                        <th>ADDRESS</th>
+                        <th>RIDER</th>
+                        <th>ITEM AMOUNT</th>
+                        <th>IS DELI FREE ?</th>
+                        <th>DELIVERY FEES</th>
+                        <th>MARKUP DELIVERY FEES</th>
+                        <th>EXTRA CHARGES</th>
+                        <th>IS PAYLATER ?</th>
+                        <th>PAYMENT METHOD</th>
+                        <th>ITEM TYPE</th>
+                        <th>QUANTITY</th>
+                        <th>DELIVERY TYPE</th>
+                        <th>SCHEDULE DATE</th>
+                        <th>REMARK</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(data, index) in tableData" :key="index">
+                        <bulk-order-create-table-row :rowData="data" :rowIndex="index + 1">
+                        </bulk-order-create-table-row>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </template>
+
+<script>
+import BulkOrderCreateTableRow from './../../../components/order/order_bulk_create/BulkOrderCreateTableRow.vue';
+
+export default {
+    components: {
+        BulkOrderCreateTableRow,
+    },
+    data() {
+        return {
+            tableData: [
+                {
+                    shop: null,
+                    customer_name: null,
+                    customer_phone_number: null,
+                    city: null,
+                    township: null,
+                    address: null,
+                    rider: null,
+                    item_amount: null,
+                    is_deli_free: null,
+                    delivery_fees: null,
+                    markup_delivery_fees: null,
+                    extra_charges: null,
+                    is_paylater: null,
+                    payment_method: null,
+                    item_type: null,
+                    quantity: null,
+                    delivery_type: null,
+                    schedule_date: null,
+                    remark: null
+                },
+                {
+                    shop: null,
+                    customer_name: null,
+                    customer_phone_number: null,
+                    city: null,
+                    township: null,
+                    address: null,
+                    rider: null,
+                    item_amount: null,
+                    is_deli_free: null,
+                    delivery_fees: null,
+                    markup_delivery_fees: null,
+                    extra_charges: null,
+                    is_paylater: null,
+                    payment_method: null,
+                    item_type: null,
+                    quantity: null,
+                    delivery_type: null,
+                    schedule_date: null,
+                    remark: null
+                },
+                // Add more initial data rows as needed
+            ],
+        };
+    },
+    // methods: {
+    //     addNewRow() {
+    //         // Add a new row to the tableData array
+    //         this.tableData.push({
+    //             inputValue: '',
+    //             selectedOption: 'option1',
+    //             radioValue: 'radio1',
+    //         });
+    //     },
+    // },
+};
+</script>
+
+<style lang="scss" scoped>
+#createBulkOrderTable::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+#createBulkOrderTable table {
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    /* Adjust the second value to control the margin between rows */
+}
+
+#createBulkOrderTable {
+    thead th {
+        text-align: center;
+        background-color: #116a5b;
+        color: white;
+        text-wrap: nowrap;
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 18px;
+        padding: 10px 5px;
+    }
+
+    thead th:first-child {
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+    }
+
+    thead th:last-child {
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+    }
+
+    tr {
+        margin-bottom: 10px;
+    }
+
+    tbody tr {
+        background-color: #d4efeb;
+        text-align: center;
+    }
+}
+</style>
