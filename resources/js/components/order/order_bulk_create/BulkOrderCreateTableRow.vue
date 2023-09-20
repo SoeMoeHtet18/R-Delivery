@@ -3,86 +3,161 @@
         <b>{{ rowIndex }}</b>
     </td>
     <td>
-        <select v-model="rowData.shop">
-            <option v-for="(shop, index) in shopList" :key="index" :value="shop.id">{{ shop.name }}</option>
-        </select>
+        <DxSelectBox
+            :items="shopList"
+            displayExpr="name"
+            valueExpr="id"
+            v-model="rowData.shop"
+            :searchEnabled=true
+            :onValueChanged=shopValueChange
+        />
     </td>
     <td>
-        <input v-model="rowData.customer_name" type="text">
+        <DxTextBox
+            v-model="rowData.customer_name"
+        />
     </td>
     <td>
-        <input v-model="rowData.customer_phone_number" type="number">
+        <DxNumberBox 
+            v-model="rowData.customer_phone_number"
+        />
     </td>
     <td>
-        <select v-model="rowData.city">
-            <option v-for="(city, index) in cityList" :key="index" :value="city.id">{{ city.name }}</option>
-        </select>
+        <DxSelectBox
+            :items="cityList"
+            displayExpr="name"
+            valueExpr="id"
+            v-model="rowData.city"
+            :searchEnabled=true
+            :onValueChanged=cityValueChange
+        />
     </td>
     <td>
-        <select v-model="rowData.township">
-            <option v-for="(township, index) in townshipList" :key="index" :value="township.id">{{ township.name }}</option>
-        </select>
+        <DxSelectBox
+            :items="townshipList"
+            displayExpr="name"
+            valueExpr="id"
+            v-model="rowData.township"
+            :searchEnabled=true
+            :onValueChanged=townshipValueChange
+        />
     </td>
     <td>
-        <input v-model="rowData.address" type="text">
+        <DxTextArea
+            v-model="rowData.address"
+        />
     </td>
     <td>
-        <select v-model="rowData.rider">
-            <option v-for="(rider, index) in riderList" :key="index" :value="rider.id">{{ rider.name }}</option>
-        </select>
+        <DxSelectBox
+            :items="riderList"
+            displayExpr="name"
+            valueExpr="id"
+            v-model="rowData.rider"
+            :searchEnabled=true
+        />
     </td>
     <td>
-        <input v-model="rowData.item_amount" type="number">
+        <DxNumberBox 
+            v-model="rowData.item_amount"
+            :min="0"
+            :show-spin-buttons="true"
+        />
     </td>
     <td>
-        <input v-model="rowData.is_deli_free" type="checkbox">
+        <DxCheckBox
+            v-model="rowData.is_deli_free"
+        />
     </td>
     <td>
-        <input v-model="rowData.delivery_fees" type="number">
+        <DxNumberBox 
+            v-model="rowData.delivery_fees"
+            :min="0"
+            :show-spin-buttons="true"
+        />
     </td>
     <td>
-        <input v-model="rowData.markup_delivery_fees" type="number">
+        <DxNumberBox 
+            v-model="rowData.markup_delivery_fees"
+            :min="0"
+            :show-spin-buttons="true"
+        />
     </td>
     <td>
-        <input v-model="rowData.extra_charges" type="number">
+        <DxNumberBox 
+            v-model="rowData.extra_charges"
+            :min="0"
+            :show-spin-buttons="true"
+        />
     </td>
     <td>
-        <input v-model="rowData.is_paylater" type="checkbox">
+        <DxCheckBox
+            v-model="rowData.is_paylater"
+        />
     </td>
     <td class="text-nowrap">
-        <label>
-            <input type="radio" v-model="rowData.payment_method" value="radio1"> COD
-        </label>
-        <label>
-            <input type="radio" v-model="rowData.payment_method" value="radio2"> Item Prepaid
-        </label>
-        <label>
-            <input type="radio" v-model="rowData.payment_method" value="radio2"> All Prepaid
-        </label>
+        <DxRadioGroup
+            :items="paymentMethods"
+            v-model="rowData.payment_method"
+            layout="horizontal"
+        />
     </td>
     <td>
-        <select v-model="rowData.item_type">
-            <option v-for="(itemType, index) in itemTypeList" :key="index" :value="itemType.id">{{ itemType.name }}</option>
-        </select>
+        <DxSelectBox
+            :items="itemTypeList"
+            displayExpr="name"
+            valueExpr="id"
+            v-model="rowData.item_type"
+            :searchEnabled=true
+        />
     </td>
     <td>
-        <input v-model="rowData.quantity" type="number">
+        <DxNumberBox 
+            v-model="rowData.quantity"
+            :min="1"
+            :show-spin-buttons="true"
+        />
     </td>
     <td>
-        <select v-model="rowData.delivery_type">
-            <option v-for="(rider, index) in riderList" :key="index" :value="rider.id">{{ rider.name }}</option>
-        </select>
+        <DxSelectBox
+            :items="deliveryTypeList"
+            displayExpr="name"
+            valueExpr="id"
+            v-model="rowData.delivery_type"
+            :searchEnabled=true
+        />
     </td>
     <td>
-        <input v-model="rowData.schedule_date" type="date">
+        <DxDateBox
+            v-model="rowData.schedule_date"
+            type="date"
+        />
     </td>
     <td>
-        <textarea v-model="rowData.remark"></textarea>
+        <DxTextArea
+            v-model="rowData.remark"
+        />
     </td>
 </template>
 
 <script>
+import DxSelectBox from 'devextreme-vue/select-box';
+import DxTextBox from 'devextreme-vue/text-box';
+import DxNumberBox  from 'devextreme-vue/number-box';
+import DxDateBox from 'devextreme-vue/date-box';
+import DxTextArea from 'devextreme-vue/text-area';
+import DxCheckBox from 'devextreme-vue/check-box';
+import DxRadioGroup from 'devextreme-vue/radio-group';
+
 export default {
+    components: {
+        DxSelectBox,
+        DxTextBox,
+        DxNumberBox,
+        DxDateBox,
+        DxTextArea,
+        DxCheckBox,
+        DxRadioGroup
+    },
     props: {
         rowData: Object,
         rowIndex: Number
@@ -95,9 +170,31 @@ export default {
             riderList: [],
             itemTypeList: [],
             deliveryTypeList: [],
+            paymentMethods: [
+                { text: 'COD', value: 'cash_on_delivery' },
+                { text: 'Item Prepaid', value: 'item_prepaid' },
+                { text: 'All Prepaid', value: 'all_prepaid' },
+            ],
+            isAddRow : true,
         }
     },
     methods: {
+        shopValueChange() {
+            if(this.isAddRow){
+                this.isAddRow = false;
+                this.$emit('addRow', {
+                    shop: this.rowData.shop,
+                });
+            }
+        },
+
+        cityValueChange() {
+            this.getTownshipList();
+        },
+        townshipValueChange() {
+            this.getRiderList();
+            this.getDeliveryFeesByTownshipID();
+        },
         async getShopList() {
             await fetch('/api/get-shop-list')
                 .then((res) => res.json())
@@ -140,6 +237,13 @@ export default {
                     this.deliveryTypeList = data.data;
                 });
         },
+        async getDeliveryFeesByTownshipID() {
+            await fetch(`/api/get-delivery-fees-by-township-id?township_id=${this.rowData.township}`)
+                .then((res) => res.json())
+                .then((data) => {
+                    this.rowData.delivery_fees = data.data;
+                });
+        },
     },
     mounted() {
         this.getShopList();
@@ -153,6 +257,13 @@ export default {
 </script>
 <style scoped>
 td {
-    padding: 0 5px;
+    padding: 5px 5px;
+}
+
+td .dx-texteditor {
+    width: max-content;
+}
+td .dx-radiogroup {
+    width: max-content;
 }
 </style>

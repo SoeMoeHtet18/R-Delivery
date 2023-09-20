@@ -538,10 +538,6 @@ video {
   margin-bottom: 0.75rem;
 }
 
-.ml-\[10px\] {
-  margin-left: 10px;
-}
-
 .ms-2 {
   margin-inline-start: 0.5rem;
 }
@@ -594,14 +590,6 @@ video {
 
 .font-lato {
   font-family: Lato, sans-serif;
-}
-
-.text-\[34px\] {
-  font-size: 34px;
-}
-
-.font-extrabold {
-  font-weight: 800;
 }
 
 @media (min-width: 640px) {

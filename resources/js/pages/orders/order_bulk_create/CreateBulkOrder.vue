@@ -6,7 +6,7 @@
                     d="M40 16.0202H4.77963L20.1959 28.5654L18.4329 30L0 15L18.4329 0L20.1959 1.43464L4.77963 13.9798H40V16.0202Z"
                     fill="black" />
             </svg>
-            <h1 class="text-[34px] font-extrabold font-lato text-start ml-[10px]">CREATE ORDERS</h1>
+            <h1 class="bulk-order-title font-lato text-start">CREATE ORDERS</h1>
         </div>
         <!-- table starts -->
         <div class="overflow-hidden overflow-x-auto" id="createBulkOrderTable">
@@ -37,7 +37,7 @@
                 </thead>
                 <tbody>
                     <tr v-for="(data, index) in tableData" :key="index">
-                        <bulk-order-create-table-row :rowData="data" :rowIndex="index + 1">
+                        <bulk-order-create-table-row :rowData="data" :rowIndex="index + 1" @addRow="addNewRow">
                         </bulk-order-create-table-row>
                     </tr>
                 </tbody>
@@ -65,32 +65,11 @@ export default {
                     address: null,
                     rider: null,
                     item_amount: null,
-                    is_deli_free: null,
+                    is_deli_free: false,
                     delivery_fees: null,
                     markup_delivery_fees: null,
                     extra_charges: null,
-                    is_paylater: null,
-                    payment_method: null,
-                    item_type: null,
-                    quantity: null,
-                    delivery_type: null,
-                    schedule_date: null,
-                    remark: null
-                },
-                {
-                    shop: null,
-                    customer_name: null,
-                    customer_phone_number: null,
-                    city: null,
-                    township: null,
-                    address: null,
-                    rider: null,
-                    item_amount: null,
-                    is_deli_free: null,
-                    delivery_fees: null,
-                    markup_delivery_fees: null,
-                    extra_charges: null,
-                    is_paylater: null,
+                    is_paylater: false,
                     payment_method: null,
                     item_type: null,
                     quantity: null,
@@ -102,16 +81,32 @@ export default {
             ],
         };
     },
-    // methods: {
-    //     addNewRow() {
-    //         // Add a new row to the tableData array
-    //         this.tableData.push({
-    //             inputValue: '',
-    //             selectedOption: 'option1',
-    //             radioValue: 'radio1',
-    //         });
-    //     },
-    // },
+    methods: {
+        addNewRow(data) {
+            // Add a new row to the tableData array
+            this.tableData.push({
+                shop: data.shop,
+                customer_name: null,
+                customer_phone_number: null,
+                city: null,
+                township: null,
+                address: null,
+                rider: null,
+                item_amount: null,
+                is_deli_free: false,
+                delivery_fees: null,
+                markup_delivery_fees: null,
+                extra_charges: null,
+                is_paylater: false,
+                payment_method: null,
+                item_type: null,
+                quantity: null,
+                delivery_type: null,
+                schedule_date: null,
+                remark: null
+            });
+        },
+    },
 };
 </script>
 
@@ -157,5 +152,11 @@ export default {
         background-color: #d4efeb;
         text-align: center;
     }
+}
+
+.bulk-order-title {
+    font-weight: 800 !important;
+    font-size: 34px;
+    margin-left: 10px;
 }
 </style>
