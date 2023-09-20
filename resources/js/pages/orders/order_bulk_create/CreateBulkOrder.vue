@@ -35,7 +35,7 @@
                         <th>REMARK</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="bulk-order-input-box-container">
                     <tr v-for="(data, index) in tableData" :key="index">
                         <bulk-order-create-table-row :rowData="data" :rowIndex="index + 1" @addRow="addNewRow">
                         </bulk-order-create-table-row>

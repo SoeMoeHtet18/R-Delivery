@@ -10,6 +10,7 @@
             v-model="rowData.shop"
             :searchEnabled=true
             :onValueChanged=shopValueChange
+            placeholder="Select"
         />
     </td>
     <td>
@@ -30,6 +31,7 @@
             v-model="rowData.city"
             :searchEnabled=true
             :onValueChanged=cityValueChange
+            placeholder="Select"
         />
     </td>
     <td>
@@ -40,6 +42,7 @@
             v-model="rowData.township"
             :searchEnabled=true
             :onValueChanged=townshipValueChange
+            placeholder="Select"
         />
     </td>
     <td>
@@ -54,6 +57,7 @@
             valueExpr="id"
             v-model="rowData.rider"
             :searchEnabled=true
+            placeholder="Select"
         />
     </td>
     <td>
@@ -99,6 +103,7 @@
             :items="paymentMethods"
             v-model="rowData.payment_method"
             layout="horizontal"
+            class="payment-method-input-box"
         />
     </td>
     <td>
@@ -108,6 +113,7 @@
             valueExpr="id"
             v-model="rowData.item_type"
             :searchEnabled=true
+            placeholder="Select"
         />
     </td>
     <td>
@@ -115,6 +121,7 @@
             v-model="rowData.quantity"
             :min="1"
             :show-spin-buttons="true"
+            class="quantity-input-box"
         />
     </td>
     <td>
@@ -124,6 +131,7 @@
             valueExpr="id"
             v-model="rowData.delivery_type"
             :searchEnabled=true
+            placeholder="Select"
         />
     </td>
     <td>
@@ -265,5 +273,22 @@ td .dx-texteditor {
 }
 td .dx-radiogroup {
     width: max-content;
+}
+
+.dx-dropdowneditor-icon {
+    background-color: black !important;
+}
+
+.quantity-input-box {
+    width: 85px !important;
+}
+
+.payment-method-input-box {
+    width: 100%;
+    height: auto;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 7px 21px;
 }
 </style>

@@ -1,3 +1,49 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.bulk-order-input-box-container .dx-dropdowneditor-icon:not(.dx-datebox .dx-dropdowneditor-icon) {
+    background-image: url('/images/vector_close.svg');
+    background-color: #ffffff !important;
+}
+
+.bulk-order-input-box-container .dx-dropdowneditor-icon::before {
+    content: unset;
+}
+
+.bulk-order-input-box-container .dx-datebox .dx-dropdowneditor-icon  {
+    color: #116a5b;
+}
+
+.bulk-order-input-box-container .dx-texteditor:hover ,
+.bulk-order-input-box-container .dx-radiobutton-icon {
+    border-color: #116a5b !important;
+}
+
+.bulk-order-input-box-container .dx-checkbox {
+    border: 2px solid #116a5b !important;
+    border-radius: 4px;
+}
+
+.bulk-order-input-box-container .dx-checkbox-icon {
+    color: #116a5b !important;
+    font-weight: 900 !important;
+}
+
+.dx-numberbox .dx-numberbox-spin-up-icon, .dx-numberbox .dx-numberbox-spin-down-icon {
+    background-color: #ffffff !important;
+}
+
+
+.bulk-order-input-box-container .dx-radiobutton-icon-checked .dx-radiobutton-icon-dot {
+    background-color: #116a5b !important;
+}
+
+.bulk-order-input-box-container .dx-item-content {
+    color: #000;
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400;
+    line-height: 18px;
+    text-transform: capitalize;
+}
