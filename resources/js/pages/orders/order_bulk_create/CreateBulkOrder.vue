@@ -104,27 +104,27 @@ export default {
     methods: {
         addNewRow(data) {
             // Add a new row to the tableData array
-            // this.tableData.push({
-            //     shop: data.shop,
-            //     customer_name: null,
-            //     customer_phone_number: null,
-            //     city: null,
-            //     township: null,
-            //     address: null,
-            //     rider: null,
-            //     item_amount: null,
-            //     is_deli_free: false,
-            //     delivery_fees: null,
-            //     markup_delivery_fees: null,
-            //     extra_charges: null,
-            //     is_paylater: false,
-            //     payment_method: null,
-            //     item_type: null,
-            //     quantity: null,
-            //     delivery_type: null,
-            //     schedule_date: null,
-            //     remark: null
-            // });
+            this.tableData.push({
+                shop: data.shop,
+                customer_name: null,
+                customer_phone_number: null,
+                city: null,
+                township: null,
+                address: null,
+                rider: null,
+                item_amount: null,
+                is_deli_free: false,
+                delivery_fees: null,
+                markup_delivery_fees: null,
+                extra_charges: null,
+                is_paylater: false,
+                payment_method: null,
+                item_type: null,
+                quantity: null,
+                delivery_type: null,
+                schedule_date: null,
+                remark: null
+            });
         },
 
         saveBulkOrder() {
