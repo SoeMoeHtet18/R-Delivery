@@ -10,22 +10,13 @@
                 <h1 class="bulk-order-title font-lato text-start">CREATE ORDERS</h1>
             </div>
             <div class="flex items-center">
-                <DxButton
-                    :width="100"
-                    text="Cancel"
-                    styling-mode="outlined"
-                    style="margin-right: 10px; border-color: #116a5b; color: #116a5b;"
-                />
-                <DxButton
-                    :width="100"
-                    text="Save"
-                    styling-mode="contained"
-                    style="background-color: #116a5b; color: #ffff;"
-                    @click="saveBulkOrder()"
-                />
+                <DxButton :width="100" text="Cancel" styling-mode="outlined"
+                    style="margin-right: 10px; border-color: #116a5b; color: #116a5b;" />
+                <DxButton :width="100" text="Save" styling-mode="contained" style="background-color: #116a5b; color: #ffff;"
+                    @click="saveBulkOrder()" />
             </div>
         </div>
-        
+
         <!-- table starts -->
         <div class="overflow-hidden overflow-x-auto" id="createBulkOrderTable">
             <table class="table-auto">
@@ -74,6 +65,10 @@ export default {
         DxButton
     },
     data() {
+        const scheduledDate = new Date();
+        const today = scheduledDate.setDate(scheduledDate.getDate());
+        const tomorrow = scheduledDate.setDate(scheduledDate.getDate() + 1);
+
         return {
             tableData: [
                 {
@@ -94,11 +89,12 @@ export default {
                     item_type: null,
                     quantity: null,
                     delivery_type: null,
-                    schedule_date: null,
+                    schedule_date: tomorrow,
                     remark: null
                 },
                 // Add more initial data rows as needed
             ],
+            date_for_scheduled: tomorrow
         };
     },
     methods: {
@@ -122,7 +118,7 @@ export default {
                 item_type: null,
                 quantity: null,
                 delivery_type: null,
-                schedule_date: null,
+                schedule_date: this.date_for_scheduled,
                 remark: null
             });
         },
@@ -141,16 +137,16 @@ export default {
                     bulkOrder: formData,
                 }),
             })
-            .then((response) => {
-                return response.json();
-            })
-            .then(function (data) {
-                console.log(data);
-                window.location = `/orders`;
-            })
-            .catch((error) => {
-                return error;
-            });
+                .then((response) => {
+                    return response.json();
+                })
+                .then(function (data) {
+                    console.log(data);
+                    window.location = `/orders`;
+                })
+                .catch((error) => {
+                    return error;
+                });
         }
     },
 };

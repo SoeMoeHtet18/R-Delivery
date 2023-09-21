@@ -11,16 +11,25 @@
             :searchEnabled=true
             :onValueChanged=shopValueChange
             placeholder="Select"
+            :validation-rules="shopValidationRules"
+            ref="shop"
+            :onFocusOut="validateShopBox"
         />
     </td>
     <td>
         <DxTextBox
             v-model="rowData.customer_name"
+            :validation-rules="customerNameValidationRules"
+            ref="customerName"
+            :onFocusOut="validateCustomerName"
         />
     </td>
     <td>
         <DxNumberBox 
             v-model="rowData.customer_phone_number"
+            :validation-rules="customerPhoneNumberValidationRules"
+            ref="customerPhoneNumber"
+            :onFocusOut="validateCustomerPhoneNumber"
         />
     </td>
     <td>
@@ -61,11 +70,29 @@
         />
     </td>
     <td>
-        <DxNumberBox 
+        <DxNumberBox v-if="!rowData.is_deli_free"
             v-model="rowData.item_amount"
             :min="0"
             :show-spin-buttons="true"
         />
+        <div class="flex" v-if="rowData.is_deli_free">
+            <div class="flex flex-col">
+                <h5 class="label-amount">Actual Amount</h5>
+                <DxNumberBox
+                    v-model="rowData.item_amount"
+                    :min="0"
+                    class="amount-box"
+                />
+            </div>
+            <div class="flex flex-col">
+                <h5 class="label-amount">Total Amount</h5>
+                <DxNumberBox
+                    v-model="actualAmount"
+                    :min="0"
+                    class="amount-box"
+                />
+            </div>
+        </div>
     </td>
     <td>
         <DxCheckBox
@@ -73,11 +100,15 @@
         />
     </td>
     <td>
-        <DxNumberBox 
+        <DxNumberBox v-if="!rowData.is_deli_free"
             v-model="rowData.delivery_fees"
             :min="0"
             :show-spin-buttons="true"
+            :readOnly="true"
         />
+        <template v-else>
+            -
+        </template>
     </td>
     <td>
         <DxNumberBox 
@@ -138,11 +169,14 @@
         <DxDateBox
             v-model="rowData.schedule_date"
             type="date"
+            :onKeyDown="handleArrowKeys"
+            :min="getInvalidDate()"
         />
     </td>
     <td>
         <DxTextArea
             v-model="rowData.remark"
+            :onKeyDown="saveOrder"
         />
     </td>
 </template>
@@ -184,9 +218,90 @@ export default {
                 { text: 'All Prepaid', value: 'all_prepaid' },
             ],
             isAddRow : true,
+            shopValidationRules: [
+                {
+                    type: 'required',
+                    message: 'Shop is required',
+                },
+                // Add more validation rules as needed for the shop
+            ],
+            // Define validation rules for other fields as needed
+            customerNameValidationRules: [
+                {
+                    type: 'required',
+                    message: 'Customer name is required',
+                },
+                // Add more validation rules as needed for the customer name
+            ],
+            customerPhoneNumberValidationRules: [
+                {
+                    type: 'required',
+                    message: 'Customer phone number is required',
+                },
+                // Add more validation rules as needed for the customer phone number
+            ],
         }
     },
     methods: {
+        saveOrder(event) {
+            const keyEvent = event.event;
+            if (keyEvent.which === 9 && !keyEvent.shiftKey) {
+                const csrf = document.querySelector('meta[name="_token"]').content;
+                let formData = this.rowData;
+                
+                fetch("/api/orders", {
+                    method: "POST",
+                    headers: new Headers({
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": csrf,
+                    }),
+                    body: JSON.stringify({
+                        data: formData,
+                    }),
+                })
+                    .then((response) => {
+                        return response.json();
+                    })
+                    .catch((error) => {
+                        return error;
+                    });
+            }
+        },
+        validateShopBox() {
+            const selectBox = this.$refs.shop.$refs.input;
+            if (selectBox) {
+                selectBox.validation.validate();
+            }
+        },
+        validateCustomerName() {
+            const textBox = this.$refs.customerName;
+            if (textBox) {
+                textBox.instance.validate(); // Use .instance to access the DevExtreme component's methods
+            }
+        },
+        validateCustomerPhoneNumber() {
+            const numberBox = this.$refs.customer_phone_number.$refs.input;
+            if (numberBox) {
+                numberBox.validation.validate();
+            }
+        },
+        getInvalidDate() {
+            const date = new Date();
+            date.setDate(date.getDate());
+            return date.toISOString().split('T')[0];
+        },
+        handleArrowKeys(event) {
+            const keyEvent = event.event;
+            const currentDate = new Date(this.rowData.schedule_date); 
+
+            if (keyEvent.which === 38) {
+                currentDate.setDate(currentDate.getDate() + 1);
+            } else if (keyEvent.which === 40) {
+                currentDate.setDate(currentDate.getDate() - 1);
+            }
+
+            this.rowData.schedule_date = currentDate;
+        },
         shopValueChange() {
             if(this.isAddRow){
                 this.isAddRow = false;
@@ -195,7 +310,6 @@ export default {
                 });
             }
         },
-
         cityValueChange() {
             this.getTownshipList();
         },
@@ -261,6 +375,13 @@ export default {
         this.getItemTypeList();
         this.getDeliveryTypeList();
     },
+    computed: {
+        actualAmount() {
+            if (this.rowData.is_deli_free) {
+                return this.rowData.item_amount - this.rowData.delivery_fees;
+            }
+        },
+    },
 }
 </script>
 <style scoped>
@@ -290,5 +411,24 @@ td .dx-radiogroup {
     border: 1px solid #ddd;
     border-radius: 4px;
     padding: 7px 21px;
+}
+
+.label-amount {
+    text-align: start;
+    color: #116A5B;
+    font-family: 'Lato';
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-bottom: 2px;
+}
+
+.amount-box {
+    width: 100px !important;
+}
+
+.amount-box:first-of-type {
+    margin-right: 5px;
 }
 </style>

@@ -13,3 +13,4 @@ Route::get('/get-township-list', [TownshipApiController::class, 'getAllTownshipL
 Route::get('/get-rider-list', [RiderApiController::class, 'getAllRidersByTownshipID']);
 Route::get('/get-delivery-fees-by-township-id', [TownshipApiController::class, 'getDeliveryFees']);
 Route::post('/save-bulk-order', [OrderApiController::class, 'saveBulkOrder']);
+Route::post('/orders', [OrderApiController::class, 'saveOrder']);

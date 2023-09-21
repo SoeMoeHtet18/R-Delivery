@@ -239,4 +239,14 @@ class OrderApiController extends Controller
             'status' => 'success'
         ], 200);
     }
+
+    public function saveOrder(Request $request) {
+        $data = $request->data;
+        $this->orderService->saveBulkOrderData($data);
+        return response()->json([
+            'data'   => null,
+            'message'=> 'Successfully save bulk order',
+            'status' => 'success'
+        ], 200);
+    }
 }

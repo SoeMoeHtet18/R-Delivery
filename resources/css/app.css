@@ -16,11 +16,16 @@
 }
 
 .bulk-order-input-box-container .dx-texteditor:hover ,
-.bulk-order-input-box-container .dx-radiobutton-icon {
+.bulk-order-input-box-container .dx-texteditor:focus ,
+.bulk-order-input-box-container .dx-texteditor.dx-state-focused.dx-editor-outlined,
+.bulk-order-input-box-container .dx-radiobutton-icon:hover, 
+.bulk-order-input-box-container .dx-radiobutton.dx-state-focused .dx-radiobutton-icon,
+.bulk-order-input-box-container .dx-radiobutton-icon.dx-radiobutton-icon-checked {
     border-color: #116a5b !important;
 }
 
-.bulk-order-input-box-container .dx-checkbox {
+.bulk-order-input-box-container .dx-checkbox:hover, 
+.bulk-order-input-box-container .dx-checkbox:focus {
     border: 2px solid #116a5b !important;
     border-radius: 4px;
 }
@@ -30,7 +35,7 @@
     font-weight: 900 !important;
 }
 
-.dx-numberbox .dx-numberbox-spin-up-icon, .dx-numberbox .dx-numberbox-spin-down-icon {
+.dx-numberbox .dx-numberbox-spin-up-icon, .dx-numberbox .dx-numberbox-spin-down-icon, .dx-dropdowneditor-icon {
     background-color: #ffffff !important;
 }
 
