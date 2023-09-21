@@ -72,6 +72,7 @@ export default {
         return {
             tableData: [
                 {
+                    order_id: null,
                     shop: null,
                     customer_name: null,
                     customer_phone_number: null,
@@ -101,6 +102,7 @@ export default {
         addNewRow(data) {
             // Add a new row to the tableData array
             this.tableData.push({
+                order_id: null,
                 shop: data.shop,
                 customer_name: null,
                 customer_phone_number: null,

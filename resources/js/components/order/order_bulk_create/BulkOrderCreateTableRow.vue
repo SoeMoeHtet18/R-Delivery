@@ -13,7 +13,7 @@
             placeholder="Select"
             :validation-rules="shopValidationRules"
             ref="shop"
-            :onFocusOut="validateShopBox"
+            :onFocusOut="validateAndUpdateShop"
         />
     </td>
     <td>
@@ -21,7 +21,7 @@
             v-model="rowData.customer_name"
             :validation-rules="customerNameValidationRules"
             ref="customerName"
-            :onFocusOut="validateCustomerName"
+            :onFocusOut="validateAndUpdateCustomerName"
         />
     </td>
     <td>
@@ -29,7 +29,7 @@
             v-model="rowData.customer_phone_number"
             :validation-rules="customerPhoneNumberValidationRules"
             ref="customerPhoneNumber"
-            :onFocusOut="validateCustomerPhoneNumber"
+            :onFocusOut="validateAndUpdateCustomerPhoneNumber"
         />
     </td>
     <td>
@@ -41,6 +41,7 @@
             :searchEnabled=true
             :onValueChanged=cityValueChange
             placeholder="Select"
+            :onFocusOut="validateAndUpdateCity"
         />
     </td>
     <td>
@@ -52,11 +53,13 @@
             :searchEnabled=true
             :onValueChanged=townshipValueChange
             placeholder="Select"
+            :onFocusOut="validateAndUpdateTownship"
         />
     </td>
     <td>
         <DxTextArea
             v-model="rowData.address"
+            :onFocusOut="updateAddress"
         />
     </td>
     <td>
@@ -67,6 +70,7 @@
             v-model="rowData.rider"
             :searchEnabled=true
             placeholder="Select"
+            :onFocusOut="validateAndUpdateRider"
         />
     </td>
     <td>
@@ -74,6 +78,7 @@
             v-model="rowData.item_amount"
             :min="0"
             :show-spin-buttons="true"
+            :onFocusOut="validateAndUpdateItemAmount"
         />
         <div class="flex" v-if="rowData.is_deli_free">
             <div class="flex flex-col">
@@ -115,6 +120,7 @@
             v-model="rowData.markup_delivery_fees"
             :min="0"
             :show-spin-buttons="true"
+            :onFocusOut="updateMarkupDeliveryFees"
         />
     </td>
     <td>
@@ -122,6 +128,7 @@
             v-model="rowData.extra_charges"
             :min="0"
             :show-spin-buttons="true"
+            :onFocusOut="updateExtraCharges"
         />
     </td>
     <td>
@@ -135,6 +142,7 @@
             v-model="rowData.payment_method"
             layout="horizontal"
             class="payment-method-input-box"
+            :onFocusOut="validateAndUpdatePaymentMethod"
         />
     </td>
     <td>
@@ -145,6 +153,7 @@
             v-model="rowData.item_type"
             :searchEnabled=true
             placeholder="Select"
+            :onFocusOut="validateAndUpdateItemType"
         />
     </td>
     <td>
@@ -153,6 +162,7 @@
             :min="1"
             :show-spin-buttons="true"
             class="quantity-input-box"
+            :onFocusOut="updateQuantity"
         />
     </td>
     <td>
@@ -163,6 +173,7 @@
             v-model="rowData.delivery_type"
             :searchEnabled=true
             placeholder="Select"
+            :onFocusOut="validateAndUpdateDeliveryType"
         />
     </td>
     <td>
@@ -171,12 +182,14 @@
             type="date"
             :onKeyDown="handleArrowKeys"
             :min="getInvalidDate()"
+            :onFocusOut="updateScheduleDate"
         />
     </td>
     <td>
         <DxTextArea
             v-model="rowData.remark"
             :onKeyDown="saveOrder"
+            :onFocusOut="updateRemark"
         />
     </td>
 </template>
@@ -243,6 +256,30 @@ export default {
         }
     },
     methods: {
+        updateOrder(order_id) {
+            const csrf = document.querySelector('meta[name="_token"]').content;
+            let formData = this.rowData;
+
+            fetch(`/api/orders/${order_id}`, {
+                    method: "POST",
+                    headers: new Headers({
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": csrf,
+                    }),
+                    body: JSON.stringify({
+                        data: formData,
+                    }),
+                })
+                .then((response) => {
+                    return response.json();
+                })
+                .then((data) => {
+                    console.log(data);
+                })
+                .catch((error) => {
+                    return error;
+                });
+        },
         saveOrder(event) {
             const keyEvent = event.event;
             if (keyEvent.which === 9 && !keyEvent.shiftKey) {
@@ -259,30 +296,123 @@ export default {
                         data: formData,
                     }),
                 })
-                    .then((response) => {
-                        return response.json();
-                    })
-                    .catch((error) => {
-                        return error;
-                    });
+                .then((response) => {
+                    return response.json();
+                })
+                .then((data) => {
+                    this.rowData.order_id = data.data;
+                })
+                .catch((error) => {
+                    return error;
+                });
             }
         },
-        validateShopBox() {
+        validateAndUpdateShop() {
             const selectBox = this.$refs.shop.$refs.input;
-            if (selectBox) {
-                selectBox.validation.validate();
+            // if (selectBox) {
+            //     selectBox.validation.validate();
+            // }
+            const order_id = this.rowData.order_id;
+            if(order_id) {
+                this.updateOrder(order_id);
             }
         },
-        validateCustomerName() {
+        validateAndUpdateCustomerName() {
             const textBox = this.$refs.customerName;
-            if (textBox) {
-                textBox.instance.validate(); // Use .instance to access the DevExtreme component's methods
+            // if (textBox) {
+            //     textBox.instance.validate(); // Use .instance to access the DevExtreme component's methods
+            // }
+            const order_id = this.rowData.order_id;
+            if(order_id) {
+                this.updateOrder(order_id);
             }
         },
-        validateCustomerPhoneNumber() {
+        validateAndUpdateCustomerPhoneNumber() {
             const numberBox = this.$refs.customer_phone_number.$refs.input;
             if (numberBox) {
                 numberBox.validation.validate();
+            }
+            const order_id = this.rowData.order_id;
+            if(order_id) {
+                this.updateOrder(order_id);
+            }
+        },
+        validateAndUpdateCity() {
+            const order_id = this.rowData.order_id;
+            if(order_id) {
+                this.updateOrder(order_id);
+            }
+        },
+        validateAndUpdateTownship() {
+            const order_id = this.rowData.order_id;
+            if(order_id) {
+                this.updateOrder(order_id);
+            }
+        },
+        updateAddress() {
+            const order_id = this.rowData.order_id;
+            if(order_id) {
+                this.updateOrder(order_id);
+            }
+        },
+        validateAndUpdateRider() {
+            const order_id = this.rowData.order_id;
+            if(order_id) {
+                this.updateOrder(order_id);
+            }
+        },
+        validateAndUpdateItemAmount() {
+            const order_id = this.rowData.order_id;
+            if(order_id) {
+                this.updateOrder(order_id);
+            }
+        },
+        updateMarkupDeliveryFees() {
+            const order_id = this.rowData.order_id;
+            if(order_id) {
+                this.updateOrder(order_id);
+            }
+        },
+        updateExtraCharges() {
+            const order_id = this.rowData.order_id;
+            if(order_id) {
+                this.updateOrder(order_id);
+            }
+        },
+        validateAndUpdatePaymentMethod() {
+            const order_id = this.rowData.order_id;
+            if(order_id) {
+                this.updateOrder(order_id);
+            }
+        },
+        validateAndUpdateItemType() {
+            const order_id = this.rowData.order_id;
+            if(order_id) {
+                this.updateOrder(order_id);
+            }
+        },
+        updateQuantity() {
+            const order_id = this.rowData.order_id;
+            if(order_id) {
+                this.updateOrder(order_id);
+            }
+        },
+        validateAndUpdateDeliveryType() {
+            const order_id = this.rowData.order_id;
+            if(order_id) {
+                this.updateOrder(order_id);
+            }
+        },
+        updateScheduleDate() {
+            const order_id = this.rowData.order_id;
+            if(order_id) {
+                this.updateOrder(order_id);
+            }
+        },
+        updateRemark() {
+            const order_id = this.rowData.order_id;
+            if(order_id) {
+                this.updateOrder(order_id);
             }
         },
         getInvalidDate() {
