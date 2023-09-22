@@ -604,6 +604,11 @@ video {
   font-family: Lato, sans-serif;
 }
 
+.blur {
+  --tw-blur: blur(8px);
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+
 .bulk-order-input-box-container .dx-dropdowneditor-icon:not(.dx-datebox .dx-dropdowneditor-icon) {
   background-image: url('/images/vector_close.svg');
   background-color: #ffffff !important;

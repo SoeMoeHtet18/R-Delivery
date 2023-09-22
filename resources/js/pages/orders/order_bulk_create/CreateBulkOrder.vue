@@ -2,19 +2,19 @@
     <div class="py-8 px-6 sm:p-4 md:py-4 md:px-6">
         <div class="flex justify-between">
             <div class="flex items-center">
-                <svg width="40" height="30" viewBox="0 0 40 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg width="40" height="30" viewBox="0 0 40 30" fill="none" xmlns="http://www.w3.org/2000/svg" style="cursor: pointer;" @click="back">
                     <path
                         d="M40 16.0202H4.77963L20.1959 28.5654L18.4329 30L0 15L18.4329 0L20.1959 1.43464L4.77963 13.9798H40V16.0202Z"
                         fill="black" />
                 </svg>
                 <h1 class="bulk-order-title font-lato text-start">CREATE ORDERS</h1>
             </div>
-            <div class="flex items-center">
+            <!-- <div class="flex items-center">
                 <DxButton :width="100" text="Cancel" styling-mode="outlined"
                     style="margin-right: 10px; border-color: #116a5b; color: #116a5b;" />
                 <DxButton :width="100" text="Save" styling-mode="contained" style="background-color: #116a5b; color: #ffff;"
                     @click="saveBulkOrder()" />
-            </div>
+            </div> -->
         </div>
 
         <!-- table starts -->
@@ -149,6 +149,9 @@ export default {
                 .catch((error) => {
                     return error;
                 });
+        },
+        back(){
+            window.location = `/orders`;
         }
     },
 };

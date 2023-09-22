@@ -9,12 +9,16 @@
             valueExpr="id"
             v-model="rowData.shop"
             :searchEnabled=true
-            :onValueChanged=shopValueChange
             placeholder="Select"
-            :validation-rules="shopValidationRules"
             ref="shop"
+            :onItemClick=shopValueChange
+            :onEnterKey=shopValueChange
             :onFocusOut="validateAndUpdateShop"
+            :style="isShopRequired && !rowData.shop ? 'margin-top : 20px' : '' "
         />
+        <div v-if="isShopRequired && !rowData.shop" class="error-message">
+            Shop is required.
+        </div>
     </td>
     <td>
         <DxTextBox
@@ -22,7 +26,11 @@
             :validation-rules="customerNameValidationRules"
             ref="customerName"
             :onFocusOut="validateAndUpdateCustomerName"
+            :style="isCustomerNameRequired && !rowData.customer_name ? 'margin-top : 20px' : '' "
         />
+        <div v-if="isCustomerNameRequired && !rowData.customer_name" class="error-message">
+            Customer Name is required.
+        </div>
     </td>
     <td>
         <DxNumberBox 
@@ -30,7 +38,11 @@
             :validation-rules="customerPhoneNumberValidationRules"
             ref="customerPhoneNumber"
             :onFocusOut="validateAndUpdateCustomerPhoneNumber"
+            :style="isCustomerPhoneNumberRequired && !rowData.customer_phone_number ? 'margin-top : 20px' : '' "
         />
+        <div v-if="isCustomerPhoneNumberRequired && !rowData.customer_phone_number" class="error-message">
+            Phone Number is required.
+        </div>
     </td>
     <td>
         <DxSelectBox
@@ -42,7 +54,11 @@
             :onValueChanged=cityValueChange
             placeholder="Select"
             :onFocusOut="validateAndUpdateCity"
+            :style="isCityRequired && !rowData.city ? 'margin-top : 20px' : '' "
         />
+        <div v-if="isCityRequired && !rowData.city" class="error-message">
+            City is required.
+        </div>
     </td>
     <td>
         <DxSelectBox
@@ -54,7 +70,11 @@
             :onValueChanged=townshipValueChange
             placeholder="Select"
             :onFocusOut="validateAndUpdateTownship"
+            :style="isTownshipRequired && !rowData.township ? 'margin-top : 20px' : '' "
         />
+        <div v-if="isTownshipRequired && !rowData.township" class="error-message">
+            Township is required.
+        </div>
     </td>
     <td>
         <DxTextArea
@@ -79,6 +99,7 @@
             :min="0"
             :show-spin-buttons="true"
             :onFocusOut="validateAndUpdateItemAmount"
+            :style="isItemAmountRequired && !rowData.item_amount && !rowData.is_deli_free ? 'margin-top : 20px' : '' "
         />
         <div class="flex" v-if="rowData.is_deli_free">
             <div class="flex flex-col">
@@ -98,6 +119,9 @@
                 />
             </div>
         </div>
+        <div v-if="isItemAmountRequired && !rowData.item_amount && !rowData.is_deli_free" class="error-message">
+            Item Amount is required.
+        </div>
     </td>
     <td>
         <DxCheckBox
@@ -110,6 +134,7 @@
             :min="0"
             :show-spin-buttons="true"
             :readOnly="true"
+            style="border: 1px solid #ddd;"
         />
         <template v-else>
             -
@@ -119,7 +144,6 @@
         <DxNumberBox 
             v-model="rowData.markup_delivery_fees"
             :min="0"
-            :show-spin-buttons="true"
             :onFocusOut="updateMarkupDeliveryFees"
         />
     </td>
@@ -127,7 +151,6 @@
         <DxNumberBox 
             v-model="rowData.extra_charges"
             :min="0"
-            :show-spin-buttons="true"
             :onFocusOut="updateExtraCharges"
         />
     </td>
@@ -143,7 +166,11 @@
             layout="horizontal"
             class="payment-method-input-box"
             :onFocusOut="validateAndUpdatePaymentMethod"
+            :style="isPaymentMethodRequired && !rowData.payment_method ? 'margin-top : 20px' : '' "
         />
+        <div v-if="isPaymentMethodRequired && !rowData.payment_method" class="error-message">
+            Payment Method is required.
+        </div>
     </td>
     <td>
         <DxSelectBox
@@ -174,7 +201,11 @@
             :searchEnabled=true
             placeholder="Select"
             :onFocusOut="validateAndUpdateDeliveryType"
+            :style="isDeliveryTypeRequired && !rowData.delivery_type ? 'margin-top : 20px' : '' "
         />
+        <div v-if="isDeliveryTypeRequired && !rowData.delivery_type" class="error-message">
+            Delivery Type is required.
+        </div>
     </td>
     <td>
         <DxDateBox
@@ -231,6 +262,14 @@ export default {
                 { text: 'All Prepaid', value: 'all_prepaid' },
             ],
             isAddRow : true,
+            isShopRequired : false,
+            isCustomerNameRequired : false,
+            isCustomerPhoneNumberRequired : false,
+            isCityRequired : false,
+            isTownshipRequired : false,
+            isItemAmountRequired : false,
+            isPaymentMethodRequired : false,
+            isDeliveryTypeRequired : false,
             shopValidationRules: [
                 {
                     type: 'required',
@@ -256,6 +295,10 @@ export default {
         }
     },
     methods: {
+        handleShopChange(newValue) {
+            console.log('i choose the same option.');
+            console.log(newValue);
+        },
         updateOrder(order_id) {
             const csrf = document.querySelector('meta[name="_token"]').content;
             let formData = this.rowData;
@@ -308,29 +351,27 @@ export default {
             }
         },
         validateAndUpdateShop() {
-            const selectBox = this.$refs.shop.$refs.input;
-            // if (selectBox) {
-            //     selectBox.validation.validate();
-            // }
+            console.log(this.isShopRequired);
+            if(this.rowData.shop == null) {
+                this.isShopRequired = true;
+            }
             const order_id = this.rowData.order_id;
             if(order_id) {
                 this.updateOrder(order_id);
             }
         },
         validateAndUpdateCustomerName() {
-            const textBox = this.$refs.customerName;
-            // if (textBox) {
-            //     textBox.instance.validate(); // Use .instance to access the DevExtreme component's methods
-            // }
+            if(this.rowData.customerName == null) {
+                this.isCustomerNameRequired = true;
+            }
             const order_id = this.rowData.order_id;
             if(order_id) {
                 this.updateOrder(order_id);
             }
         },
         validateAndUpdateCustomerPhoneNumber() {
-            const numberBox = this.$refs.customer_phone_number.$refs.input;
-            if (numberBox) {
-                numberBox.validation.validate();
+            if(this.rowData.customerPhoneNumber == null) {
+                this.isCustomerPhoneNumberRequired = true;
             }
             const order_id = this.rowData.order_id;
             if(order_id) {
@@ -338,12 +379,18 @@ export default {
             }
         },
         validateAndUpdateCity() {
+            if(this.rowData.city == null) {
+                this.isCityRequired = true;
+            }
             const order_id = this.rowData.order_id;
             if(order_id) {
                 this.updateOrder(order_id);
             }
         },
         validateAndUpdateTownship() {
+            if(this.rowData.township == null) {
+                this.isTownshipRequired = true;
+            }
             const order_id = this.rowData.order_id;
             if(order_id) {
                 this.updateOrder(order_id);
@@ -362,6 +409,9 @@ export default {
             }
         },
         validateAndUpdateItemAmount() {
+            if(this.rowData.item_amount == null){
+                this.isItemAmountRequired = true;
+            }
             const order_id = this.rowData.order_id;
             if(order_id) {
                 this.updateOrder(order_id);
@@ -380,6 +430,9 @@ export default {
             }
         },
         validateAndUpdatePaymentMethod() {
+            if(this.rowData.payment_method == null) {
+                this.isPaymentMethodRequired = true;
+            }
             const order_id = this.rowData.order_id;
             if(order_id) {
                 this.updateOrder(order_id);
@@ -398,6 +451,9 @@ export default {
             }
         },
         validateAndUpdateDeliveryType() {
+            if(this.rowData.delivery_type == null){
+                this.isDeliveryTypeRequired = true;
+            }
             const order_id = this.rowData.order_id;
             if(order_id) {
                 this.updateOrder(order_id);
@@ -433,6 +489,7 @@ export default {
             this.rowData.schedule_date = currentDate;
         },
         shopValueChange() {
+            console.log('shop value change');
             if(this.isAddRow){
                 this.isAddRow = false;
                 this.$emit('addRow', {
@@ -446,6 +503,7 @@ export default {
         townshipValueChange() {
             this.getRiderList();
             this.getDeliveryFeesByTownshipID();
+            
         },
         async getShopList() {
             await fetch('/api/get-shop-list')
@@ -494,6 +552,7 @@ export default {
                 .then((res) => res.json())
                 .then((data) => {
                     this.rowData.delivery_fees = data.data;
+                    this.rowData.rider = this.riderList[0].id;
                 });
         },
     },
@@ -560,5 +619,11 @@ td .dx-radiogroup {
 
 .amount-box:first-of-type {
     margin-right: 5px;
+}
+
+.error-message {
+    color: red;
+    margin-top: 5px;
+    text-align: start;
 }
 </style>
