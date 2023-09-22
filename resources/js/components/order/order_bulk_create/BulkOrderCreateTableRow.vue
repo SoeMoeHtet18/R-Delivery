@@ -33,13 +33,15 @@
         </div>
     </td>
     <td>
-        <DxNumberBox 
+        <DxTextBox
             v-model="rowData.customer_phone_number"
             :validation-rules="customerPhoneNumberValidationRules"
             ref="customerPhoneNumber"
             :onFocusOut="validateAndUpdateCustomerPhoneNumber"
             :style="isCustomerPhoneNumberRequired && !rowData.customer_phone_number ? 'margin-top : 20px' : '' "
+            mode="tel"
         />
+        
         <div v-if="isCustomerPhoneNumberRequired && !rowData.customer_phone_number" class="error-message">
             Phone Number is required.
         </div>
@@ -134,6 +136,7 @@
             :min="0"
             :show-spin-buttons="true"
             :readOnly="true"
+            :disabled="true"
             style="border: 1px solid #ddd;"
         />
         <template v-else>
@@ -601,6 +604,9 @@ td .dx-radiogroup {
     border-radius: 4px;
     padding: 7px 21px;
 }
+.payment-method-input-box:focus {
+    border-color: #116A5B;
+}
 
 .label-amount {
     text-align: start;
@@ -625,5 +631,7 @@ td .dx-radiogroup {
     color: red;
     margin-top: 5px;
     text-align: start;
+    font-size: 12px;
 }
+
 </style>

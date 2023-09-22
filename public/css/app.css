@@ -604,11 +604,6 @@ video {
   font-family: Lato, sans-serif;
 }
 
-.blur {
-  --tw-blur: blur(8px);
-  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
-}
-
 .bulk-order-input-box-container .dx-dropdowneditor-icon:not(.dx-datebox .dx-dropdowneditor-icon) {
   background-image: url('/images/vector_close.svg');
   background-color: #ffffff !important;
@@ -657,6 +652,13 @@ video {
   font-weight: 400;
   line-height: 18px;
   text-transform: capitalize;
+}
+
+.no-spin-buttons::-webkit-inner-spin-button,
+.no-spin-buttons::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
 }
 
 @media (min-width: 640px) {
