@@ -9,14 +9,16 @@ class SettingController extends Controller
 {
     public function browse()
     {
-        return view('vue-pages.setting.browse');
+        $collection_method = Cache::get('collection_method');
+        $schedule_date = Cache::get('schedule_date');
+        return view('vue-pages.setting.browse',compact('collection_method','schedule_date'));
     }
 
     public function updateSetting(Request $request)
     {
         $data = $request->data;
-        $collection_method = optional($data['collection_method'])['value'];
-        $schedule_date = optional($data['schedule_date'])['value'];
+        $collection_method = $data['collection_method'];
+        $schedule_date = $data['schedule_date'];
 
         $cached_collection_method = Cache::get('collection_method');
         $cached_schedule_date = Cache::get('schedule_date');

@@ -424,7 +424,7 @@ class OrderService
         $order->status = "pending";
         $order->item_type_id =  $data['item_type'] ?? null;
         $order->full_address =  $data['full_address'] ?? null;
-        $order->schedule_date =  Carbon::parse($data['schedule_date']) ?? Carbon::tomorrow();
+        $order->schedule_date =  Carbon::createFromTimestamp($data['schedule_date'] / 1000) ?? Carbon::tomorrow();
         $order->collection_method = $collectionMethod == 'pick_up' ? 'pickup' : 'dropoff';
         $order->proof_of_payment = $data['proof_of_payment'] ?? null;
         $order->payment_method = $data['payment_method'] != null ? $data['payment_method']['value'] : null;
@@ -466,7 +466,7 @@ class OrderService
         $order->status = "pending";
         $order->item_type_id =  $data['item_type'] ?? null;
         $order->full_address =  $data['full_address'] ?? null;
-        $order->schedule_date =  Carbon::parse($data['schedule_date']) ?? Carbon::tomorrow();
+        $order->schedule_date =  Carbon::createFromTimestamp($data['schedule_date'] / 1000) ?? Carbon::tomorrow();
         $order->collection_method = $collectionMethod == 'pick_up' ? 'pickup' : 'dropoff';
         $order->proof_of_payment = $data['proof_of_payment'] ?? null;
         $order->payment_method = $data['payment_method'] != null ? $data['payment_method']['value'] : null;

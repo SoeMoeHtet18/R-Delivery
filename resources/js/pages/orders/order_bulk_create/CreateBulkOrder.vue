@@ -66,8 +66,6 @@ export default {
     },
     props: ['schedule_date'],
     data() {
-        
-
         return {
             tableData: [
                 {
@@ -169,7 +167,7 @@ export default {
         scheduledDate() {
             const scheduledDate = new Date();
             if(this.schedule_date == 'today') {
-                const today = scheduledDate.setDate(scheduledDate.getDate())
+                const today = scheduledDate.setDate(scheduledDate.getDate());
                 this.date_for_scheduled = today;
                 this.tableData[0].schedule_date = today;
             } else {

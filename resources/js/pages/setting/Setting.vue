@@ -11,7 +11,7 @@
                 <div class="rectangle">
                     <span class="label">Collection Method</span>
                     <h5 class="lable-title">Always On</h5>
-                    <DxRadioGroup :items="collectionMethods" layout="vertical" v-model="selectedCollectionMethod"
+                    <DxRadioGroup :items="collectionMethods" value-expr="value" layout="vertical" v-model="selectedCollectionMethod"
                         :valueChanged="updateSetting()" />
                 </div>
             </div>
@@ -19,7 +19,7 @@
                 <div class="rectangle">
                     <span class="label">Schedule Date</span>
                     <h5 class="lable-title">Always On</h5>
-                    <DxRadioGroup :items="scheduleDate" layout="vertical" v-model="selectedScheduleDate"
+                    <DxRadioGroup :items="scheduleDate" value-expr="value" layout="vertical" v-model="selectedScheduleDate"
                         :valueChanged="updateSetting()" />
                 </div>
             </div>
@@ -33,10 +33,11 @@ export default {
     components: {
         DxRadioGroup
     },
+    props:['collection_method', 'schedule_date'],
     data() {
         return {
-            selectedCollectionMethod: null,
-            selectedScheduleDate: null,
+            selectedCollectionMethod: this.collection_method ?? null,
+            selectedScheduleDate: this.schedule_date ?? null,
             collectionMethods: [
                 { text: 'Pick Up', value: 'pick_up' },
                 { text: 'Drop Off', value: 'drop_off' },
@@ -75,7 +76,7 @@ export default {
                     return error;
                 });
         },
-    }
+    },
 }
 </script>
 <style scoped>

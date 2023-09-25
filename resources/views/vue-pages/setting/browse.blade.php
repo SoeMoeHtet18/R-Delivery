@@ -16,7 +16,10 @@
 @section('content')
 
     <div id="app">
-        <setting></setting>
+        <setting
+            :collection_method="'{{$collection_method}}'"
+            :schedule_date="'{{$schedule_date}}'"
+        ></setting>
     </div>
 @endsection
 @section('javascript')
