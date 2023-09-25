@@ -7,20 +7,20 @@
             <hr class="short-line">
         </div>
         <div class="flex">
-            <div class="collection w-1/2">
+            <div class="collection">
                 <div class="rectangle">
                     <span class="label">Collection Method</span>
                     <h5 class="lable-title">Always On</h5>
                     <DxRadioGroup :items="collectionMethods" layout="vertical" v-model="selectedCollectionMethod"
-                        :valueChanged="updateSetting" />
+                        :valueChanged="updateSetting()" />
                 </div>
             </div>
-            <div class="schedule-date w-1/2">
+            <div class="schedule-date">
                 <div class="rectangle">
                     <span class="label">Schedule Date</span>
                     <h5 class="lable-title">Always On</h5>
                     <DxRadioGroup :items="scheduleDate" layout="vertical" v-model="selectedScheduleDate"
-                        :valueChanged="updateSetting" />
+                        :valueChanged="updateSetting()" />
                 </div>
             </div>
         </div>
@@ -108,10 +108,12 @@ export default {
     border: none;
     margin: 10px 0 30px;
 }
-
+.schedule-date {
+    width: 50%;
+}
 .collection {
-    box-sizing: border-box;
-    inset: 0;
+    width: 50%;
+    margin-right: 30px;
 }
 
 .rectangle {
@@ -125,10 +127,9 @@ export default {
 .label {
     position: absolute;
     top: -15px;
-    left: 125px;
-    transform: translateX(-50%);
+    left: 25px;
     background-color: #fff;
-    padding: 0 10px;
+    padding: 0 20px;
     color: #000000;
     font-size: 20px;
     font-style: normal;
@@ -142,7 +143,7 @@ export default {
     font-style: normal;
     font-weight: 400;
     line-height: 17px;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
 </style>
