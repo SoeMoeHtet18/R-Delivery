@@ -59,3 +59,41 @@
     appearance: none;
     margin: 0;
 }
+
+.rectangle .dx-radiobutton {
+    margin: 12px 16px !important;
+}
+
+.rectangle .dx-radiobutton-icon {
+    border-radius: 50% !important;
+    width: 18px;
+    height: 18px;
+    border-color: #aaaaaa !important;
+}
+
+.rectangle .dx-radiobutton.dx-state-hover .dx-radiobutton-icon {
+    background-color: #116a5b;
+}
+
+.rectangle .dx-radiobutton-icon-dot {
+    border-width: 3px;
+    border-radius: 50% !important;
+}
+
+.rectangle .dx-radiobutton-icon-checked .dx-radiobutton-icon-dot {
+    background-color: #116a5b;
+    border-width: 3px;
+}
+
+.rectangle .dx-radiobutton-icon.dx-radiobutton-icon-checked {
+    border-color: #116a5b;
+}
+
+.rectangle .dx-item.dx-radiobutton .dx-item-content {
+    font-family: 'Lato';
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 17px;
+    color: #000000;
+}
