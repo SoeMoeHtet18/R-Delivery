@@ -693,7 +693,7 @@ video {
 }
 
 .rectangle .dx-radiobutton.dx-state-hover .dx-radiobutton-icon {
-  background-color: #116a5b;
+  border-color: #116a5b;
 }
 
 .rectangle .dx-radiobutton-icon-dot {

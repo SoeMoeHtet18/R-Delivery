@@ -11,14 +11,16 @@
                 <div class="rectangle">
                     <span class="label">Collection Method</span>
                     <h5 class="lable-title">Always On</h5>
-                    <DxRadioGroup :items="collectionMethods" layout="vertical" />
+                    <DxRadioGroup :items="collectionMethods" layout="vertical" v-model="selectedCollectionMethod"
+                        :valueChanged="updateSetting" />
                 </div>
             </div>
             <div class="schedule-date w-1/2">
                 <div class="rectangle">
                     <span class="label">Schedule Date</span>
                     <h5 class="lable-title">Always On</h5>
-                    <DxRadioGroup :items="scheduleDate" layout="vertical" />
+                    <DxRadioGroup :items="scheduleDate" layout="vertical" v-model="selectedScheduleDate"
+                        :valueChanged="updateSetting" />
                 </div>
             </div>
         </div>
@@ -33,6 +35,8 @@ export default {
     },
     data() {
         return {
+            selectedCollectionMethod: null,
+            selectedScheduleDate: null,
             collectionMethods: [
                 { text: 'Pick Up', value: 'pick_up' },
                 { text: 'Drop Off', value: 'drop_off' },
@@ -42,6 +46,35 @@ export default {
                 { text: 'Tomorrow', value: 'tomorrow' },
             ],
         }
+    },
+    methods: {
+        updateSetting() {
+            const csrf = document.querySelector('meta[name="_token"]').content;
+            let formData = {
+                'collection_method': this.selectedCollectionMethod,
+                'schedule_date': this.selectedScheduleDate
+            };
+
+            fetch(`/api/setting/update`, {
+                    method: "POST",
+                    headers: new Headers({
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": csrf,
+                    }),
+                    body: JSON.stringify({
+                        data: formData,
+                    }),
+                })
+                .then((response) => {
+                    return response.json();
+                })
+                .then((data) => {
+                    console.log(data);
+                })
+                .catch((error) => {
+                    return error;
+                });
+        },
     }
 }
 </script>
