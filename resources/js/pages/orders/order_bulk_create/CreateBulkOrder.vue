@@ -46,7 +46,7 @@
                 </thead>
                 <tbody class="bulk-order-input-box-container">
                     <tr v-for="(data, index) in tableData" :key="index">
-                        <bulk-order-create-table-row :rowData="data" :rowIndex="index + 1" @addRow="addNewRow">
+                        <bulk-order-create-table-row :rowData="data" :rowIndex="index + 1" @addRow="addNewRow" @duplicateData="duplicateData">
                         </bulk-order-create-table-row>
                     </tr>
                 </tbody>
@@ -64,10 +64,9 @@ export default {
         BulkOrderCreateTableRow,
         DxButton
     },
+    props: ['schedule_date'],
     data() {
-        const scheduledDate = new Date();
-        const today = scheduledDate.setDate(scheduledDate.getDate());
-        const tomorrow = scheduledDate.setDate(scheduledDate.getDate() + 1);
+        
 
         return {
             tableData: [
@@ -88,14 +87,14 @@ export default {
                     is_paylater: false,
                     payment_method: null,
                     item_type: null,
-                    quantity: null,
+                    quantity: 1,
                     delivery_type: null,
-                    schedule_date: tomorrow,
+                    schedule_date: null,
                     remark: null
                 },
                 // Add more initial data rows as needed
             ],
-            date_for_scheduled: tomorrow
+            date_for_scheduled: null
         };
     },
     methods: {
@@ -118,11 +117,24 @@ export default {
                 is_paylater: false,
                 payment_method: null,
                 item_type: null,
-                quantity: null,
+                quantity: 1,
                 delivery_type: null,
                 schedule_date: this.date_for_scheduled,
                 remark: null
             });
+        },
+        
+        duplicateData(data) {
+            // Add a new row to the tableData array
+            console.log(data);
+            const rowData = this.tableData[data.index];
+            rowData.city  = data.city;
+            rowData.township = data.township;
+            rowData.rider = data.rider;
+            rowData.delivery_fees = data.delivery_fees;
+            rowData.item_type = data.item_type;
+            rowData.delivery_type = data.delivery_type;
+            rowData.schedule_date = data.schedule_date;
         },
 
         saveBulkOrder() {
@@ -152,8 +164,24 @@ export default {
         },
         back(){
             window.location = `/orders`;
+        },
+
+        scheduledDate() {
+            const scheduledDate = new Date();
+            if(this.schedule_date == 'today') {
+                const today = scheduledDate.setDate(scheduledDate.getDate())
+                this.date_for_scheduled = today;
+                this.tableData[0].schedule_date = today;
+            } else {
+                const tomorrow = scheduledDate.setDate(scheduledDate.getDate() + 1);
+                this.date_for_scheduled = tomorrow;
+                this.tableData[0].schedule_date = tomorrow;
+            }
         }
     },
+    mounted() {
+        this.scheduledDate();
+    }
 };
 </script>
 

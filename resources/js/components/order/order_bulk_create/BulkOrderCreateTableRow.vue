@@ -273,28 +273,6 @@ export default {
             isItemAmountRequired : false,
             isPaymentMethodRequired : false,
             isDeliveryTypeRequired : false,
-            shopValidationRules: [
-                {
-                    type: 'required',
-                    message: 'Shop is required',
-                },
-                // Add more validation rules as needed for the shop
-            ],
-            // Define validation rules for other fields as needed
-            customerNameValidationRules: [
-                {
-                    type: 'required',
-                    message: 'Customer name is required',
-                },
-                // Add more validation rules as needed for the customer name
-            ],
-            customerPhoneNumberValidationRules: [
-                {
-                    type: 'required',
-                    message: 'Customer phone number is required',
-                },
-                // Add more validation rules as needed for the customer phone number
-            ],
         }
     },
     methods: {
@@ -350,6 +328,17 @@ export default {
                 })
                 .catch((error) => {
                     return error;
+                });
+
+                this.$emit('duplicateData', {
+                    index: this.rowIndex,
+                    city: this.rowData.city,
+                    township: this.rowData.township,
+                    rider: this.rowData.rider,
+                    delivery_fees: this.rowData.delivery_fees,
+                    item_type: this.rowData.item_type,
+                    delivery_type: this.rowData.delivery_type,
+                    schedule_date: this.rowData.schedule_date,
                 });
             }
         },
@@ -632,6 +621,7 @@ td .dx-radiogroup {
     margin-top: 5px;
     text-align: start;
     font-size: 12px;
+    width: max-content;
 }
 
 </style>

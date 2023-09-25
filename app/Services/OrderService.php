@@ -13,6 +13,7 @@ use App\Models\Township;
 use App\Models\User;
 use App\Models\Log;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -403,6 +404,7 @@ class OrderService
     {
         $user = auth()->user();
         $today = Carbon::today()->format('Y-m-d');
+        $collectionMethod = Cache::get('collection_method');
         
         $order = new Order();
         $orderCode = Helper::nomenclature('orders', 'TCP', 'id', $data['shop'], 'S');
@@ -423,7 +425,7 @@ class OrderService
         $order->item_type_id =  $data['item_type'] ?? null;
         $order->full_address =  $data['full_address'] ?? null;
         $order->schedule_date =  Carbon::parse($data['schedule_date']) ?? Carbon::tomorrow();
-        $order->collection_method = $data['collection_method'] ?? 'pickup';
+        $order->collection_method = $collectionMethod == 'pick_up' ? 'pickup' : 'dropoff';
         $order->proof_of_payment = $data['proof_of_payment'] ?? null;
         $order->payment_method = $data['payment_method'] != null ? $data['payment_method']['value'] : null;
         $order->note = $data['note'] ?? null;
@@ -446,6 +448,7 @@ class OrderService
     {
         $user = auth()->user();
         $today = Carbon::today()->format('Y-m-d');
+        $collectionMethod = Cache::get('collection_method');
         
         $order = Order::findOrFail($data['order_id']);
         $order->shop_id =  $data['shop'];
@@ -464,7 +467,7 @@ class OrderService
         $order->item_type_id =  $data['item_type'] ?? null;
         $order->full_address =  $data['full_address'] ?? null;
         $order->schedule_date =  Carbon::parse($data['schedule_date']) ?? Carbon::tomorrow();
-        $order->collection_method = $data['collection_method'] ?? 'pickup';
+        $order->collection_method = $collectionMethod == 'pick_up' ? 'pickup' : 'dropoff';
         $order->proof_of_payment = $data['proof_of_payment'] ?? null;
         $order->payment_method = $data['payment_method'] != null ? $data['payment_method']['value'] : null;
         $order->note = $data['note'] ?? null;
