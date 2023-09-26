@@ -15,6 +15,7 @@
             :onEnterKey=shopValueChange
             :onFocusOut="validateAndUpdateShop"
             :style="isShopRequired && !rowData.shop ? 'margin-top : 20px' : '' "
+            @input="addNewRow"
         />
         <div v-if="isShopRequired && !rowData.shop" class="error-message">
             Shop is required.
@@ -27,6 +28,7 @@
             ref="customerName"
             :onFocusOut="validateAndUpdateCustomerName"
             :style="isCustomerNameRequired && !rowData.customer_name ? 'margin-top : 20px' : '' "
+            @input="addNewRow"
         />
         <div v-if="isCustomerNameRequired && !rowData.customer_name" class="error-message">
             Customer Name is required.
@@ -40,6 +42,7 @@
             :onFocusOut="validateAndUpdateCustomerPhoneNumber"
             :style="isCustomerPhoneNumberRequired && !rowData.customer_phone_number ? 'margin-top : 20px' : '' "
             mode="tel"
+            @input="addNewRow"
         />
         
         <div v-if="isCustomerPhoneNumberRequired && !rowData.customer_phone_number" class="error-message">
@@ -55,8 +58,10 @@
             :searchEnabled=true
             :onValueChanged=cityValueChange
             placeholder="Select"
+            ref="city"
             :onFocusOut="validateAndUpdateCity"
             :style="isCityRequired && !rowData.city ? 'margin-top : 20px' : '' "
+            @input="addNewRow"
         />
         <div v-if="isCityRequired && !rowData.city" class="error-message">
             City is required.
@@ -71,8 +76,10 @@
             :searchEnabled=true
             :onValueChanged=townshipValueChange
             placeholder="Select"
+            ref="township"
             :onFocusOut="validateAndUpdateTownship"
             :style="isTownshipRequired && !rowData.township ? 'margin-top : 20px' : '' "
+            @input="addNewRow"
         />
         <div v-if="isTownshipRequired && !rowData.township" class="error-message">
             Township is required.
@@ -82,6 +89,7 @@
         <DxTextArea
             v-model="rowData.address"
             :onFocusOut="updateAddress"
+            @input="addNewRow"
         />
     </td>
     <td>
@@ -92,7 +100,9 @@
             v-model="rowData.rider"
             :searchEnabled=true
             placeholder="Select"
+            ref="rider"
             :onFocusOut="validateAndUpdateRider"
+            @input="addNewRow"
         />
     </td>
     <td>
@@ -102,6 +112,7 @@
             :show-spin-buttons="true"
             :onFocusOut="validateAndUpdateItemAmount"
             :style="isItemAmountRequired && !rowData.item_amount && !rowData.is_deli_free ? 'margin-top : 20px' : '' "
+            @input="addNewRow"
         />
         <div class="flex" v-if="rowData.is_deli_free">
             <div class="flex flex-col">
@@ -110,6 +121,7 @@
                     v-model="rowData.item_amount"
                     :min="0"
                     class="amount-box"
+                    @input="addNewRow"
                 />
             </div>
             <div class="flex flex-col">
@@ -118,6 +130,7 @@
                     v-model="actualAmount"
                     :min="0"
                     class="amount-box"
+                    @input="addNewRow"
                 />
             </div>
         </div>
@@ -148,6 +161,7 @@
             v-model="rowData.markup_delivery_fees"
             :min="0"
             :onFocusOut="updateMarkupDeliveryFees"
+            @input="addNewRow"
         />
     </td>
     <td>
@@ -155,6 +169,7 @@
             v-model="rowData.extra_charges"
             :min="0"
             :onFocusOut="updateExtraCharges"
+            @input="addNewRow"
         />
     </td>
     <td>
@@ -170,6 +185,7 @@
             class="payment-method-input-box"
             :onFocusOut="validateAndUpdatePaymentMethod"
             :style="isPaymentMethodRequired && !rowData.payment_method ? 'margin-top : 20px' : '' "
+            @input="addNewRow"
         />
         <div v-if="isPaymentMethodRequired && !rowData.payment_method" class="error-message">
             Payment Method is required.
@@ -184,6 +200,7 @@
             :searchEnabled=true
             placeholder="Select"
             :onFocusOut="validateAndUpdateItemType"
+            @input="addNewRow"
         />
     </td>
     <td>
@@ -193,6 +210,7 @@
             :show-spin-buttons="true"
             class="quantity-input-box"
             :onFocusOut="updateQuantity"
+            @input="addNewRow"
         />
     </td>
     <td>
@@ -205,6 +223,7 @@
             placeholder="Select"
             :onFocusOut="validateAndUpdateDeliveryType"
             :style="isDeliveryTypeRequired && !rowData.delivery_type ? 'margin-top : 20px' : '' "
+            @input="addNewRow"
         />
         <div v-if="isDeliveryTypeRequired && !rowData.delivery_type" class="error-message">
             Delivery Type is required.
@@ -217,6 +236,7 @@
             :onKeyDown="handleArrowKeys"
             :min="getInvalidDate()"
             :onFocusOut="updateScheduleDate"
+            @input="addNewRow"
         />
     </td>
     <td>
@@ -224,6 +244,7 @@
             v-model="rowData.remark"
             :onKeyDown="saveOrder"
             :onFocusOut="updateRemark"
+            @input="addNewRow"
         />
     </td>
 </template>
@@ -276,6 +297,50 @@ export default {
         }
     },
     methods: {
+        selectShopValue(event) {
+            this.shopList.forEach((shop) => {
+                const shopName = shop.name.toLowerCase();
+                const valueForCheck = event.target.value.toLowerCase();
+                if(shopName == valueForCheck) {
+                    this.rowData.shop = shop.id;
+                }
+            })
+        },
+        selectCityValue(event) {
+            this.cityList.forEach((city) => {
+                const cityName = city.name.toLowerCase();
+                const valueForCheck = event.target.value.toLowerCase();
+                if(cityName == valueForCheck) {
+                    this.rowData.city = city.id;
+                }
+            })
+        },
+        selectTownshipValue(event) {
+            this.townshipList.forEach((township) => {
+                const townshipName = township.name.toLowerCase();
+                const valueForCheck = event.target.value.toLowerCase();
+                if(townshipName == valueForCheck) {
+                    this.rowData.township = township.id;
+                }
+            })
+        },
+        selectRiderValue(event) {
+            this.riderList.forEach((rider) => {
+                const riderName = rider.name.toLowerCase();
+                const valueForCheck = event.target.value.toLowerCase();
+                if(riderName == valueForCheck) {
+                    this.rowData.rider = rider.id;
+                }
+            })
+        },
+        addNewRow() {
+            if(this.isAddRow){
+                this.isAddRow = false;
+                this.$emit('addRow', {
+                    shop: null,
+                });
+            }
+        },
         handleShopChange(newValue) {
             console.log('i choose the same option.');
             console.log(newValue);
@@ -481,7 +546,6 @@ export default {
             this.rowData.schedule_date = currentDate;
         },
         shopValueChange() {
-            console.log('shop value change');
             if(this.isAddRow){
                 this.isAddRow = false;
                 this.$emit('addRow', {
@@ -523,6 +587,7 @@ export default {
                 .then((res) => res.json())
                 .then((data) => {
                     this.riderList = data.data;
+                    this.rowData.rider = this.riderList[0].id;
                 });
         },
         async getItemTypeList() {
@@ -544,17 +609,30 @@ export default {
                 .then((res) => res.json())
                 .then((data) => {
                     this.rowData.delivery_fees = data.data;
-                    this.rowData.rider = this.riderList[0].id;
                 });
         },
     },
     mounted() {
         this.getShopList();
         this.getCityList();
-        this.getTownshipList();
-        this.getRiderList();
         this.getItemTypeList();
         this.getDeliveryTypeList();
+        this.$refs.shop.$el.querySelector(".dx-texteditor-input").addEventListener(
+            "input",
+            this.selectShopValue
+        );
+        this.$refs.city.$el.querySelector(".dx-texteditor-input").addEventListener(
+            "input",
+            this.selectCityValue
+        );
+        this.$refs.township.$el.querySelector(".dx-texteditor-input").addEventListener(
+            "input",
+            this.selectTownshipValue
+        );
+        this.$refs.rider.$el.querySelector(".dx-texteditor-input").addEventListener(
+            "input",
+            this.selectRiderValue
+        );
     },
     computed: {
         actualAmount() {
