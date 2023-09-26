@@ -616,6 +616,10 @@ video {
   text-transform: uppercase;
 }
 
+.outline {
+  outline-style: solid;
+}
+
 .bulk-order-input-box-container .dx-dropdowneditor-icon:not(.dx-datebox .dx-dropdowneditor-icon) {
   background-image: url('/images/vector_close.svg');
   background-color: #ffffff !important;

@@ -42,6 +42,7 @@
                         <th>DELIVERY TYPE</th>
                         <th>SCHEDULE DATE</th>
                         <th>REMARK</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody class="bulk-order-input-box-container">

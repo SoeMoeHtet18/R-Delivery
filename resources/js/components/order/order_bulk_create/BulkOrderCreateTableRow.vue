@@ -199,6 +199,7 @@
             v-model="rowData.item_type"
             :searchEnabled=true
             placeholder="Select"
+            ref="itemType"
             :onFocusOut="validateAndUpdateItemType"
             @input="addNewRow"
         />
@@ -221,6 +222,7 @@
             v-model="rowData.delivery_type"
             :searchEnabled=true
             placeholder="Select"
+            ref="deliveryType"
             :onFocusOut="validateAndUpdateDeliveryType"
             :style="isDeliveryTypeRequired && !rowData.delivery_type ? 'margin-top : 20px' : '' "
             @input="addNewRow"
@@ -247,6 +249,15 @@
             @input="addNewRow"
         />
     </td>
+    <td>
+        <ph-plus-circle 
+            :size="32" 
+            ref="plusCircle" 
+            tabindex="0" 
+            class="plus-icon"
+            @keydown="addRow"
+        />
+    </td>
 </template>
 
 <script>
@@ -257,6 +268,7 @@ import DxDateBox from 'devextreme-vue/date-box';
 import DxTextArea from 'devextreme-vue/text-area';
 import DxCheckBox from 'devextreme-vue/check-box';
 import DxRadioGroup from 'devextreme-vue/radio-group';
+import { PhPlusCircle } from "@phosphor-icons/vue";
 
 export default {
     components: {
@@ -266,7 +278,8 @@ export default {
         DxDateBox,
         DxTextArea,
         DxCheckBox,
-        DxRadioGroup
+        DxRadioGroup,
+        PhPlusCircle
     },
     props: {
         rowData: Object,
@@ -294,9 +307,15 @@ export default {
             isItemAmountRequired : false,
             isPaymentMethodRequired : false,
             isDeliveryTypeRequired : false,
+            isIconFocused: false,
         }
     },
     methods: {
+        addRow(event) {
+            if (event.keyCode === 13 || event.keyCode === 9 && !event.shiftKey) {
+                this.addNewRow();
+            }
+        },
         selectShopValue(event) {
             this.shopList.forEach((shop) => {
                 const shopName = shop.name.toLowerCase();
@@ -330,6 +349,24 @@ export default {
                 const valueForCheck = event.target.value.toLowerCase();
                 if(riderName == valueForCheck) {
                     this.rowData.rider = rider.id;
+                }
+            })
+        },
+        selectItemTypeValue(event) {
+            this.itemTypeList.forEach((itemType) => {
+                const itemTypeName = itemType.name.toLowerCase();
+                const valueForCheck = event.target.value.toLowerCase();
+                if(itemTypeName == valueForCheck) {
+                    this.rowData.item_type = itemType.id;
+                }
+            })
+        },
+        selectDeliveryTypeValue(event) {
+            this.deliveryTypeList.forEach((deliveryType) => {
+                const deliveryTypeName = deliveryType.name.toLowerCase();
+                const valueForCheck = event.target.value.toLowerCase();
+                if(deliveryTypeName == valueForCheck) {
+                    this.rowData.delivery_type = deliveryType.id;
                 }
             })
         },
@@ -633,6 +670,14 @@ export default {
             "input",
             this.selectRiderValue
         );
+        this.$refs.itemType.$el.querySelector(".dx-texteditor-input").addEventListener(
+            "input",
+            this.selectItemTypeValue
+        );
+        this.$refs.deliveryType.$el.querySelector(".dx-texteditor-input").addEventListener(
+            "input",
+            this.selectDeliveryTypeValue
+        );
     },
     computed: {
         actualAmount() {
@@ -702,4 +747,13 @@ td .dx-radiogroup {
     width: max-content;
 }
 
+.plus-icon {
+  color: #ffffff;
+}
+
+/* Define the color for the icon when it is focused */
+.plus-icon:focus {
+  color: #116A5B;
+  outline: none; /* Remove the default focus outline */
+}
 </style>
