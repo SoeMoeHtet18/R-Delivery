@@ -13,6 +13,7 @@ use App\Models\Township;
 use App\Models\User;
 use App\Models\Log;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -397,5 +398,91 @@ class OrderService
     {
         $schedule_date = Carbon::parse($data['schedule_date']);
         Order::where('id', $data['order_id'])->update(['schedule_date' => $schedule_date]);
+    }
+
+    public function saveBulkOrderData($data)
+    {
+        $user = auth()->user();
+        $today = Carbon::today()->format('Y-m-d');
+        $collectionMethod = Cache::get('collection_method');
+        
+        $order = new Order();
+        $orderCode = Helper::nomenclature('orders', 'TCP', 'id', $data['shop'], 'S');
+        $order->order_code =  $orderCode;
+        $order->shop_id =  $data['shop'];
+        $order->customer_name =  $data['customer_name'];
+        $order->customer_phone_number =  $data['customer_phone_number'];
+        $order->city_id =  $data['city'];
+        $order->township_id =  $data['township'];
+        $order->rider_id =  $data['rider'] ?? null;
+        $order->items =  $data['items'] ?? null;
+        $order->quantity =  $data['quantity'] ?? null;
+        $order->delivery_fees =  $data['delivery_fees'];
+        $order->total_amount = $data['item_amount'];
+        $order->markup_delivery_fees =  $data['markup_delivery_fees'] ?? 0;
+        $order->remark =  $data['remark'] ?? null;
+        $order->status = "pending";
+        $order->item_type_id =  $data['item_type'] ?? null;
+        $order->full_address =  $data['full_address'] ?? null;
+        $order->schedule_date =  Carbon::parse($data['schedule_date']) ?? Carbon::tomorrow();
+        $order->collection_method = $collectionMethod == 'pick_up' ? 'pickup' : 'dropoff';
+        $order->proof_of_payment = $data['proof_of_payment'] ?? null;
+        $order->payment_method = $data['payment_method'] != null ? $data['payment_method']['value'] : null;
+        $order->note = $data['note'] ?? null;
+        $order->delivery_type_id = $data['delivery_type'];
+        $order->is_payment_channel_confirm = 0;
+        $order->is_confirm = 0;
+        $order->extra_charges = $data['extra_charges'] ?? 0;
+        $order->branch_id = $user->branch_id;
+        // $order->pay_later = $data['total_amount'] > 100000 ? true : false;
+        $order->pay_later = isset($data['pay_later']) ? true : false;
+        $order->is_deli_free = isset($data['is_deli_free']) ? true : false;
+        $order->save();
+        if($today == Carbon::parse($data['schedule_date'])->format('Y-m-d')) {
+            $this->changeStatus($order, 'delivering', $user, User::class);
+        }
+        return $order;
+    }
+
+    public function updateBulkOrder($data)
+    {
+        $user = auth()->user();
+        $today = Carbon::today()->format('Y-m-d');
+        $collectionMethod = Cache::get('collection_method');
+        
+        $order = Order::findOrFail($data['order_id']);
+        $order->shop_id =  $data['shop'];
+        $order->customer_name =  $data['customer_name'];
+        $order->customer_phone_number =  $data['customer_phone_number'];
+        $order->city_id =  $data['city'];
+        $order->township_id =  $data['township'];
+        $order->rider_id =  $data['rider'] ?? null;
+        $order->items =  $data['items'] ?? null;
+        $order->quantity =  $data['quantity'] ?? null;
+        $order->delivery_fees =  $data['delivery_fees'];
+        $order->total_amount = $data['item_amount'];
+        $order->markup_delivery_fees =  $data['markup_delivery_fees'] ?? 0;
+        $order->remark =  $data['remark'] ?? null;
+        $order->status = "pending";
+        $order->item_type_id =  $data['item_type'] ?? null;
+        $order->full_address =  $data['full_address'] ?? null;
+        $order->schedule_date =  Carbon::parse($data['schedule_date']) ?? Carbon::tomorrow();
+        $order->collection_method = $collectionMethod == 'pick_up' ? 'pickup' : 'dropoff';
+        $order->proof_of_payment = $data['proof_of_payment'] ?? null;
+        $order->payment_method = $data['payment_method'] != null ? $data['payment_method']['value'] : null;
+        $order->note = $data['note'] ?? null;
+        $order->delivery_type_id = $data['delivery_type'];
+        $order->is_payment_channel_confirm = 0;
+        $order->is_confirm = 0;
+        $order->extra_charges = $data['extra_charges'] ?? 0;
+        $order->branch_id = $user->branch_id;
+        // $order->pay_later = $data['total_amount'] > 100000 ? true : false;
+        $order->pay_later = isset($data['pay_later']) ? true : false;
+        $order->is_deli_free = isset($data['is_deli_free']) ? true : false;
+        $order->save();
+        if($today == Carbon::parse($data['schedule_date'])->format('Y-m-d')) {
+            $this->changeStatus($order, 'delivering', $user, User::class);
+        }
+        return $order;
     }
 }

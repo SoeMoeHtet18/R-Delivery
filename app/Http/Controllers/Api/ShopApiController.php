@@ -42,7 +42,6 @@ class ShopApiController extends Controller
     public function getAllShopList()
     {
         $shops = $this->shopRepository->getAllShops();
-        $shops = $shops->sortByDesc('id');
         return response()->json([
             'data' => $shops,
             'message' => 'Successfully Get Shop List',

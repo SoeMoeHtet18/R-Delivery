@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bulk-order-input-box-container .dx-dropdowneditor-icon:not(.dx-datebox .dx-dropdowneditor-icon) {
+    background-image: url('/images/vector_close.svg');
+    background-color: #ffffff !important;
+}
+
+.bulk-order-input-box-container .dx-dropdowneditor-icon::before {
+    content: unset;
+}
+
+.bulk-order-input-box-container .dx-datebox .dx-dropdowneditor-icon  {
+    color: #116a5b;
+}
+
+.bulk-order-input-box-container .dx-texteditor:hover ,
+.bulk-order-input-box-container .dx-texteditor:focus ,
+.bulk-order-input-box-container .dx-texteditor.dx-state-focused.dx-editor-outlined,
+.bulk-order-input-box-container .dx-radiobutton-icon:hover, 
+.bulk-order-input-box-container .dx-radiobutton.dx-state-focused .dx-radiobutton-icon,
+.bulk-order-input-box-container .dx-radiobutton-icon.dx-radiobutton-icon-checked {
+    border-color: #116a5b !important;
+}
+
+.bulk-order-input-box-container .dx-checkbox:hover, 
+.bulk-order-input-box-container .dx-checkbox:focus {
+    border: 2px solid #116a5b !important;
+    border-radius: 4px;
+}
+
+.bulk-order-input-box-container .dx-checkbox-icon {
+    color: #116a5b !important;
+    font-weight: 900 !important;
+}
+
+.dx-numberbox .dx-numberbox-spin-up-icon, .dx-numberbox .dx-numberbox-spin-down-icon, .dx-dropdowneditor-icon {
+    background-color: #ffffff !important;
+}
+
+
+.bulk-order-input-box-container .dx-radiobutton-icon-checked .dx-radiobutton-icon-dot {
+    background-color: #116a5b !important;
+}
+
+.bulk-order-input-box-container .dx-item-content {
+    color: #000;
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400;
+    line-height: 18px;
+    text-transform: capitalize;
+}
+
+.no-spin-buttons::-webkit-inner-spin-button,
+.no-spin-buttons::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+}
+
+.rectangle .dx-radiobutton {
+    margin: 12px 16px !important;
+}
+
+.rectangle .dx-radiobutton-icon {
+    border-radius: 50% !important;
+    width: 18px;
+    height: 18px;
+    border-color: #aaaaaa !important;
+}
+
+.rectangle .dx-radiobutton.dx-state-hover .dx-radiobutton-icon {
+    border-color: #116a5b;
+}
+
+.rectangle .dx-radiobutton-icon-dot {
+    border-width: 3px;
+    border-radius: 50% !important;
+}
+
+.rectangle .dx-radiobutton-icon-checked .dx-radiobutton-icon-dot {
+    background-color: #116a5b;
+    border-width: 3px;
+}
+
+.rectangle .dx-radiobutton-icon.dx-radiobutton-icon-checked {
+    border-color: #116a5b;
+}
+
+.rectangle .dx-item.dx-radiobutton .dx-item-content {
+    font-family: 'Lato';
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 17px;
+    color: #000000;
+}

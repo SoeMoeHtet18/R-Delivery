@@ -110,7 +110,7 @@ Route::middleware('auth:rider-api')->group(function() {
     Route::post('reassign-rider/{order_id}', [OrderApiController::class, 'reAssignRider']);
 });
 
-Route::get('get-shop-list', [ShopApiController::class, 'getAllShopList']);
+// Route::get('/get-shop-list', [ShopApiController::class, 'getAllShopList']);
 Route::get('cities', [CityApiController::class, 'getAllCityList']);
 Route::get('townships', [TownshipApiController::class, 'getAllTownshipList']);
 Route::post('townships-get-by-city', [TownshipApiController::class, 'getAllTownshipListByCityID']);

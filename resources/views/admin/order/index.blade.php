@@ -117,8 +117,13 @@
 </style>
 
 <div class='d-flex justify-content-between mb-3'>
-    <div class="create-button">
-        <a class="btn create-btn" href="{{route('orders.create')}}">Add Order</a>
+    <div class="d-flex">
+        <div class="create-button">
+            <a class="btn create-btn" href="{{route('orders.create')}}">Add Order</a>
+        </div>
+        <div class="create-button ms-1">
+            <a class="btn create-btn" href="{{url('/create-bulk-order')}}">Bulk Order Create</a>
+        </div>
     </div>
 
     <button class="btn btn-link" id="toggleFilter"><svg width="18" height="20" viewBox="0 0 18 20" fill="none" xmlns="http://www.w3.org/2000/svg">

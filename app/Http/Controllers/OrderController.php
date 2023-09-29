@@ -24,6 +24,7 @@ use App\Services\OrderService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
@@ -781,5 +782,15 @@ class OrderController extends Controller
         $data = $request->all();
         $this->orderService->updateSchedule($data);
         return redirect()->back();
+    }
+    
+    public function bulkOrderCreate()
+    {
+        // Cache::put('collection_method','pick_up');
+        // Cache::put('schedule_date','today');
+        $schedule_date = Cache::get('schedule_date');
+        $collectionMethod = Cache::get('collection_method');
+        // dd($scheduledate,$collectionMethod);
+        return view('vue-pages.order.create-bulk-order',compact('schedule_date'));
     }
 }

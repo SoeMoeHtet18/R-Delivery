@@ -20,6 +20,7 @@ use App\Http\Controllers\PaymentTypeController;
 use App\Http\Controllers\QrCodeController;
 use App\Http\Controllers\RiderController;
 use App\Http\Controllers\RiderPaymentController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\ShopPaymentController;
 use App\Http\Controllers\ShopUserController;
@@ -180,6 +181,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('get-amounts-related-to-order', [OrderController::class, 'getAmountsRelatedToOrder']);
     Route::post('/orders/update-rider', [OrderController::class, 'updateRiderFromOrderDetail']);
     Route::post('/orders/update-schedule-date', [OrderController::class, 'updateScheduleDateFromOrderDetail']);
+    Route::get('/create-bulk-order', [OrderController::class, 'bulkOrderCreate']);
+    Route::get('/setting',[SettingController::class, 'browse']);
 });
 Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -102,61 +102,66 @@
                     <span class="title">Admin Tools<span class="arrow"></span></span>
                 </a>
             </li>
-                <ul class="collapse customize-collapse" id="adminTools">
-                    <li class="@if(request()->is('users*')) {{'active'}} @endif">
-                        <a href="{{route('users.index')}}">
-                            <!-- <i class="fa fa-users"></i> -->
-                            <span class="title">User</span>
-                        </a>
-                    </li>
-                    <li class="@if(request()->is('cities*')) {{'active'}} @endif">
-                        <a href="{{route('cities.index')}}">
-                            <!-- <i class="fa fa-users"></i> -->
-                            <span class="title">City</span>
-                        </a>
-                    </li>
-                    <li class="@if(request()->is('townships*')) {{'active'}} @endif">
-                        <a href="{{route('townships.index')}}">
-                            <!-- <i class="fa fa-users"></i> -->
-                            <span class="title">Township</span>
-                        </a>
-                    </li>
-                    <li class="@if(request()->is('itemtypes*')) {{'active'}} @endif">
-                        <a href="{{route('itemtypes.index')}}">
-                            <!-- <i class="fa fa-users"></i> -->
-                            <span class="title">Item Type</span>
-                        </a>
-                    </li>
-                    <li class="@if(request()->is('delivery-types*')) {{'active'}} @endif">
-                        <a href="{{route('delivery-types.index')}}">
-                            <!-- <i class="fa fa-users"></i> -->
-                            <span class="title">Delivery Type</span>
-                        </a>
-                    </li>
-                    <li class="@if(request()->is('branches*')) {{'active'}} @endif">
-                        <a href="{{route('branches.index')}}">
-                            <!-- <i class="fa fa-users"></i> -->
-                            <span class="title">Branch</span>
-                        </a>
-                    </li>
-                    <li class="@if(request()->is('gates*')) {{'active'}} @endif">
-                        <a href="{{route('gates.index')}}">
-                            <!-- <i class="fa fa-users"></i> -->
-                            <span class="title">Gate</span>
-                        </a>
-                    </li>
-                    <li class="@if(request()->is('third-party-vendor*')) {{'active'}} @endif">
-                        <a href="/third-party-vendor">
-                            <!-- <i class="fa fa-users"></i> -->
-                            <span class="title">Third Party Vendor</span>
-                        </a>
-                    </li>
-                    <!-- <li class="@if(request()->is('payment-types*')) {{'active'}} @endif">
-                        <a href="{{route('payment-types.index')}}">
-                            <span class="title">Payment Type</span>
-                        </a>
-                    </li> -->
-                </ul>
+            <ul class="collapse customize-collapse" id="adminTools">
+                <li class="@if(request()->is('users*')) {{'active'}} @endif">
+                    <a href="{{route('users.index')}}">
+                        <!-- <i class="fa fa-users"></i> -->
+                        <span class="title">User</span>
+                    </a>
+                </li>
+                <li class="@if(request()->is('cities*')) {{'active'}} @endif">
+                    <a href="{{route('cities.index')}}">
+                        <!-- <i class="fa fa-users"></i> -->
+                        <span class="title">City</span>
+                    </a>
+                </li>
+                <li class="@if(request()->is('townships*')) {{'active'}} @endif">
+                    <a href="{{route('townships.index')}}">
+                        <!-- <i class="fa fa-users"></i> -->
+                        <span class="title">Township</span>
+                    </a>
+                </li>
+                <li class="@if(request()->is('itemtypes*')) {{'active'}} @endif">
+                    <a href="{{route('itemtypes.index')}}">
+                        <!-- <i class="fa fa-users"></i> -->
+                        <span class="title">Item Type</span>
+                    </a>
+                </li>
+                <li class="@if(request()->is('delivery-types*')) {{'active'}} @endif">
+                    <a href="{{route('delivery-types.index')}}">
+                        <!-- <i class="fa fa-users"></i> -->
+                        <span class="title">Delivery Type</span>
+                    </a>
+                </li>
+                <li class="@if(request()->is('branches*')) {{'active'}} @endif">
+                    <a href="{{route('branches.index')}}">
+                        <!-- <i class="fa fa-users"></i> -->
+                        <span class="title">Branch</span>
+                    </a>
+                </li>
+                <li class="@if(request()->is('gates*')) {{'active'}} @endif">
+                    <a href="{{route('gates.index')}}">
+                        <!-- <i class="fa fa-users"></i> -->
+                        <span class="title">Gate</span>
+                    </a>
+                </li>
+                <li class="@if(request()->is('third-party-vendor*')) {{'active'}} @endif">
+                    <a href="/third-party-vendor">
+                        <!-- <i class="fa fa-users"></i> -->
+                        <span class="title">Third Party Vendor</span>
+                    </a>
+                </li>
+                <!-- <li class="@if(request()->is('payment-types*')) {{'active'}} @endif">
+                    <a href="{{route('payment-types.index')}}">
+                        <span class="title">Payment Type</span>
+                    </a>
+                </li> -->
+            </ul>
+            <li class="@if(request()->is('setting*')) {{'active'}} @endif">
+                <a href="{{url('/setting')}}">
+                    <span class="title">Setting</span>
+                </a>
+            </li>
             <li style="padding-bottom: 50px;">
                 <a class="dropdown-item" href="{{ route('logout') }}"
                     onclick="event.preventDefault();
