@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\CustomerPaymentApiController;
 use App\Http\Controllers\Api\DeliveryTypeApiController;
 use App\Http\Controllers\Api\ItemTypeApiController;
 use App\Http\Controllers\Api\OrderApiController;
+use App\Http\Controllers\Api\PaymentDetailApiController;
 use App\Http\Controllers\Api\PaymentTypeApiController;
 use App\Http\Controllers\Api\RiderApiController;
 use App\Http\Controllers\Api\ShopApiController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\Api\ShopPaymentApiController;
 use App\Http\Controllers\Api\ShopUserApiController;
 use App\Http\Controllers\Api\TownshipApiController;
 use App\Http\Controllers\Api\TransactionForShopApiController;
+use App\Http\Controllers\Api\UpdateShopOrchestratorController;
 use App\Http\Controllers\TownshipController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -65,6 +67,9 @@ Route::middleware('auth:shop-user-api')->group( function () {
     Route::get('get-payment-history-by-shop-user', [ShopApiController::class, 'getPaymentHistoryForShop']);
     Route::get('delete-order/{id}', [OrderApiController::class, 'deleteOrderByShopUser']);
     Route::get('get-order-detail-by-shop', [OrderApiController::class, 'getOrderDetailByShop']);
+    Route::post('/shop-user/update-data',
+        [UpdateShopOrchestratorController::class, 'updateShopUserDataAndPaymentInfo']);
+    Route::get('/shop-user/payment-detail', [PaymentDetailApiController::class, 'getPaymentDetailByShop']);
 });
 Route::post('rider-login', [RiderApiController::class, 'riderLoginApi']);
 Route::post('rider/create', [RiderApiController::class, 'create']);
@@ -124,5 +129,6 @@ Route::post('/tracking', [OrderApiController::class, 'trackOrder']);
 Route::get('get-delivery-type-list', [DeliveryTypeApiController::class, 'getAllDeliveryTypeList']);
 Route::post('get-customer-collection-code',[CustomerCollectionApiController::class, 'getCustomerCollectionCode']);
 Route::post('change-customer-collection-code',[CustomerCollectionApiController::class, 'changeCustomerCollectionCode']);
-Route::post('get-data-by-order-for-customer-collection',[OrderApiController::class, 'getDataByOrderForCustomerCollection']);
+Route::post('get-data-by-order-for-customer-collection',
+    [OrderApiController::class, 'getDataByOrderForCustomerCollection']);
 Route::post('get-township-by-associable', [TownshipController::class, 'getTownshipListByAssociable']);

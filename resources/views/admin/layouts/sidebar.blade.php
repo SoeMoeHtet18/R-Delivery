@@ -151,11 +151,11 @@
                         <span class="title">Third Party Vendor</span>
                     </a>
                 </li>
-                <!-- <li class="@if(request()->is('payment-types*')) {{'active'}} @endif">
+                <li class="@if(request()->is('payment-types*')) {{'active'}} @endif">
                     <a href="{{route('payment-types.index')}}">
                         <span class="title">Payment Type</span>
                     </a>
-                </li> -->
+                </li>
             </ul>
             <li class="@if(request()->is('setting*')) {{'active'}} @endif">
                 <a href="{{url('/setting')}}">
