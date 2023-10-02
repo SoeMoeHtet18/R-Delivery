@@ -15,13 +15,15 @@ class NotificationRepository
         return $notifications;
     }
 
-    public function getNotificationCount($model, $id)
+    public function getUnreadNotificationCount($model, $id)
     {
         $user = $model::find($id);
         if (!$user) {
             return '0';
         }
-        $count = $user->notifications()->wherePivot('is_read', 0)->count();
-        return $count;
+        return $user->notifications()
+            ->whereNull('deleted_at')
+            ->wherePivot('is_read', 0)
+            ->count();
     }
 }

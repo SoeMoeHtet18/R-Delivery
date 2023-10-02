@@ -143,7 +143,7 @@ class ShopUserApiController extends Controller
     public function getNotificationCount()
     {
         $shop_user = auth()->guard('shop-user-api')->user();
-        $notifications = $this->notificationRepository->getNotificationCount(ShopUser::class, $shop_user->id);
+        $notifications = $this->notificationRepository->getUnreadNotificationCount(ShopUser::class, $shop_user->id);
         return response()->json(['data' => $notifications, 'message' => 'Successfully get notification count', 'status' => 'success'], 200);
     }
 
