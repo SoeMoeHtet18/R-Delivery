@@ -97,3 +97,39 @@
     line-height: 17px;
     color: #000000;
 }
+
+.card {
+    /* Add your custom styles here */
+    border: 1px solid #ccc;
+    border-radius: 0.25rem;
+    padding: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+  
+.card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #ccc;
+    padding: 0.75rem 1rem;
+}
+
+.card-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+}
+
+.card-subtitle {
+    font-size: 1rem;
+    color: #6c757d;
+    margin-bottom: 0.25rem;
+}
+
+.card-text {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+.card-footer {
+    background-color: #f8f9fa;
+    border-top: 1px solid #ccc;
+    padding: 0.75rem 1rem;
+}

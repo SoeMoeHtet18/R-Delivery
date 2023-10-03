@@ -19,7 +19,8 @@
 
     <!-- icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    
     <link href="{{asset('css/app.css')}}" rel="stylesheet">
     <style>
         body {
@@ -29,8 +30,12 @@
 </head>
 
 <body class="antialiased dx-viewport">
-    <div id="app">
-        @yield('content')
+    <div id="app" class="flex">
+        <nav-bar>
+        </nav-bar>
+        <main class="w-5/6 ml-1/6">
+            @yield('content')
+        </main>
     </div>
 
     <script src="{{ mix('js/app.js') }}"></script>

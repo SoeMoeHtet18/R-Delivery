@@ -120,6 +120,29 @@ class DashboardController extends Controller
 
     public function index()
     {
-        return view('vue-pages.dashboard.browse');
+        $userCount = $this->adminRepository->getAllUsersCount();
+        $shopUserCount = $this->shopUserRepository->getAllShopUserCount();
+        $riderCount = $this->riderRepository->getAllRidersCount();
+        $shopCount = $this->shopRepository->getAllShopCount();
+        $cityCount = $this->cityRepository->getAllCityCount();
+        $itemTypeCount = $this->itemTypeRepository->getAllItemTypesCount();
+        $townshipCount = $this->townshipRepository->getAllTownshipsCount();
+        $shopPaymentCount = $this->shopPaymentRepository->getAllShopPaymentCount();
+        $customerpaymentcount = $this->customerPaymentRepository->getAllCustomerPaymentCount();
+        $transactionForShopCount = $this->transactionsForShopRepository->getAllTransactionsForShopCount();
+        $orderCount = $this->orderRepository->getAllOrdersCount();
+        $riderPaymentCount = $this->riderPaymentRepository->getAllRiderPaymentCount();
+        $collectionCount = $this->collectionRepository->getAllCollectionCount();
+        $customerCollectionCount = $this->customerCollectionRepository->getAllCustomerCollectionCount();
+        $collectionGroupCount = $this->collectionGroupRepository->getAllCollectionGroupCount();
+        $branchCount = $this->branchRepository->getAllBranchCount();
+        $gateCount = $this->gateRepository->getAllGateCount();
+        $thirdPartyVendorCount = $this->thirdPartyVentorRepository->getAllThirdPartyVendorCount();
+        $deliveryTypeCount = $this->deliveryTypeRepository->getAllDeliveryTypeCount();
+        return view('vue-pages.dashboard.browse', compact('userCount', 'shopUserCount', 'riderCount', 'shopCount',
+            'cityCount', 'itemTypeCount', 'townshipCount', 'shopPaymentCount', 'customerpaymentcount',
+            'riderPaymentCount', 'transactionForShopCount','orderCount', 'collectionCount', 'customerCollectionCount',
+            'collectionGroupCount', 'branchCount', 'gateCount', 'thirdPartyVendorCount', 'deliveryTypeCount')
+        );
     }
 }

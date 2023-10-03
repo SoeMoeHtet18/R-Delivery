@@ -48,7 +48,7 @@ Route::get('/', function () {
 });
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/dashboard', [DashboardController::class, 'count'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('/users', AdminController::class);
     Route::resource('/riders', RiderController::class);
     Route::get('/riders/get-today-orders-by-rider-id/{id}', [OrderController::class, 'getTodayOrdersTableByRiderID']);
