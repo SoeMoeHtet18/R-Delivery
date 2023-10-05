@@ -18,3 +18,4 @@ Route::post('/orders', [OrderApiController::class, 'saveOrder']);
 Route::post('/orders/{id}', [OrderApiController::class, 'updateOrder']);
 Route::post('/setting/update', [SettingController::class, 'updateSetting']);
 Route::get('/shops', [ShopApiController::class, 'getShopTableData']);
+Route::post('/shops', [ShopApiController::class, 'store']);

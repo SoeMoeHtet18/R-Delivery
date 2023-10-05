@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShopCreateApiRequest;
+use App\Http\Requests\ShopCreateRequest;
 use App\Models\Collection;
 use App\Models\Order;
 use App\Repositories\CollectionRepository;
@@ -172,6 +173,18 @@ class ShopApiController extends Controller
         return response()->json([
             'data' => $data,
             'message' => 'Successfully get shop table data',
+            'status' => 'success'
+        ], 200);
+    }
+
+    public function store(ShopCreateRequest $request)
+    {
+        $data = $request->all();
+        $shop = $this->shopService->saveShopData($data);
+        
+        return response()->json([
+            'data' => $shop,
+            'message' => 'Successfully created shop',
             'status' => 'success'
         ], 200);
     }

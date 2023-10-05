@@ -20,6 +20,7 @@ module.exports = {
       },
       width: {
         '35/10': '35%',
+        '70px': '70px'
       },
       flex: {
         '0': '1 0 0%'

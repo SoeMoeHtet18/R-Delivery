@@ -21,7 +21,8 @@
             <!-- search toggle -->
             <iconify-icon icon="prime:filter-fill" width="30" class="mx-3" @click="toggleSearch"></iconify-icon>
             <!-- create new shop btn -->
-            <button class="bg-main text-white rounded-sm px-4">Create New Shop</button>
+            <button class="bg-main text-white rounded-sm px-4" @click="createShop">Create New Shop</button>
+            <shop-create v-if="isShopCreate" @close="closeShopCreate"></shop-create>
         </div>
         <!-- filter container -->
         <div id="filter-container" v-if="isToggleSearch">
@@ -100,7 +101,7 @@
                     show-scrollbar="never" /> 
             </dx-data-grid>
             <!-- paging -->
-            <div class="flex justify-between items-center" :class="{ 'mt-5' : pageSize > 10}">
+            <div class="flex justify-between items-center" :class="{ 'mt-5' : pageSize != 10}">
                 <select id="pageSizeSelect" v-model="pageSize">
                     <option value="10">10</option>
                     <option value="20">20</option>
@@ -162,10 +163,17 @@ export default {
             totalCount: 0,
             totalPages: null,
             fromDate: null,
-            toDate: null
+            toDate: null,
+            isShopCreate: false
         };
     },
     methods: {
+        createShop() {
+            this.isShopCreate = true;
+        },
+        closeShopCreate() {
+            this.isShopCreate = false;
+        },
         async getDataByDateRange(fromDate, toDate) {
             const fromattedFromDate = fromDate.toISOString();
             const fromattedToDate = toDate.toISOString();
