@@ -588,6 +588,11 @@ video {
   right: 1rem;
 }
 
+.mx-3 {
+  margin-left: 0.75rem;
+  margin-right: 0.75rem;
+}
+
 .my-0 {
   margin-top: 0px;
   margin-bottom: 0px;
@@ -596,6 +601,11 @@ video {
 .my-0\.5 {
   margin-top: 0.125rem;
   margin-bottom: 0.125rem;
+}
+
+.my-13px {
+  margin-top: 13px;
+  margin-bottom: 13px;
 }
 
 .my-3 {
@@ -608,18 +618,26 @@ video {
   margin-bottom: 1.5rem;
 }
 
-.my-13px {
-  margin-top: 13px;
-  margin-bottom: 13px;
-}
-
 .my-px {
   margin-top: 1px;
   margin-bottom: 1px;
 }
 
+.mx-1 {
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+}
+
+.mb-5 {
+  margin-bottom: 1.25rem;
+}
+
 .mb-6 {
   margin-bottom: 1.5rem;
+}
+
+.mb-7 {
+  margin-bottom: 1.75rem;
 }
 
 .ml-1\/6 {
@@ -630,12 +648,20 @@ video {
   margin-left: 0.5rem;
 }
 
+.ml-21 {
+  margin-left: 84px;
+}
+
 .ml-4 {
   margin-left: 1rem;
 }
 
 .ml-8 {
   margin-left: 2rem;
+}
+
+.ml-9 {
+  margin-left: 2.25rem;
 }
 
 .mr-10 {
@@ -648,6 +674,18 @@ video {
 
 .mt-5 {
   margin-top: 1.25rem;
+}
+
+.mr-8 {
+  margin-right: 2rem;
+}
+
+.mr-4 {
+  margin-right: 1rem;
+}
+
+.block {
+  display: block;
 }
 
 .flex {
@@ -751,6 +789,10 @@ video {
   border-radius: 0.5rem;
 }
 
+.rounded-sm {
+  border-radius: 0.125rem;
+}
+
 .border {
   border-width: 1px;
 }
@@ -758,6 +800,11 @@ video {
 .border-main {
   --tw-border-opacity: 1;
   border-color: rgb(17 106 91 / var(--tw-border-opacity));
+}
+
+.bg-main {
+  --tw-bg-opacity: 1;
+  background-color: rgb(17 106 91 / var(--tw-bg-opacity));
 }
 
 .bg-side-bar {
@@ -802,6 +849,11 @@ video {
 .py-8 {
   padding-top: 2rem;
   padding-bottom: 2rem;
+}
+
+.py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
 .pb-3 {
@@ -861,6 +913,11 @@ video {
   line-height: 1.75rem;
 }
 
+.text-base {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
 .font-semibold {
   font-weight: 600;
 }
@@ -872,6 +929,11 @@ video {
 .text-grey {
   --tw-text-opacity: 1;
   color: rgb(170 170 170 / var(--tw-text-opacity));
+}
+
+.text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
 .antialiased {
@@ -887,6 +949,10 @@ video {
 
 .outline {
   outline-style: solid;
+}
+
+.filter {
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 
 .transition {

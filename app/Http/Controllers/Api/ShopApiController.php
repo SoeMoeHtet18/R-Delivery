@@ -162,4 +162,17 @@ class ShopApiController extends Controller
 
         return $textReport;
     }
+
+    public function getShopTableData(Request $request)
+    {
+        $search = $request->search;
+        $from_date = $request->from_date;
+        $to_date   = $request->to_date;
+        $data = $this->shopRepository->getAllShopData($request, $search, $from_date, $to_date);
+        return response()->json([
+            'data' => $data,
+            'message' => 'Successfully get shop table data',
+            'status' => 'success'
+        ], 200);
+    }
 }

@@ -73,4 +73,51 @@ class ShopRepository
         $user = auth()->user();
         return Shop::where('branch_id', $user->branch_id)->count();
     }
+
+    public function getAllShopData($request, $search, $from_date, $to_date)
+    {
+        $township_id = $request->township_id;
+        $city_id = $request->city_id;
+        $shop_id = $request->shop_id;
+        
+        $branch_id = auth()->user()->branch_id;
+        // parse date range if exist
+        if($from_date && $to_date) {
+            $from_date = Carbon::parse($from_date)->format('Y-m-d');
+            $to_date   = Carbon::parse($to_date)->format('Y-m-d').' 23:59:59';
+        } else {
+            // set for this month if date range not exist
+            $from_date = Carbon::now()->startOfMonth()->format('Y-m-d');
+            $to_date = Carbon::now()->endOfMonth()->format('Y-m-d').' 23:59:59';
+        }
+
+        return Shop::where('branch_id', $branch_id)
+            ->when(isset($shop_id), function ($query) use ($shop_id) {
+                $query->where('id', $shop_id);
+            })
+            // filter with search
+            ->when(isset($search), function ($query) use ($search) {
+                $query->where('name','like', '%' . $search . '%')
+                    ->orWhere('address','like', '%' . $search . '%')
+                    ->orWhere('phone_number','like', '%' . $search . '%');
+            })
+            // filter with city and township
+            ->when(isset($township_id) || isset($city_id), function ($query) use ($township_id, $city_id) {
+                $query->whereHas('township', function ($query) use ($township_id, $city_id) {
+                    if ($township_id) {
+                        $query->where('id', $township_id);
+                    }
+                    if ($city_id) {
+                        $query->whereHas('city', function ($query) use ($city_id) {
+                            $query->where('id', $city_id);
+                        });
+                    }
+                });
+            })
+            // filter with date range
+            ->with(['township.city', 'orders' => function ($query) use ($from_date, $to_date) {
+                $query->where('status', 'success')->whereBetween('created_at', [$from_date, $to_date]);
+            }])
+            ->get();
+    }
 }

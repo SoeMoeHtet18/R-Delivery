@@ -50,7 +50,9 @@ class ShopController extends Controller
      */
     public function index(Request $request)
     {
-        return view('admin.shop.index');
+        // return view('admin.shop.index');
+        // render with vue
+        return view('vue-pages.shop.index');
     }
 
     /**
@@ -66,7 +68,7 @@ class ShopController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(ShopCreateRequest $request)
-    {    
+    {
         $data = $request->all();
         $this->shopService->saveShopData($data);
         

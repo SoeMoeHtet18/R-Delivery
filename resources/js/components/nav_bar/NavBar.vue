@@ -10,7 +10,7 @@
                         <h5 class="menu-label ml-4">Dashboard</h5>
                     </li>
                 </a>
-                <a href="/shops" class="flex items-center pl-7 h-11.25">
+                <a href="/shops" class="flex items-center pl-7 h-11.25" :class="{ 'active': isActive('shop')}">
                     <li class="flex items-center text-grey">
                         <iconify-icon icon="ph:house-line" width="20"></iconify-icon>
                         <h5 class="menu-label ml-4">Shop</h5>
