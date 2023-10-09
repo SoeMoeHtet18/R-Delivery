@@ -88,6 +88,46 @@
                 :columnAutoWidth="true"
                 ref="myDataGrid"
             >
+                <DxColumn
+                    data-field="shopName"
+                    caption="SHOP NAME"
+                    cell-template="shopTemplate"
+                />
+                <template #shopTemplate="{ data }">
+                    <a :href="`/shops/${data.data.id}`">{{data.data.shopName}}</a>
+                </template>
+                <DxColumn 
+                    data-field="phoneNumber"
+                    caption="PHONE NUMBER"
+                />
+                <DxColumn
+                    data-field="township"
+                    caption="TOWNSHIP"
+                    cell-template="townshipTemplate"
+                />
+                <template #townshipTemplate="{ data }">
+                    <a :href="`/townships/${data.data.townshipId}`">{{data.data.township}}</a>
+                </template>
+                <DxColumn
+                    data-field="city"
+                    caption="CITY"
+                    cell-template="cityTemplate"
+                />
+                <template #cityTemplate="{ data }">
+                    <a :href="`/cities/${data.data.cityId}`">{{data.data.city}}</a>
+                </template>
+                <DxColumn 
+                    data-field="address"
+                    caption="ADDRESS"
+                />
+                <DxColumn 
+                    data-field="totalPickUp"
+                    caption="THIS MONTH'S TOTAL&nbsp;PICKUP"
+                />
+                <DxColumn 
+                    data-field="joinedDate"
+                    caption="JOINED DATE"
+                />
                 <DxPaging
                     v-model:page-size="pageSize"
                     v-model:page-index="pageIndex"
@@ -123,7 +163,7 @@
 import { DxTextBox, DxButton as DxTextBoxButton } from 'devextreme-vue/text-box';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxDateBox from 'devextreme-vue/date-box';
-import { DxDataGrid, DxPager, DxPaging, DxScrolling } from 'devextreme-vue/data-grid';
+import { DxDataGrid, DxPager, DxPaging, DxScrolling, DxColumn } from 'devextreme-vue/data-grid';
 
 const searchButton = {
     icon: '/images/icons/search.svg',
@@ -139,7 +179,8 @@ export default {
         DxDataGrid,
         DxPager,
         DxPaging,
-        DxScrolling
+        DxScrolling,
+        DxColumn
     },
     data() {
         return {
@@ -230,13 +271,16 @@ export default {
                 const data = await response.json();
                 
                 const formattedData = data.data.map((shop) => ({
-                    'SHOP NAME': shop.name,
-                    'PHONE NUMBER': shop.phone_number,
-                    'TOWNSHIP': shop.township ? shop.township.name : '',
-                    'CITY': shop.township?.city ? shop.township.city.name : '',
-                    'ADDRESS': shop.address,
-                    "THIS MONTH'S TOTAL PICKUP": shop.orders.length,
-                    'JOINED DATE': this.formatDate(shop.created_at),
+                    'id': shop.id,
+                    'shopName': shop.name,
+                    'phoneNumber': shop.phone_number,
+                    'townshipId' : shop.township ? shop.township.id : '',
+                    'township': shop.township ? shop.township.name : '',
+                    'cityId': shop.township?.city ? shop.township.city.id : '',
+                    'city': shop.township?.city ? shop.township.city.name : '',
+                    'address': shop.address,
+                    "totalPickUp": shop.orders.length,
+                    'joinedDate': this.formatDate(shop.created_at),
                 }));
 
                 this.gridData = formattedData;
@@ -372,7 +416,27 @@ export default {
     border-left: none;
     border-right: none;
     border-bottom: 1px solid #D9D9D9;
-    padding: 10px 0 !important;
+    padding: 10px !important;
+}
+
+.custom-data-grid .dx-datagrid-headers .dx-datagrid-table .dx-header-row .dx-datagrid-action .dx-datagrid-text-content {
+    color: var(--black, #000);
+    text-align: center;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 18px; /* 150% */
+    text-transform: uppercase;
+}
+
+.custom-data-grid .dx-datagrid-rowsview .dx-datagrid-content .dx-row.dx-data-row td,
+.custom-data-grid .dx-datagrid-rowsview .dx-datagrid-content .dx-row.dx-data-row td a {
+    color: #000000 !important;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 18px; /* 150% */
+    text-transform: capitalize;
 }
 
 .custom-data-grid .dx-datagrid-rowsview .dx-datagrid-content .dx-row.dx-freespace-row {
