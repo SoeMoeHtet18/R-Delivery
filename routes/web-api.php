@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AdminApiController;
 use App\Http\Controllers\Api\CityApiController;
 use App\Http\Controllers\Api\OrderApiController;
 use App\Http\Controllers\Api\RiderApiController;
@@ -18,3 +19,5 @@ Route::post('/orders', [OrderApiController::class, 'saveOrder']);
 Route::post('/orders/{id}', [OrderApiController::class, 'updateOrder']);
 Route::post('/setting/update', [SettingController::class, 'updateSetting']);
 Route::get('/shops', [ShopApiController::class, 'getShopTableData']);
+Route::get('/users', [AdminApiController::class, 'getUserTableData']);
+Route::post('/save-user-data', [AdminApiController::class, 'storeUserData']);

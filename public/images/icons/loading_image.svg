@@ -1,0 +1,11 @@
+<svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Property 1=Frame 5">
+<path id="Ellipse 8" d="M25 12.5C25 19.4036 19.4036 25 12.5 25C5.59644 25 0 19.4036 0 12.5C0 5.59644 5.59644 0 12.5 0C19.4036 0 25 5.59644 25 12.5ZM2.39661 12.5C2.39661 18.08 6.92005 22.6034 12.5 22.6034C18.08 22.6034 22.6034 18.08 22.6034 12.5C22.6034 6.92005 18.08 2.39661 12.5 2.39661C6.92005 2.39661 2.39661 6.92005 2.39661 12.5Z" fill="url(#paint0_angular_62_5695)"/>
+</g>
+<defs>
+<radialGradient id="paint0_angular_62_5695" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(12 11.75) rotate(90) scale(14.25)">
+<stop stop-color="#116A5B"/>
+<stop offset="1" stop-color="#278AF9" stop-opacity="0"/>
+</radialGradient>
+</defs>
+</svg>
