@@ -30,7 +30,9 @@ class AdminController extends Controller
      */
     public function index(Request $request)
     {
-        return view('admin.user.index');
+        // return view('admin.user.index');
+        //render with vue
+        return view('vue-pages.user.index');
     }
 
     /**

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AdminApiController;
 use App\Http\Controllers\Api\CityApiController;
 use App\Http\Controllers\Api\OrderApiController;
 use App\Http\Controllers\Api\RiderApiController;
@@ -24,3 +25,5 @@ Route::post('/shops/{id}', [ShopApiController::class, 'updateShopDetail']);
 Route::get('/shops/{id}/shop-users', [ShopApiController::class, 'getShopUsers']);
 Route::get('/shops/{id}/orders', [ShopApiController::class, 'getShopOrders']);
 Route::get('/shops/{id}/financial-amounts', [ShopApiController::class, 'getAmountsRelatedToOrder']);
+Route::get('/users', [AdminApiController::class, 'getUserTableData']);
+Route::post('/save-user-data', [AdminApiController::class, 'storeUserData']);

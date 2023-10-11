@@ -10,6 +10,7 @@ import Setting from './pages/setting/Setting.vue';
 import ShopList from './pages/shop/ShopList.vue';
 import ShopCreate from './pages/shop/ShopCreate.vue';
 import ShopDetail from './pages/shop/ShopDetail.vue';
+import UserList from './pages/user/UserList.vue';
 
 //import components
 import NavBar from './components/nav_bar/NavBar.vue';
@@ -28,6 +29,7 @@ app.component('shop-list', ShopList);
 app.component('shop-create', ShopCreate);
 app.component('shop-detail', ShopDetail);
 
+app.component('user-list', UserList);
 // Components
 
 app.component('nav-bar', NavBar);
