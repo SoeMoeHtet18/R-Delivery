@@ -99,7 +99,7 @@ class ReportCalculationRepository
         } else {
             // If the key does not exist in cache, calculate the value from the database
 
-            // Calculate the total amount of COD (cash on delivery) orders that the shop will receiv
+            // Calculate the total amount of COD (cash on delivery) orders that the shop will receive
             $codAmount = Order::where('shop_id', $shopId)
                 ->where('payment_method', 'cash_on_delivery')
                 ->where(function ($query) {

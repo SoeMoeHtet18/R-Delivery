@@ -9,6 +9,7 @@ import CreateBulkOrder from './pages/orders/order_bulk_create/CreateBulkOrder.vu
 import Setting from './pages/setting/Setting.vue';
 import ShopList from './pages/shop/ShopList.vue';
 import ShopCreate from './pages/shop/ShopCreate.vue';
+import ShopDetail from './pages/shop/ShopDetail.vue';
 
 //import components
 import NavBar from './components/nav_bar/NavBar.vue';
@@ -25,6 +26,8 @@ app.component('create-bulk-order', CreateBulkOrder);
 app.component('setting', Setting);
 app.component('shop-list', ShopList);
 app.component('shop-create', ShopCreate);
+app.component('shop-detail', ShopDetail);
+
 // Components
 
 app.component('nav-bar', NavBar);

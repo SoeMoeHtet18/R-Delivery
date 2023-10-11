@@ -19,3 +19,8 @@ Route::post('/orders/{id}', [OrderApiController::class, 'updateOrder']);
 Route::post('/setting/update', [SettingController::class, 'updateSetting']);
 Route::get('/shops', [ShopApiController::class, 'getShopTableData']);
 Route::post('/shops', [ShopApiController::class, 'store']);
+Route::get('/shops/{id}', [ShopApiController::class, 'getShopDetail']);
+Route::post('/shops/{id}', [ShopApiController::class, 'updateShopDetail']);
+Route::get('/shops/{id}/shop-users', [ShopApiController::class, 'getShopUsers']);
+Route::get('/shops/{id}/orders', [ShopApiController::class, 'getShopOrders']);
+Route::get('/shops/{id}/financial-amounts', [ShopApiController::class, 'getAmountsRelatedToOrder']);

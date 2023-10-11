@@ -37,6 +37,7 @@
                     placeholder="Township"
                     ref="township"
                     :onValueChanged=getDataByTownship
+                    width="204px"
                 />
                 <!-- city filter -->
                 <DxSelectBox
@@ -48,6 +49,7 @@
                     placeholder="City"
                     ref="city"
                     :onValueChanged=getDataByCity
+                    width="204px"
                 />
                 <!-- <DxSelectBox
                     class="search-box ml-9"
@@ -128,20 +130,24 @@
                     data-field="joinedDate"
                     caption="JOINED DATE"
                 />
-                <DxPaging
-                    v-model:page-size="pageSize"
-                    v-model:page-index="pageIndex"
-                >
-                </DxPaging>
+                <DxPaging :page-size="10"/>
+                <DxPager
+                    :visible="true"
+                    :allowed-page-sizes="pageSize"
+                    display-mode="compact"
+                    :show-page-size-selector="true"
+                    :show-info="true"
+                    :show-navigation-buttons="true"
+                />
                 <DxScrolling
                     mode="standard"
                     :use-native="false"
                     :scroll-by-content="true"
                     :scroll-by-thumb="true"
-                    show-scrollbar="never" /> 
+                    show-scrollbar="never" />
             </dx-data-grid>
             <!-- paging -->
-            <div class="flex justify-between items-center" :class="{ 'mt-5' : pageSize != 10}">
+            <!-- <div class="flex justify-between items-center" :class="{ 'mt-5' : pageSize != 10}">
                 <select id="pageSizeSelect" v-model="pageSize">
                     <option value="10">10</option>
                     <option value="20">20</option>
@@ -154,7 +160,7 @@
                     <span class="current-page">{{ pageIndex + 1 }}</span> <span class="mx-1"> of </span> <span>{{ totalPages }}</span>
                     <button class="ml-4 text-base" @click="nextPage">&gt;</button>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>
@@ -199,10 +205,7 @@ export default {
                 "THIS MONTH'S TOTAL PICKUP",
                 'JOINED DATE'
             ],
-            pageSize: 10,
-            pageIndex: 0,
-            totalCount: 0,
-            totalPages: null,
+            pageSize: [10, 20, 50, 100],
             fromDate: null,
             toDate: null,
             isShopCreate: false
@@ -221,23 +224,24 @@ export default {
             const response = await fetch(`/api/shops?from_date=${fromattedFromDate}&to_date=${fromattedToDate}`);
             this.fetchData(response);
         },
-        prevPage() {
-            if (this.pageIndex > 0) {
-                this.pageIndex--;
-                this.getShopTableData();
-            }
-        },
-        nextPage() {
-            if (this.pageIndex < this.totalPages) {
-                this.pageIndex++;
-                this.getShopTableData();
-            }
-        },
-        getTotalPageCount() {
-            const totalCount = this.$refs['myDataGrid'].instance.pageCount();
-            this.totalPages = totalCount + 1;
-            return totalCount;
-        },
+        // prevPage() {
+        //     if (this.pageIndex > 0) {
+        //         this.pageIndex--;
+        //         this.getShopTableData();
+        //     }
+        // },
+        // nextPage() {
+        //     if (this.pageIndex < this.totalPages) {
+        //         this.pageIndex++;
+        //         this.getShopTableData();
+        //     }
+        // },
+        // getTotalPageCount() {
+        //     const totalCount = this.$refs['myDataGrid'].instance.pageCount();
+        //     console.log(totalCount);
+        //     this.totalPages = totalCount + 1;
+        //     return totalCount;
+        // },
         async getDataByTownship(event) {
             const response = await fetch(`/api/shops?township_id=${event.value}`);
             this.fetchData(response);
@@ -319,7 +323,7 @@ export default {
         this.getTownshipList();
         this.getCityList();
         this.getShopList();
-        this.getTotalPageCount();
+        // this.getTotalPageCount();
         this.$refs.search.$el.querySelector(".dx-texteditor-input").addEventListener(
             "input",
             this.getDataBySearch
@@ -457,7 +461,7 @@ export default {
 }
 
 .dx-pager .dx-pages {
-    display: none;
+    /* display: none; */
 }
 
 .paging {

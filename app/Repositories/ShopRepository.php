@@ -120,4 +120,16 @@ class ShopRepository
             }])
             ->get();
     }
+
+    public function getShopDetailByID($id)
+    {
+        $from_date = Carbon::now()->startOfMonth()->format('Y-m-d');
+        $to_date = Carbon::now()->endOfMonth()->format('Y-m-d').' 23:59:59';
+        
+        return Shop::where('id', $id)
+            ->with(['township.city',  'orders' => function ($query) use ($from_date, $to_date) {
+                $query->where('status', 'success')->whereBetween('created_at', [$from_date, $to_date]);
+            }])
+            ->first();
+    }
 }

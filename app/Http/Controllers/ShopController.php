@@ -80,6 +80,7 @@ class ShopController extends Controller
      */
     public function show(string $id)
     {
+        $shop_id = $id;
         $shop = $this->shopRepository->getShopByID($id);
         // $order_ids = $this->orderRepository->getAllOrderIdsByShopID($id);
         // $payable_amount = $this->shopService->getPayableAmount($order_ids,$shop->id);
@@ -87,8 +88,11 @@ class ShopController extends Controller
         $shop->payable_amount = $payable_amount;
         // $collection_total_amount = Collection::where('shop_id',$id)->where('status','success')->sum('total_amount');
         // $collection_paid_amount = Collection::where('shop_id',$id)->where('status','success')->sum('paid_amount');
-        // $remainig_amount  = $collection_total_amount - $collection_paid_amount; 
-        return view('admin.shop.detail', compact('shop'));
+        // $remainig_amount  = $collection_total_amount - $collection_paid_amount;
+        $old_view = 'admin.shop.detail';
+        $new_view = 'vue-pages.shop.detail';
+        // return view('admin.shop.detail', compact('shop'));
+        return view($new_view, compact('shop_id'));
     }
 
     /**

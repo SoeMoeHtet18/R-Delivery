@@ -6,12 +6,14 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShopCreateApiRequest;
 use App\Http\Requests\ShopCreateRequest;
+use App\Http\Requests\ShopUpdateApiRequest;
 use App\Models\Collection;
 use App\Models\Order;
 use App\Repositories\CollectionRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\ReportCalculationRepository;
 use App\Repositories\ShopRepository;
+use App\Repositories\ShopUserRepository;
 use App\Repositories\TransactionsForShopRepository;
 use App\Services\ShopService;
 use DateTime;
@@ -26,11 +28,12 @@ class ShopApiController extends Controller
     protected $collectionRepository;
     protected $transactionForShopRepository;
     protected $reportCalculationRepository;
+    protected $shopUserRepository;
 
     public function __construct(ShopService $shopService, ShopRepository $shopRepository,
         OrderRepository $orderRepository, CollectionRepository $collectionRepository,
         TransactionsForShopRepository $transactionForShopRepository,
-        ReportCalculationRepository $reportCalculationRepository)
+        ReportCalculationRepository $reportCalculationRepository, ShopUserRepository $shopUserRepository)
     {
         $this->shopService = $shopService;
         $this->shopRepository = $shopRepository;
@@ -38,6 +41,7 @@ class ShopApiController extends Controller
         $this->collectionRepository = $collectionRepository;
         $this->transactionForShopRepository = $transactionForShopRepository;
         $this->reportCalculationRepository = $reportCalculationRepository;
+        $this->shopUserRepository = $shopUserRepository;
     }
 
     public function getAllShopList()
@@ -187,5 +191,77 @@ class ShopApiController extends Controller
             'message' => 'Successfully created shop',
             'status' => 'success'
         ], 200);
+    }
+    
+    public function getShopDetail($id)
+    {
+        $shop = $this->shopRepository->getShopDetailByID($id);
+        $shop = $this->getShopFinancialAmounts($shop, $id);
+
+        return response()->json([
+            'data' => $shop,
+            'message' => 'Successfully get shop detail',
+            'status' => 'success'
+        ], 200);
+    }
+
+    public function updateShopDetail(Request $request, $id)
+    {
+        $shop = $this->shopRepository->getShopByID($id);
+        $data = $request->all();
+        $this->shopService->updateShopByID($data, $shop);
+        $updatedShop = $this->shopRepository->getShopDetailByID($id);
+        $updatedShop = $this->getShopFinancialAmounts($updatedShop, $id);
+
+        return response()->json([
+            'data' => $updatedShop,
+            'message' => 'Successfully updated shop detail',
+            'status' => 'success'
+        ], 200);
+    }
+
+    private function getShopFinancialAmounts($shop, $id)
+    {
+        $payable_amount = $this->reportCalculationRepository->getPayableAmountForShop($id);
+        $total_credit = $this->reportCalculationRepository->getTotalCreditForShop($id);
+
+        $paid_credit_from_collection = $this->collectionRepository->getPaidAmountByShopUser($id);
+        $paid_credit_from_transaction = $this->transactionForShopRepository->getPaidAmountByShopUser($id);
+
+        $shop->payable_amount = $payable_amount;
+        $shop->total_credit = $total_credit;
+        $shop->paid_amount = $paid_credit_from_collection + $paid_credit_from_transaction;
+        return $shop;
+    }
+
+
+    public function getShopUsers($id)
+    {
+        $shop_users = $this->shopUserRepository->getShopUsersByShopID($id);
+        return response()->json([
+            'data' => $shop_users,
+            'message' => 'Successfully get shop users',
+            'status' => 'success'
+        ], 200);
+    }
+
+    public function getShopOrders($id)
+    {
+        $shop_orders = $this->orderRepository->getShopOrdersByShopID($id);
+        return response()->json([
+            'data' => $shop_orders,
+            'message' => 'Successfully get shop orders',
+            'status' => 'success'
+        ], 200);
+    }
+
+    public function getAmountsRelatedToOrder(Request $request)
+    {
+        $amounts = $this->orderRepository->getAmountsRelatedToOrder($request);
+        
+        return response()->json([
+            'data' => $amounts,
+            'message' => 'Successfully get related amounts',
+            'status' => 'success'], 200);
     }
 }

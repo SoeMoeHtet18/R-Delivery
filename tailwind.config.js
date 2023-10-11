@@ -16,7 +16,9 @@ module.exports = {
         'active-item': '#07384D',
         'grey': '#AAAAAA',
         'white': '#ffffff',
-        'side-bar': '#1C202E'
+        'side-bar': '#1C202E',
+        'info-main': '#F1F5F5',
+        'info-secondary': '#D9D9D9'
       },
       width: {
         '35/10': '35%',

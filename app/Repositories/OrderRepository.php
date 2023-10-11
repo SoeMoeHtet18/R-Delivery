@@ -659,4 +659,11 @@ class OrderRepository
 
         return $cashOnDeliveryInfo;
     }
+
+    public function getShopOrdersByShopID($shop_id)
+    {
+        return Order::where('shop_id', $shop_id)
+            ->with(['shop', 'city', 'township', 'rider', 'itemType', 'delivery_type', 'branch',])
+            ->get();
+    }
 }

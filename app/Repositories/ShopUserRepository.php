@@ -24,4 +24,9 @@ class ShopUserRepository
         $user = auth()->user();
         return ShopUser::where('branch_id', $user->branch_id)->count();
     }
+
+    public function getShopUsersByShopID($shop_id)
+    {
+        return ShopUser::where('shop_id', $shop_id)->with('shop')->get();
+    }
 }
