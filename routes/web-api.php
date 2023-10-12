@@ -27,3 +27,4 @@ Route::get('/shops/{id}/orders', [ShopApiController::class, 'getShopOrders']);
 Route::get('/shops/{id}/financial-amounts', [ShopApiController::class, 'getAmountsRelatedToOrder']);
 Route::get('/users', [AdminApiController::class, 'getUserTableData']);
 Route::post('/save-user-data', [AdminApiController::class, 'storeUserData']);
+Route::post('/update-user-data', [AdminApiController::class, 'updateUserData']);
