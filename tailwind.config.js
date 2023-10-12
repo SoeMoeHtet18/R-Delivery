@@ -18,7 +18,10 @@ module.exports = {
         'white': '#ffffff',
         'side-bar': '#1C202E',
         'info-main': '#F1F5F5',
-        'info-secondary': '#D9D9D9'
+        'info-secondary': '#D9D9D9',
+        'warning': '#FFB20E',
+        'cancel': '#E33B3B',
+        'success': '#2AB936',
       },
       width: {
         '35/10': '35%',

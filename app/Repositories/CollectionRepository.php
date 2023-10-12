@@ -189,4 +189,11 @@ class CollectionRepository
         $user = auth()->user();
         return Collection::where('branch_id', $user->branch_id)->count();
     }
+
+    public function getShopPickUpsByShopID($shop_id)
+    {
+        return Collection::where('shop_id', $shop_id)
+            ->with(['collection_group', 'shop', 'rider'])
+            ->get();
+    }
 }

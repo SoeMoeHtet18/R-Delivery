@@ -1,83 +1,85 @@
 <template>
-    <div class="px-9 py-2 font-lato">
-        <!-- page title -->
-        <h1 class="page-title mb-7">SHOP</h1>
-        <div class="flex mb-5">
-            <!-- search box -->
-            <DxTextBox
-                ref="search"
-                class="search-btn"
-                width="280px"
-                height="34px"
-                placeholder="Search"
-                :buttons="[
-                    {
-                        location: 'before',
-                        name: 'searchButton',
-                        options: searchButton,
-                    },
-                ]">
-            </DxTextBox>
-            <!-- search toggle -->
-            <iconify-icon icon="prime:filter-fill" width="30" class="mx-3" @click="toggleSearch"></iconify-icon>
-            <!-- create new shop btn -->
-            <button class="bg-main text-white rounded-sm px-4" @click="createShop">Create New Shop</button>
-            <shop-create v-if="isShopCreate" @close="closeShopCreate"></shop-create>
-        </div>
-        <!-- filter container -->
-        <div id="filter-container" v-if="isToggleSearch">
+    <div class="px-9 pt-2 pb-1 font-lato">
+        <div id="filterContentContainer" ref="filterContentContainer">
+             <!-- page title -->
+            <h1 class="page-title mb-7">SHOP</h1>
             <div class="flex mb-5">
-                <!-- township filter -->
-                <DxSelectBox
-                    class="search-box ml-21"
-                    :items="townshipList"
-                    displayExpr="name"
-                    valueExpr="id"
-                    :searchEnabled=true
-                    placeholder="Township"
-                    ref="township"
-                    :onValueChanged=getDataByTownship
-                    width="204px"
-                />
-                <!-- city filter -->
-                <DxSelectBox
-                    class="search-box ml-9"
-                    :items="cityList"
-                    displayExpr="name"
-                    valueExpr="id"
-                    :searchEnabled=true
-                    placeholder="City"
-                    ref="city"
-                    :onValueChanged=getDataByCity
-                    width="204px"
-                />
-                <!-- <DxSelectBox
-                    class="search-box ml-9"
-                    :items="shopList"
-                    displayExpr="name"
-                    valueExpr="id"
-                    :searchEnabled=true
-                    placeholder="Shop"
-                    ref="shop"
-                    :onValueChanged=getDataByShop
-                /> -->
+                <!-- search box -->
+                <DxTextBox
+                    ref="search"
+                    class="search-btn"
+                    width="280px"
+                    height="34px"
+                    placeholder="Search"
+                    :buttons="[
+                        {
+                            location: 'before',
+                            name: 'searchButton',
+                            options: searchButton,
+                        },
+                    ]">
+                </DxTextBox>
+                <!-- search toggle -->
+                <iconify-icon icon="prime:filter-fill" width="30" class="mx-3" @click="toggleSearch"></iconify-icon>
+                <!-- create new shop btn -->
+                <button class="bg-main text-white rounded-sm px-4" @click="createShop">Create New Shop</button>
+                <shop-create v-if="isShopCreate" @close="closeShopCreate"></shop-create>
             </div>
-            <!-- date range filter -->
-            <div class="flex items-center">
-                <h5 class="from-label">From</h5>
-                <DxDateBox
-                    v-model="fromDate"
-                    class="date-box"
-                    width="204px"
-                    type="date"
-                />
-                <h5 class="to-label">To</h5>
-                <DxDateBox
-                    v-model="toDate"
-                    class="date-box"
-                    width="204px"
-                    type="date"
-                />
+            <!-- filter container -->
+            <div id="filter-container" v-if="isToggleSearch">
+                <div class="flex mb-5">
+                    <!-- township filter -->
+                    <DxSelectBox
+                        class="search-box ml-21"
+                        :items="townshipList"
+                        displayExpr="name"
+                        valueExpr="id"
+                        :searchEnabled=true
+                        placeholder="Township"
+                        ref="township"
+                        :onValueChanged=getDataByTownship
+                        width="204px"
+                    />
+                    <!-- city filter -->
+                    <DxSelectBox
+                        class="search-box ml-9"
+                        :items="cityList"
+                        displayExpr="name"
+                        valueExpr="id"
+                        :searchEnabled=true
+                        placeholder="City"
+                        ref="city"
+                        :onValueChanged=getDataByCity
+                        width="204px"
+                    />
+                    <!-- <DxSelectBox
+                        class="search-box ml-9"
+                        :items="shopList"
+                        displayExpr="name"
+                        valueExpr="id"
+                        :searchEnabled=true
+                        placeholder="Shop"
+                        ref="shop"
+                        :onValueChanged=getDataByShop
+                    /> -->
+                </div>
+                <!-- date range filter -->
+                <div class="flex items-center">
+                    <h5 class="from-label">From</h5>
+                    <DxDateBox
+                        v-model="fromDate"
+                        class="date-box"
+                        width="204px"
+                        type="date"
+                    />
+                    <h5 class="to-label">To</h5>
+                    <DxDateBox
+                        v-model="toDate"
+                        class="date-box"
+                        width="204px"
+                        type="date"
+                    />
+                </div>
             </div>
         </div>
         <!-- table list view -->
@@ -89,6 +91,7 @@
                 class="custom-data-grid"
                 :columnAutoWidth="true"
                 ref="myDataGrid"
+                :style="{ height: dataGridHeight }"
             >
                 <DxColumn
                     data-field="shopName"
@@ -208,10 +211,21 @@ export default {
             pageSize: [10, 20, 50, 100],
             fromDate: null,
             toDate: null,
-            isShopCreate: false
+            isShopCreate: false,
+            dataGridHeight: 'auto',
         };
     },
     methods: {
+        calculateDataGridHeight() {
+            const filterContentContainer = this.$refs.filterContentContainer;
+            console.log(filterContentContainer.clientHeight);
+            if (filterContentContainer) {
+                const screenHeight = window.innerHeight;
+                const height = filterContentContainer.clientHeight;
+                const blankHeight = height + 12 + (!this.isToggleSearch ? 20 : 0) + 1;
+                this.dataGridHeight = (screenHeight - blankHeight) + 'px';
+            }
+        },
         createShop() {
             this.isShopCreate = true;
         },
@@ -323,11 +337,11 @@ export default {
         this.getTownshipList();
         this.getCityList();
         this.getShopList();
-        // this.getTotalPageCount();
         this.$refs.search.$el.querySelector(".dx-texteditor-input").addEventListener(
             "input",
             this.getDataBySearch
         );
+        this.calculateDataGridHeight();
     },
     watch: {
         fromDate(newFromDate, oldFromDate) {
@@ -336,6 +350,9 @@ export default {
         toDate(newToDate, oldToDate) {
             this.getDataByDateRange(this.fromDate, newToDate);
         },
+        isToggleSearch() {
+            this.calculateDataGridHeight();
+        }
     },
 }
 </script>
@@ -416,6 +433,8 @@ export default {
 
 .custom-data-grid .dx-datagrid-headers .dx-datagrid-table .dx-header-row .dx-datagrid-action,
 .custom-data-grid .dx-datagrid-rowsview .dx-datagrid-content .dx-row.dx-data-row td {
+    vertical-align: middle;
+    white-space: normal;
     text-align: center !important;
     border-left: none;
     border-right: none;
@@ -424,13 +443,14 @@ export default {
 }
 
 .custom-data-grid .dx-datagrid-headers .dx-datagrid-table .dx-header-row .dx-datagrid-action .dx-datagrid-text-content {
+    white-space: normal !important;
     color: var(--black, #000);
     text-align: center;
     font-size: 12px;
     font-style: normal;
     font-weight: 700;
     line-height: 18px; /* 150% */
-    text-transform: uppercase;
+    text-transform: capitalize;
 }
 
 .custom-data-grid .dx-datagrid-rowsview .dx-datagrid-content .dx-row.dx-data-row td,
@@ -460,8 +480,8 @@ export default {
     color: #116A5B;
 }
 
-.dx-pager .dx-pages {
-    /* display: none; */
+.dx-pager {
+    padding-bottom: 0 !important;
 }
 
 .paging {

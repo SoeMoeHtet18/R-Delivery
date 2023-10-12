@@ -364,8 +364,8 @@ export default {
     border-left: none;
     border-right: none;
     border-bottom: 1px solid #D9D9D9;
-    padding: 10px 0 !important;
-    text-transform: uppercase;
+    padding: 10px !important;
+    text-transform: capitalize;
     font-family: Lato;
     color: black;
     font-size: 12px;

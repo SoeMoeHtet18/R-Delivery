@@ -183,4 +183,11 @@ class CustomerCollectionRepository
         $user = auth()->user();
         return CustomerCollection::where('branch_id', $user->branch_id)->count();
     }
+
+    public function getShopExchangesByShopID($shop_id)
+    {
+        return CustomerCollection::where('shop_id', $shop_id)
+            ->with(['city','township','rider','shop','collection_group','order'])
+            ->get();
+    }
 }

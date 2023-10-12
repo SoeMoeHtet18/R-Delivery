@@ -109,4 +109,9 @@ class TransactionsForShopRepository
 
         return $actual_amount;
     }
+
+    public function getShopTransactionsByShopID($shop_id)
+    {
+        return TransactionsForShop::where('shop_id', $shop_id)->with('user')->get();
+    }
 }

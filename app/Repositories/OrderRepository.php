@@ -660,10 +660,13 @@ class OrderRepository
         return $cashOnDeliveryInfo;
     }
 
-    public function getShopOrdersByShopID($shop_id)
+    public function getShopOrdersByShopID($shop_id, $status)
     {
         return Order::where('shop_id', $shop_id)
-            ->with(['shop', 'city', 'township', 'rider', 'itemType', 'delivery_type', 'branch',])
+            ->when(!is_null($status), function ($query) use ($status) {
+                $query->where('status', $status);
+            })
+            ->with(['shop', 'city', 'township', 'rider', 'itemType', 'delivery_type', 'branch'])
             ->get();
     }
 }

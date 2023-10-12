@@ -10,8 +10,10 @@ use App\Http\Requests\ShopUpdateApiRequest;
 use App\Models\Collection;
 use App\Models\Order;
 use App\Repositories\CollectionRepository;
+use App\Repositories\CustomerCollectionRepository;
 use App\Repositories\OrderRepository;
 use App\Repositories\ReportCalculationRepository;
+use App\Repositories\ShopPaymentRepository;
 use App\Repositories\ShopRepository;
 use App\Repositories\ShopUserRepository;
 use App\Repositories\TransactionsForShopRepository;
@@ -29,11 +31,14 @@ class ShopApiController extends Controller
     protected $transactionForShopRepository;
     protected $reportCalculationRepository;
     protected $shopUserRepository;
+    protected $customerCollectionRepository;
+    protected $shopPaymentRepository;
 
     public function __construct(ShopService $shopService, ShopRepository $shopRepository,
         OrderRepository $orderRepository, CollectionRepository $collectionRepository,
         TransactionsForShopRepository $transactionForShopRepository,
-        ReportCalculationRepository $reportCalculationRepository, ShopUserRepository $shopUserRepository)
+        ReportCalculationRepository $reportCalculationRepository, ShopUserRepository $shopUserRepository,
+        CustomerCollectionRepository $customerCollectionRepository, ShopPaymentRepository $shopPaymentRepository)
     {
         $this->shopService = $shopService;
         $this->shopRepository = $shopRepository;
@@ -42,6 +47,8 @@ class ShopApiController extends Controller
         $this->transactionForShopRepository = $transactionForShopRepository;
         $this->reportCalculationRepository = $reportCalculationRepository;
         $this->shopUserRepository = $shopUserRepository;
+        $this->customerCollectionRepository = $customerCollectionRepository;
+        $this->shopPaymentRepository = $shopPaymentRepository;
     }
 
     public function getAllShopList()
@@ -245,9 +252,11 @@ class ShopApiController extends Controller
         ], 200);
     }
 
-    public function getShopOrders($id)
+    public function getShopOrders(Request $request, $id)
     {
-        $shop_orders = $this->orderRepository->getShopOrdersByShopID($id);
+        $status = $request->status;
+        $shop_orders = $this->orderRepository->getShopOrdersByShopID($id, $status);
+
         return response()->json([
             'data' => $shop_orders,
             'message' => 'Successfully get shop orders',
@@ -262,6 +271,46 @@ class ShopApiController extends Controller
         return response()->json([
             'data' => $amounts,
             'message' => 'Successfully get related amounts',
+            'status' => 'success'], 200);
+    }
+
+    public function getShopPickUps($id)
+    {
+        $pickUps = $this->collectionRepository->getShopPickUpsByShopID($id);
+
+        return response()->json([
+            'data' => $pickUps,
+            'message' => 'Successfully get shop pick ups',
+            'status' => 'success'], 200);
+    }
+
+    public function getShopExchanges($id)
+    {
+        $exchanges = $this->customerCollectionRepository->getShopExchangesByShopID($id);
+
+        return response()->json([
+            'data' => $exchanges,
+            'message' => 'Successfully get shop exchanges',
+            'status' => 'success'], 200);
+    }
+
+    public function getShopPayments($id)
+    {
+        $payments = $this->shopPaymentRepository->getShopPaymentListByShopID($id);
+
+        return response()->json([
+            'data' => $payments,
+            'message' => 'Successfully get shop payments',
+            'status' => 'success'], 200);
+    }
+    
+    public function getShopTransactions($id)
+    {
+        $transactions = $this->transactionForShopRepository->getShopTransactionsByShopID($id);
+
+        return response()->json([
+            'data' => $transactions,
+            'message' => 'Successfully get shop payments',
             'status' => 'success'], 200);
     }
 }
