@@ -6,6 +6,7 @@ use App\Models\Collection;
 use App\Models\CollectionGroup;
 use App\Models\CustomerCollection;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Support\Facades\DB;
 
 class CollectionRepository
@@ -190,9 +191,19 @@ class CollectionRepository
         return Collection::where('branch_id', $user->branch_id)->count();
     }
 
-    public function getShopPickUpsByShopID($shop_id)
+    public function getShopPickUpsByShopID($shop_id, $start, $end)
     {
+        if($start && $end) {
+            $start = str_replace(' GMT+0630 (Myanmar Time)', '', $start);
+            $end = str_replace(' GMT+0630 (Myanmar Time)', '', $end);
+            $start = new DateTime($start);
+            $end = new DateTime($end);
+        }
+
         return Collection::where('shop_id', $shop_id)
+            ->when($start && $end, function ($query) use ($start, $end) {
+                $query->whereBetween('created_at', [$start, $end]);
+            })
             ->with(['collection_group', 'shop', 'rider'])
             ->get();
     }

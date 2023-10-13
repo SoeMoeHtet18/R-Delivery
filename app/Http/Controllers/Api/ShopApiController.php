@@ -19,7 +19,9 @@ use App\Repositories\ShopUserRepository;
 use App\Repositories\TransactionsForShopRepository;
 use App\Services\ShopService;
 use DateTime;
+use Exception;
 use Illuminate\Support\Facades\DB;
+use Mpdf\Mpdf;
 
 class ShopApiController extends Controller
 {
@@ -255,7 +257,10 @@ class ShopApiController extends Controller
     public function getShopOrders(Request $request, $id)
     {
         $status = $request->status;
-        $shop_orders = $this->orderRepository->getShopOrdersByShopID($id, $status);
+        $start = $request->from_date;
+        $end = $request->to_date;
+         
+        $shop_orders = $this->orderRepository->getShopOrdersByShopID($id, $status, $start, $end);
 
         return response()->json([
             'data' => $shop_orders,
@@ -274,9 +279,12 @@ class ShopApiController extends Controller
             'status' => 'success'], 200);
     }
 
-    public function getShopPickUps($id)
+    public function getShopPickUps(Request $request, $id)
     {
-        $pickUps = $this->collectionRepository->getShopPickUpsByShopID($id);
+        $start = $request->from_date;
+        $end = $request->to_date;
+
+        $pickUps = $this->collectionRepository->getShopPickUpsByShopID($id, $start, $end);
 
         return response()->json([
             'data' => $pickUps,
@@ -284,9 +292,12 @@ class ShopApiController extends Controller
             'status' => 'success'], 200);
     }
 
-    public function getShopExchanges($id)
+    public function getShopExchanges(Request $request, $id)
     {
-        $exchanges = $this->customerCollectionRepository->getShopExchangesByShopID($id);
+        $start = $request->from_date;
+        $end = $request->to_date;
+        
+        $exchanges = $this->customerCollectionRepository->getShopExchangesByShopID($id, $start, $end);
 
         return response()->json([
             'data' => $exchanges,
@@ -294,9 +305,12 @@ class ShopApiController extends Controller
             'status' => 'success'], 200);
     }
 
-    public function getShopPayments($id)
+    public function getShopPayments(Request $request, $id)
     {
-        $payments = $this->shopPaymentRepository->getShopPaymentListByShopID($id);
+        $start = $request->from_date;
+        $end = $request->to_date;
+        
+        $payments = $this->shopPaymentRepository->getShopPaymentListByShopID($id, $start, $end);
 
         return response()->json([
             'data' => $payments,
@@ -304,13 +318,59 @@ class ShopApiController extends Controller
             'status' => 'success'], 200);
     }
     
-    public function getShopTransactions($id)
+    public function getShopTransactions(Request $request, $id)
     {
-        $transactions = $this->transactionForShopRepository->getShopTransactionsByShopID($id);
+        $start = $request->from_date;
+        $end = $request->to_date;
+        
+        $transactions = $this->transactionForShopRepository->getShopTransactionsByShopID($id, $start, $end);
 
         return response()->json([
             'data' => $transactions,
             'message' => 'Successfully get shop payments',
             'status' => 'success'], 200);
+    }
+
+    public function downloadShopPdf(Request $request, $id) {
+        try {
+            $mpdf = new Mpdf();
+
+            // Enable Myanmar language support
+            $mpdf->autoScriptToLang = true;
+            $mpdf->autoLangToFont = true;
+
+            // Set the font for Myanmar language
+            $mpdf->SetFont('myanmar3');
+
+            //retrieve data
+            $status = $request->status;
+            $start = $request->from_date;
+            $end = $request->to_date;
+            $shop_id = $id;
+            $type = $request->type;
+
+            if($type == 'order') {
+                $orders = $this->orderRepository->getShopOrdersByShopID($shop_id, $status, $start, $end);
+                $paidAmount = $this->shopRepository->getAllPaidAmountByCompany($shop_id, $start, $end);
+               
+                // Add HTML content with Myanmar text
+                $mpdf->WriteHTML(view('admin.shop.pdf_export', compact('orders','paidAmount')));
+    
+                // Output the PDF for download
+                $mpdf->Output('shop_order.pdf', 'D');
+            } elseif($type == 'pick_up') {
+                $collections = $this->collectionRepository->getShopPickUpsByShopID($id, $start, $end);
+
+                $mpdf->WriteHTML(view('admin.shop.pdf_export_for_pick_up', compact('collections')));
+    
+                // Output the PDF for download
+                $mpdf->Output('shop_pick_up.pdf', 'D');
+            } else {
+                return redirect()->back()->with('error', "Can't generate pdf");
+            }
+           
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', "Can't generate pdf");
+        }
     }
 }

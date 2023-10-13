@@ -17,6 +17,7 @@ import NavBar from './components/nav_bar/NavBar.vue';
 import Dashboard from './components/Dashboard.vue';
 import Loader from './components/general/Loader.vue';
 import SuccessPopUp from './components/general/SuccessPopUp.vue';
+import FilterSubTable from './components/shop/shop_detail/FilterSubTable.vue';
 
 const app = createApp({});
 
@@ -35,5 +36,6 @@ app.component('user-list', UserList);
 app.component('nav-bar', NavBar);
 app.component('loader', Loader);
 app.component('success-pop-up', SuccessPopUp);
+app.component('filter-sub-table', FilterSubTable)
 
 app.mount('#app');

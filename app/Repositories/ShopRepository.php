@@ -132,4 +132,20 @@ class ShopRepository
             }])
             ->first();
     }
+
+    public function getAllPaidAmountByCompany($shop_id, $start, $end) {
+        $collectionAmount = Collection::where('shop_id', $shop_id)
+            ->when(!is_null($start) && !is_null($end), function ($query) use ($start, $end) {
+                $query->whereBetween('created_at', [$start, $end]);
+            })
+            ->sum('paid_amount');
+
+        $transactionAmount = TransactionsForShop::where('shop_id',$shop_id)
+            ->when(!is_null($start) && !is_null($end), function ($query) use ($start, $end) {
+                $query->whereBetween('created_at', [$start, $end]);
+            })
+            ->sum('amount');
+
+        return $collectionAmount + $transactionAmount;
+    }
 }

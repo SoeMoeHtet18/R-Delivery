@@ -11,6 +11,7 @@ use App\Models\Order;
 use App\Models\ShopPayment;
 use App\Models\Township;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -660,11 +661,21 @@ class OrderRepository
         return $cashOnDeliveryInfo;
     }
 
-    public function getShopOrdersByShopID($shop_id, $status)
+    public function getShopOrdersByShopID($shop_id, $status, $start, $end)
     {
+        if($start && $end) {
+            $start = str_replace(' GMT+0630 (Myanmar Time)', '', $start);
+            $end = str_replace(' GMT+0630 (Myanmar Time)', '', $end);
+            $start = new DateTime($start);
+            $end = new DateTime($end);
+        }
+        
         return Order::where('shop_id', $shop_id)
             ->when(!is_null($status), function ($query) use ($status) {
                 $query->where('status', $status);
+            })
+            ->when($start && $end, function ($query) use ($start, $end) {
+                $query->whereBetween('created_at', [$start, $end]);
             })
             ->with(['shop', 'city', 'township', 'rider', 'itemType', 'delivery_type', 'branch'])
             ->get();

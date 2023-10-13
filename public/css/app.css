@@ -718,6 +718,10 @@ video {
   margin-right: 2rem;
 }
 
+.mr-9 {
+  margin-right: 2.25rem;
+}
+
 .ms-3 {
   margin-inline-start: 0.75rem;
 }

@@ -7,6 +7,7 @@ use App\Models\CustomerCollection;
 use App\Models\Order;
 use App\Models\ShopPayment;
 use App\Models\TransactionsForShop;
+use DateTime;
 
 class TransactionsForShopRepository
 {
@@ -110,8 +111,19 @@ class TransactionsForShopRepository
         return $actual_amount;
     }
 
-    public function getShopTransactionsByShopID($shop_id)
+    public function getShopTransactionsByShopID($shop_id, $start, $end)
     {
-        return TransactionsForShop::where('shop_id', $shop_id)->with('user')->get();
+        if($start && $end) {
+            $start = str_replace(' GMT+0630 (Myanmar Time)', '', $start);
+            $end = str_replace(' GMT+0630 (Myanmar Time)', '', $end);
+            $start = new DateTime($start);
+            $end = new DateTime($end);
+        }
+
+        return TransactionsForShop::where('shop_id', $shop_id)
+            ->when($start && $end, function ($query) use ($start, $end) {
+                $query->whereBetween('created_at', [$start, $end]);
+            })
+            ->with('user')->get();
     }
 }

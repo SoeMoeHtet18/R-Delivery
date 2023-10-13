@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\ShopPayment;
+use DateTime;
 
 class ShopPaymentRepository
 {
@@ -19,10 +20,20 @@ class ShopPaymentRepository
         return $shop_payments;
     }
 
-    public function getShopPaymentListByShopID($id)
+    public function getShopPaymentListByShopID($id, $start, $end)
     {
-        $shop_payments = ShopPayment::where('shop_id', $id)->get();
-        return $shop_payments;
+        if($start && $end) {
+            $start = str_replace(' GMT+0630 (Myanmar Time)', '', $start);
+            $end = str_replace(' GMT+0630 (Myanmar Time)', '', $end);
+            $start = new DateTime($start);
+            $end = new DateTime($end);
+        }
+
+        return ShopPayment::where('shop_id', $id)
+            ->when($start && $end, function ($query) use ($start, $end) {
+                $query->whereBetween('created_at', [$start, $end]);
+            })
+            ->get();
     }
 
     public function getShopPaymentDetailByID($id)

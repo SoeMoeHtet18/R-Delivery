@@ -37,7 +37,7 @@ class ShopPaymentApiController extends Controller
     public function getShopPaymentListByShopID()
     {
         $shop_user = auth()->guard('shop-user-api')->user();
-        $shop_payments = $this->shopPaymentRepository->getShopPaymentListByShopID($shop_user->shop_id);
+        $shop_payments = $this->shopPaymentRepository->getShopPaymentListByShopID($shop_user->shop_id, null, null);
         return response()->json(['data' => $shop_payments, 'message' => 'Successfully Get Shop Payments By Shop ID', 'status' => 'success'], 200);
     }
 

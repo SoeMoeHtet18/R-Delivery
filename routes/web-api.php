@@ -29,5 +29,6 @@ Route::get('/shops/{id}/pick-ups', [ShopApiController::class, 'getShopPickUps'])
 Route::get('/shops/{id}/exchanges', [ShopApiController::class, 'getShopExchanges']);
 Route::get('/shops/{id}/payments', [ShopApiController::class, 'getShopPayments']);
 Route::get('/shops/{id}/transactions', [ShopApiController::class, 'getShopTransactions']);
+Route::get('/shops/{id}/download-pdf', [ShopApiController::class, 'downloadShopPdf']);
 Route::get('/users', [AdminApiController::class, 'getUserTableData']);
 Route::post('/save-user-data', [AdminApiController::class, 'storeUserData']);
