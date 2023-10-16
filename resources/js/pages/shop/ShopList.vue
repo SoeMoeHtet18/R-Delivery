@@ -1,6 +1,9 @@
 <template>
     <div class="px-9 pt-2 pb-1 font-lato">
-        <div id="filterContentContainer" ref="filterContentContainer">
+        <div id="filterContentContainer"
+            ref="filterContentContainer"
+            :style="{ height: isToggleSearch ? '41vh' : '16vh', marginBottom: '20px' }"
+        >
              <!-- page title -->
             <h1 class="page-title mb-7">SHOP</h1>
             <div class="flex mb-5">
@@ -91,7 +94,7 @@
                 class="custom-data-grid"
                 :columnAutoWidth="true"
                 ref="myDataGrid"
-                :style="{ height: dataGridHeight }"
+                :style="{ height: isToggleSearch ? '53vh' : '78vh' }"
             >
                 <DxColumn
                     data-field="shopName"
@@ -358,6 +361,7 @@ export default {
 </script>
  
 <style>
+
 .page-title {
     font-size: 34px !important;
     font-style: normal;

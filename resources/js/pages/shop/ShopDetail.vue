@@ -182,6 +182,7 @@
                         class="custom-data-grid"
                         :columnAutoWidth="true"
                         ref="shopUserDataGrid"
+                        :style="{ height: '82vh' }"
                     >
                         <DxColumn 
                             data-field="index"
@@ -211,7 +212,7 @@
                             data-field="email"
                             caption="EMAIL"
                         ></DxColumn>
-                        <DxPaging :page-size="10"/>
+                        <DxPaging :page-size="10" />
                         <DxPager
                             :visible="true"
                             :allowed-page-sizes="pageSize"
@@ -222,10 +223,12 @@
                         />
                         <DxScrolling
                             mode="standard"
+                            column-rendering-mode="virtual"
                             :use-native="false"
                             :scroll-by-content="true"
                             :scroll-by-thumb="true"
-                            show-scrollbar="never" />
+                            show-scrollbar="never"
+                        />
                     </dx-data-grid>
                 </div>
             </div>
@@ -235,26 +238,22 @@
                     @download="downloadShopOrderPdf"
                 ></filter-sub-table>
                 <div class="grid grid-cols-4 gap-8 my-4">
-                    <div class="bg-soft hover:bg-main-hover border rounded-lg shadow-lg text-center">
-                        <h5 class="my-4 label">ITEM AMOUNT</h5>
-                        <hr class="border-main">
-                        <h5 class="my-6 label-count">{{this.formatWithNumberingSystem(financialAmounts.totalItemAmount)}} MMK</h5>
-                    </div>
-                    <div class="bg-soft hover:bg-main-hover border rounded-lg shadow-lg text-center">
-                        <h5 class="my-4 label">MARKUP DELIVERY FEES</h5>
-                        <hr class="border-main">
-                        <h5 class="my-6 label-count">{{this.formatWithNumberingSystem(financialAmounts.totalMarkUpDeliveryFees)}} MMK</h5>
-                    </div>
-                    <div class="bg-soft hover:bg-main-hover border rounded-lg shadow-lg text-center">
-                        <h5 class="my-4 label">DELIVERY FEES</h5>
-                        <hr class="border-main">
-                        <h5 class="my-6 label-count">{{this.formatWithNumberingSystem(financialAmounts.totalDeliveryFees)}} MMK</h5>
-                    </div>
-                    <div class="bg-soft hover:bg-main-hover border rounded-lg shadow-lg text-center">
-                        <h5 class="my-4 label">PAY AMOUNT TO SHOP</h5>
-                        <hr class="border-main">
-                        <h5 class="my-6 label-count">{{this.formatWithNumberingSystem(financialAmounts.totalAmountToPayShop)}} MMK</h5>
-                    </div>
+                    <display-amount-box
+                        title="ITEM AMOUNT"
+                        :amount="financialAmounts.totalItemAmount"
+                    ></display-amount-box>
+                    <display-amount-box
+                        title="MARKUP DELIVERY FEES"
+                        :amount="financialAmounts.totalMarkUpDeliveryFees"
+                    ></display-amount-box>
+                    <display-amount-box
+                        title="DELIVERY FEES"
+                        :amount="financialAmounts.totalDeliveryFees"
+                    ></display-amount-box>
+                    <display-amount-box
+                        title="PAY AMOUNT TO SHOP"
+                        :amount="financialAmounts.totalAmountToPayShop"
+                    ></display-amount-box>
                 </div>
                 <div id="order-container">
                 <!-- table -->
@@ -265,6 +264,7 @@
                         class="custom-data-grid shop-order-data-grid"
                         ref="orderDataGrid"
                         :columnAutoWidth="true"
+                        :style="{ height: '82vh' }"
                     >
                         <DxColumn 
                             data-field="index"
@@ -382,7 +382,7 @@
                         <template #orderStatusTemplate="{ data }">
                             <span :class="getStatusColor(data.data.status)">{{ this.renderStatus(data.data.status) }}</span>
                         </template>
-                        <DxPaging :page-size="10"/>
+                        <DxPaging :page-size="10" />
                         <DxPager
                             :visible="true"
                             :allowed-page-sizes="pageSize"
@@ -397,7 +397,8 @@
                             :use-native="false"
                             :scroll-by-content="true"
                             :scroll-by-thumb="true"
-                            show-scrollbar="never" />
+                            show-scrollbar="never"
+                        />
                     </dx-data-grid>
                 </div>
             </div>
@@ -415,6 +416,7 @@
                         class="custom-data-grid shop-pickup-data-grid"
                         ref="pickupDataGrid"
                         :columnAutoWidth="true"
+                        :style="{ height: '82vh' }"
                     >
                         <DxColumn 
                             data-field="index"
@@ -491,7 +493,7 @@
                                 {{ this.renderPickUpStatus(data.data.status) }}
                             </span>
                         </template>
-                        <DxPaging :page-size="10"/>
+                        <DxPaging :page-size="10" />
                         <DxPager
                             :visible="true"
                             :allowed-page-sizes="pageSize"
@@ -506,7 +508,8 @@
                             :use-native="false"
                             :scroll-by-content="true"
                             :scroll-by-thumb="true"
-                            show-scrollbar="never" />
+                            show-scrollbar="never"
+                        />
                     </dx-data-grid>
                 </div>
             </div>
@@ -523,6 +526,7 @@
                         class="custom-data-grid shop-exchange-data-grid"
                         ref="exchangeDataGrid"
                         :columnAutoWidth="true"
+                        :style="{ height: '82vh' }"
                     >
                         <DxColumn 
                             data-field="index"
@@ -623,7 +627,7 @@
                                 {{ this.renderExchangeStatus(data.data.status) }}
                             </span>
                         </template>
-                        <DxPaging :page-size="10"/>
+                        <DxPaging :page-size="10" />
                         <DxPager
                             :visible="true"
                             :allowed-page-sizes="pageSize"
@@ -638,7 +642,8 @@
                             :use-native="false"
                             :scroll-by-content="true"
                             :scroll-by-thumb="true"
-                            show-scrollbar="never" />
+                            show-scrollbar="never"
+                        />
                     </dx-data-grid>
                 </div>
             </div>
@@ -655,6 +660,7 @@
                         class="custom-data-grid shop-payment-data-grid"
                         ref="paymentDataGrid"
                         :columnAutoWidth="true"
+                        :style="{ height: '82vh' }"
                     >
                         <DxColumn 
                             data-field="index"
@@ -676,7 +682,7 @@
                             data-field="note"
                             caption="NOTE"
                         />
-                        <DxPaging :page-size="10"/>
+                        <DxPaging :page-size="10" />
                         <DxPager
                             :visible="true"
                             :allowed-page-sizes="pageSize"
@@ -691,7 +697,8 @@
                             :use-native="false"
                             :scroll-by-content="true"
                             :scroll-by-thumb="true"
-                            show-scrollbar="never" />
+                            show-scrollbar="never"
+                        />
                     </dx-data-grid>
                 </div>
             </div>
@@ -708,6 +715,7 @@
                         class="custom-data-grid shop-transaction-data-grid"
                         ref="transactionDataGrid"
                         :columnAutoWidth="true"
+                        :style="{ height: '82vh' }"
                     >
                         <DxColumn 
                             data-field="index"
@@ -770,6 +778,7 @@
                         class="custom-data-grid shop-order-data-grid"
                         ref="canceledOrderDataGrid"
                         :columnAutoWidth="true"
+                        :style="{ height: '82vh' }"
                     >
                         <DxColumn 
                             data-field="index"
@@ -887,7 +896,7 @@
                         <template #orderStatusTemplate="{ data }">
                             <span class="text-cancel">{{ this.renderStatus(data.data.status) }}</span>
                         </template>
-                        <DxPaging :page-size="10"/>
+                        <DxPaging :page-size="10" />
                         <DxPager
                             :visible="true"
                             :allowed-page-sizes="pageSize"
@@ -902,7 +911,8 @@
                             :use-native="false"
                             :scroll-by-content="true"
                             :scroll-by-thumb="true"
-                            show-scrollbar="never" />
+                            show-scrollbar="never"
+                        />
                     </dx-data-grid>
                 </div>
             </div>
@@ -1542,8 +1552,11 @@ export default {
         selectedIndex(newValue, oldValue) {
             switch (newValue) {
             case 1:
-                this.getShopOrders();
-                this.getFinancialAmounts();
+                console.log(this.orders.length);
+                if(this.orders.length == 0) {
+                    this.getShopOrders();
+                    this.getFinancialAmounts();
+                }
                 break;
             case 2:
                 this.getShopPickUps();
