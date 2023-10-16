@@ -1552,29 +1552,40 @@ export default {
         selectedIndex(newValue, oldValue) {
             switch (newValue) {
             case 1:
-                console.log(this.orders.length);
                 if(this.orders.length == 0) {
                     this.getShopOrders();
                     this.getFinancialAmounts();
                 }
                 break;
             case 2:
-                this.getShopPickUps();
+                if(this.pickUps.length == 0) {
+                    this.getShopPickUps();
+                }
                 break;
             case 3:
-               this.getShopExchanges();
+                if(this.exchanges.length == 0) {
+                    this.getShopExchanges();
+                }
                 break;
             case 4:
-                this.getShopPayments();
+                if(this.payments.length == 0) {
+                    this.getShopPayments();
+                }
                 break;
             case 5:
-                this.getShopTransactions();
+                if(this.transactions.length == 0) {
+                    this.getShopTransactions();
+                }
                 break;
             case 6:
-                this.getShopOrders('cancel');
+                if(this.cancelOrders.length == 0) {
+                    this.getShopOrders('cancel');
+                }
                 break;
             default:
-                this.getShopUsers();
+                if(this.shopUsers.length == 0) {
+                    this.getShopUsers();
+                }
             }
         },
     }
