@@ -69,26 +69,26 @@
                     <div>
                         <p class="mb-1">USER NAME</p>
                         <DxTextBox 
-                        v-model="user.name" 
+                        v-model:value="user.name" 
                         :isValid="isNameValid"
                         :onFocusOut="validateName"/>
                         <span v-if="!isNameValid" class="validation-error mt-1">User Name is required.</span>
                     </div>
                     <div class="mt-3">
                         <p class="mb-1">PHONE NUMBER</p>
-                        <DxTextBox v-model="user.phone_number" 
+                        <DxTextBox v-model:value="user.phone_number" 
                         :isValid="isPhoneNumberValid"
                         :onFocusOut="validatePhoneNumber"/>
                         <span v-if="!isPhoneNumberValid" class="validation-error mt-1">Phone Number is required.</span>
                     </div>
                     <div class="mt-3">
                         <p class="mb-1">EMAIL</p>
-                        <DxTextBox v-model="user.email" />
+                        <DxTextBox v-model:value="user.email" />
                     </div>
                     <div class="mt-3">
                         <p class="mb-1">PASSWORD</p>
                         <DxTextBox 
-                        v-model="user.password" 
+                        v-model:value="user.password" 
                         mode="password"
                         :isValid="isPasswordValid"
                         :onFocusOut="validatePassword"/>
@@ -97,7 +97,7 @@
                     <div class="mt-3">
                         <p class="mb-1">CONFIRM PASSWORD</p>
                         <DxTextBox 
-                        v-model="user.confirm_password"
+                        v-model:value="user.confirm_password"
                         mode="password"
                         :isValid="isConfirmPasswordValid"
                         :onFocusOut="validateConfirmPassword"/>
@@ -349,7 +349,12 @@ export default {
                         this.isShowSuccess = false;
                         this.createPopupVisible = false;
                     }, 2000);
-                    this.getShopTableData();
+                    this.user.name = null;
+                    this.user.phone_number = null;
+                    this.user.email = null;
+                    this.user.password = null;
+                    this.user.confirm_password = null;
+                    this.getUserTableData();
                 }
             })
             .catch((error) => {
@@ -402,7 +407,7 @@ export default {
                         this.isShowSuccess = false;
                         this.createPopupVisible = false;
                     }, 2000);
-                    this.getShopTableData();
+                    this.getUserTableData();
                 }
             })
             .catch((error) => {
@@ -417,7 +422,7 @@ export default {
             const response = await fetch(`/api/users?search=${input}`);
             this.fetchData(response);
         },
-        async getShopTableData() {
+        async getUserTableData() {
             const response = await fetch(`/api/users`);
             this.fetchData(response);
         },
@@ -497,7 +502,7 @@ export default {
         
     },
     mounted() {
-        this.getShopTableData();
+        this.getUserTableData();
         this.$refs.search.$el.querySelector(".dx-texteditor-input").addEventListener(
             "input",
             this.getDataBySearch
@@ -600,10 +605,6 @@ export default {
     color: red;
     font-size: 10px;
     font-family: Lato;
-}
-
-.user-list .custom-data-grid {
-    min-height: 80vh;
 }
 
 .loading-popup-content {

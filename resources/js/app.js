@@ -11,6 +11,7 @@ import ShopList from './pages/shop/ShopList.vue';
 import ShopCreate from './pages/shop/ShopCreate.vue';
 import ShopDetail from './pages/shop/ShopDetail.vue';
 import UserList from './pages/user/UserList.vue';
+import CityList from './pages/city/CityList.vue';
 
 //import components
 import NavBar from './components/nav_bar/NavBar.vue';
@@ -30,6 +31,7 @@ app.component('shop-create', ShopCreate);
 app.component('shop-detail', ShopDetail);
 
 app.component('user-list', UserList);
+app.component('city-list', CityList);
 // Components
 
 app.component('nav-bar', NavBar);

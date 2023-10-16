@@ -28,4 +28,11 @@ class CityRepository
         $citycount = City::count();
         return $citycount;
     }
+
+    public function getAllCityData($search)
+    {
+        return City::when(isset($search), function ($query) use ($search) {
+                    $query->where('name', 'like', '%' . $search . '%');
+                })->orderBy('id','desc')->get();
+    }
 }

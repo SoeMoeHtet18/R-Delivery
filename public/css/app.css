@@ -670,6 +670,10 @@ video {
   margin-bottom: 1.75rem;
 }
 
+.me-2 {
+  margin-inline-end: 0.5rem;
+}
+
 .ml-1\/6 {
   margin-left: 16.6667%;
 }
@@ -1233,6 +1237,19 @@ video {
   background-color: #f8f9fa;
   border-top: 1px solid #ccc;
   padding: 0.75rem 1rem;
+}
+
+.custom-data-grid {
+  min-height: 80vh;
+  max-height: 80vh;
+}
+
+.custom-data-grid .dx-datagrid .dx-datagrid-pager {
+  border-top: none;
+}
+
+.dx-overlay-shader {
+  background-color: rgba(0,0,0,0.5) !important;
 }
 
 .hover\:bg-main-hover:hover {
