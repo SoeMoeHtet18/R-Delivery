@@ -33,3 +33,6 @@ Route::get('/shops/{id}/download-pdf', [ShopApiController::class, 'downloadShopP
 Route::get('/users', [AdminApiController::class, 'getUserTableData']);
 Route::post('/save-user-data', [AdminApiController::class, 'storeUserData']);
 Route::post('/update-user-data', [AdminApiController::class, 'updateUserData']);
+Route::get('/cities', [CityApiController::class, 'getCityTableData']);
+Route::post('/save-city-data', [CityApiController::class, 'storeCityData']);
+Route::post('/update-city-data', [CityApiController::class, 'updateCityData']);

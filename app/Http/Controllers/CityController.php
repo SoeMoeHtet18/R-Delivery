@@ -27,7 +27,9 @@ class CityController extends Controller
      */
     public function index(Request $request)
     {
-        return view('admin.city.index');
+        // return view('admin.city.index');
+        //render with vue
+        return view('vue-pages.city.index');
     }
 
     /**
