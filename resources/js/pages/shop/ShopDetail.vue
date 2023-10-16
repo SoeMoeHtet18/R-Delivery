@@ -1,19 +1,9 @@
 <template>
     <div class="px-9 py-2 font-lato">
         <!-- page title -->
-        <h1 class="page-title mb-7">{{ shopInfo.name }}</h1>
-        <div class="flex">
-            <!-- search box -->
-            <DxTextBox ref="search" class="search-btn" width="280px" height="34px" placeholder="Search" :buttons="[
-                {
-                    location: 'before',
-                    name: 'searchButton',
-                    options: searchButton,
-                },
-            ]">
-            </DxTextBox>
-            <!-- search toggle -->
-            <iconify-icon icon="prime:filter-fill" width="30" class="mx-3" @click="toggleSearch"></iconify-icon>
+        <div class="flex justify-between items-end mb-7">
+            <h1 class="page-title">{{ shopInfo.name }}</h1>
+            <iconify-icon icon="ri:close-line" style="color: #aaa;" width="20" @click="directToShopList"></iconify-icon>
         </div>
         <!-- filter container -->
         <div id="filter-container" v-if="isToggleSearch">
@@ -163,16 +153,6 @@
         </DxTabs>
         <div class="mt-4 shop-related-containers">
             <div v-if="selectedIndex === 0">
-                <div class="flex justify-end my-4">
-                    <div>
-                        <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <g id="download">
-                                <rect id="Rectangle 71" width="30" height="30" rx="5" fill="#116A5B"/>
-                                <path id="Vector" d="M25 17.5V23.3333C25 23.7754 24.8244 24.1993 24.5118 24.5118C24.1993 24.8244 23.7754 25 23.3333 25H6.66667C6.22464 25 5.80072 24.8244 5.48816 24.5118C5.17559 24.1993 5 23.7754 5 23.3333V17.5C5 17.279 5.0878 17.067 5.24408 16.9107C5.40036 16.7545 5.61232 16.6667 5.83333 16.6667C6.05435 16.6667 6.26631 16.7545 6.42259 16.9107C6.57887 17.067 6.66667 17.279 6.66667 17.5V23.3333H23.3333V17.5C23.3333 17.279 23.4211 17.067 23.5774 16.9107C23.7337 16.7545 23.9457 16.6667 24.1667 16.6667C24.3877 16.6667 24.5996 16.7545 24.7559 16.9107C24.9122 17.067 25 17.279 25 17.5ZM14.4104 18.0896C14.4878 18.1671 14.5797 18.2285 14.6809 18.2705C14.782 18.3124 14.8905 18.334 15 18.334C15.1095 18.334 15.218 18.3124 15.3191 18.2705C15.4203 18.2285 15.5122 18.1671 15.5896 18.0896L19.7563 13.9229C19.8337 13.8455 19.8951 13.7536 19.937 13.6524C19.9789 13.5513 20.0005 13.4428 20.0005 13.3333C20.0005 13.2238 19.9789 13.1154 19.937 13.0143C19.8951 12.9131 19.8337 12.8212 19.7563 12.7437C19.6788 12.6663 19.5869 12.6049 19.4857 12.563C19.3846 12.5211 19.2762 12.4995 19.1667 12.4995C19.0572 12.4995 18.9487 12.5211 18.8476 12.563C18.7464 12.6049 18.6545 12.6663 18.5771 12.7437L15.8333 15.4885V5.83333C15.8333 5.61232 15.7455 5.40036 15.5893 5.24408C15.433 5.0878 15.221 5 15 5C14.779 5 14.567 5.0878 14.4107 5.24408C14.2545 5.40036 14.1667 5.61232 14.1667 5.83333V15.4885L11.4229 12.7437C11.2665 12.5874 11.0545 12.4995 10.8333 12.4995C10.6122 12.4995 10.4001 12.5874 10.2437 12.7437C10.0874 12.9001 9.99954 13.1122 9.99954 13.3333C9.99954 13.5545 10.0874 13.7666 10.2437 13.9229L14.4104 18.0896Z" fill="white"/>
-                            </g>
-                        </svg>
-                    </div>
-                </div>
                 <div id="user-container">
                 <!-- table -->
                     <dx-data-grid
@@ -234,6 +214,7 @@
             </div>
             <div v-if="selectedIndex === 1">
                 <filter-sub-table 
+                    :downloadable="true"
                     @callApiFilter="filterShopOrder"
                     @download="downloadShopOrderPdf"
                 ></filter-sub-table>
@@ -404,6 +385,7 @@
             </div>
             <div v-if="selectedIndex === 2">
                 <filter-sub-table
+                    :downloadable="true"
                     @callApiFilter="filterShopPickUp"
                     @download="downloadShopPickUpPdf"
                 ></filter-sub-table>
@@ -515,6 +497,7 @@
             </div>
             <div v-if="selectedIndex === 3">
                 <filter-sub-table
+                    :downloadable="false"
                     @callApiFilter="filterShopExchange"
                 ></filter-sub-table>
                 <div id="exchange-container">
@@ -649,6 +632,7 @@
             </div>
             <div v-if="selectedIndex === 4">
                 <filter-sub-table
+                    :downloadable="false"
                     @callApiFilter="filterShopPayment"
                 ></filter-sub-table>
                 <div id="payment-container">
@@ -704,6 +688,7 @@
             </div>
             <div v-if="selectedIndex === 5">
                 <filter-sub-table
+                    :downloadable="false"
                     @callApiFilter="filterShopTransaction"
                 ></filter-sub-table>
                 <div id="transaction-container">
@@ -766,6 +751,7 @@
             </div>
             <div v-if="selectedIndex === 6">
                 <filter-sub-table
+                    :downloadable="true"
                     @callApiFilter="filterShopCanceledOrder"
                     @download="downloadShopCanceledOrderPdf"
                 ></filter-sub-table>
@@ -1076,6 +1062,9 @@ export default {
         }
     },
     methods: {
+        directToShopList() {
+            window.location.href = "/shops";
+        },
         downloadShopCanceledOrderPdf(data) {
             this.downloadPdf(data, 'order', 'cancel');
         },

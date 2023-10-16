@@ -670,10 +670,6 @@ video {
   margin-bottom: 1.75rem;
 }
 
-.me-2 {
-  margin-inline-end: 0.5rem;
-}
-
 .ml-1\/6 {
   margin-left: 16.6667%;
 }
@@ -744,6 +740,10 @@ video {
 
 .mt-5 {
   margin-top: 1.25rem;
+}
+
+.me-2 {
+  margin-inline-end: 0.5rem;
 }
 
 .block {
@@ -833,6 +833,10 @@ video {
 
 .flex-wrap {
   flex-wrap: wrap;
+}
+
+.items-end {
+  align-items: flex-end;
 }
 
 .items-center {

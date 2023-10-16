@@ -18,7 +18,7 @@
                 type="date"
             />
         </div>
-        <div class="mr-3" @click="filterData">
+        <div @click="filterData">
             <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g id="calendar">
                     <rect id="Rectangle 72" width="30" height="30" rx="5" fill="#116A5B"/>
@@ -26,7 +26,7 @@
                 </g>
             </svg>
         </div>
-        <div @click="downloadData">
+        <div class="ml-3" @click="downloadData" v-if="downloadable">
             <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g id="download">
                     <rect id="Rectangle 71" width="30" height="30" rx="5" fill="#116A5B"/>
@@ -40,6 +40,9 @@
 import DxDateBox from 'devextreme-vue/date-box';
 
 export default {
+    props: {
+        downloadable: Boolean
+    },
     data() {
         return {
             isFilter : false,
