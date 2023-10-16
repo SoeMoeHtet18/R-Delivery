@@ -11,12 +11,14 @@ class CityService
         $city = new City();
         $city->name = $data['name'];
         $city->save();
+        return $city;
     }
 
     public function updateCityByID($data,$city)
     {
         $city->name = $data['name'];
         $city->save();
+        return $city;
     }
 
     public function deleteCityByID($id)

@@ -24,7 +24,7 @@ class AdminApiController extends Controller
         $data = $this->adminRepository->getAllAdminData($search);
         return response()->json([
             'data' => $data,
-            'message' => 'Successfully get shop table data',
+            'message' => 'Successfully get user table data',
             'status' => 'success'
         ], 200);
     }

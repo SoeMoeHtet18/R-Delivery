@@ -109,12 +109,12 @@
                 </a>
                 <!-- dropdown items of admin tools -->
                 <ul v-if="isAdminToolOpen" class="dropdown-menu">
-                    <a href="/users" class="flex items-center pl-14 h-11.25">
+                    <a href="/users" class="flex items-center pl-14 h-11.25" :class="{ 'sub-active': isActive('users')}">
                         <li class="flex items-center text-grey relative">
                             <h5 class="menu-label ml-4">User</h5>
                         </li>
                     </a>
-                    <a href="/cities" class="flex items-center pl-14 h-11.25">
+                    <a href="/cities" class="flex items-center pl-14 h-11.25" :class="{ 'sub-active': isActive('cities')}">
                         <li class="flex items-center text-grey relative">
                             <h5 class="menu-label ml-4">City</h5>
                         </li>
@@ -216,11 +216,18 @@ aside::-webkit-scrollbar {
     font-size: 14px !important;
 }
 
+.sub-active,
 .active {
     color: #ffffff;
     background-color: #07384D;
     border-left: 6px solid #116A5B;
+}
+
+.active {
     padding-left: 22px !important;
+}
+.sub-active {
+    padding-left: 50px !important;
 }
 
 .active>* {
