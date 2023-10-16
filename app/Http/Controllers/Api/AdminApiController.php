@@ -38,4 +38,14 @@ class AdminApiController extends Controller
             'status' => 'success'
         ], 200);
     }
+    
+    public function updateUserData(Request $request) {
+        $data = $request->data;
+        $user = $this->adminService->updateUserData($data);
+        return response()->json([
+            'data'   => $user,
+            'message'=> 'Successfully save user',
+            'status' => 'success'
+        ], 200);
+    }
 }

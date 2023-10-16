@@ -31,6 +31,7 @@
                 :columnAutoWidth="true"
                 :remote-operations="false"
                 ref="myDataGrid"
+                @row-click="showRowDataPopup"
             >
                 <DxPaging :page-size="10"/>
                 <DxPager
@@ -139,6 +140,84 @@
                 <span class="loading-text">Done successfully.</span>
             </div>
         </DxPopup>
+
+        <DxPopup
+            v-model:visible="isShowDetail"
+            :position="{ my: 'right top', at: 'right top', of: 'window' }"
+            :height="popupHeight"
+            :width="800"  
+            :closeOnOutsideClick="true"
+            :show-title="true"
+            :title="selectedRowData.name"
+            :style="{ 'box-shadow': '5px 0px 5px rgba(0, 0, 0, 0.2)' }"
+        >
+        <!-- Popup content goes here -->
+            <div class="user-create-form">
+                <div class="mb-5 flex justify-end" v-if="!isEdit">
+                    <DxButton :width="100" text="Edit" styling-mode="contained" @click="clickEditBtn"
+                        style="background-color: #116a5b; color: #ffff;"
+                    />
+                </div>
+                <div class="mb-5 flex justify-end" v-if="isEdit">
+                    <DxButton :width="100" text="Cancel" styling-mode="outlined"
+                        style="margin-right: 10px; border-color: #116a5b; color: #116a5b;" @click="closeEdit"/>
+                    <DxButton :width="100" text="Save" styling-mode="contained" style="background-color: #116a5b; color: #ffff;"
+                        @click="editData" />
+                </div>
+                <div>
+                    <p class="mb-1">USER NAME</p>
+                    <DxTextBox 
+                    v-model="selectedRowData.name"
+                    :disabled="isEdit ? false : true"/>
+                    <span v-if="!isNameValid" class="validation-error mt-1">User Name is required.</span>
+                </div>
+                <div class="mt-3">
+                    <p class="mb-1">PHONE NUMBER</p>
+                    <DxTextBox v-model="selectedRowData.phone_number"
+                    :disabled="isEdit ? false : true"/>
+                </div>
+                <div class="mt-3">
+                    <p class="mb-1">EMAIL</p>
+                    <DxTextBox v-model="selectedRowData.email" :disabled="isEdit ? false : true"/>
+                </div>
+                <div class="mt-5 flex justify-end" v-if="isEdit">
+                    <DxButton :width="150" text="Update Password" styling-mode="contained" @click="clickUpdatePasswordBtn"
+                        style="background-color: #116a5b; color: #ffff;"
+                    />
+                </div>
+                <div class="update-password mt-5" v-if="isUpdatePassword && isEdit">
+                    <div>
+                        <p class="mb-1">ENTER OLD PASSWORD</p>
+                        <DxTextBox 
+                        v-model="selectedRowData.old_password" 
+                        mode="password"
+                        :isValid="isOldPasswordValid"
+                        :onFocusOut="validateOldPassword"/>
+                        <span v-if="!isOldPasswordValid" class="validation-error mt-1">Old Password is required.</span>
+                    </div>
+                    <div class="mt-3">
+                        <p class="mb-1">ENTER NEW PASSWORD</p>
+                        <DxTextBox 
+                        v-model="selectedRowData.new_password" 
+                        mode="password"
+                        :isValid="isNewPasswordValid"
+                        :onFocusOut="validateNewPassword"/>
+                        <span v-if="!isNewPasswordValid" class="validation-error mt-1">New Password is required.</span>
+                    </div>
+                    <div class="mt-3">
+                        <p class="mb-1">ENTER NEW PASSWORD AGAIN</p>
+                        <DxTextBox 
+                        v-model="selectedRowData.confirm_password"
+                        mode="password"
+                        :isValid="isConfirmNewPasswordValid"
+                        :onFocusOut="validateConfirmNewPassword"/>
+                        <span v-if="!isConfirmNewPasswordValid && isNewPasswordMatch" class="validation-error mt-1">Confirm Password is required.</span>
+                        <span v-if="!isConfirmNewPasswordValid && !isNewPasswordMatch" class="validation-error mt-1">New Password and Confirm Password do not match.</span>
+                    </div>
+                </div>
+            </div>
+            
+        </DxPopup>
         
     </div>
 </template>
@@ -173,6 +252,7 @@ export default {
     },
     data() {
         return {
+            popupHeight: window.innerHeight,
             searchButton: searchButton,
             gridData: [],
             pageSize: [10, 20, 50, 100],
@@ -188,10 +268,26 @@ export default {
             isNameValid: true,
             isPhoneNumberValid: true,
             isPasswordValid: true,
+            isNewPasswordValid: true,
+            isOldPasswordValid: true,
+            isConfirmNewPasswordValid: true,
             isConfirmPasswordValid: true,
+            isNewPasswordMatch: true,
             isPasswordMatch: true,
             isloading: false,
             isShowSuccess: false,
+            isShowDetail: false,
+            selectedRowData: {
+                id: null,
+                name: null,
+                phone_number: null,
+                email: null,
+                old_password: null,
+                new_password: null,
+                confirm_password: null
+            },
+            isEdit: false,
+            isUpdatePassword: false,
         };
     },
     methods: {
@@ -202,6 +298,19 @@ export default {
             // setTimeout(() => {
             //     this.loadingVisible = false;
             // }, 10000);
+        },
+        showRowDataPopup(event) {
+            console.log(event.data);
+            this.selectedRowData.id = event.data.ID;
+            this.selectedRowData.name = event.data.UserName;
+            this.selectedRowData.phone_number = event.data.PhoneNumber;
+            this.selectedRowData.email = event.data.Email;
+            this.selectedRowData.new_password = null;
+            this.selectedRowData.old_password = null;
+            this.selectedRowData.confirm_password = null;
+            this.isEdit = false;
+            this.isUpdatePassword = false;
+            this.isShowDetail = true;
         },
         saveData() {
             console.log('save user data');
@@ -234,6 +343,59 @@ export default {
             })
             .then((data) => {
                 if(data.status == 'success') {
+                    this.isloading = false;
+                    this.isShowSuccess = true;
+                    setTimeout(() => {
+                        this.isShowSuccess = false;
+                        this.createPopupVisible = false;
+                    }, 2000);
+                    this.getShopTableData();
+                }
+            })
+            .catch((error) => {
+                return error;
+            });
+        },
+        clickEditBtn() {
+            this.isEdit = true;
+        },
+        closeEdit() {
+            this.isEdit = false;
+            this.isUpdatePassword = false;
+        },
+        clickUpdatePasswordBtn() {
+            this.isUpdatePassword = true;
+        },
+        editData() {
+            if(this.selectedRowData.new_password != this.selectedRowData.confirm_password) {
+                this.isNewPasswordMatch = false;
+                this.isConfirmNewPasswordValid = false;
+                return;
+            } else {
+                this.isNewPasswordMatch = true;
+                this.isConfirmNewPasswordValid = true;
+            }
+            const csrf = document.querySelector('meta[name="_token"]').content;
+            let formData = this.selectedRowData;
+            this.isloading = true;
+            console.log(formData);
+            fetch("/api/update-user-data", {
+                method: "POST",
+                headers: new Headers({
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": csrf,
+                }),
+                body: JSON.stringify({
+                    data: formData,
+                }),
+            })
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                if(data.status == 'success') {
+                    this.isUpdatePassword = false;
+                    this.isEdit = false;
                     this.isloading = false;
                     this.isShowSuccess = true;
                     setTimeout(() => {
@@ -305,6 +467,30 @@ export default {
                 this.isConfirmPasswordValid = false;
             } else {
                 this.isConfirmPasswordValid = true;
+            }
+        },
+        
+        validateNewPassword() {
+            if(this.selectedRowData.new_password == null) {
+                this.isNewPasswordValid = false;
+            } else {
+                this.isNewPasswordValid = true;
+            }
+        },
+        
+        validateOldPassword() {
+            if(this.selectedRowData.old_password == null) {
+                this.isOldPasswordValid = false;
+            } else {
+                this.isOldPasswordValid = true;
+            }
+        },
+        
+        validateConfirmNewPassword() {
+            if(this.selectedRowData.confirm_password == null) {
+                this.isConfirmNewPasswordValid = false;
+            } else {
+                this.isConfirmNewPasswordValid = true;
             }
         }
 

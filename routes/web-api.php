@@ -32,3 +32,4 @@ Route::get('/shops/{id}/transactions', [ShopApiController::class, 'getShopTransa
 Route::get('/shops/{id}/download-pdf', [ShopApiController::class, 'downloadShopPdf']);
 Route::get('/users', [AdminApiController::class, 'getUserTableData']);
 Route::post('/save-user-data', [AdminApiController::class, 'storeUserData']);
+Route::post('/update-user-data', [AdminApiController::class, 'updateUserData']);
