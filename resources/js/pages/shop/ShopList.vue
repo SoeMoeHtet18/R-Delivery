@@ -95,6 +95,7 @@
                 :columnAutoWidth="true"
                 ref="myDataGrid"
                 :style="{ height: isToggleSearch ? '53vh' : '78vh' }"
+                @row-click="directToShopDetail"
             >
                 <DxColumn
                     data-field="shopName"
@@ -114,7 +115,7 @@
                     cell-template="townshipTemplate"
                 />
                 <template #townshipTemplate="{ data }">
-                    <a :href="`/townships/${data.data.townshipId}`">{{data.data.township}}</a>
+                    <a class="hover-text" :href="`/townships/${data.data.townshipId}`">{{data.data.township}}</a>
                 </template>
                 <DxColumn
                     data-field="city"
@@ -122,7 +123,7 @@
                     cell-template="cityTemplate"
                 />
                 <template #cityTemplate="{ data }">
-                    <a :href="`/cities/${data.data.cityId}`">{{data.data.city}}</a>
+                    <a class="hover-text" :href="`/cities/${data.data.cityId}`">{{data.data.city}}</a>
                 </template>
                 <DxColumn 
                     data-field="address"
@@ -219,16 +220,19 @@ export default {
         };
     },
     methods: {
-        calculateDataGridHeight() {
-            const filterContentContainer = this.$refs.filterContentContainer;
-            console.log(filterContentContainer.clientHeight);
-            if (filterContentContainer) {
-                const screenHeight = window.innerHeight;
-                const height = filterContentContainer.clientHeight;
-                const blankHeight = height + 12 + (!this.isToggleSearch ? 20 : 0) + 1;
-                this.dataGridHeight = (screenHeight - blankHeight) + 'px';
-            }
+        directToShopDetail(e) {
+            window.location.href = `/shops/${e.data.id}`;
         },
+        // calculateDataGridHeight() {
+        //     const filterContentContainer = this.$refs.filterContentContainer;
+        //     console.log(filterContentContainer.clientHeight);
+        //     if (filterContentContainer) {
+        //         const screenHeight = window.innerHeight;
+        //         const height = filterContentContainer.clientHeight;
+        //         const blankHeight = height + 12 + (!this.isToggleSearch ? 20 : 0) + 1;
+        //         this.dataGridHeight = (screenHeight - blankHeight) + 'px';
+        //     }
+        // },
         createShop() {
             this.isShopCreate = true;
         },
@@ -344,7 +348,7 @@ export default {
             "input",
             this.getDataBySearch
         );
-        this.calculateDataGridHeight();
+        // this.calculateDataGridHeight();
     },
     watch: {
         fromDate(newFromDate, oldFromDate) {
@@ -353,9 +357,9 @@ export default {
         toDate(newToDate, oldToDate) {
             this.getDataByDateRange(this.fromDate, newToDate);
         },
-        isToggleSearch() {
-            this.calculateDataGridHeight();
-        }
+        // isToggleSearch() {
+        //     this.calculateDataGridHeight();
+        // }
     },
 }
 </script>
@@ -500,6 +504,14 @@ export default {
     border: 1px solid #39CAB2;
     padding: 1px 8px;
     border-radius: 2px;
+}
+
+.custom-data-grid .dx-datagrid-rowsview .dx-datagrid-content .dx-row.dx-data-row td .hover-text:hover {
+    color: #39CAB2 !important;
+}
+
+.custom-data-grid .dx-datagrid-rowsview .dx-row:hover {
+    background-color: #D4EFEB;
 }
 </style>
  

@@ -163,6 +163,7 @@
                         :columnAutoWidth="true"
                         ref="shopUserDataGrid"
                         :style="{ height: '82vh' }"
+                        @row-click="(rowData) => directToDetail(rowData, 'users')"
                     >
                         <DxColumn 
                             data-field="index"
@@ -246,6 +247,7 @@
                         ref="orderDataGrid"
                         :columnAutoWidth="true"
                         :style="{ height: '82vh' }"
+                        @row-click="(rowData) => directToDetail(rowData, 'orders')"
                     >
                         <DxColumn 
                             data-field="index"
@@ -399,6 +401,7 @@
                         ref="pickupDataGrid"
                         :columnAutoWidth="true"
                         :style="{ height: '82vh' }"
+                        @row-click="(rowData) => directToDetail(rowData, 'collections')"
                     >
                         <DxColumn 
                             data-field="index"
@@ -510,6 +513,7 @@
                         ref="exchangeDataGrid"
                         :columnAutoWidth="true"
                         :style="{ height: '82vh' }"
+                        @row-click="(rowData) => directToDetail(rowData, 'customer-collections')"
                     >
                         <DxColumn 
                             data-field="index"
@@ -645,6 +649,7 @@
                         ref="paymentDataGrid"
                         :columnAutoWidth="true"
                         :style="{ height: '82vh' }"
+                        @row-click="(rowData) => directToDetail(rowData, 'shoppayments')"
                     >
                         <DxColumn 
                             data-field="index"
@@ -701,6 +706,7 @@
                         ref="transactionDataGrid"
                         :columnAutoWidth="true"
                         :style="{ height: '82vh' }"
+                        @row-click="(rowData) => directToDetail(rowData, 'transactions-for-shop')"
                     >
                         <DxColumn 
                             data-field="index"
@@ -765,6 +771,7 @@
                         ref="canceledOrderDataGrid"
                         :columnAutoWidth="true"
                         :style="{ height: '82vh' }"
+                        @row-click="(rowData) => directToDetail(rowData, 'orders')"
                     >
                         <DxColumn 
                             data-field="index"
@@ -1062,6 +1069,9 @@ export default {
         }
     },
     methods: {
+        directToDetail(rowData, type) {
+            window.location.href = `/${type}/${rowData.data.id}`;
+        },
         directToShopList() {
             window.location.href = "/shops";
         },
