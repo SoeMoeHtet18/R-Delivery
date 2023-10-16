@@ -225,4 +225,7 @@ return [
 
     //Delivery Company Name
     'delivery_company_name' => env('DELIVERY_COMPANY_NAME'),
+
+    //js version
+    'js_version' => '1.10',
 ];
