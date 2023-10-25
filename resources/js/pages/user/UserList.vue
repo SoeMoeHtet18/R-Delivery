@@ -95,12 +95,12 @@
                         <DxTextBox v-model:value="user.phone_number" 
                         :isValid="isPhoneNumberValid"
                         :onFocusOut="validatePhoneNumber"
-                        :input-attr="{ autocomplete: 'off' }"/>
+                        :input-attr="{ autocomplete: 'no-chrome-autofill-phone' }"/>
                         <span v-if="!isPhoneNumberValid" class="validation-error mt-1">Phone Number is required.</span>
                     </div>
                     <div class="mt-3">
                         <p class="mb-1">EMAIL</p>
-                        <DxTextBox v-model:value="user.email" :input-attr="{ autocomplete: 'off' }"/>
+                        <DxTextBox v-model:value="user.email" :input-attr="{ autocomplete: 'no-chrome-autofill-email' }"/>
                     </div>
                     <div class="mt-3">
                         <p class="mb-1">PASSWORD</p>
@@ -109,7 +109,7 @@
                         mode="password"
                         :isValid="isPasswordValid"
                         :onFocusOut="validatePassword"
-                        :input-attr="{ autocomplete: 'off' }"/>
+                        :input-attr="{ autocomplete: 'no-chrome-autofill-password' }"/>
                         <span v-if="!isPasswordValid" class="validation-error mt-1">Password is required.</span>
                     </div>
                     <div class="mt-3">
