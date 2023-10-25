@@ -109,7 +109,7 @@
                         mode="password"
                         :isValid="isPasswordValid"
                         :onFocusOut="validatePassword"
-                        :input-attr="{ autocomplete: 'no-chrome-autofill-password' }"/>
+                        :input-attr="{ autocomplete: 'new-password' }"/>
                         <span v-if="!isPasswordValid" class="validation-error mt-1">Password is required.</span>
                     </div>
                     <div class="mt-3">
