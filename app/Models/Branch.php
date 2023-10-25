@@ -21,4 +21,9 @@ class Branch extends Model
     {
         return $this->morphMany(Township::class, 'associable');
     }
+
+    public function riders()
+    {
+        return $this->hasMany(Rider::class);
+    }
 }

@@ -29,8 +29,9 @@ class BranchController extends Controller
      */
     public function index()
     {
-        $cities = $this->cityRepository->getAllCities();
-        return view('admin.branches.index',compact('cities'));
+        // $cities = $this->cityRepository->getAllCities();
+        // return view('admin.branches.index',compact('cities'));
+        return view('vue-pages.branch.index');
     }
 
     /**
@@ -58,9 +59,12 @@ class BranchController extends Controller
      */
     public function show($id)
     {
-        $branch = $this->branchRepository->show($id);
-        $townships = $branch->townships;
-        return view('admin.branches.detail', compact('branch', 'townships'));
+        // $branch = $this->branchRepository->show($id);
+        // $townships = $branch->townships;
+        $old_view = 'admin.branches.detail';
+        $new_view = 'vue-pages.branch.detail';
+        $branchId = $id;
+        return view($new_view, compact('branchId'));
     }
 
     /**

@@ -14,6 +14,7 @@ class BranchService
         $branch->phone_number = $data['phone_number'];
         $branch->address = $data['address'];
         $branch->save();
+        return $branch;
     }
 
     public function updateBranchByID($data, $branch)

@@ -33,6 +33,22 @@
                 ref="myDataGrid"
                 @row-click="showRowDataPopup"
             >
+                <DxColumn 
+                    data-field="index"
+                    caption="ID"
+                />
+                <DxColumn 
+                    data-field="UserName"
+                    caption="User Name"
+                />
+                <DxColumn 
+                    data-field="PhoneNumber"
+                    caption="Phone Number"
+                />
+                <DxColumn 
+                    data-field="Email"
+                    caption="Email"
+                />
                 <DxPaging :page-size="10"/>
                 <DxPager
                     :visible="true"
@@ -78,12 +94,13 @@
                         <p class="mb-1">PHONE NUMBER</p>
                         <DxTextBox v-model:value="user.phone_number" 
                         :isValid="isPhoneNumberValid"
-                        :onFocusOut="validatePhoneNumber"/>
+                        :onFocusOut="validatePhoneNumber"
+                        :autocomplete="'off'"/>
                         <span v-if="!isPhoneNumberValid" class="validation-error mt-1">Phone Number is required.</span>
                     </div>
                     <div class="mt-3">
                         <p class="mb-1">EMAIL</p>
-                        <DxTextBox v-model:value="user.email" />
+                        <DxTextBox v-model:value="user.email" :autocomplete="'off'"/>
                     </div>
                     <div class="mt-3">
                         <p class="mb-1">PASSWORD</p>
@@ -91,7 +108,8 @@
                         v-model:value="user.password" 
                         mode="password"
                         :isValid="isPasswordValid"
-                        :onFocusOut="validatePassword"/>
+                        :onFocusOut="validatePassword"
+                        :autocomplete="'off'"/>
                         <span v-if="!isPasswordValid" class="validation-error mt-1">Password is required.</span>
                     </div>
                     <div class="mt-3">
@@ -100,6 +118,7 @@
                         v-model:value="user.confirm_password"
                         mode="password"
                         :isValid="isConfirmPasswordValid"
+                        :autocomplete="'off'"
                         :onFocusOut="validateConfirmPassword"/>
                         <span v-if="!isConfirmPasswordValid && isPasswordMatch" class="validation-error mt-1">Confirm Password is required.</span>
                         <span v-if="!isConfirmPasswordValid && !isPasswordMatch" class="validation-error mt-1">Password and Confirm Password do not match.</span>
@@ -226,7 +245,7 @@
 import  DxTextBox from 'devextreme-vue/text-box';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxDateBox from 'devextreme-vue/date-box';
-import { DxDataGrid, DxPager, DxPaging, DxScrolling, DxSearchPanel } from 'devextreme-vue/data-grid';
+import { DxDataGrid, DxPager, DxPaging, DxScrolling, DxSearchPanel, DxColumn } from 'devextreme-vue/data-grid';
 import { DxPopup, DxPosition, DxToolbarItem } from 'devextreme-vue/popup';
 import DxButton from 'devextreme-vue/button';
 import { DxLoadPanel } from 'devextreme-vue/load-panel';
@@ -248,7 +267,8 @@ export default {
         DxScrolling,
         DxPopup,
         DxToolbarItem,
-        DxLoadPanel
+        DxLoadPanel,
+        DxColumn
     },
     data() {
         return {
@@ -430,8 +450,9 @@ export default {
             try {
                 const data = await response.json();
                 
-                const formattedData = data.data.map((user) => ({
+                const formattedData = data.data.map((user, index) => ({
                     'ID': user.id,
+                    'index': index + 1,
                     'UserName': user.name,
                     'PhoneNumber': user.phone_number,
                     'Email': user.email ? user.email : '',
@@ -569,7 +590,7 @@ export default {
 }
 
 .custom-data-grid .dx-datagrid-rowsview .dx-datagrid-content .dx-row.dx-freespace-row {
-    display: block;
+    display: none;
 }
 
 #pageSizeSelect {

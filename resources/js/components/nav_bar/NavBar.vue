@@ -88,7 +88,7 @@
                         </li>
                     </a>
                 </ul>
-                <a href="/branches" class="flex items-center pl-7 h-11.25">
+                <a href="/branches" class="flex items-center pl-7 h-11.25" :class="{ 'active': isActive('branches')}">
                     <li class="flex items-center text-grey">
                         <iconify-icon icon="fluent:branch-compare-24-regular" width="20"></iconify-icon>
                         <h5 class="menu-label ml-4">Branch</h5>
@@ -195,12 +195,27 @@ export default {
         toggleAdminTool() {
             this.isAdminToolOpen = !this.isAdminToolOpen;
         },
+        isActiveAdminTool() {
+            // Use the current route to determine if isAdminToolOpen should be true
+            const currentRoute = window.location.pathname;
+
+            // Define an array of routes that should open the admin tool
+            const adminToolRoutes = ["/users", "/cities", "/gates", "/townships", "/itemtypes", "/delivery-types", "/third-party-vendor"];
+            if(adminToolRoutes.includes(currentRoute)) {
+                this.isAdminToolOpen = true;
+            } else {
+                this.isAdminToolOpen = false;
+            }
+        },
     },
     computed: {
         isPositionAbsolute() {
             return this.isCollectionOpen || this.isPaymentOpen || this.isAdminToolOpen ? false : true;
         },
     },
+    mounted() {
+        this.isActiveAdminTool();
+    }
 };
 </script>
 <style scoped>

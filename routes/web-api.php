@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AdminApiController;
+use App\Http\Controllers\Api\BranchApiController;
 use App\Http\Controllers\Api\CityApiController;
 use App\Http\Controllers\Api\OrderApiController;
 use App\Http\Controllers\Api\RiderApiController;
@@ -36,3 +37,6 @@ Route::post('/update-user-data', [AdminApiController::class, 'updateUserData']);
 Route::get('/cities', [CityApiController::class, 'getCityTableData']);
 Route::post('/save-city-data', [CityApiController::class, 'storeCityData']);
 Route::post('/update-city-data', [CityApiController::class, 'updateCityData']);
+Route::get('/branches', [BranchApiController::class, 'getBranchTableData']);
+Route::post('/save-branch-data', [BranchApiController::class, 'storeBranchData']);
+Route::get('/branches/{id}', [BranchApiController::class, 'getBranchDetail']);
