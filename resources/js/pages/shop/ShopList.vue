@@ -2,38 +2,27 @@
     <div class="px-9 pt-2 pb-1 font-lato">
         <div id="filterContentContainer"
             ref="filterContentContainer"
-            :style="{ height: isToggleSearch ? '41vh' : '16vh', marginBottom: '20px' }"
         >
-             <!-- page title -->
+            <!-- page title -->
             <h1 class="page-title mb-7">SHOP</h1>
             <div class="flex mb-5">
                 <!-- search box -->
-                <DxTextBox
-                    ref="search"
-                    class="search-btn"
-                    width="280px"
-                    height="34px"
-                    placeholder="Search"
-                    :buttons="[
-                        {
-                            location: 'before',
-                            name: 'searchButton',
-                            options: searchButton,
-                        },
-                    ]">
-                </DxTextBox>
+                <SearchBox @search="getDataBySearch"/>
                 <!-- search toggle -->
                 <iconify-icon icon="prime:filter-fill" width="30" class="mx-3" @click="toggleSearch"></iconify-icon>
                 <!-- create new shop btn -->
-                <button class="bg-main text-white rounded-sm px-4" @click="createShop">Create New Shop</button>
-                <shop-create v-if="isShopCreate" @close="closeShopCreate"></shop-create>
+                <button class="bg-main text-white rounded-sm px-4 pb-0.5" @click="createShop">Create New Shop</button>
+                <shop-create v-if="isShopCreate" 
+                    @close="closeShopCreate"
+                    @refreshData="getShopTableData"  
+                ></shop-create>
             </div>
             <!-- filter container -->
             <div id="filter-container" v-if="isToggleSearch">
-                <div class="flex mb-5">
+                <div class="flex">
                     <!-- township filter -->
                     <DxSelectBox
-                        class="search-box ml-21"
+                        class="search-box ml-11"
                         :items="townshipList"
                         displayExpr="name"
                         valueExpr="id"
@@ -55,6 +44,23 @@
                         :onValueChanged=getDataByCity
                         width="204px"
                     />
+                    <!-- date range filter -->
+                    <div class="flex items-center">
+                        <h5 class="from-label">From</h5>
+                        <DxDateBox
+                            v-model="fromDate"
+                            class="date-box"
+                            width="204px"
+                            type="date"
+                        />
+                        <h5 class="to-label">To</h5>
+                        <DxDateBox
+                            v-model="toDate"
+                            class="date-box"
+                            width="204px"
+                            type="date"
+                        />
+                    </div>
                     <!-- <DxSelectBox
                         class="search-box ml-9"
                         :items="shopList"
@@ -65,23 +71,6 @@
                         ref="shop"
                         :onValueChanged=getDataByShop
                     /> -->
-                </div>
-                <!-- date range filter -->
-                <div class="flex items-center">
-                    <h5 class="from-label">From</h5>
-                    <DxDateBox
-                        v-model="fromDate"
-                        class="date-box"
-                        width="204px"
-                        type="date"
-                    />
-                    <h5 class="to-label">To</h5>
-                    <DxDateBox
-                        v-model="toDate"
-                        class="date-box"
-                        width="204px"
-                        type="date"
-                    />
                 </div>
             </div>
         </div>
@@ -94,7 +83,7 @@
                 class="custom-data-grid"
                 :columnAutoWidth="true"
                 ref="myDataGrid"
-                :style="{ height: isToggleSearch ? '53vh' : '78vh' }"
+                :style="{ height: isToggleSearch ? '62vh' : '78vh' }"
                 @row-click="directToShopDetail"
             >
                 <DxColumn
@@ -177,11 +166,7 @@ import { DxTextBox, DxButton as DxTextBoxButton } from 'devextreme-vue/text-box'
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxDateBox from 'devextreme-vue/date-box';
 import { DxDataGrid, DxPager, DxPaging, DxScrolling, DxColumn } from 'devextreme-vue/data-grid';
-
-const searchButton = {
-    icon: '/images/icons/search.svg',
-    type: 'default',
-};
+import SearchBox from '../../components/general/SearchBox.vue';
 
 export default {
     components: {
@@ -193,11 +178,11 @@ export default {
         DxPager,
         DxPaging,
         DxScrolling,
-        DxColumn
+        DxColumn,
+        SearchBox
     },
     data() {
         return {
-            searchButton: searchButton,
             townshipList: [],
             cityList: [],
             shopList: [],
@@ -275,9 +260,10 @@ export default {
             const response = await fetch(`/api/shops?shop_id=${event.value}`);
             this.fetchData(response);
         },
-        async getDataBySearch(event) {
-            const input = event.target.value;
-            const response = await fetch(`/api/shops?search=${input}`);
+        async getDataBySearch(data) {
+           
+            console.log(data.input);
+            const response = await fetch(`/api/shops?search=${data.input}`);
             this.fetchData(response);
         },
         formatDate(inputDate) {
@@ -344,10 +330,6 @@ export default {
         this.getTownshipList();
         this.getCityList();
         this.getShopList();
-        this.$refs.search.$el.querySelector(".dx-texteditor-input").addEventListener(
-            "input",
-            this.getDataBySearch
-        );
         // this.calculateDataGridHeight();
     },
     watch: {
@@ -374,17 +356,6 @@ export default {
     text-transform: uppercase;
 }
 
-.search-btn {
-    border-radius: 20px !important;
-    border-color: #116A5B !important;
-}
-
-.search-btn .dx-button-mode-contained.dx-button-default {
-    margin-left: 11px;
-    border: none !important;
-    background: transparent !important;
-}
-
 #filter-container {
     padding: 35px 0;
     border-top: 1px solid #AAAAAA;
@@ -408,7 +379,7 @@ export default {
 }
 
 .from-label {
-    margin-left: 39px;
+    margin-left: 36px;
     margin-right: 14px;
 }
 
@@ -510,7 +481,7 @@ export default {
     color: #39CAB2 !important;
 }
 
-.custom-data-grid .dx-datagrid-rowsview .dx-row:hover {
+.custom-data-grid .dx-datagrid-rowsview .dx-row.dx-data-row:hover {
     background-color: #D4EFEB;
 }
 </style>

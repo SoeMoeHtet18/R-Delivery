@@ -29,4 +29,9 @@ class ShopUserRepository
     {
         return ShopUser::where('shop_id', $shop_id)->with('shop')->get();
     }
+
+    public function getAllShopUsers()
+    {
+        return ShopUser::with('shop')->orderBy('id', 'desc')->get();
+    }
 }

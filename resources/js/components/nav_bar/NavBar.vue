@@ -10,13 +10,13 @@
                         <h5 class="menu-label ml-4">Dashboard</h5>
                     </li>
                 </a>
-                <a href="/shops" class="flex items-center pl-7 h-11.25" :class="{ 'active': isActive('shop')}">
+                <a href="/shops" class="flex items-center pl-7 h-11.25" :class="{ 'active': isActive('shops')}">
                     <li class="flex items-center text-grey">
                         <iconify-icon icon="ph:house-line" width="20"></iconify-icon>
                         <h5 class="menu-label ml-4">Shop</h5>
                     </li>
                 </a>
-                <a href="/shopusers" class="flex items-center pl-7 h-11.25">
+                <a href="/shopusers" class="flex items-center pl-7 h-11.25" :class="{ 'active': isActive('shopusers')}">
                     <li class="flex items-center text-grey">
                         <iconify-icon icon="cil:people" width="20"></iconify-icon>
                         <h5 class="menu-label ml-4">Shop User</h5>
@@ -109,7 +109,7 @@
                 </a>
                 <!-- dropdown items of admin tools -->
                 <ul v-if="isAdminToolOpen" class="dropdown-menu">
-                    <a href="/users" class="flex items-center pl-14 h-11.25" :class="{ 'sub-active': isActive('users')}">
+                    <a href="/users" class="flex items-center pl-14 h-11.25" :class="{ 'sub-active': isActive('/users')}">
                         <li class="flex items-center text-grey relative">
                             <h5 class="menu-label ml-4">User</h5>
                         </li>

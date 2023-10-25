@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <div @click="closePopupOnClickOutside">
         <div class="fixed inset-0 bg-black opacity-50 z-50"></div>
         <div class="fixed inset-0 flex items-center justify-center z-50">
-            <div class="bg-white p-8 rounded-lg shadow-md z-10">
+            <div  id="shopCreateCard" class="bg-white p-8 rounded-lg shadow-md z-10">
                 <!-- Card content goes here -->
                 <div>
                     <div class="flex justify-between">
@@ -12,15 +12,18 @@
                     <hr class="border-main my-7">
                     <div class="shop-create-form">
                         <div class="flex justify-between">
-                            <div>
+                            <div class="form-group">
                                 <label for="online_shop_name">Online Shop Name</label>
                                 <DxTextBox
                                     class="form-input mr-8"
                                     id="online_shop_name"
                                     v-model="online_shop_name"
                                 />
+                                <span v-show="validationErrors.name" class="validation-error mt-1">
+                                    {{ validationErrors.name }}
+                                </span>
                             </div>
-                            <div>
+                            <div class="form-group">
                                 <label for="phone_number">Phone Number</label>
                                 <DxTextBox
                                     class="form-input"
@@ -28,10 +31,13 @@
                                     v-model="phone_number"
                                     mode="tel"
                                 />
+                                <span v-show="validationErrors.phoneNumber" class="validation-error mt-1">
+                                    {{ validationErrors.phoneNumber }}
+                                </span>
                             </div>
                         </div>
                         <div class="flex justify-between">
-                            <div>
+                            <div class="form-group">
                                 <label for="city">City</label>
                                 <DxSelectBox
                                     v-model="city"
@@ -45,8 +51,11 @@
                                     ref="city"
                                     :onValueChanged=cityValueChange
                                 />
+                                <span v-show="validationErrors.city" class="validation-error mt-1">
+                                    {{ validationErrors.city }}
+                                </span>
                             </div>
-                            <div>
+                            <div class="form-group">
                                 <label for="township">Township</label>
                                 <DxSelectBox
                                     v-model="township"
@@ -59,9 +68,12 @@
                                     placeholder="Select"
                                     ref="township"
                                 />
+                                <span v-show="validationErrors.township" class="validation-error mt-1">
+                                    {{ validationErrors.township }}
+                                </span>
                             </div>
                         </div>
-                        <div>
+                        <div class="form-group">
                             <label for="address">Address</label>
                             <DxTextArea
                                 id="address"
@@ -70,6 +82,9 @@
                                 :min-height="70"
                                 :auto-resize-enabled="true"
                             />
+                            <span v-show="validationErrors.address" class="validation-error mt-1">
+                                {{ validationErrors.address }}
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -79,7 +94,7 @@
                         Cancel
                     </button>
                     <!-- Create button -->
-                    <button @click="createShop" class="text-white bg-main border border-main w-70px h-8 rounded ml-3">
+                    <button @click="validateData" class="text-white bg-main border border-main w-70px h-8 rounded ml-3">
                         Save
                     </button>
                 </div>
@@ -120,9 +135,51 @@ export default {
             townshipList: [],
             isLoading: false,
             isSuccess: false,
+            validationErrors: {
+                name: null,
+                phoneNumber: null,
+                city: null,
+                township: null,
+                address: null,
+            },
         }
     },
     methods: {
+        closePopupOnClickOutside(event) {
+            // Check if the click event occurred outside of the popup
+            if (!this.$el.querySelector("#shopCreateCard").contains(event.target)) {
+            // Close the popup by calling your closePopup method
+            this.closePopup();
+            }
+        },
+        validateData() {
+            let validationPassed = true;
+
+            if(!this.online_shop_name) {
+                this.validationErrors.name = "Online Shop Name is required.";
+                validationPassed = false;
+            }
+            if(!this.phone_number) {
+                this.validationErrors.phoneNumber = "Phone Number is required.";
+                validationPassed = false;
+            }
+            if(!this.city) {
+                this.validationErrors.city = "City is required.";
+                validationPassed = false;
+            }
+            if(!this.township) {
+                this.validationErrors.township = "Township is required.";
+                validationPassed = false;
+            }
+            if(!this.address) {
+                this.validationErrors.address = "Address is required.";
+                validationPassed = false;
+            }
+
+            if(validationPassed) {
+                this.createShop();
+            }
+        },
         async createShop() {
             this.isLoading = true;
             const apiUrl = '/api/shops';
@@ -145,14 +202,18 @@ export default {
             });
             const encodedData = await response.json();
             
-            if(encodedData.status.toLowerCase() == 'success') {
-                this.isSuccess = true;
+            setTimeout(() => {
                 this.isLoading = false;
-                setTimeout(() => {
-                    this.isSuccess = false;
-                    this.closePopup();
-                }, '3000');
-            }
+                if(encodedData.status.toLowerCase() == 'success') {
+                    this.isSuccess = true;
+                    setTimeout(() => {
+                        this.isSuccess = false;
+                        this.closePopup();
+                    }, 1000);
+                }
+            }, 1000);
+
+            this.$emit('refreshData');
         },
         cityValueChange() {
             this.getTownshipList();
@@ -183,7 +244,6 @@ export default {
     width: 309px;
     height: 32px;
     margin-top: 5px;
-    margin-bottom: 20px;
 }
 
 .form-input :last-of-type {

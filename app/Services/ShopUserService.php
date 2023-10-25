@@ -42,7 +42,8 @@ class ShopUserService
         ShopUser::destroy($id);
     }
 
-    public function changePassword($shopUser, $old_password, $new_password) {
+    public function changePassword($shopUser, $old_password, $new_password) 
+    {
         $password = $shopUser->password;
         if (Hash::check($old_password, $password)) {
             $shopUser->password = bcrypt($new_password);
@@ -51,5 +52,26 @@ class ShopUserService
         } else {
            return false;
         }
+    }
+
+    public function checkPassword($password, $id)
+    {
+        $shop_user = ShopUser::findOrFail($id);
+        return Hash::check($shop_user->password, $password);
+    }
+
+    public function updateShopUserData($data, $id)
+    {
+        $shop_user = ShopUser::findOrFail($id);
+        $shop_user->name = $data['name'];
+        $shop_user->phone_number = $data['phone_number'];
+        $shop_user->email = $data['email'] ?? $shop_user->email;
+        if(isset($data['password'])) {
+            $shop_user->password =  bcrypt($data['password']);
+        }
+        $shop_user->device_id = $data['device_id'] ?? $shop_user->device_id;
+        $shop_user->shop_id = $data['shop_id'] ?? $shop_user->shop_id;
+        $shop_user->save();
+        return $shop_user;
     }
 }
