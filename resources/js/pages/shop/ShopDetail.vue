@@ -1286,7 +1286,7 @@ export default {
         },
         editShop() {
             this.isEdit = true;
-            this.originData = {...this.shop};
+            this.originData = {...this.shopInfo};
             if(this.cityList.length == 0) {
                 this.getCityList();
             }

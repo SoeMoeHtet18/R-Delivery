@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <div @click="closePopupOnClickOutside">
         <div class="fixed inset-0 bg-black opacity-50 z-50"></div>
         <div class="fixed inset-0 flex items-center justify-center z-50">
-            <div class="bg-white p-8 rounded-lg shadow-md z-10">
+            <div  id="shopCreateCard" class="bg-white p-8 rounded-lg shadow-md z-10">
                 <!-- Card content goes here -->
                 <div>
                     <div class="flex justify-between">
@@ -145,6 +145,13 @@ export default {
         }
     },
     methods: {
+        closePopupOnClickOutside(event) {
+            // Check if the click event occurred outside of the popup
+            if (!this.$el.querySelector("#shopCreateCard").contains(event.target)) {
+            // Close the popup by calling your closePopup method
+            this.closePopup();
+            }
+        },
         validateData() {
             let validationPassed = true;
 
