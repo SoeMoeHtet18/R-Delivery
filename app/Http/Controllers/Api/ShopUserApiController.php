@@ -7,6 +7,7 @@ use App\Http\Requests\ShopUserCreateApiRequest;
 use App\Http\Requests\ShopUserCreateRequest;
 use App\Http\Requests\ShopUserLoginRequest;
 use App\Http\Requests\ShopUserUpdateApiRequest;
+use App\Http\Requests\ShopUserUpdateRequest;
 use App\Models\ShopUser;
 use App\Repositories\NotificationRepository;
 use App\Repositories\OrderRepository;
@@ -157,6 +158,50 @@ class ShopUserApiController extends Controller
             return response()->json(['data' => $shopUser, 'message' => 'Successfully changed password', 'status' => 'success'], 200);
         } else {
             return response()->json(['data' => $shopUser, 'message' => 'Password wronged', 'status' => 'failed'], 200);
+        }
+    }
+
+    public function getShopUsers()
+    {
+        $shop_users = $this->shopUserRepository->getAllShopUsers();
+        return response()->json([
+            'data' => $shop_users,
+            'message' => 'Successfully get shop users',
+            'status' => 'success'], 200);
+    }
+
+    public function store(ShopUserCreateRequest $request)
+    {
+        $data = $request->all();
+        $shop_user = $this->shopUserService->saveShopUserData($data);
+        return response()->json([
+            'data' => $shop_user,
+            'message' => 'Successfully created new shop user',
+            'status' => 'success'], 201);
+    }
+
+    public function updateShopUser(Request $request, $id)
+    {
+        $data = $request->all();
+        $shop_user = $this->shopUserService->updateShopUserData($data, $id);
+        return response()->json([
+            'data' => $shop_user,
+            'message' => 'Successfully updated shop user',
+            'status' => 'success'], 200);
+    }
+
+    public function checkPassword(Request $request, $id)
+    {
+        $password = $request->password;
+        $is_validate_password = $this->shopUserService->checkPassword($password, $id);
+        if($is_validate_password) {
+            return response()->json([
+                'message' => 'Password validation passed',
+                'status' => 'success'], 200);
+        } else {
+            return response()->json([
+                'message' => 'Password validation failed',
+                'status' => 'fail'], 401);
         }
     }
 }

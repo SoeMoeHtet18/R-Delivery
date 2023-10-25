@@ -19,7 +19,7 @@
                     <button v-if="isEdit" @click="cancelEdit"
                         class="bg-white text-main w-70px h-8 border border-main">Cancel</button>
                     <!-- update/save button -->
-                    <button v-if="isEdit" @click="updateShop"
+                    <button v-if="isEdit" @click="validateData"
                         class="bg-main text-white w-70px h-8 ml-2.5">Save</button>
                 </div>
             </div>
@@ -34,6 +34,9 @@
                         v-model="shopInfo.name"
                         height="37"
                     />
+                    <span v-show="validationErrors.name" class="validation-error mt-1">
+                        {{ validationErrors.name }}
+                    </span>
                 </div>
                 <div class="flex flex-col">
                     <h5 class="info-label">Phone Number</h5>
@@ -46,6 +49,9 @@
                         mode="tel"
                         height="37"
                     />
+                    <span v-show="validationErrors.phoneNumber" class="validation-error mt-1">
+                        {{ validationErrors.phoneNumber }}
+                    </span>
                 </div>
                 <div class="flex flex-col">
                     <h5 class="info-label">Township</h5>
@@ -63,6 +69,9 @@
                         ref="township"
                         height="37"
                     />
+                    <span v-show="validationErrors.township" class="validation-error mt-1">
+                        {{ validationErrors.township }}
+                    </span>
                 </div>
                 <div class="flex flex-col">
                     <h5 class="info-label">City</h5>
@@ -81,6 +90,9 @@
                         height="37"
                         :onValueChanged=cityValueChange
                     />
+                    <span v-show="validationErrors.city" class="validation-error mt-1">
+                        {{ validationErrors.city }}
+                    </span>
                 </div>
                 <div class="flex flex-col">
                     <h5 class="info-label">Address</h5>
@@ -92,6 +104,9 @@
                         v-model="shopInfo.address"
                         :auto-resize-enabled="true"
                     />
+                    <span v-show="validationErrors.address" class="validation-error mt-1">
+                        {{ validationErrors.address }}
+                    </span>
                 </div>
                 <div class="flex flex-col">
                     <h5 class="info-label">Joined Date</h5>
@@ -1036,6 +1051,7 @@ export default {
     },
     data() {
         return {
+            originData: null,
             searchButton: searchButton,
             isToggleSearch: false,
             pageSize: [10, 20, 50, 100],
@@ -1065,10 +1081,45 @@ export default {
             customizeTransactionColumns: customizeTransactionColumns,
             financialAmounts: {},
             isLoading: false,
-            isSuccess: false
+            isSuccess: false,
+            validationErrors: {
+                name: null,
+                phoneNumber: null,
+                city: null,
+                township: null,
+                address: null,
+            },
         }
     },
     methods: {
+        validateData() {
+            let validationPassed = true;
+
+            if(!this.shopInfo.name) {
+                this.validationErrors.name = "Online Shop Name is required.";
+                validationPassed = false;
+            }
+            if(!this.shopInfo.phone_number) {
+                this.validationErrors.phoneNumber = "Phone Number is required.";
+                validationPassed = false;
+            }
+            if(!this.shopInfo.city) {
+                this.validationErrors.city = "City is required.";
+                validationPassed = false;
+            }
+            if(!this.shopInfo.township) {
+                this.validationErrors.township = "Township is required.";
+                validationPassed = false;
+            }
+            if(!this.shopInfo.address) {
+                this.validationErrors.address = "Address is required.";
+                validationPassed = false;
+            }
+
+            if(validationPassed) {
+                this.updateShop();
+            }
+        },
         directToDetail(rowData, type) {
             window.location.href = `/${type}/${rowData.data.id}`;
         },
@@ -1227,11 +1278,21 @@ export default {
         },
         cancelEdit() {
             this.isEdit = false;
+            this.shopInfo.name = this.originData.name;
+            this.shopInfo.phoneNumber = this.originData.phoneNumber;
+            this.shopInfo.township = this.originData.township;
+            this.shopInfo.city = this.originData.city;
+            this.shopInfo.address = this.originData.address;
         },
         editShop() {
             this.isEdit = true;
-            this.getCityList();
-            this.getTownshipList();
+            this.originData = {...this.shop};
+            if(this.cityList.length == 0) {
+                this.getCityList();
+            }
+            if(this.townshipList.length == 0) {
+                this.getTownshipList();
+            }
         },
         cityValueChange() {
             this.getTownshipList('byCity');

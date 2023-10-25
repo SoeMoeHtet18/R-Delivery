@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\CityApiController;
 use App\Http\Controllers\Api\OrderApiController;
 use App\Http\Controllers\Api\RiderApiController;
 use App\Http\Controllers\Api\ShopApiController;
+use App\Http\Controllers\Api\ShopUserApiController;
 use App\Http\Controllers\Api\TownshipApiController;
 use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +31,10 @@ Route::get('/shops/{id}/exchanges', [ShopApiController::class, 'getShopExchanges
 Route::get('/shops/{id}/payments', [ShopApiController::class, 'getShopPayments']);
 Route::get('/shops/{id}/transactions', [ShopApiController::class, 'getShopTransactions']);
 Route::get('/shops/{id}/download-pdf', [ShopApiController::class, 'downloadShopPdf']);
+Route::get('/shop-users', [ShopUserApiController::class, 'getShopUsers']);
+Route::post('/shop-users', [ShopUserApiController::class, 'store']);
+Route::post('/shop-users/{id}', [ShopUserApiController::class, 'updateShopUser']);
+Route::post('/shop-users/{id}/check-password', [ShopUserApiController::class, 'checkPassword']);
 Route::get('/users', [AdminApiController::class, 'getUserTableData']);
 Route::post('/save-user-data', [AdminApiController::class, 'storeUserData']);
 Route::post('/update-user-data', [AdminApiController::class, 'updateUserData']);

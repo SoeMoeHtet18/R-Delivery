@@ -28,7 +28,9 @@ class ShopUserController extends Controller
      */
     public function index(Request $request)
     {
-        return view('admin.shopuser.index');
+        $old_view = 'admin.shopuser.index';
+        $new_view = 'vue-pages.shop-user.browse';
+        return view($new_view);
     }
 
     /**

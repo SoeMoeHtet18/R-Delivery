@@ -678,6 +678,10 @@ video {
   margin-left: 16.6667%;
 }
 
+.ml-11 {
+  margin-left: 2.75rem;
+}
+
 .ml-2 {
   margin-left: 0.5rem;
 }
@@ -686,16 +690,16 @@ video {
   margin-left: 0.625rem;
 }
 
-.ml-21 {
-  margin-left: 84px;
-}
-
 .ml-3 {
   margin-left: 0.75rem;
 }
 
 .ml-4 {
   margin-left: 1rem;
+}
+
+.ml-5 {
+  margin-left: 1.25rem;
 }
 
 .ml-8 {
@@ -740,10 +744,6 @@ video {
 
 .mt-5 {
   margin-top: 1.25rem;
-}
-
-.mr-3 {
-  margin-right: 0.75rem;
 }
 
 .block {
@@ -953,6 +953,11 @@ video {
   padding-right: 1rem;
 }
 
+.px-5 {
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
 .px-6 {
   padding-left: 1.5rem;
   padding-right: 1.5rem;
@@ -961,6 +966,11 @@ video {
 .px-9 {
   padding-left: 2.25rem;
   padding-right: 2.25rem;
+}
+
+.py-1 {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
 }
 
 .py-2 {
@@ -1032,6 +1042,14 @@ video {
 
 .pt-7\.5 {
   padding-top: 30px;
+}
+
+.pb-0 {
+  padding-bottom: 0px;
+}
+
+.pb-0\.5 {
+  padding-bottom: 0.125rem;
 }
 
 .text-center {
@@ -1245,8 +1263,11 @@ video {
 }
 
 .card-title {
-  font-size: 1.25rem;
-  margin-bottom: 0.5rem;
+  font-size: 24px !important;
+  font-style: normal;
+  font-weight: 700 !important;
+  line-height: normal;
+  text-transform: uppercase;
 }
 
 .card-subtitle {
@@ -1266,17 +1287,39 @@ video {
   padding: 0.75rem 1rem;
 }
 
-.custom-data-grid {
-  min-height: 80vh;
-  max-height: 80vh;
-}
-
 .custom-data-grid .dx-datagrid .dx-datagrid-pager {
   border-top: none;
 }
 
 .dx-overlay-shader {
   background-color: rgba(0,0,0,0.5) !important;
+}
+
+.dx-texteditor-input {
+  padding: 3px 9px 8px !important;
+}
+
+.shop-user-info-edit-container .dx-texteditor-input {
+  font-size: 12px !important;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 18px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-input {
+  border: 1px solid #D9D9D9 !important;
+  border-radius: 2px;
+  width: 100%;
+  height: 32px;
+  margin-top: 5px;
+}
+
+.form-input :last-of-type {
+  margin-bottom: 0;
 }
 
 .hover\:bg-main-hover:hover {
