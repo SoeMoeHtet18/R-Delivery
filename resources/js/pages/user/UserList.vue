@@ -95,12 +95,12 @@
                         <DxTextBox v-model:value="user.phone_number" 
                         :isValid="isPhoneNumberValid"
                         :onFocusOut="validatePhoneNumber"
-                        :autocomplete="'off'"/>
+                        :input-attr="{ autocomplete: 'off' }"/>
                         <span v-if="!isPhoneNumberValid" class="validation-error mt-1">Phone Number is required.</span>
                     </div>
                     <div class="mt-3">
                         <p class="mb-1">EMAIL</p>
-                        <DxTextBox v-model:value="user.email" :autocomplete="'off'"/>
+                        <DxTextBox v-model:value="user.email" :input-attr="{ autocomplete: 'off' }"/>
                     </div>
                     <div class="mt-3">
                         <p class="mb-1">PASSWORD</p>
@@ -109,7 +109,7 @@
                         mode="password"
                         :isValid="isPasswordValid"
                         :onFocusOut="validatePassword"
-                        :autocomplete="'off'"/>
+                        :input-attr="{ autocomplete: 'off' }"/>
                         <span v-if="!isPasswordValid" class="validation-error mt-1">Password is required.</span>
                     </div>
                     <div class="mt-3">
@@ -118,7 +118,7 @@
                         v-model:value="user.confirm_password"
                         mode="password"
                         :isValid="isConfirmPasswordValid"
-                        :autocomplete="'off'"
+                        :input-attr="{ autocomplete: 'off' }"
                         :onFocusOut="validateConfirmPassword"/>
                         <span v-if="!isConfirmPasswordValid && isPasswordMatch" class="validation-error mt-1">Confirm Password is required.</span>
                         <span v-if="!isConfirmPasswordValid && !isPasswordMatch" class="validation-error mt-1">Password and Confirm Password do not match.</span>
