@@ -59,12 +59,12 @@ class BranchController extends Controller
      */
     public function show($id)
     {
-        // $branch = $this->branchRepository->show($id);
-        // $townships = $branch->townships;
+        $branch = $this->branchRepository->show($id);
+        $townships = $branch->townships;
         $old_view = 'admin.branches.detail';
         $new_view = 'vue-pages.branch.detail';
         $branchId = $id;
-        return view($new_view, compact('branchId'));
+        return view($old_view, compact('branch','townships'));
     }
 
     /**
