@@ -11,6 +11,7 @@ class ItemTypeService
         $itemtype = new ItemType();
         $itemtype->name = $data['name'];
         $itemtype->save();
+        return $itemtype;
     }
 
     public function updateItemTypeByID($data,$itemtype)
@@ -22,5 +23,13 @@ class ItemTypeService
     public function deleteItemTypeByID($id)
     {
         ItemType::destroy($id);
+    }
+
+    public function updateItemType($name, $id)
+    {
+        $item_type = ItemType::findOrFail($id);
+        $item_type->name = $name;
+        $item_type->save();
+        return $item_type;
     }
 }

@@ -34,8 +34,8 @@ export default {
     },
     mounted() {
         this.$refs.search.$el
-        .querySelector(".dx-texteditor-input")
-        .addEventListener("input", this.getDataBySearch);
+            .querySelector(".dx-texteditor-input")
+            .addEventListener("input", this.getDataBySearch);
     },
     methods: {
         getDataBySearch(event) {
