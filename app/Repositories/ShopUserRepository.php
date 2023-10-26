@@ -30,8 +30,15 @@ class ShopUserRepository
         return ShopUser::where('shop_id', $shop_id)->with('shop')->get();
     }
 
-    public function getAllShopUsers()
+    public function getAllShopUsers($search)
     {
-        return ShopUser::with('shop')->orderBy('id', 'desc')->get();
+        return ShopUser::when(isset($search), function ($query) use ($search) {
+            $query->where('name', 'like', '%' . $search . '%')
+                ->orWhere('email','like', '%' . $search . '%')
+                ->orWhere('phone_number','like', '%' . $search . '%')
+                ->orWhereHas('shop', function ($shopQuery) use ($search) {
+                    $shopQuery->where('name', 'like', '%' . $search . '%');
+                });
+        })->with('shop')->orderBy('id', 'desc')->get();
     }
 }

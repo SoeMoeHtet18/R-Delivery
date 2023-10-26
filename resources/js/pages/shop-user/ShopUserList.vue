@@ -4,7 +4,7 @@
             <h1 class="page-title mb-7">SHOP USER</h1>
             <div class="flex mb-5">
                 <!-- search box -->
-                <SearchBox />
+                <SearchBox @search="getShopUsers"/>
                 <!-- create new shop user btn -->
                 <button
                     class="bg-main text-white rounded-sm ml-5 px-4 pb-0.5" 
@@ -48,8 +48,13 @@ export default {
         }
     },
     methods: {
-        async getShopUsers() {
-            const response = await fetch(`/api/shop-users`);
+        async getShopUsers(target) {
+            let apiUrl = '/api/shop-users';
+            if(target) {
+                apiUrl += `?search=${target.input}`;
+            }
+            
+            const response = await fetch(apiUrl);
             const data = await response.json();
 
             const formattedData = data.data.map((shopUser, index) => ({

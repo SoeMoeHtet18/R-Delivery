@@ -161,9 +161,10 @@ class ShopUserApiController extends Controller
         }
     }
 
-    public function getShopUsers()
+    public function getShopUsers(Request $request)
     {
-        $shop_users = $this->shopUserRepository->getAllShopUsers();
+        $search = $request->search;
+        $shop_users = $this->shopUserRepository->getAllShopUsers($search);
         return response()->json([
             'data' => $shop_users,
             'message' => 'Successfully get shop users',
