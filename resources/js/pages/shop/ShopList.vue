@@ -3,22 +3,26 @@
         <div id="filterContentContainer"
             ref="filterContentContainer"
         >
-            <!-- page title -->
-            <h1 class="page-title mb-7">SHOP</h1>
-            <div class="flex mb-5">
-                <!-- search box -->
-                <SearchBox @search="getDataBySearch"/>
-                <!-- search toggle -->
-                <iconify-icon icon="prime:filter-fill" width="30" class="mx-3" @click="toggleSearch"></iconify-icon>
-                <!-- create new shop btn -->
-                <button class="bg-main text-white rounded-sm px-4 pb-0.5" @click="createShop">Create New Shop</button>
-                <shop-create v-if="isShopCreate" 
-                    @close="closeShopCreate"
-                    @refreshData="getShopTableData"  
-                ></shop-create>
-            </div>
+           <div style="height: 20vh;">
+                <!-- page title -->
+                <h1 class="page-title mb-7">SHOP</h1>
+                <div class="flex mb-5">
+                    <!-- search box -->
+                    <SearchBox @search="getDataBySearch"/>
+                    <!-- search toggle -->
+                    <iconify-icon icon="prime:filter-fill" width="30" class="mx-3" @click="toggleSearch"></iconify-icon>
+                    <!-- create new shop btn -->
+                    <button class="bg-main text-white rounded-sm px-4 pb-0.5" @click="createShop">Create New Shop</button>
+                    <shop-create v-if="isShopCreate" 
+                        @close="closeShopCreate"
+                        @refreshData="getShopTableData"  
+                    ></shop-create>
+                </div>
+           </div>
             <!-- filter container -->
-            <div id="filter-container" v-if="isToggleSearch">
+            <div id="filter-container" class="flex items-center" 
+                v-if="isToggleSearch" 
+                :style="{ height: isToggleSearch ? '16vh' : '0' }">
                 <div class="flex">
                     <!-- township filter -->
                     <DxSelectBox

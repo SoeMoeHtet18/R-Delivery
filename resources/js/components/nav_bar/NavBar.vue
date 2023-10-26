@@ -129,7 +129,7 @@
                             <h5 class="menu-label ml-4">Township</h5>
                         </li>
                     </a>
-                    <a href="/itemtypes" class="flex items-center pl-14 h-11.25">
+                    <a href="/itemtypes" class="flex items-center pl-14 h-11.25" :class="{ 'sub-active': isActive('/itemtypes')}">
                         <li class="flex items-center text-grey relative">
                             <h5 class="menu-label ml-4">Item Type</h5>
                         </li>
