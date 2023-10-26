@@ -15,6 +15,7 @@ import CityList from './pages/city/CityList.vue';
 import BranchList from './pages/branch/BranchList.vue';
 import BranchDetail from './pages/branch/BranchDetail.vue';
 import ShopUserList from './pages/shop-user/ShopUserList.vue';
+import ItemTypeList from './pages/item-type/ItemTypeList.vue';
 
 //import components
 import NavBar from './components/nav_bar/NavBar.vue';
@@ -40,6 +41,7 @@ app.component('city-list', CityList);
 app.component('branch-list', BranchList);
 app.component('branch-detail', BranchDetail);
 app.component('shop-user-list', ShopUserList);
+app.component('item-type-list', ItemTypeList);
 // Components
 
 app.component('nav-bar', NavBar);

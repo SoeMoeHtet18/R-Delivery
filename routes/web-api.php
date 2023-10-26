@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AdminApiController;
 use App\Http\Controllers\Api\BranchApiController;
 use App\Http\Controllers\Api\CityApiController;
+use App\Http\Controllers\Api\ItemTypeApiController;
 use App\Http\Controllers\Api\OrderApiController;
 use App\Http\Controllers\Api\RiderApiController;
 use App\Http\Controllers\Api\ShopApiController;
@@ -45,3 +46,7 @@ Route::post('/update-city-data', [CityApiController::class, 'updateCityData']);
 Route::get('/branches', [BranchApiController::class, 'getBranchTableData']);
 Route::post('/save-branch-data', [BranchApiController::class, 'storeBranchData']);
 Route::get('/branches/{id}', [BranchApiController::class, 'getBranchDetail']);
+Route::get('/item-types', [ItemTypeApiController::class, 'getItemTypes']);
+Route::post('/item-types', [ItemTypeApiController::class, 'store']);
+Route::post('/item-types/{id}', [ItemTypeApiController::class, 'update']);
+Route::delete('/item-types/{id}', [ItemTypeApiController::class, 'delete']);

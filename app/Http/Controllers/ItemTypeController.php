@@ -22,7 +22,9 @@ class ItemTypeController extends Controller
      */
     public function index(Request $request)
     {
-        return view('admin.itemtype.index');
+        $old_view = 'admin.itemtype.index';
+        $new_view = 'vue-pages.item-type.browse';
+        return view($new_view);
     }
 
     /**

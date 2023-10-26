@@ -29,4 +29,12 @@ class ItemTypeRepository
         $itemTypeCount = ItemType::count();
         return $itemTypeCount;
     }
+
+    public function getItemTypes($search)
+    {
+        return ItemType::when(isset($search), function ($query) use ($search) {
+                $query->where('name', 'like', '%' . $search . '%');
+            })
+            ->orderBy('id', 'desc')->get();
+    }
 }

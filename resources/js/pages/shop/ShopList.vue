@@ -261,8 +261,6 @@ export default {
             this.fetchData(response);
         },
         async getDataBySearch(data) {
-           
-            console.log(data.input);
             const response = await fetch(`/api/shops?search=${data.input}`);
             this.fetchData(response);
         },
