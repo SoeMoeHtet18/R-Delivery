@@ -170,62 +170,12 @@
             <div v-if="selectedIndex === 0">
                 <div id="user-container">
                 <!-- table -->
-                    <dx-data-grid
-                        :data-source="shopUsers"
-                        :columns="gridUserColumns"
-                        :customize-columns="customizeUserColumns"
-                        class="custom-data-grid"
-                        :columnAutoWidth="true"
-                        ref="shopUserDataGrid"
-                        :style="{ height: '82vh' }"
-                        @row-click="(rowData) => directToDetail(rowData, 'users')"
-                    >
-                        <DxColumn 
-                            data-field="index"
-                            caption=""
-                        />
-                        <DxColumn
-                            data-field="userName"
-                            caption="USER NAME"
-                            cell-template="userNameTemplate"
-                        />
-                        <template #userNameTemplate="{ data }">
-                            <a :href="`/shopusers/${data.data.id}`">{{data.data.userName}}</a>
-                        </template>
-                        <DxColumn 
-                            data-field="phoneNumber"
-                            caption="PHONE NUMBER"
-                        ></DxColumn>
-                        <DxColumn
-                            data-field="shopName"
-                            caption="SHOP NAME"
-                            cell-template="shopTemplate"
-                        ></DxColumn>
-                        <template #shopTemplate="{ data }">
-                            <a :href="`/shops/${data.data.shop_id}`">{{data.data.shopName}}</a>
-                        </template>
-                        <DxColumn 
-                            data-field="email"
-                            caption="EMAIL"
-                        ></DxColumn>
-                        <DxPaging :page-size="10" />
-                        <DxPager
-                            :visible="true"
-                            :allowed-page-sizes="pageSize"
-                            display-mode="compact"
-                            :show-page-size-selector="true"
-                            :show-info="true"
-                            :show-navigation-buttons="true"
-                        />
-                        <DxScrolling
-                            mode="standard"
-                            column-rendering-mode="virtual"
-                            :use-native="false"
-                            :scroll-by-content="true"
-                            :scroll-by-thumb="true"
-                            show-scrollbar="never"
-                        />
-                    </dx-data-grid>
+                    <ShopUserTable 
+                        :shopUsers="shopUsers"
+                        :columns="shopUserColumns"
+                        gridHeight="86vh"
+                        :isDetail=true
+                    ></ShopUserTable>
                 </div>
             </div>
             <div v-if="selectedIndex === 1">
@@ -934,6 +884,7 @@ import { DxTabs, DxItem } from 'devextreme-vue/tabs';
 import DxSelectBox from 'devextreme-vue/select-box';
 import DxTextArea from 'devextreme-vue/text-area';
 import { DxDataGrid, DxPager, DxPaging, DxScrolling, DxColumn } from 'devextreme-vue/data-grid';
+import ShopUserTable from '../../components/table/ShopUserTable.vue';
 
 const searchButton = {
     icon: '/images/icons/search.svg',
@@ -1047,7 +998,8 @@ export default {
         DxScrolling,
         DxColumn,
         DxSelectBox,
-        DxTextArea
+        DxTextArea,
+        ShopUserTable
     },
     data() {
         return {
@@ -1059,12 +1011,13 @@ export default {
             townshipList: [],
             cityList: [],
             selectedIndex: 0,
-            shopUserColumns: [
-                'USER NAME',
-                'PHONE NUMBER',
-                'SHOP NAME',
-                'EMAIL'
-            ],
+            shopUserColumns: {
+                index: '',
+                userName: 'USER NAME',
+                phoneNumber: 'PHONE NUMBER',
+                shopName: 'SHOP NAME',
+                email: 'EMAIL'
+            },
             shopUsers: [],
             orders: [],
             pickUps: [],

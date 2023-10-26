@@ -65,6 +65,7 @@
                                 id="password"
                                 v-model="password"
                                 mode="password"
+                                :input-attr="{ autocomplete: 'new-password' }"
                             />
                             <span v-show="validationErrors.password" class="validation-error mt-1">
                                 {{ validationErrors.password }}
