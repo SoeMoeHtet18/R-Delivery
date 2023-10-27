@@ -50,3 +50,4 @@ Route::get('/item-types', [ItemTypeApiController::class, 'getItemTypes']);
 Route::post('/item-types', [ItemTypeApiController::class, 'store']);
 Route::post('/item-types/{id}', [ItemTypeApiController::class, 'update']);
 Route::delete('/item-types/{id}', [ItemTypeApiController::class, 'delete']);
+Route::get('/notifications', [AdminApiController::class, 'getNotifications']);

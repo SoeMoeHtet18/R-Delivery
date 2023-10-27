@@ -1,7 +1,10 @@
 <template>
     <div class="px-9 pt-2">
         <!-- dashboard -->
-        <h1 class="page-title">Dashboard</h1>
+        <div class="flex justify-between items-center">
+            <h1 class="page-title">Dashboard</h1>
+            <notification/>
+        </div>
         <!-- add line -->
         <hr class="mt-4 mb-6 border-main">
         <!-- ui start -->

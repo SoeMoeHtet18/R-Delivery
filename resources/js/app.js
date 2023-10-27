@@ -24,6 +24,7 @@ import Loader from './components/general/Loader.vue';
 import SuccessPopUp from './components/general/SuccessPopUp.vue';
 import FilterSubTable from './components/shop/shop_detail/FilterSubTable.vue';
 import DisplayAmountBox from './components/shop/shop_detail/DisplayAmountBox.vue';
+import Notification from './components/general/Notification.vue';
 
 const app = createApp({});
 
@@ -49,5 +50,6 @@ app.component('loader', Loader);
 app.component('success-pop-up', SuccessPopUp);
 app.component('filter-sub-table', FilterSubTable);
 app.component('display-amount-box', DisplayAmountBox);
+app.component('notification', Notification);
 
 app.mount('#app');

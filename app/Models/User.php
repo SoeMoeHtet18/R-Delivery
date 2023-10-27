@@ -58,7 +58,7 @@ class User extends Authenticatable
 
     public function notifications()
     {
-        return $this->morphToMany(Notification::class, 'notifiable');
+        return $this->morphToMany(Notification::class, 'notifiable')->withPivot('is_read');
     }
 
     public function unreadNotifications()
