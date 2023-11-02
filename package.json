@@ -28,6 +28,7 @@
         "bootstrap-vue": "^2.23.1",
         "devextreme": "23.1.5",
         "devextreme-vue": "23.1.5",
+        "toastify-js": "^1.12.0",
         "vue": "^3.3.4"
     }
 }
