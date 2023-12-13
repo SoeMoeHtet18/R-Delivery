@@ -64,7 +64,7 @@ class OrderRepository
 
     public function getOrdersByShopID($id, $status, $start_date, $end_date, $page)
     {
-        $limit = 10; 
+        $limit = 10;
         $offset = ($page - 1) * $limit;
         if ($status == 'success') {
             $orders = Order::where('shop_id', $id)
